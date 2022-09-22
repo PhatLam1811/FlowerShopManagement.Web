@@ -2,7 +2,7 @@
 
 namespace FlowerShopManagement.Core.Entities
 {
-    internal class Shipment
+    public class Shipment
     {
         string shipmentId = String.Empty;
         string orderID = String.Empty;

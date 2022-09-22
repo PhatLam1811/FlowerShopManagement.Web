@@ -2,7 +2,7 @@
 
 namespace FlowerShopManagement.Core.Entities
 {
-    internal class GoodCategory
+    public class GoodCategory
     {
         string goodCategoryId = String.Empty;
         string goodCategoryName = String.Empty;

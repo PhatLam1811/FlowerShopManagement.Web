@@ -19,7 +19,7 @@ builder.Services.AddSingleton<IDatabaseSettings>(sp =>
 builder.Services.AddSingleton<IMongoClient>(s =>
     new MongoClient(builder.Configuration.GetValue<string>("CustomerDatabase:ConnectionString")));
 
-builder.Services.AddScoped<ICustomerServices, CustomerService>();
+builder.Services.AddScoped<ICustomerService, CustomerService>();
 
 var app = builder.Build();
 

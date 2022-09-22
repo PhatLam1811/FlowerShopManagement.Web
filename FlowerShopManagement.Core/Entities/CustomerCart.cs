@@ -2,7 +2,7 @@
 
 namespace FlowerShopManagement.Core.Entities
 {
-    internal class CustomerCart
+    public class CustomerCart
     {
         string cartId = String.Empty;
         string customerId = String.Empty;

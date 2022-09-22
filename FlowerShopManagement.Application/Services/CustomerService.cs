@@ -6,7 +6,7 @@ using FlowerShopManagement.Infrustructure.Interfaces;
 
 namespace FlowerShopManagement.Core.Services
 {
-    public class CustomerService : ICustomerServices
+    public class CustomerService : ICustomerService
     {
         private IMongoCollection<Customer> _customers;
 

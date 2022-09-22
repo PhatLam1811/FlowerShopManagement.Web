@@ -2,7 +2,7 @@
 
 namespace FlowerShopManagement.Core.Entities
 {
-    internal class Account
+    public class Account
     {
         string accountId = String.Empty;
         string accountUsername = String.Empty;

@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Service\" />
     <Folder Include="SampleUsecases\Commands\" />
     <Folder Include="SampleUsecases\EventHandlers\" />
     <Folder Include="SampleUsecases\Queries\" />

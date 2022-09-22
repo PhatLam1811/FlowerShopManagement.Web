@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FlowerShopManagement.Core.Interfaces
 {
-    public interface ICustomerServices
+    public interface ICustomerService
     {
         //List<Customer> Get(string id);
 
