@@ -1,4 +1,4 @@
-﻿using FlowerShopManagement.Core.Model;
+﻿using FlowerShopManagement.Core.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 
-namespace FlowerShopManagement.Infrustructure.Interfaces
+namespace FlowerShopManagement.Core.Interfaces
 {
     public interface ICustomerServices
     {

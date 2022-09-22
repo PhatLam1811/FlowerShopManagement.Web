@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace FlowerShopManagement.Core.Model
+namespace FlowerShopManagement.Core.Entities
 {
     internal class CustomerCart
     {

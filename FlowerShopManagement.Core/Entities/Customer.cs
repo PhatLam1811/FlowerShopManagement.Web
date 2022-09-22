@@ -1,6 +1,7 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 
-namespace FlowerShopManagement.Core.Model
+namespace FlowerShopManagement.Core.Entities
 {
     public class Customer
     {
@@ -14,7 +15,7 @@ namespace FlowerShopManagement.Core.Model
         string customerEmail = String.Empty;
 
         [BsonId]
-        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
+        [BsonRepresentation(BsonType.ObjectId)]
         public string CustomerId
         {
             get { return customerId; }
@@ -23,8 +24,8 @@ namespace FlowerShopManagement.Core.Model
 
         public string AccountId
         {
-            get { return customerId; }
-            set { customerId = value; }
+            get { return accountId; }
+            set { accountId = value; }
         }
         public string CustomerName
         {

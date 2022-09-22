@@ -1,18 +1,20 @@
-using FlowerShopManagement.Infrustructure.Services;
 using FlowerShopManagement.Infrustructure.Interfaces;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
+using FlowerShopManagement.Infrustructure.DatabaseSettings;
+using FlowerShopManagement.Core.Interfaces;
+using FlowerShopManagement.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-builder.Services.Configure<CustomerDatabaseSettings>(
+builder.Services.Configure<DatabaseSettings>(
     builder.Configuration.GetSection("CustomerDatabase"));
 
-builder.Services.AddSingleton<ICustomerDatabaseSettings>(sp =>
-    sp.GetRequiredService<IOptions<CustomerDatabaseSettings>>().Value);
+builder.Services.AddSingleton<IDatabaseSettings>(sp =>
+    sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);
 
 builder.Services.AddSingleton<IMongoClient>(s =>
     new MongoClient(builder.Configuration.GetValue<string>("CustomerDatabase:ConnectionString")));

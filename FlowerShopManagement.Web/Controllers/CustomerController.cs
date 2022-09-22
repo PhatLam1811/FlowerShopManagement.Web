@@ -1,5 +1,5 @@
-﻿using FlowerShopManagement.Core.Model;
-using FlowerShopManagement.Infrustructure.Interfaces;
+﻿using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
