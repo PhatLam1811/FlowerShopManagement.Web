@@ -18,7 +18,12 @@ namespace FlowerShopManagement.Web.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Wishes()
+        {
+            return View();
+        }
+
+        public IActionResult ProductDetail()
         {
             return View();
         }

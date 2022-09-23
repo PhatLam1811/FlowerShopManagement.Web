@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowerShopManagement.Web", "FlowerShopManagement.Web\FlowerShopManagement.Web.csproj", "{8B41DCBB-E496-41C8-8575-D136E60F07ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlowerShopManagement.Web", "FlowerShopManagement.Web\FlowerShopManagement.Web.csproj", "{8B41DCBB-E496-41C8-8575-D136E60F07ED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowerShopManagement.Core", "FlowerShopManagement.Core\FlowerShopManagement.Core.csproj", "{6EE23D81-B92C-4C4D-857F-9BF9D1365B86}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlowerShopManagement.Core", "FlowerShopManagement.Core\FlowerShopManagement.Core.csproj", "{6EE23D81-B92C-4C4D-857F-9BF9D1365B86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowerShopManagement.Infrustructure", "FlowerShopManagement.Infrustructure\FlowerShopManagement.Infrustructure.csproj", "{923DA1EB-5978-431E-86DB-BC94F23AE8F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlowerShopManagement.Infrustructure", "FlowerShopManagement.Infrustructure\FlowerShopManagement.Infrustructure.csproj", "{923DA1EB-5978-431E-86DB-BC94F23AE8F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FlowerShopManagement.Application", "FlowerShopManagement.Application\FlowerShopManagement.Application.csproj", "{0272275F-4991-4899-A7AE-C6F218803A7C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlowerShopManagement.Application", "FlowerShopManagement.Application\FlowerShopManagement.Application.csproj", "{0272275F-4991-4899-A7AE-C6F218803A7C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "source", "source", "{9F3841BE-9874-482E-9915-F3C24F475510}"
 EndProject
