@@ -14,8 +14,7 @@ namespace FlowerShopManagement.Core.Entities
         string customerPhone = String.Empty;
         string customerEmail = String.Empty;
 
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
+    
         public string CustomerId
         {
             get { return customerId; }

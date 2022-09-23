@@ -1,0 +1,78 @@
+﻿@{
+	ViewData["Title"] = "Detail Page";
+}
+<div class="mt-5" style="display:flex">
+
+	<div class="product-detail-image"></div>
+
+	<div class="product-detail-body" style="flex-grow: 1">
+		<h4 class="product-detail-name">Product Full Name</h4>
+		<div class="mt-4">
+			<label class="fw-bold">Classified</label>
+			<select class="mt-3"></select>
+		</div>
+		<div class="mt-4">
+			<label class="fw-bold">Quantity</label>
+			<div class="product-quantity mt-3">
+				<button class="product-quantity-control">
+					<i class="fa-solid fa-minus"></i>
+				</button>
+				<input />
+				<button class="product-quantity-control">
+					<i class="fa-solid fa-plus"></i>
+				</button>
+			</div>
+		</div>
+		<div>
+			<button class="btn-secondary product-detail-btn">
+				Add to Cart
+				<i class="fa fa-cart-shopping" style="font-size: 1rem; margin-left: 4px"></i>
+			</button>
+			<button class="btn-primary product-detail-btn mt-2">Buy Now</button>
+		</div>
+	</div>
+
+	<div class="product-detail-description">
+		<label class="fw-bold">Description</label>
+		<p class="mt-2">
+			Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+			Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+			when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+		</p>
+		<div class="product-detail-info">
+			<div class="product-detail-info-row">
+				<div class="product-info-card">
+					<i class="fa fa-seedling product-info-icon"></i>
+					<div>
+						<span class="product-info-label">text</span>
+						<span class="product-info-value">text</span>
+					</div>
+				</div>
+				<div class="product-info-card">
+					<i class="fa fa-seedling product-info-icon"></i>
+					<div>
+						<span class="product-info-label">text</span>
+						<span class="product-info-value">text</span>
+					</div>
+				</div>
+			</div>
+			<div class="product-detail-info-row mt-3">
+				<div class="product-info-card">
+					<i class="fa fa-seedling product-info-icon"></i>
+					<div>
+						<span class="product-info-label">text</span>
+						<span class="product-info-value">text</span>
+					</div>
+				</div>
+				<div class="product-info-card">
+					<i class="fa fa-seedling product-info-icon"></i>
+					<div>
+						<span class="product-info-label">text</span>
+						<span class="product-info-value">text</span>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>
