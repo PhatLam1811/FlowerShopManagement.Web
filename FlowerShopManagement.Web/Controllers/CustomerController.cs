@@ -18,14 +18,13 @@ namespace FlowerShopManagement.Web.Controllers
             this.customerServices = customerServices;
         }
 
-        [HttpGet]
+        //[HttpGet]
         public ActionResult<List<Customer>> Get()
         {
             return customerServices.Get();
         }
 
-        // GET api/<CustomerController>/5
-        [HttpGet("{id}")]
+        //[HttpGet("{id}")]
         public ActionResult<Customer?> Get(string id)
         {
             var customer = customerServices.Get(id);
@@ -38,7 +37,7 @@ namespace FlowerShopManagement.Web.Controllers
         }
 
         // POST api/<CustomerController>
-        [HttpPost]
+        //[HttpPost]
         public ActionResult<Customer?> Post([FromBody] string value)
         {
             Customer customer = new Customer();
@@ -48,7 +47,7 @@ namespace FlowerShopManagement.Web.Controllers
         }
 
         // PUT api/<CustomerController>/5
-        [HttpPut("{id}")]
+        //[HttpPut("{id}")]
         public ActionResult Put(string id, [FromBody] Customer customer)
         {
             var existingCustomer = customerServices.Get(id);
@@ -63,7 +62,7 @@ namespace FlowerShopManagement.Web.Controllers
         }
 
         // DELETE api/<CustomerController>/5
-        [HttpDelete("{id}")]
+        //[HttpDelete("{id}")]
         public ActionResult Delete(string id)
         {
             var existingCustomer = customerServices.Get(id);
