@@ -20,7 +20,7 @@ namespace FlowerShopManagement.Application.Services
         public OrderService(IDatabaseSettings settings, IMongoClient mongoClient)
         {
             var database = mongoClient.GetDatabase(settings.DatabaseName);
-            _order = database.GetCollection<Order>(CollectionConstant.KEY_ACCOUNT);
+            _order = database.GetCollection<Order>(CollectionConstant.KEY_ORDER);
         }
 
         public List<Order> Get() => _order.Find(_ => true).ToList();
