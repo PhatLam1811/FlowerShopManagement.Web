@@ -8,14 +8,11 @@ namespace FlowerShopManagement.Core.Enums
 {
     public static class CollectionConstant
     {
-        public const string KEY_CUSTOMER = "customer";
-        public const string KEY_CUSTOMER_CART = "customerCart";
-        public const string KEY_CART_DETAIL = "cartDetail";
-        public const string KEY_ACCOUNT = "account";
-        public const string KEY_GOOD = "good";
-        public const string KEY_GOOD_CART = "goodCategory";
-        public const string KEY_ORDER = "order";
-        public const string KEY_SHIPMENT = "shipment";
+        public const string KEY_CUSTOMERS = "Customers";
+        public const string KEY_CARTS = "Carts";
+        public const string KEY_ACCOUNTS = "Accounts";
+        public const string KEY_PRODUCTS = "Products";
+        public const string KEY_ORDERS = "Orders";
     }
 
 }

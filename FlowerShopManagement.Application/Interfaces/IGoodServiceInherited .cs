@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace FlowerShopManagement.Core.Interfaces
 {
-    public interface IGoodService : IServices<Good>
+    public interface IGoodService : IServices<Product>
     {
        
     }
