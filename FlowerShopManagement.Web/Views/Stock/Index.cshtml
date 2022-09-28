@@ -1,0 +1,30 @@
+﻿@{
+	ViewData["Title"] = "Staff-Stock-Page";
+}
+
+<a asp-controller="Stock" asp-action="AddProduct" class="btn btn-primary d-flex align-items-center float-end">
+	Add new Product
+	<i class="fa-solid fa-circle-plus"></i>
+</a>
+<table class="table">
+	<tr>
+		<th>Product Name</th>
+		<th>Quantity</th>
+		<th>Price</th>
+	</tr>
+	<tr onclick="location.href = '@(Url.Action("DetailProduct", "Stock"))'">
+		<td>Rose</td>
+		<td>120</td>
+		<td>20.000</td>
+		<td style="width: 32px">
+			<a asp-controller="Stock" asp-action="EditProduct" class="" style="width: fit-content">
+				<i class="fa-regular fa-pen-to-square"></i>
+			</a>
+		</td>
+		<td>
+			<a asp-controller="Stock" asp-action="DeleteProduct">
+				<i class="fa-solid fa-xmark"></i>
+			</a>
+		</td>
+	</tr>
+</table>

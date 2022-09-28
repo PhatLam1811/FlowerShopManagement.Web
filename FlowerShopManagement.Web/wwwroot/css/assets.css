@@ -37,16 +37,13 @@ div {
     display: block;
 }
 
-input {
-    text-align: center;
-}
-
 .input {
     width: 248px;
     height: 45px;
     border-width: 1.5px;
     border-color: var(--primary-color);
     border-radius: 4px;
+    text-align: center;
 }
 
 .fa {
@@ -175,6 +172,11 @@ button, .btn {
     border-left-width: 1.5px;
     color: var(--black-color);
     font-weight: 600
+}
+
+button i, .btn i {
+    margin-left: 6px;
+    font-size: medium !important
 }
 
 /*home*/
@@ -461,7 +463,7 @@ p {
 html, body {
     width: 100%;
     height: 100%;
-    background-color: var(--surface-color)
+    /*background-color: var(--surface-color)*/
 }
 
 .cart-price-part {
