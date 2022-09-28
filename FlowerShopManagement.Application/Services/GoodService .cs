@@ -20,7 +20,7 @@ namespace FlowerShopManagement.Application.Services
         public GoodService(IDatabaseSettings settings, IMongoClient mongoClient)
         {
             var database = mongoClient.GetDatabase(settings.DatabaseName);
-            _good = database.GetCollection<Good>(CollectionConstant.KEY_ACCOUNT);
+            _good = database.GetCollection<Good>(CollectionConstant.KEY_GOOD);
         }
 
         List<Good> IServices<Good>.Get() => _good.Find(_ => true).ToList();

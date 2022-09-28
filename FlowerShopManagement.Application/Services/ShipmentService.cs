@@ -20,7 +20,7 @@ namespace FlowerShopManagement.Application.Services
         public ShipmentService(IDatabaseSettings settings, IMongoClient mongoClient)
         {
             var database = mongoClient.GetDatabase(settings.DatabaseName);
-            _shipment = database.GetCollection<Shipment>(CollectionConstant.KEY_ACCOUNT);
+            _shipment = database.GetCollection<Shipment>(CollectionConstant.KEY_SHIPMENT);
         }
 
         public List<Shipment> Get() => _shipment.Find(_ => true).ToList();
