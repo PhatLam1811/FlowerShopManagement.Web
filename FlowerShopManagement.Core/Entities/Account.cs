@@ -1,35 +1,14 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using FlowerShopManagement.Core.Enums;
 
 namespace FlowerShopManagement.Core.Entities
 {
-    public class Account
+    public class Account : BaseEntity
     {
-        string accountId = String.Empty;
-        string accountUsername = String.Empty;
-        string accountPassword = String.Empty;
-        int accountType = 0;
-
-        [BsonId]
-        [BsonRepresentation(MongoDB.Bson.BsonType.ObjectId)]
-        public string AccountId
-        {
-            get { return accountId; }
-            set { accountId = value; }
-        }
-        public string AccountUsername
-        {
-            get { return accountUsername; }
-            set { accountUsername = value; }
-        }
-        public string AccountPassword
-        {
-            get { return accountPassword; }
-            set { accountPassword = value; }
-        }
-        public int AccountType
-        {
-            get { return accountType; }
-            set { accountType = value; }
-        }
+        protected string _username { get; set; }
+        protected string _password { get; set; }
+        protected string? _fullName { get; set; }
+        protected string? _avatar { get; set; }
+        protected Genders _gender { get; set; }
+        protected AccountTypes _accountType { get; set; }
     }
 }
