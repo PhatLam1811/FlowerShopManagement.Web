@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FlowerShopManagement.Core\FlowerShopManagement.Core.csproj" />
-    <ProjectReference Include="..\FlowerShopManagement.Infrustructure\FlowerShopManagement.Infrustructure.csproj" />
   </ItemGroup>
 
 </Project>

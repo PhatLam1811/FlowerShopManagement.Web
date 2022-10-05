@@ -1,5 +1,4 @@
-﻿using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Core.Interfaces;
+﻿using FlowerShopManagement.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,21 +10,21 @@ namespace FlowerShopManagement.Web.Controllers
     {
         // GET: api/<CustomerController>
 
-        private readonly ICustomerService customerServices;
+        private readonly ICustomerServices customerServices;
 
-        public CustomerController(ICustomerService customerServices)
+        public CustomerController(ICustomerServices customerServices)
         {
             this.customerServices = customerServices;
         }
 
         //[HttpGet]
-        public ActionResult<List<Customer>> Get()
+        /*public ActionResult<List<Customer>> Get()
         {
             return customerServices.Get();
-        }
+        }*/
 
         //[HttpGet("{id}")]
-        public ActionResult<Customer?> Get(string id)
+        /*public ActionResult<Customer?> Get(string id)
         {
             var customer = customerServices.Get(id);
 
@@ -34,23 +33,23 @@ namespace FlowerShopManagement.Web.Controllers
                 return NotFound($"Customer with id = {id} isn't exist");
             }
             return customer;
-        }
+        }*/
 
         // POST api/<CustomerController>
         //[HttpPost]
-        public ActionResult<Customer?> Post([FromBody] string value)
+        /*public ActionResult<Customer?> Post([FromBody] string value)
         {
             Customer customer = new Customer();
-            customer.CustomerName = value;
-            customerServices.Create(customer);
-            return CreatedAtAction(nameof(Get), new { id = customer.CustomerId }, customer);
-        }
+            customer._fullName = value;
+            //customerServices.Create(customer);
+            return CreatedAtAction(nameof(Get), new { id = customer._id }, customer);
+        }*/
 
         // PUT api/<CustomerController>/5
         //[HttpPut("{id}")]
-        public ActionResult Put(string id, [FromBody] Customer customer)
+        /*public ActionResult Put(string id, [FromBody] Customer customer)
         {
-            var existingCustomer = customerServices.Get(id);
+            var existingCustomer = customerSes.Get(id);
 
             if (existingCustomer == null)
             {
@@ -59,11 +58,11 @@ namespace FlowerShopManagement.Web.Controllers
             else
                 customerServices.Update(id, customer);
             return NoContent();
-        }
+        }*/
 
         // DELETE api/<CustomerController>/5
         //[HttpDelete("{id}")]
-        public ActionResult Delete(string id)
+        /*public ActionResult Delete(string id)
         {
             var existingCustomer = customerServices.Get(id);
 
@@ -74,6 +73,6 @@ namespace FlowerShopManagement.Web.Controllers
             else
                 customerServices.Remove(id);
             return Ok($"Customer with id = {id} deleted");
-        }
+        }*/
     }
 }
