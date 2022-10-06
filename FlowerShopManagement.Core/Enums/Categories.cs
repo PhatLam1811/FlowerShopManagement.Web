@@ -6,4 +6,4 @@ public enum Categories
     furniture = 1,
     entertainmentEquipment = 2
 }
-}
+
