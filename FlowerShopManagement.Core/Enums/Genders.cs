@@ -1,9 +1,9 @@
-﻿namespace FlowerShopManagement.Core.Enums
+﻿namespace FlowerShopManagement.Core.Enums;
+
+public enum Genders
 {
-    public enum Genders
-    {
-        male = 0,
-        female = 1,
-        other = 2
-    }
+    male = 0,
+    female = 1,
+    other = 2
+}
 }

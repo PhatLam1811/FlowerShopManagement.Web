@@ -1,9 +1,19 @@
-﻿namespace FlowerShopManagement.Core.Entities
+﻿using FlowerShopManagement.Core.Common;
+using System.ComponentModel.DataAnnotations;
+
+namespace FlowerShopManagement.Core.Entities;
+
+public class Cart : BaseEntity
 {
-    public class Cart : BaseEntity
+    [Required]
+    public string _customerId { get; set; }
+    public List<Product> _items { get; set; }
+    public long _total { get; set; }
+
+    public Cart(string customerId, List<Product> items, long total)
     {
-        protected Guid _accountID { get; set; }
-        protected IList<Product> _products = new List<Product>();
-        protected long _total = 0;
+        _customerId = customerId;
+        _items = items;
+        _total = total;
     }
 }

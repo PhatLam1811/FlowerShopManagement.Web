@@ -1,9 +1,9 @@
-﻿namespace FlowerShopManagement.Core.Enums
+﻿namespace FlowerShopManagement.Core.Enums;
+
+public enum Categories
 {
-    public enum Categories
-    {
-        artificialFlower = 0,
-        furniture = 1,
-        entertainmentEquipment = 2
-    }
+    artificialFlower = 0,
+    furniture = 1,
+    entertainmentEquipment = 2
+}
 }

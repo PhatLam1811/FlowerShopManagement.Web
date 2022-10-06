@@ -1,12 +1,5 @@
-﻿using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Core.Enums;
-using FlowerShopManagement.Infrustructure.Interfaces;
-using MongoDB.Driver;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+// ******************** THIS INTERFACE IS ONLY USED FOR REFERENCE FOR NOW (DONT PAY ATTENTION TO IT) *********************
 
 namespace FlowerShopManagement.Application.Interfaces
 {

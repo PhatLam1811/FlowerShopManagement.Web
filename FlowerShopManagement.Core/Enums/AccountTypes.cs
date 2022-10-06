@@ -1,9 +1,7 @@
-﻿namespace FlowerShopManagement.Core.Enums
+﻿namespace FlowerShopManagement.Core.Enums;
+
+public enum AccountTypes
 {
-    public enum AccountTypes
-    {
-        owner = 0,
-        staff = 1,
-        customer = 2
-    }
+    admin = 0,
+    staff = 1
 }

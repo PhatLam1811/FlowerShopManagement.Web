@@ -1,6 +1,6 @@
 ﻿namespace FlowerShopManagement.Core.Enums;
 
-public enum Status
+public enum DeliverryMethods
 {
-    sampleStatus = 0
+    sampleMethod = 0
 }
