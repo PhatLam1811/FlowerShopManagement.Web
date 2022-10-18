@@ -1,4 +1,6 @@
-﻿using FlowerShopManagement.Infrustructure.Interfaces;
+﻿using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Infrustructure.Interfaces;
+using MongoDB.Bson.Serialization;
 
 // ******************** THIS IMPLEMENTATION IS ONLY USED FOR REFERENCE FOR NOW *********************
 

@@ -4,8 +4,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlowerShopManagement.Core.Entities;
 
-public class Order : BaseEntity
+public class Order 
 {
+    public string? _id { get; private set; }
+
     [Required]
     public string _accountID { get; set; }
     public DateTime _date { get; set; }

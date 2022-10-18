@@ -3,8 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlowerShopManagement.Core.Entities;
 
-public class Review : BaseEntity
+public class Review 
 {
+    public string? _id { get; private set; }
+
     [Required]
     public string _productID { get; set; }
     [Required]
@@ -18,6 +20,8 @@ public class Review : BaseEntity
     public int _dislikes { get; set; }
     public DateTime _createdDate { get; set; }
     public DateTime _lastModified { get; set; }
+
+   
 
     public Review(
         string productID, string authorID, string authorName, string authorAvatar, 

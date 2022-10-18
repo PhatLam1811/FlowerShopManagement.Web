@@ -3,8 +3,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FlowerShopManagement.Core.Entities;
 
-public class Cart : BaseEntity
+public class Cart 
 {
+    public string? _id { get; private set; }
+
     [Required]
     public string _customerId { get; set; }
     public List<Product> _items { get; set; }

@@ -1,6 +1,7 @@
 ﻿using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Interfaces;
 using FlowerShopManagement.Infrustructure.Interfaces;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
 namespace FlowerShopManagement.Infrustructure.DatabaseSettings;
@@ -11,6 +12,8 @@ public class CustomerCRUD : ICustomerCRUD
 
     public CustomerCRUD(IMongoDbDAO mongoDbDAO) => _mongoDbDAO = mongoDbDAO;
 
+    
+
     // Implementation
     public async Task<bool> AddNewCustomer(Customer newCustomer)
     {
@@ -20,6 +23,7 @@ public class CustomerCRUD : ICustomerCRUD
             return true;
         }
         catch { return false; }
+
     }
 
     public async Task<List<Customer>> GetAllCustomers()
@@ -57,4 +61,7 @@ public class CustomerCRUD : ICustomerCRUD
         }
         catch { return false; }
     }
+
+    
 }
+

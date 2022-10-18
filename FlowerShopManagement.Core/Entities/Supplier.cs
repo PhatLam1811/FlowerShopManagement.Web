@@ -1,12 +1,13 @@
 ﻿namespace FlowerShopManagement.Core.Entities
 {
-    public class Supplier : BaseEntity
+    public class Supplier
     {
-        protected string _name { get; set; }
-        protected string _address { get; set; }
-        protected string _products { get; set; }    // Type could change depends on how UI displays the suppliers
-        protected string _phoneNumber { get; set; }
-        protected string _email { get; set; }
-        protected string _note { get; set; }
+        public string? _id { get; private set; }
+        public string _name { get; set; } = string.Empty;
+        public string _address { get; set; } = string.Empty;
+        public string _products { get; set; } = string.Empty; // Type could change depends on how UI displays the suppliers
+        public string _phoneNumber { get; set; } = string.Empty;
+        public string _email { get; set; } = string.Empty;
+        public string _note { get; set; } = string.Empty;
     }
 }

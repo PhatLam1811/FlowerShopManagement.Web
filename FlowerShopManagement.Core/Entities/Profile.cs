@@ -2,9 +2,11 @@
 
 namespace FlowerShopManagement.Core.Entities
 {
-    public class Profile : BaseEntity
+    public class Profile 
     {
-        protected Guid _accountID { get; set; }
+        public string? _id { get; private set; }
+
+        protected string? _accountID { get; set; }
         protected string? _fullName { get; set; }
         protected string? _avatar { get; set; }
         protected Genders _gender { get; set; }

@@ -34,7 +34,7 @@ namespace FlowerShopManagement.Web.Controllers
 
             Cart demoCart = new Cart("jksdahfkjasdhkfjasdh", demoList, 0);
 
-            demoCart._id = "3604d6b9-1c78-44dc-82a3-821ab0904416";
+           // demoCart._id = "3604d6b9-1c78-44dc-82a3-821ab0904416";
 
             _customerServices.AddItemToCart(demoProduct, demoCart, "jksdahfkjasdhkfjasdh");
 

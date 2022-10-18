@@ -5,7 +5,7 @@ namespace FlowerShopManagement.Core.Entities;
 
 public class Staff : IPerson
 {
-    public string _id { get; private set; }
+    public string? _id { get; private set; }
     public string _username { get; set; }
     public string _password { get; set; }
     public string? _fullName { get; set; }
@@ -16,14 +16,14 @@ public class Staff : IPerson
 
     public Staff()
     {
-        _id = Guid.NewGuid().ToString();
+        //_id = Guid.NewGuid().ToString();
         _username = "";
         _password = "";
         _fullName = "";
         _avatar = "";
         _age = 16;
         _gender = Genders.male;
-        _type = AccountTypes.staff;
+        _type = AccountTypes.staff;      
     }
 
     public Staff(
