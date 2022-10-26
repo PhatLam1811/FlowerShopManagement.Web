@@ -16,6 +16,25 @@ public class AuthenticationServices : IAuthenticationServices
         _userServices = userServices;
     }
 
+    public bool Register(string email, string phoneNumber, string pasword)
+    {
+        // Encrypt password
+        var encryptedPassword = _securityServices.Encrypt(pasword);
+
+        // Create new user with input email, phone number & encrypted password
+        User newUser = new();
+        newUser._email = email;
+        newUser._phoneNumber = phoneNumber;
+        newUser._password = encryptedPassword;
+
+        // Add newly created user to database
+        if (!_userServices.Add(newUser).Result) return false;
+
+        // Successfully registered new user
+        _currentUser = newUser;
+        return true;
+    }
+
     public bool Login(string username, string password)
     {
         // Validate username
@@ -39,23 +58,4 @@ public class AuthenticationServices : IAuthenticationServices
     public bool IsValidEmail(string email) => _securityServices.IsValidEmail(email);
 
     public bool IsValidPhoneNumber(string phoneNumber) => _securityServices.IsValidPhoneNumber(phoneNumber);
-
-    public bool Register(string email, string phoneNumber, string pasword)
-    {
-        // Encrypt password
-        var encryptedPassword = _securityServices.Encrypt(pasword);
-
-        // Create new user with input email, phone number & encrypted password
-        User newUser = new();
-        newUser._email = email;
-        newUser._phoneNumber = phoneNumber;
-        newUser._password = encryptedPassword;
-        
-        // Add newly created user to database
-        if (!_userServices.Add(newUser).Result) return false;
-
-        // Successfully registered new user
-        _currentUser = newUser;
-        return true;
-    }
 }
