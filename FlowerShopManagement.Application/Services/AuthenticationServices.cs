@@ -36,10 +36,7 @@ public class AuthenticationServices : IAuthenticationServices
         return true;
     }
 
-    public bool Logout()
-    {
-        throw new NotImplementedException();
-    }
+    public void Logout() => _currentUser = null;
 
     public bool Register(string username, string pasword, string reEnter)
     {
