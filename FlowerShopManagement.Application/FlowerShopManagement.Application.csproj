@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,9 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="SampleUsecases\Commands\" />
-    <Folder Include="SampleUsecases\EventHandlers\" />
-    <Folder Include="SampleUsecases\Queries\" />
+    <Compile Remove="SampleUsecases\**" />
+    <EmbeddedResource Remove="SampleUsecases\**" />
+    <None Remove="SampleUsecases\**" />
   </ItemGroup>
 
   <ItemGroup>
