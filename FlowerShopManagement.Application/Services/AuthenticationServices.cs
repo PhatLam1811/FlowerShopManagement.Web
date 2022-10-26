@@ -19,9 +19,7 @@ public class AuthenticationServices : IAuthenticationServices
     public bool Login(string username, string password)
     {
         // Validate username
-        if (!_securityServices.IsValidEmail(username) && 
-            !_securityServices.IsValidPhoneNumber(username)) 
-            return false;
+        if (!IsValidEmail(username) && !IsValidPhoneNumber(username)) return false;
 
         // Try receiving the user has the same input username
         var result = _userServices.GetUsersByUsername(username).Result;
@@ -38,8 +36,26 @@ public class AuthenticationServices : IAuthenticationServices
 
     public void Logout() => _currentUser = null;
 
-    public bool Register(string username, string pasword, string reEnter)
+    public bool IsValidEmail(string email) => _securityServices.IsValidEmail(email);
+
+    public bool IsValidPhoneNumber(string phoneNumber) => _securityServices.IsValidPhoneNumber(phoneNumber);
+
+    public bool Register(string email, string phoneNumber, string pasword)
     {
-        throw new NotImplementedException();
+        // Encrypt password
+        var encryptedPassword = _securityServices.Encrypt(pasword);
+
+        // Create new user with input email, phone number & encrypted password
+        User newUser = new();
+        newUser._email = email;
+        newUser._phoneNumber = phoneNumber;
+        newUser._password = encryptedPassword;
+        
+        // Add newly created user to database
+        if (!_userServices.Add(newUser).Result) return false;
+
+        // Successfully registered new user
+        _currentUser = newUser;
+        return true;
     }
 }
