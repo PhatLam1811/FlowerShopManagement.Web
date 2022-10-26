@@ -6,4 +6,5 @@ public interface ISecurityServices
     public bool IsValidPhoneNumber(string input);
     public string Encrypt(string plainText);
     public string Decrypt(string cipherText);
+    public bool VerifyEmail(string emailAddress);
 }

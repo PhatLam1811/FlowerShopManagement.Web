@@ -135,4 +135,9 @@ public class SecurityServices : ISecurityServices
         }
         return randomBytes;
     }
+
+    public bool VerifyEmail(string emailAddress)
+    {
+        throw new NotImplementedException();
+    }
 }
