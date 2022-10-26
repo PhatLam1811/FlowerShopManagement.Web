@@ -2,7 +2,7 @@
 
 public interface IUser
 {
-    // Rename
+    public Task<bool> Rename(string newName);
 
     // Reset password
 
