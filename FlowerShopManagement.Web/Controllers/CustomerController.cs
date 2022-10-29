@@ -10,9 +10,9 @@ namespace FlowerShopManagement.Web.Controllers
     {
         // GET: api/<CustomerController>
 
-        private readonly ICustomerServices customerServices;
+        private readonly ICustomerManagementServices customerServices;
 
-        public CustomerController(ICustomerServices customerServices)
+        public CustomerController(ICustomerManagementServices customerServices)
         {
             this.customerServices = customerServices;
         }

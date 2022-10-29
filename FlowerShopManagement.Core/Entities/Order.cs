@@ -15,6 +15,8 @@ public class Order
     // Could be added in future 
     // protected Vouchers _voucher { get; set; }
     public long _total { get; set; } = 0;
+
+    public long _isVerified { get; set; } = 0;
     public Status _status { get; set; }
     public DeliverryMethods _deliveryMethod { get; set; }
     public long _deliveryCharge { get; set; }

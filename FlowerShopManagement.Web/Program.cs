@@ -26,9 +26,11 @@ builder.Services.AddSingleton<IMongoClient>(
 // Add object CRUD operation services
 builder.Services.AddScoped<ICartCRUD, CartCRUD>();
 builder.Services.AddScoped<ICustomerCRUD, CustomerCRUD>();
+builder.Services.AddScoped<IOrderCRUD, OrderCRUD>();
+builder.Services.AddScoped<IProfileCRUD, ProfileCRUD>();
 
 // Add application logic services
-builder.Services.AddScoped<ICustomerServices, CustomerServices>();
+builder.Services.AddScoped<ICustomerManagementServices, CustomerManagementServices>();
 
 
 
