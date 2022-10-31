@@ -29,7 +29,7 @@ namespace FlowerShopManagement.Core.Services
             _customerCRUD = customerCRUD;
             _customers = _customerCRUD.GetAllCustomers().Result;
             _profileCRUD = profileCRUD;
-            _profiles = _profileCRUD.GetAllProfiles().Result;    
+            _profiles = _profileCRUD.GetAllProfiles().Result;
         }
 
         public async Task<List<Order>> GetOrderListAsync()
@@ -44,18 +44,19 @@ namespace FlowerShopManagement.Core.Services
 
         public async Task<bool> VerifyOrder(string customerId, Order order)
         {
-            if (!CheckExistedCustomer(customerId))
+            if (!CheckExistedCustomer(customerId)||!CheckExistedOrder(order._id))
             {
                 return false;
             }
             //update
+            
             order._isVerified = 1;
             await _orderCRUD.UpdateOrder(order);
             return true;
 
         }
 
-        public bool CheckExistedCustomer(string id)
+        public bool CheckExistedCustomer(string? id)
         {
             foreach (Customer customer in _customers)
             {
@@ -67,7 +68,21 @@ namespace FlowerShopManagement.Core.Services
             return false;
 
         }
+        public bool CheckExistedOrder(string? id)
+        {
+            if (!string.IsNullOrEmpty(id))
+            {
+                var check = _orderCRUD.GetOrderById(id);
+                if (check != null)
+                {
+                    return true;
+                }
+            }
+            
 
+            return false;
+
+        }
 
         public async Task<bool> CancelOrder(string customerId, Order order)
         {
@@ -94,6 +109,6 @@ namespace FlowerShopManagement.Core.Services
                 return true;
             }
             else return false;
-        } 
+        }
     }
 }

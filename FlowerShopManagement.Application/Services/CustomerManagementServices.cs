@@ -31,5 +31,9 @@ namespace FlowerShopManagement.Core.Services
         {
             return _profileCRUD.GetProfileById(customerId);
         }
+        public async Task<Customer> GetUser(string customerId)
+        {
+            return  await _customerCRUD.GetCustomerById(customerId);
+        }
     }
 }

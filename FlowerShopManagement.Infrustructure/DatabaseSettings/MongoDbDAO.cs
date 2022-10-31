@@ -78,13 +78,7 @@ public class MongoDbDAO : IMongoDbDAO
             cm.AutoMap();
         });
 
-        BsonClassMap.RegisterClassMap<Profile>(cm =>
-        {
-            cm.MapIdField(c => c._id);
-            cm.IdMemberMap.SetSerializer(new StringSerializer(BsonType.ObjectId));
-            cm.AutoMap();
-        });
-
+      
         BsonClassMap.RegisterClassMap<Review>(cm =>
         {
             cm.MapIdField(c => c._id);

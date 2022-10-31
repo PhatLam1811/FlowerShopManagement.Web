@@ -46,4 +46,8 @@ public class Order
         _deliveryCharge = s._deliveryCharge;
         _notes = s._notes;
     }
+
+    public Order()
+    {
+    }
 }
