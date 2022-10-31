@@ -4,9 +4,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - FlowerShopManagement.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/assets.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/color.css asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/base.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/icons.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/font.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins">
     <link rel="stylesheet" href="~/FlowerShopManagement.Web.styles.css" asp-append-version="true" />
+
 </head>
 <body>
     <header>
@@ -26,11 +32,21 @@
                             <a class="nav-link" asp-area="Admin" asp-controller="Product" asp-action="Index">Product</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Order" asp-action="Index">Order</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Admin" asp-controller="Voucher" asp-action="Index">Voucher</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-area="Admin" asp-controller="User" asp-action="Index">User</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Wishes">About</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Wishes">Account</a>
                         </li>
+                        
                     </ul>
                 </div>
                 <div class="test d-sm-inline-flex justify-content-between">
@@ -40,6 +56,11 @@
                         <li>
                             <a asp-controller="Cart" asp-action="Index">
                                 <i class="fa fa-cart-shopping" onclick=""></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a asp-controller="Setting" asp-action="Index">
+                                <i class="fas fa-cog" onclick=""></i>
                             </a>
                         </li>
                     </ul>

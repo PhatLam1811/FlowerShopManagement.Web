@@ -83,7 +83,7 @@
 
 /* Style the tab */
 .tabCustom {
-    margin-inline-start: 8px;
+    margin-inline-start: 0px;
     float: left;
     background-color: white;
     width: 100%;
@@ -149,7 +149,7 @@
         height: auto;
     }
 
-/*.borderCustom {
+.borderCustom {
     border-top: 1px solid rgba(20, 33, 61, 0.1);
 }
 
@@ -169,7 +169,7 @@
     border-right: 1px solid rgba(20, 33, 61, 0.1);
     border-left: 1px solid rgba(20, 33, 61, 0.1);
     border-bottom: 1px solid rgba(20, 33, 61, 0.1);
-}*/
+}
 
 /*FORM*/
 .form-floating {
