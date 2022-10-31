@@ -3,13 +3,11 @@
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
-    public class SettingController : Controller
+    public class OrderController : Controller
     {
         public IActionResult Index()
         {
             return View();
         }
-
-
     }
 }

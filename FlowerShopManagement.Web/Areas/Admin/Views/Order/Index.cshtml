@@ -1,5 +1,4 @@
 ﻿@using FlowerShopManagement.Web.Views.Shared.Components;
-@*VOUCHER PAGE*@
 <style>
 
 </style>
@@ -9,10 +8,12 @@
             <ii class="row-1 h6 mb-2 mt-4">Category</ii>
 
             <div class="tabCustom row-cols-6">
-                <button class="tabCustom " onclick="openCity(event, 'London')">All</button>
-                <button class="tabCustom" onclick="openCity(event, 'London')">Using</button>
-                <button class="tabCustom" onclick="openCity(event, 'London')">Out of date</button>
-                <button class="tabCustom" onclick="openCity(event, 'London')">Future</button>
+                <button class="tabCustom" onclick="openCity(event, 'London')">All</button>
+                <button class="tabCustom" onclick="openCity(event, 'London')">Retro</button>
+                <button class="tabCustom" onclick="openCity(event, 'London')">Basic</button>
+                <button class="tabCustom" onclick="openCity(event, 'London')">Street</button>
+                <button class="tabCustom" onclick="openCity(event, 'London')">Sweet</button>
+
             </div>
         </div>
     </div> @*used to col-3 vs col-10*@
@@ -26,10 +27,10 @@
                             <tr>
                                 <th>#</th>
                                 <th>Code</th>
-                                <th>Condition</th>
-                                <th>Value</th>
-                                <th>Start Date</th>
-                                <th>Expire</th>
+                                <th>Customer</th>
+                                <th>Price</th>
+                                <th>Amount</th>
+                                <th>Date Create</th>
                                 <th>State</th>
                                 <th></th>
                             </tr>
@@ -37,13 +38,13 @@
                         <tbody>
                             <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed">
                                 <th scope="row">1</th>
+                                <td>11</td>
+                                <td>Hoang Le</td>
+                                <td>$100</td>
+                                <td>12</td>
 
-                                <td>#NEWBIE</td>
-                                <td>New customer</td>
-                                <td>15%</td>
                                 <td>Today</td>
-                                <td>Today</td>
-                                <th>Using</th>
+                                <td>waiting</td>
                                 <td>
                                     <p class="icon-plus m-0"></p>
                                 </td>
@@ -61,5 +62,4 @@
         </div>
     </div>
 </div>
-
 @*<partial name="Add.cshtml"></partial>*@
