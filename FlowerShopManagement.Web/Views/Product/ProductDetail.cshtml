@@ -1,4 +1,6 @@
-﻿@*
+﻿@using FlowerShopManagement.Web.Views.Shared.Components;
+
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
@@ -7,78 +9,52 @@
 @{
 	ViewData["Title"] = "Detail Page";
 }
-<div class="mt-5" style="display:flex">
+<div class="mt-5 row">
 
-	<div class="product-detail-image"></div>
+	<div class="col-4">
+		<img src="~/image/flower2.png" class="w-100 h-auto" />
+	</div>
 
-	<div class="product-detail-body" style="flex-grow: 1">
-		<h4 class="product-detail-name">Product Full Name</h4>
-		<div class="mt-4">
-			<label class="fw-bold">Classified</label>
-			<select class="mt-3"></select>
-		</div>
-		<div class="mt-4">
-			<label class="fw-bold">Quantity</label>
-			<div class="product-quantity mt-3">
-				<button class="product-quantity-control">
-					<i class="fa-solid fa-minus"></i>
-				</button>
-				<input />
-				<button class="product-quantity-control">
-					<i class="fa-solid fa-plus"></i>
-				</button>
+	<div class="col-5 d-flex flex-column justify-content-between">
+		<div>
+			<p class="h2">Flower Blue ne`</p>
+			<div class="form-group mt-4 w-50">
+				<label for="exampleFormControlSelect1" class="h6">Classified</label>
+				<select class="form-control-lg form-control" id="exampleFormControlSelect1">
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+					<option>4</option>
+					<option>5</option>
+				</select>
+			</div>
+			<div class="form-group mt-4">
+				<label for="exampleFormControlInput1" class="h6">Amount</label>
+				<div>counter</div>
 			</div>
 		</div>
-		<div>
-			<button class="btn-secondary product-detail-btn">
-				Add to Cart
-				<i class="fa fa-cart-shopping" style="font-size: 1rem; margin-left: 4px"></i>
-			</button>
-			<button class="btn-primary product-detail-btn mt-2">Buy Now</button>
+		<div class="d-flex flex-column">
+			<button class="btn btn-secondary w-50 icon-cart">Add to Cart</button>
+			<button class="btn btn-primary w-50 mt-2 icon-arrow">Buy Now</button>
 		</div>
 	</div>
 
-	<div class="product-detail-description">
-		<label class="fw-bold">Description</label>
-		<p class="mt-2">
-			Lorem Ipsum is simply dummy text of the printing and typesetting industry.
-			Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-			when an unknown printer took a galley of type and scrambled it to make a type specimen book.
-		</p>
-		<div class="product-detail-info">
-			<div class="product-detail-info-row">
-				<div class="product-info-card">
-					<i class="fa fa-seedling product-info-icon"></i>
-					<div>
-						<span class="product-info-label">text</span>
-						<span class="product-info-value">text</span>
-					</div>
-				</div>
-				<div class="product-info-card">
-					<i class="fa fa-seedling product-info-icon"></i>
-					<div>
-						<span class="product-info-label">text</span>
-						<span class="product-info-value">text</span>
-					</div>
-				</div>
-			</div>
-			<div class="product-detail-info-row mt-3">
-				<div class="product-info-card">
-					<i class="fa fa-seedling product-info-icon"></i>
-					<div>
-						<span class="product-info-label">text</span>
-						<span class="product-info-value">text</span>
-					</div>
-				</div>
-				<div class="product-info-card">
-					<i class="fa fa-seedling product-info-icon"></i>
-					<div>
-						<span class="product-info-label">text</span>
-						<span class="product-info-value">text</span>
-					</div>
-				</div>
-			</div>
+	<div class="col-3 d-flex flex-column justify-content-between">
+		
+		<div class="">
+			<label class="h6">Description</label>
+			<p class="mt-2">
+				Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+				Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
+				when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+			</p>
+			
 		</div>
-
+		<div class="row gx-2 gy-3">
+				<component type="typeof(ProductInformationPanel)" render-mode="Static" />
+				<component type="typeof(ProductInformationPanel)" render-mode="Static" />
+				<component type="typeof(ProductInformationPanel)" render-mode="Static" />
+				<component type="typeof(ProductInformationPanel)" render-mode="Static" />
+			</div>
 	</div>
 </div>

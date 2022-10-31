@@ -1,4 +1,6 @@
-﻿<div class="form-check">
+﻿@using FlowerShopManagement.Web.Views.Shared.Components;
+
+<div class="form-check">
 	<input class="form-check-input fs-4 me-3" type="checkbox" value="" id="defaultCheck1">
 	<div class="card d-flex flex-row">
 		<img src="image/flower2.png" class="card-img-top w-25 h-auto" />
@@ -13,8 +15,8 @@
 					<span class="h3 fw-bold text-primary">20.000</span>
 				</div>
 			</div>
-			<div class="mt-1 d-flex justify-content-between">
-				<p class="m-0">counter</p>
+			<div class="mt-1 d-flex justify-content-between align-items-end">
+				<Counter />
 				<p class="icon-delete m-0 icon-normal text-color-pink"></p>
 			</div>
 		</div>

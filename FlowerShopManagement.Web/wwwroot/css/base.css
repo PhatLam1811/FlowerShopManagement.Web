@@ -80,6 +80,13 @@ p, span, h1, h2, h3, h4, h5, h6 {
 .btn-icon {
     width: fit-content;
     height: auto;
+    min-width: auto !important;
+    padding: 2px 12px;
+}
+
+.btn-icon-primary {
+    background-color: var(--bs-primary);
+    color: white;
 }
 
 .btn-active-none-style.btn:active, .btn-active-none-style.btn:focus {
