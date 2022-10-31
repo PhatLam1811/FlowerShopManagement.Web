@@ -2,7 +2,7 @@
 
 namespace FlowerShopManagement.Web.Controllers
 {
-    public class CustomersController : Controller
+    public class ProfileController : Controller
     {
         public IActionResult Index()
         {

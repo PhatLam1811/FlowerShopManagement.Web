@@ -1,0 +1,88 @@
+﻿﻿.w-30 {
+    width: 30%;
+}
+
+.w-60 {
+    width: 60%;
+}
+
+.w-65 {
+    width: 65%;
+}
+
+.w-input {
+    width: 250px !important;
+}
+
+.h-80 {
+    height: 80% !important;
+}
+
+.h-90 {
+    height: 90% !important;
+}
+
+/*BUTTON*/
+.btn-secondary {
+    border: solid;
+    border-width: 1px;
+    border-color: rgb(20, 33, 61);
+    background-color: transparent;
+    color: rgb(20, 33, 61);
+    font-weight: 700;
+}
+
+    .btn-secondary:hover {
+        background-color: rgba(20, 33, 61, 0.2);
+        color: rgba(20, 33, 61, 0.8);
+        transition-delay: 100ms;
+        transition-duration: 100ms;
+    }
+
+    .btn-secondary:active {
+        background-color: inherit;
+        color: inherit;
+        font-weight: inherit;
+    }
+
+    .btn-secondary:focus {
+        background-color: inherit;
+        color: inherit;
+        font-weight: inherit;
+    }
+
+.btn:active {
+    background-color: #E59512;
+    border: none;
+    text-decoration: none;
+}
+
+.btn-icon {
+    width: fit-content;
+    height: auto;
+}
+
+.btn-active-none-style.btn:active, .btn-active-none-style.btn:focus {
+    border: none;
+    box-shadow: none;
+    background-color: inherit;
+}
+
+/*LABEL*/
+label {
+    font-size: 12px;
+}
+
+
+/*DROPDOWN*/
+/*.dropdown-menu {
+    min-width: auto;
+}
+
+.row {
+    margin-right: 0;
+}
+
+.padding-cart {
+    padding: 0px 80px 0px 80px;
+}*/

@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace FlowerShopManagement.Web.Controllers
+namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 {
-    public class OrdersController : Controller
+    [Area("Admin")]
+    public class DashboardController : Controller
     {
         public IActionResult Index()
         {
