@@ -35,16 +35,13 @@ namespace FlowerShopManagement.Web.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.Home = true;
             return View();
         }
 
-        public IActionResult Wishes()
+        public IActionResult About()
         {
-            return View();
-        }
-
-        public IActionResult ProductDetail()
-        {
+            ViewBag.About = true;
             return View();
         }
 

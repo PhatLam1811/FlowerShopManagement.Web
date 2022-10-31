@@ -9,6 +9,10 @@
     font-size: 20px;
 }
 
+.icon-normal {
+    font-size: 24px;
+}
+
 .icon-plus:after {
     content: "\002b";
     font-family: 'FontAwesome';
