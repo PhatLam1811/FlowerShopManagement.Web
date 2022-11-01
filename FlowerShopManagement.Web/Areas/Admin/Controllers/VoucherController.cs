@@ -7,6 +7,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
     {
         public IActionResult Index()
         {
+            ViewBag.Voucher = true;
             return View();
         }
     }
