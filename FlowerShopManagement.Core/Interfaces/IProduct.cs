@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace FlowerShopManagement.Core.Interfaces
 {
-    public interface IProductCRUD
+    public interface IProduct
     {
         public Task<bool> AddNewProduct(Product newProduct);
         public Task<List<Product>> GetAllProducts();

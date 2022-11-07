@@ -10,8 +10,8 @@ namespace FlowerShopManagement.WebAPI.Controllers
     [Route("[controller]")]
     public class Test2Controller : ControllerBase
     {
-        ICartCRUD _cartServices;
-        public Test2Controller(ICartCRUD customerServices)
+        ICart _cartServices;
+        public Test2Controller(ICart customerServices)
         {
             _cartServices = customerServices;
         }

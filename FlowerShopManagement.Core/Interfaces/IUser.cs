@@ -1,24 +1,24 @@
-﻿namespace FlowerShopManagement.Core.Interfaces;
+﻿using FlowerShopManagement.Core.Common;
+using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Core.Enums;
 
-public interface IUser
+namespace FlowerShopManagement.Core.Interfaces;
+
+public interface IUser : IBaseServices<User>
 {
     public Task<bool> Rename(string newName);
 
-    // Reset password
+    public Task<bool> SetPassword(string newPassword);
 
-    // Change password
+    public Task<bool> SetEmailAddress(string newEmail);
 
-    // Change email
+    public Task<bool> SetPhoneNumber(string newPhoneNumber);
 
-    // Change phone number
+    public Task<bool> SetAvatar(string newAvatar);
 
-    // Change avatar
+    public Task<bool> SetGender(Genders newGender);
 
-    // Change gender
+    public Task<bool> SetAge(int newAge);
 
-    // Change age
-
-    // Add address
-
-    // Remove address
+    public Task<bool> SetAddresses(List<string> newAddressList);
 }

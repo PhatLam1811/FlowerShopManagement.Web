@@ -2,7 +2,7 @@
 
 namespace FlowerShopManagement.Core.Interfaces;
 
-public interface ISupplierCRUD
+public interface ISupplier
 {
     public Task<bool> AddNewSupplier(Supplier newSupplier);
     public Task<List<Supplier>> GetAllSuppliers();

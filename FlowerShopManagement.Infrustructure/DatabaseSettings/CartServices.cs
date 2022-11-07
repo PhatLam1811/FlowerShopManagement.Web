@@ -6,11 +6,16 @@ using MongoDB.Driver;
 
 namespace FlowerShopManagement.Infrustructure.DatabaseSettings;
 
-public class CartCRUD : ICartCRUD
+public class CartServices : ICart
 {
     private IMongoDbContext _mongoDbDAO;
 
-    public CartCRUD(IMongoDbContext mongoDbDAO) => _mongoDbDAO = mongoDbDAO;
+    public CartServices(IMongoDbContext mongoDbDAO) => _mongoDbDAO = mongoDbDAO;
+
+    public Task<bool> Add(Cart newRecord)
+    {
+        throw new NotImplementedException();
+    }
 
     public async Task<bool> AddNewCartByCustomerIdAsync(string customerId)
     {
@@ -28,12 +33,6 @@ public class CartCRUD : ICartCRUD
         }
     }
 
-    public async Task<Cart> GetCartOfCustomerIdAsync(string customerId)
-    {
-        var result = await _mongoDbDAO._cartCollection.FindAsync<Cart>(customerId);
-        return result.FirstOrDefault();
-    }
-
     public async Task<bool> UpdateCartByCustomerIdAsync(string customerId, Cart cart)
     {
         try
@@ -45,5 +44,31 @@ public class CartCRUD : ICartCRUD
         {
             return false;
         }
+    }
+
+    public Task<List<Cart>> GetAll()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Cart> GetById(string id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<Cart> GetCartOfCustomerIdAsync(string customerId)
+    {
+        var result = await _mongoDbDAO._cartCollection.FindAsync<Cart>(customerId);
+        return result.FirstOrDefault();
+    }
+
+    public Task<bool> RemoveById(string id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> UpdateById(string id, Cart updatedRecord)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -3,7 +3,6 @@ using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Core.Interfaces;
-using FlowerShopManagement.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Principal;
 using System.Xml.Linq;
@@ -14,8 +13,8 @@ namespace FlowerShopManagement.WebAPI.Controllers
     [Route("[controller]")]
     public class Test1Controller : ControllerBase
     {
-        IProductCRUD _productServices;
-        public Test1Controller(IProductCRUD customerServices)
+        IProduct _productServices;
+        public Test1Controller(IProduct customerServices)
         {
             _productServices = customerServices;
         }

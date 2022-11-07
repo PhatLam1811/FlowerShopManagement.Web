@@ -6,11 +6,11 @@ using MongoDB.Driver;
 
 namespace FlowerShopManagement.Infrustructure.DatabaseSettings;
 
-public class ProductCRUD : IProductCRUD
+public class ProductServices : IProduct
 {
     private IMongoDbContext _mongoDbDAO;
 
-    public ProductCRUD(IMongoDbContext mongoDbDAO) => _mongoDbDAO = mongoDbDAO;
+    public ProductServices(IMongoDbContext mongoDbDAO) => _mongoDbDAO = mongoDbDAO;
 
     public async Task<bool> AddNewProduct(Product product)
     {

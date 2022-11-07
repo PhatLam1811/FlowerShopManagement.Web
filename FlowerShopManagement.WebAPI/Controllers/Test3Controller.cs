@@ -11,8 +11,8 @@ namespace FlowerShopManagement.WebAPI.Controllers
     [Route("[controller]")]
     public class Test3Controller : ControllerBase
     {
-        ISupplierCRUD _productServices;
-        public Test3Controller(ISupplierCRUD customerServices)
+        ISupplier _productServices;
+        public Test3Controller(ISupplier customerServices)
         {
             _productServices = customerServices;
         }

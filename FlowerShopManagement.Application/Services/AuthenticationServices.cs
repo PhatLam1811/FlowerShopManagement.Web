@@ -55,6 +55,7 @@ public class AuthenticationServices : IAuthenticationServices
 
     public void Logout() => _currentUser = null;
 
+    #region Considering Remove
     public bool VerifyEmail(string generatedCode, string inputCode) => generatedCode.Equals(inputCode);
 
     public string EmailVerificationCodeGenerate() => _securityServices.CodeGenerator();
@@ -62,4 +63,5 @@ public class AuthenticationServices : IAuthenticationServices
     public bool IsValidEmail(string email) => _securityServices.IsValidEmail(email);
 
     public bool IsValidPhoneNumber(string phoneNumber) => _securityServices.IsValidPhoneNumber(phoneNumber);
+    #endregion
 }

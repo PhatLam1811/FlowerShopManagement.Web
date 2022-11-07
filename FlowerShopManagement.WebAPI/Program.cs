@@ -20,13 +20,12 @@ builder.Services.AddSingleton<IMongoClient>(
     s => new MongoClient(builder.Configuration.GetValue<string>("CustomerDatabase:ConnectionString")));
 
 // Add object CRUD operation services
-builder.Services.AddScoped<ICartCRUD, CartCRUD>();
-builder.Services.AddScoped<ICustomerCRUD, CustomerCRUD>();
-builder.Services.AddScoped<IProductCRUD, ProductCRUD>();
-builder.Services.AddScoped<ISupplierCRUD, SupplierCRUD>();
+builder.Services.AddScoped<ICart, CartServices>();
+builder.Services.AddScoped<ICustomer, FlowerShopManagement.Infrustructure.DatabaseSettings.CustomerServices>();
+builder.Services.AddScoped<IProduct, ProductServices>();
 
 // Add application logic services
-builder.Services.AddScoped<ICustomerServices, CustomerServices>();
+builder.Services.AddScoped<ICustomerServices, FlowerShopManagement.Application.Services.Temp.CustomerServices>();
 
 
 builder.Services.AddEndpointsApiExplorer();

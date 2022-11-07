@@ -6,6 +6,8 @@ using FlowerShopManagement.Core.Entities;
 using MongoDB.Bson.Serialization;
 using FlowerShopManagement.Application.Services.Temp;
 using FlowerShopManagement.Application.Interfaces.Temp;
+using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
+using FlowerShopManagement.Infrustructure.MongoDB;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,16 +21,20 @@ builder.Services.Configure<DatabaseSettings>(
     sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);*/
 
 // Add database access services
-builder.Services.AddSingleton<IMongoDbContext, MongoDbContext>();
+/* builder.Services.AddSingleton<IMongoDbContext, MongoDbContext>();
 builder.Services.AddSingleton<IMongoClient>(
-    s => new MongoClient(builder.Configuration.GetValue<string>("CustomerDatabase:ConnectionString")));
+    s => new MongoClient(builder.Configuration.GetValue<string>("CustomerDatabase:ConnectionString"))); */
+builder.Services.AddSingleton<IMongoDBServices, MongoDBServices>(
+    s => new MongoDBServices(
+        builder.Configuration.GetValue<string>("Database:ConnectionString"),
+        builder.Configuration.GetValue<string>("Database:Name")));
 
 // Add object CRUD operation services
-builder.Services.AddScoped<ICartCRUD, CartCRUD>();
-builder.Services.AddScoped<ICustomerCRUD, CustomerCRUD>();
+builder.Services.AddScoped<ICart, CartServices>();
+builder.Services.AddScoped<ICustomer, FlowerShopManagement.Infrustructure.DatabaseSettings.CustomerServices>();
 
 // Add application logic services
-builder.Services.AddScoped<ICustomerServices, CustomerServices>();
+builder.Services.AddScoped<ICustomerServices, FlowerShopManagement.Application.Services.Temp.CustomerServices>();
 
 var app = builder.Build();
 

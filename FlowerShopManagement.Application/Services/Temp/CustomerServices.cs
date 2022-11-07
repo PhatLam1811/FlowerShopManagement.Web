@@ -10,11 +10,11 @@ namespace FlowerShopManagement.Application.Services.Temp
 {
     public class CustomerServices : ICustomerServices
     {
-        public ICartCRUD _customerCart;
-        public ICustomerCRUD _customerCRUD;
+        public ICart _customerCart;
+        public ICustomer _customerCRUD;
 
         // APPLICATION SERVICES (USE CASES)
-        public CustomerServices(ICartCRUD customerCart, ICustomerCRUD customerCRUD)
+        public CustomerServices(ICart customerCart, ICustomer customerCRUD)
         {
             _customerCart = customerCart;
             _customerCRUD = customerCRUD;

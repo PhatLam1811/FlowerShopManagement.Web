@@ -6,11 +6,11 @@ using MongoDB.Driver;
 
 namespace FlowerShopManagement.Infrustructure.DatabaseSettings;
 
-public class CustomerCRUD : ICustomerCRUD
+public class CustomerServices : ICustomer
 {
     private IMongoDbContext _mongoDbDAO;
 
-    public CustomerCRUD(IMongoDbContext mongoDbDAO) => _mongoDbDAO = mongoDbDAO;
+    public CustomerServices(IMongoDbContext mongoDbDAO) => _mongoDbDAO = mongoDbDAO;
 
     
 
