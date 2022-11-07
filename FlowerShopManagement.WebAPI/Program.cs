@@ -1,7 +1,7 @@
-using FlowerShopManagement.Application.Interfaces;
+using FlowerShopManagement.Application.Interfaces.Temp;
+using FlowerShopManagement.Application.Services.Temp;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Interfaces;
-using FlowerShopManagement.Core.Services;
 using FlowerShopManagement.Infrustructure.DatabaseSettings;
 using FlowerShopManagement.Infrustructure.Interfaces;
 using MongoDB.Bson.Serialization;
@@ -15,7 +15,7 @@ builder.Services.AddControllers();
 builder.Services.Configure<DatabaseSettings>(
     builder.Configuration.GetSection("CustomerDatabase"));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddSingleton<IMongoDbDAO, MongoDbDAO>();
+builder.Services.AddSingleton<IMongoDbContext, MongoDbContext>();
 builder.Services.AddSingleton<IMongoClient>(
     s => new MongoClient(builder.Configuration.GetValue<string>("CustomerDatabase:ConnectionString")));
 

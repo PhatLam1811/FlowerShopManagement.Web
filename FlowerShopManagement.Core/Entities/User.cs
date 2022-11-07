@@ -3,16 +3,14 @@ using FlowerShopManagement.Core.Interfaces;
 
 namespace FlowerShopManagement.Core.Entities;
 
-public class User : IUser
+public class User
 {
-    public string _id { get; private set; }
-    public string? _email { get; set; }
-    public string? _phoneNumber { get; set; }
-    public string _password { get; set; }
+    public string _id { get; private set; } = String.Empty;
+    public string? _email { get; set; } = String.Empty;
+    public string? _phoneNumber { get; set; } = String.Empty;
+    public string _password { get; set; } = String.Empty;
     public AccountTypes _type { get; set; }
-    public Profile _profile { get; set; }
-
-    public extern Task<bool> Rename(string newName);
+    public Profile? _profile { get; set; }
 }
 
 public class Customer : User { }

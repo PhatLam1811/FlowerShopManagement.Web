@@ -1,12 +1,12 @@
 ﻿using FlowerShopManagement.Core.Interfaces;
 using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Application.Interfaces;
+using FlowerShopManagement.Application.Interfaces.Temp;
 
 // ************ THIS IS A SAMPLE INTERFACE FOR CUSTOMER SERVICES **************
 // - New adjustments could be made in future updates
 // - This should be a use case logic contains the CRUD operation of Customer & Cart objects 
 
-namespace FlowerShopManagement.Core.Services
+namespace FlowerShopManagement.Application.Services.Temp
 {
     public class CustomerServices : ICustomerServices
     {
@@ -23,7 +23,7 @@ namespace FlowerShopManagement.Core.Services
         public bool AddItemToCart(Product newItem, Cart cart, string customerId)
         {
             cart._items.Add(newItem);
-            
+
             try
             {
                 _customerCart.UpdateCartByCustomerIdAsync(customerId, cart);

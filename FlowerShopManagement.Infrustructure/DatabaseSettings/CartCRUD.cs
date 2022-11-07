@@ -8,9 +8,9 @@ namespace FlowerShopManagement.Infrustructure.DatabaseSettings;
 
 public class CartCRUD : ICartCRUD
 {
-    private IMongoDbDAO _mongoDbDAO;
+    private IMongoDbContext _mongoDbDAO;
 
-    public CartCRUD(IMongoDbDAO mongoDbDAO) => _mongoDbDAO = mongoDbDAO;
+    public CartCRUD(IMongoDbContext mongoDbDAO) => _mongoDbDAO = mongoDbDAO;
 
     public async Task<bool> AddNewCartByCustomerIdAsync(string customerId)
     {

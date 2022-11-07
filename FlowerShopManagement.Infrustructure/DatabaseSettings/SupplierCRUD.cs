@@ -8,9 +8,9 @@ namespace FlowerShopManagement.Infrustructure.DatabaseSettings;
 
 public class SupplierCRUD : ISupplierCRUD
 {
-    private IMongoDbDAO _mongoDbDAO;
+    private IMongoDbContext _mongoDbDAO;
 
-    public SupplierCRUD(IMongoDbDAO mongoDbDAO) => _mongoDbDAO = mongoDbDAO;
+    public SupplierCRUD(IMongoDbContext mongoDbDAO) => _mongoDbDAO = mongoDbDAO;
 
     
 

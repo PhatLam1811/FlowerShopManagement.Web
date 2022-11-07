@@ -8,9 +8,9 @@ namespace FlowerShopManagement.Infrustructure.DatabaseSettings;
 
 public class ProductCRUD : IProductCRUD
 {
-    private IMongoDbDAO _mongoDbDAO;
+    private IMongoDbContext _mongoDbDAO;
 
-    public ProductCRUD(IMongoDbDAO mongoDbDAO) => _mongoDbDAO = mongoDbDAO;
+    public ProductCRUD(IMongoDbContext mongoDbDAO) => _mongoDbDAO = mongoDbDAO;
 
     public async Task<bool> AddNewProduct(Product product)
     {

@@ -8,9 +8,9 @@ namespace FlowerShopManagement.Infrustructure.DatabaseSettings;
 
 public class CustomerCRUD : ICustomerCRUD
 {
-    private IMongoDbDAO _mongoDbDAO;
+    private IMongoDbContext _mongoDbDAO;
 
-    public CustomerCRUD(IMongoDbDAO mongoDbDAO) => _mongoDbDAO = mongoDbDAO;
+    public CustomerCRUD(IMongoDbContext mongoDbDAO) => _mongoDbDAO = mongoDbDAO;
 
     
 

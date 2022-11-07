@@ -1,9 +1,9 @@
 ﻿using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Interfaces;
 
-namespace FlowerShopManagement.Application.Interfaces;
+namespace FlowerShopManagement.Application.Interfaces.Temp;
 
-public interface ICustomerServices : ICustomerCRUD
+public interface ICustomerServices
 {
     //List<Customer> Get(string id);
 

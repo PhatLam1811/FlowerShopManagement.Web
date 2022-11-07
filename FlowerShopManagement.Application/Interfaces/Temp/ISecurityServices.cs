@@ -1,4 +1,4 @@
-﻿namespace FlowerShopManagement.Application.Interfaces;
+﻿namespace FlowerShopManagement.Application.Interfaces.Temp;
 
 public interface ISecurityServices
 {
@@ -7,4 +7,5 @@ public interface ISecurityServices
     public string Encrypt(string plainText);
     public string Decrypt(string cipherText);
     public bool VerifyEmail(string emailAddress);
+    public string CodeGenerator();
 }

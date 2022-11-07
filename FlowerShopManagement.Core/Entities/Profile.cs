@@ -4,8 +4,8 @@ namespace FlowerShopManagement.Core.Entities;
 
 public class Profile 
 {
-    public string? _fullName { get; set; }
-    public string? _avatar { get; set; }
+    public string? _fullName { get; set; } = String.Empty;
+    public string? _avatar { get; set; } = String.Empty;
     public Genders _gender { get; set; }
     public int _age { get; set; }
     public string[] _addresses { get; set; } = new string[0];

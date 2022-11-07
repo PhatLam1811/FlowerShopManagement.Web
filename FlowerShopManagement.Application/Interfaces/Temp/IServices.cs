@@ -1,7 +1,6 @@
-﻿
-// ******************** THIS INTERFACE IS ONLY USED FOR REFERENCE FOR NOW (DONT PAY ATTENTION TO IT) *********************
+﻿// ******************** THIS INTERFACE IS ONLY USED FOR REFERENCE FOR NOW (DONT PAY ATTENTION TO IT) *********************
 
-namespace FlowerShopManagement.Application.Interfaces
+namespace FlowerShopManagement.Application.Interfaces.Temp
 {
     public interface IServices<Placeholder> where Placeholder : new()
     {

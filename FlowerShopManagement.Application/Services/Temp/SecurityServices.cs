@@ -1,10 +1,9 @@
-﻿using FlowerShopManagement.Application.Interfaces;
-using System.Text.RegularExpressions;
-using System;
+﻿using System.Text.RegularExpressions;
 using System.Security.Cryptography;
 using System.Text;
+using FlowerShopManagement.Application.Interfaces.Temp;
 
-namespace FlowerShopManagement.Application.Services;
+namespace FlowerShopManagement.Application.Services.Temp;
 
 public class SecurityServices : ISecurityServices
 {
@@ -62,7 +61,7 @@ public class SecurityServices : ISecurityServices
                 symmetricKey.BlockSize = 256;
                 symmetricKey.Mode = CipherMode.CBC;
                 symmetricKey.Padding = PaddingMode.PKCS7;
-        
+
                 using (var encryptor = symmetricKey.CreateEncryptor(keyBytes, ivStringBytes))
                 {
                     using (var memoryStream = new MemoryStream())
@@ -71,16 +70,16 @@ public class SecurityServices : ISecurityServices
                         {
                             cryptoStream.Write(plainTextBytes, 0, plainTextBytes.Length);
                             cryptoStream.FlushFinalBlock();
-                            
+
                             // Create the final bytes as a concatenation of the random salt bytes, the random iv bytes and the cipher bytes.
                             var cipherTextBytes = saltStringBytes;
-                            
+
                             cipherTextBytes = cipherTextBytes.Concat(ivStringBytes).ToArray();
                             cipherTextBytes = cipherTextBytes.Concat(memoryStream.ToArray()).ToArray();
-                
+
                             memoryStream.Close();
                             cryptoStream.Close();
-                            
+
                             return Convert.ToBase64String(cipherTextBytes);
                         }
                     }
@@ -99,7 +98,7 @@ public class SecurityServices : ISecurityServices
         // Get the IV bytes by extracting the next 32 bytes from the supplied cipherText bytes.
         var ivStringBytes = cipherTextBytesWithSaltAndIv.Skip(Keysize / 8).Take(Keysize / 8).ToArray();
         // Get the actual cipher text bytes by removing the first 64 bytes from the cipherText string.
-        var cipherTextBytes = cipherTextBytesWithSaltAndIv.Skip((Keysize / 8) * 2).Take(cipherTextBytesWithSaltAndIv.Length - ((Keysize / 8) * 2)).ToArray();
+        var cipherTextBytes = cipherTextBytesWithSaltAndIv.Skip(Keysize / 8 * 2).Take(cipherTextBytesWithSaltAndIv.Length - Keysize / 8 * 2).ToArray();
 
         using (var password = new Rfc2898DeriveBytes(passPhrase, saltStringBytes, DerivationIterations))
         {
@@ -139,5 +138,19 @@ public class SecurityServices : ISecurityServices
     public bool VerifyEmail(string emailAddress)
     {
         throw new NotImplementedException();
+    }
+
+    public string CodeGenerator()
+    {
+        var randomNumber = new byte[6];
+        string refreshToken = "";
+
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(randomNumber);
+            refreshToken = Convert.ToBase64String(randomNumber);
+        }
+
+        return refreshToken;
     }
 }

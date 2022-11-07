@@ -16,4 +16,8 @@
     <ProjectReference Include="..\FlowerShopManagement.Core\FlowerShopManagement.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
+
 </Project>

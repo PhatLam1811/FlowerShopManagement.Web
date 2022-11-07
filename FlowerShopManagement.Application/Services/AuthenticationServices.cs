@@ -1,16 +1,16 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
+using FlowerShopManagement.Application.Interfaces.Temp;
 using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Core.Interfaces;
 
 namespace FlowerShopManagement.Application.Services;
 
 public class AuthenticationServices : IAuthenticationServices
 {
-    private IUser? _currentUser;
+    private User? _currentUser;
     private ISecurityServices _securityServices;
-    private IUserServices _userServices;
+    private IUserManagementServices _userServices;
 
-    public AuthenticationServices(ISecurityServices securityServices, IUserServices userServices)
+    public AuthenticationServices(ISecurityServices securityServices, IUserManagementServices userServices)
     {
         _securityServices = securityServices;
         _userServices = userServices;
@@ -54,6 +54,10 @@ public class AuthenticationServices : IAuthenticationServices
     }
 
     public void Logout() => _currentUser = null;
+
+    public bool VerifyEmail(string generatedCode, string inputCode) => generatedCode.Equals(inputCode);
+
+    public string EmailVerificationCodeGenerate() => _securityServices.CodeGenerator();
 
     public bool IsValidEmail(string email) => _securityServices.IsValidEmail(email);
 

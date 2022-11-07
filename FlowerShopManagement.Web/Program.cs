@@ -2,10 +2,10 @@ using FlowerShopManagement.Infrustructure.Interfaces;
 using MongoDB.Driver;
 using FlowerShopManagement.Infrustructure.DatabaseSettings;
 using FlowerShopManagement.Core.Interfaces;
-using FlowerShopManagement.Core.Services;
-using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using MongoDB.Bson.Serialization;
+using FlowerShopManagement.Application.Services.Temp;
+using FlowerShopManagement.Application.Interfaces.Temp;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +19,7 @@ builder.Services.Configure<DatabaseSettings>(
     sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);*/
 
 // Add database access services
-builder.Services.AddSingleton<IMongoDbDAO, MongoDbDAO>();
+builder.Services.AddSingleton<IMongoDbContext, MongoDbContext>();
 builder.Services.AddSingleton<IMongoClient>(
     s => new MongoClient(builder.Configuration.GetValue<string>("CustomerDatabase:ConnectionString")));
 
@@ -29,8 +29,6 @@ builder.Services.AddScoped<ICustomerCRUD, CustomerCRUD>();
 
 // Add application logic services
 builder.Services.AddScoped<ICustomerServices, CustomerServices>();
-
-
 
 var app = builder.Build();
 

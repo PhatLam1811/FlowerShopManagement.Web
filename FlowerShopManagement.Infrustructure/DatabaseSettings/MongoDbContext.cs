@@ -10,7 +10,7 @@ using MongoDB.Driver;
 
 namespace FlowerShopManagement.Infrustructure.DatabaseSettings;
 
-public class MongoDbDAO : IMongoDbDAO
+public class MongoDbContext : IMongoDbContext
 {
     public IMongoClient _mongoClient { get; private set; }
     public IMongoDatabase _mongoDatabase { get; private set; }
@@ -18,11 +18,10 @@ public class MongoDbDAO : IMongoDbDAO
     public IMongoCollection<Staff> _staffCollection { get; private set; }
     public IMongoCollection<Product> _productCollection { get; private set; }
     public IMongoCollection<Cart> _cartCollection { get; private set; }
-
     public IMongoCollection<Supplier> _supplierCollection { get; private set; }
 
 
-    public MongoDbDAO(IMongoClient mongoClient)
+    public MongoDbContext(IMongoClient mongoClient)
     {
         ClassMapping();
 
@@ -37,15 +36,7 @@ public class MongoDbDAO : IMongoDbDAO
 
     public void ClassMapping()
     {
-        BsonClassMap.RegisterClassMap<Customer>(cm =>
-        {
-            cm.MapIdField(c => c._id);
-            cm.IdMemberMap.SetSerializer(new StringSerializer(BsonType.ObjectId));
-            cm.AutoMap();
-
-        });
-
-        BsonClassMap.RegisterClassMap<Staff>(cm =>
+        BsonClassMap.RegisterClassMap<User>(cm =>
         {
             cm.MapIdField(c => c._id);
             cm.IdMemberMap.SetSerializer(new StringSerializer(BsonType.ObjectId));
@@ -66,26 +57,11 @@ public class MongoDbDAO : IMongoDbDAO
             cm.AutoMap();
         });
 
-        BsonClassMap.RegisterClassMap<Profile>(cm =>
-        {
-            cm.MapIdField(c => c._id);
-            cm.IdMemberMap.SetSerializer(new StringSerializer(BsonType.ObjectId));
-            cm.AutoMap();
-        });
-
         BsonClassMap.RegisterClassMap<Review>(cm =>
         {
             cm.MapIdField(c => c._id);
             cm.IdMemberMap.SetSerializer(new StringSerializer(BsonType.ObjectId));
             cm.AutoMap();
         });
-
-        BsonClassMap.RegisterClassMap<Supplier>(cm =>
-        {
-            cm.MapIdField(c => c._id);
-            cm.IdMemberMap.SetSerializer(new StringSerializer(BsonType.ObjectId));
-            cm.AutoMap();
-        });
-
     }
 }

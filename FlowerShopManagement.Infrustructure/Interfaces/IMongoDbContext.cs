@@ -3,7 +3,7 @@ using MongoDB.Driver;
 
 namespace FlowerShopManagement.Infrustructure.Interfaces;
 
-public interface IMongoDbDAO
+public interface IMongoDbContext
 {
     public IMongoClient _mongoClient { get; }
     public IMongoDatabase _mongoDatabase { get; }
