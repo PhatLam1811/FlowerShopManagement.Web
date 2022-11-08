@@ -1,7 +1,6 @@
 ﻿using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
 using MongoDB.Driver;
-using System.Linq.Expressions;
 
 namespace FlowerShopManagement.Infrustructure.MongoDB.Implements;
 
@@ -143,11 +142,14 @@ public class UserRepository : BaseRepository<User>, IUserRepository
     public UserRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) 
     {
         CreateUniqueIndex("email");
-        CreateUniqueIndex("password");
+        CreateUniqueIndex("phoneNumber");
     }
 }
 
 public class CartRepository : BaseRepository<Cart>, ICartRepository
 {
-    public CartRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+    public CartRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) 
+    {
+        CreateUniqueIndex("customerId");
+    }
 }
