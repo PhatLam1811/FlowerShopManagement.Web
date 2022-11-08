@@ -1,6 +1,7 @@
 ﻿using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
 using MongoDB.Driver;
+using System.Linq.Expressions;
 
 namespace FlowerShopManagement.Infrustructure.MongoDB.Implements;
 
@@ -19,6 +20,15 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     private static FilterDefinition<TEntity> idFilter(string id) => Builders<TEntity>.Filter.Eq("_id", id);
     private static FilterDefinition<TEntity> customFilter(string fieldName, IComparable value)
         => Builders<TEntity>.Filter.Eq(fieldName, value);
+
+    // Indexes Configuration
+    public string CreateUniqueIndex(FieldDefinition<TEntity, string> field)
+    {
+        var indexDefine = Builders<TEntity>.IndexKeys.Ascending(field);
+        var indexOption = new CreateIndexOptions<TEntity>() { Unique = true };
+        var indexModel = new CreateIndexModel<TEntity>(indexDefine, indexOption);
+        return _mongoDbCollection.Indexes.CreateOne(indexModel);
+    }
 
     // CRUD operations
     public virtual async Task<bool> Add(TEntity entity)
@@ -130,7 +140,11 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 // Specific repositories
 public class UserRepository : BaseRepository<User>, IUserRepository
 {
-    public UserRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+    public UserRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) 
+    {
+        CreateUniqueIndex("email");
+        CreateUniqueIndex("password");
+    }
 }
 
 public class CartRepository : BaseRepository<Cart>, ICartRepository
