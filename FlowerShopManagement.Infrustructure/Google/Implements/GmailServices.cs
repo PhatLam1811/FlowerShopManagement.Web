@@ -1,10 +1,8 @@
-﻿using FlowerShopManagement.Application.Templates;
-using Google.Apis.Auth.OAuth2;
+﻿using Google.Apis.Auth.OAuth2;
 using Google.Apis.Gmail.v1;
 using Google.Apis.Gmail.v1.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
-using System.Net.Mail;
 
 namespace FlowerShopManagement.Infrustructure.Google.Implementations;
 
@@ -14,52 +12,52 @@ public class GmailServices
     static string ApplicationName = "Dallas Flower Shop Website";
  
     #region sample_code
-    public bool SendGmail(VerificationMailTemplate data)
-    {
-        try
-        {
-            string[] Scopes = { GmailService.Scope.GmailSend };
-            UserCredential credential;
+    //public bool SendGmail(VerificationMailTemplate data)
+    //{
+    //    try
+    //    {
+    //        string[] Scopes = { GmailService.Scope.GmailSend };
+    //        UserCredential credential;
 
-            using (var stream = new FileStream(
-                "./client_secret.json",
-                FileMode.Open,
-                FileAccess.Read
-            ))
-            {
-                string credPath = "token_Send.json";
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                             GoogleClientSecrets.FromStream(stream).Secrets,
-                              Scopes,
-                              "user",
-                              CancellationToken.None,
-                              new FileDataStore(credPath, true)).Result;
-                //Console.WriteLine("Credential file saved to: " + credPath);
-            }
+    //        using (var stream = new FileStream(
+    //            "./client_secret.json",
+    //            FileMode.Open,
+    //            FileAccess.Read
+    //        ))
+    //        {
+    //            string credPath = "token_Send.json";
+    //            credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+    //                         GoogleClientSecrets.FromStream(stream).Secrets,
+    //                          Scopes,
+    //                          "user",
+    //                          CancellationToken.None,
+    //                          new FileDataStore(credPath, true)).Result;
+    //            //Console.WriteLine("Credential file saved to: " + credPath);
+    //        }
 
-            // Create Gmail API service.
-            var service = new GmailService(new BaseClientService.Initializer()
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = "mycodebit",
-            });
+    //        // Create Gmail API service.
+    //        var service = new GmailService(new BaseClientService.Initializer()
+    //        {
+    //            HttpClientInitializer = credential,
+    //            ApplicationName = "mycodebit",
+    //        });
 
-            //Parsing HTML 
-            string message = $"To: {data._toAddress}\r\nSubject: {data._title}\r\nContent-Type: text/html;charset=utf-8\r\n\r\n{data._body}";
-            var newMsg = new Message();
-            newMsg.Raw = this.Base64UrlEncode(message.ToString());
-            Message response = service.Users.Messages.Send(newMsg, "me").Execute();
+    //        //Parsing HTML 
+    //        string message = $"To: {data._toAddress}\r\nSubject: {data._title}\r\nContent-Type: text/html;charset=utf-8\r\n\r\n{data._body}";
+    //        var newMsg = new Message();
+    //        newMsg.Raw = this.Base64UrlEncode(message.ToString());
+    //        Message response = service.Users.Messages.Send(newMsg, "me").Execute();
 
-            if (response != null)
-                return true;
-            else
-                return false;
-        }
-        catch (Exception e)
-        {
-            return false;
-        }
-    }
+    //        if (response != null)
+    //            return true;
+    //        else
+    //            return false;
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        return false;
+    //    }
+    //}
     #endregion
     
     public GmailService GetService()
