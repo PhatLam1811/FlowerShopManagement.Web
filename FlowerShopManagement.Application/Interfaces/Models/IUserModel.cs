@@ -1,10 +1,8 @@
-﻿using FlowerShopManagement.Core.Common;
-using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Core.Enums;
+﻿using FlowerShopManagement.Core.Enums;
 
-namespace FlowerShopManagement.Core.Interfaces;
+namespace FlowerShopManagement.Application.Interfaces.Models;
 
-public interface IUser : IBaseServices<User>
+public interface IUserModel
 {
     public Task<bool> Rename(string newName);
 

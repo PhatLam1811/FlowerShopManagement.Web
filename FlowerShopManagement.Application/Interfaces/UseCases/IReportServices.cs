@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FlowerShopManagement.Application.Interfaces
+namespace FlowerShopManagement.Application.Interfaces.UseCases
 {
     internal interface IReportServices
     {

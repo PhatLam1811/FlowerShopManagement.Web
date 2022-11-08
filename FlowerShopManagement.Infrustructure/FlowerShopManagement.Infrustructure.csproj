@@ -7,8 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Services\**" />
     <Compile Remove="ThirdPartyServices\**" />
+    <EmbeddedResource Remove="Services\**" />
     <EmbeddedResource Remove="ThirdPartyServices\**" />
+    <None Remove="Services\**" />
     <None Remove="ThirdPartyServices\**" />
   </ItemGroup>
 
@@ -26,7 +29,6 @@
 
   <ItemGroup>
     <Folder Include="Google\Interfaces\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
 </Project>

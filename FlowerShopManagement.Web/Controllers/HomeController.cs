@@ -45,8 +45,8 @@ namespace FlowerShopManagement.Web.Controllers
         {
             // Hardcode a Customer object for simpleness
             Customer customer = new Customer();
-            customer._password = "1"; // this should be encrypted later
-            customer._profile._fullName = "Lam Tan Phat";
+            customer.password = "1"; // this should be encrypted later
+            customer.profile.fullName = "Lam Tan Phat";
 
             return _customerServices.AddNewCustomer(customer);
         }
