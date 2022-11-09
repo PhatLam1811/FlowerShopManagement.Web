@@ -1,5 +1,5 @@
-﻿using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
+﻿using FlowerShopManagement.Application.MongoDB.Interfaces;
+using FlowerShopManagement.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlowerShopManagement.WebAPI.Controllers;

@@ -1,4 +1,5 @@
-﻿using FlowerShopManagement.Core.Entities;
+﻿using FlowerShopManagement.Application.MongoDB.Interfaces;
+using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
 using MongoDB.Driver;
 
@@ -6,7 +7,7 @@ namespace FlowerShopManagement.Infrustructure.MongoDB.Implements;
 
 public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
 {
-    protected readonly IMongoDBContext _mongoDbContext;
+    public readonly IMongoDBContext _mongoDbContext;
     protected readonly IMongoCollection<TEntity> _mongoDbCollection;
 
     public BaseRepository(IMongoDBContext mongoDbContext)
@@ -21,7 +22,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         => Builders<TEntity>.Filter.Eq(fieldName, value);
 
     // Indexes Configuration
-    public string CreateUniqueIndex(FieldDefinition<TEntity, string> field)
+    protected string CreateUniqueIndex(FieldDefinition<TEntity, string> field)
     {
         var indexDefine = Builders<TEntity>.IndexKeys.Ascending(field);
         var indexOption = new CreateIndexOptions<TEntity>() { Unique = true };
@@ -143,6 +144,16 @@ public class UserRepository : BaseRepository<User>, IUserRepository
     {
         CreateUniqueIndex("email");
         CreateUniqueIndex("phoneNumber");
+    }
+
+    public async Task<User> GetByEmailOrPhoneNb(string emailOrPhoneNb, string password)
+    {
+        var filter = Builders<User>.Filter.Eq("email", emailOrPhoneNb);
+        filter |= Builders<User>.Filter.Eq("phoneNumber", emailOrPhoneNb);
+        filter &= Builders<User>.Filter.Eq("password", password);
+        filter &= Builders<User>.Filter.Eq("isDeleted", false);
+        var result = await _mongoDbCollection.FindAsync(filter);
+        return result.FirstOrDefault();
     }
 }
 

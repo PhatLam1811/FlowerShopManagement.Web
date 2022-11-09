@@ -1,3 +1,6 @@
+using FlowerShopManagement.Application.Interfaces;
+using FlowerShopManagement.Application.MongoDB.Interfaces;
+using FlowerShopManagement.Application.Services;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Infrustructure.MongoDB.Implements;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
@@ -60,6 +63,11 @@ BsonClassMap.RegisterClassMap<Order>(cm =>
     cm.IdMemberMap.SetSerializer(new StringSerializer(BsonType.String));
     cm.AutoMap();
 });
+#endregion
+
+#region //================== App Services ==================//
+builder.Services.AddScoped<IAppUserManager, AppUserManager>();
+builder.Services.AddScoped<IAuthenticationServices, AuthenticationServices>();
 #endregion
 
 #region Commentted

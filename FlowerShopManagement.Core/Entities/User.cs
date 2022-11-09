@@ -28,19 +28,23 @@ public class User
     }
 
     public User(
-        string email,
+        string id,
+        string? email,
         string phoneNumber,
         string password,
+        Profile? profile = null,
+        DateTime? createdDate = null,
+        bool isDeleted = false,
         Roles role = Roles.customer)
     {
-        _id = Guid.NewGuid().ToString();
+        _id = id;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.role = role;
-        this.profile = new();
-        this.createdDate = DateTime.Now;
+        this.profile = profile != null ? profile : new();
+        this.createdDate = createdDate != null ? createdDate.Value : DateTime.Now;
         this.lastModified = DateTime.Now;
-        this.isDeleted = false;
+        this.isDeleted = isDeleted;
     }
 }

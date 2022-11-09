@@ -1,7 +1,6 @@
 ﻿using FlowerShopManagement.Core.Entities;
-using System.Runtime.Serialization;
 
-namespace FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
+namespace FlowerShopManagement.Application.MongoDB.Interfaces;
 
 public interface IBaseRepository<TEntity> : IDisposable where TEntity : class
 {
@@ -22,6 +21,9 @@ public interface IBaseRepository<TEntity> : IDisposable where TEntity : class
     public Task<bool> UpdateByField(string fieldName, IComparable value, TEntity entity);
 }
 
-public interface IUserRepository : IBaseRepository<User> { }
+public interface IUserRepository : IBaseRepository<User> 
+{
+    public Task<User> GetByEmailOrPhoneNb(string emailOrPhoneNb, string password);
+}
 
 public interface ICartRepository : IBaseRepository<Cart> { }
