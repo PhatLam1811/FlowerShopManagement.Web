@@ -4,6 +4,7 @@ using FlowerShopManagement.Application.Services;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Infrustructure.MongoDB.Implements;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -98,7 +99,23 @@ builder.Services.AddScoped<IAuthenticationServices, AuthenticationServices>();
 // builder.Services.AddScoped<ISecurityServices, SecurityServices>();
 #endregion
 
-// Swagger
+// HttpContextAccessor
+builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+// Cookie Authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+
+// Custom Cookie Authentication
+//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+//    .AddCookie("Cookies", options => 
+//    {
+//        options.LoginPath = "";
+//        options.LogoutPath = "";
+//        options.AccessDeniedPath = "";
+//        options.ReturnUrlParameter = "";
+//    });
+
+//// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 

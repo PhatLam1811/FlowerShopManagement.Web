@@ -9,7 +9,7 @@ public class UserModel
     public string? email { get; set; }
     public string phoneNumber { get; set; }
     public string password { get; set; }
-    public Roles role { get; set; }
+    public string role { get; set; }
     public Profile profile { get; set; }
 
     public UserModel(User entity)

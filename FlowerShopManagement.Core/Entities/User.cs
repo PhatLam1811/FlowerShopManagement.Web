@@ -8,7 +8,7 @@ public class User
     public string? email { get; set; }
     public string phoneNumber { get; set; }
     public string password { get; set; }
-    public Roles role { get; set; }
+    public string role { get; set; }
     public Profile profile { get; set; }
     public DateTime createdDate { get; set; }
     public DateTime lastModified { get; set; }
@@ -20,7 +20,7 @@ public class User
         email = string.Empty;
         phoneNumber = string.Empty;
         password = string.Empty;
-        role = Roles.customer;
+        role = Roles.Customer;
         profile = new();
         createdDate = DateTime.Now;
         lastModified = DateTime.Now;
@@ -35,7 +35,7 @@ public class User
         Profile? profile = null,
         DateTime? createdDate = null,
         bool isDeleted = false,
-        Roles role = Roles.customer)
+        string role = Roles.Customer)
     {
         _id = id;
         this.email = email;

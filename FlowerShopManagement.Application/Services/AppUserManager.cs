@@ -21,7 +21,7 @@ public class AppUserManager : IAppUserManager
 
     public UserModel? GetUser() => _currentUser;
 
-    public Roles? GetUserRole()
+    public string? GetUserRole()
     {
         if (_currentUser == null) return null;
         return _currentUser.role;

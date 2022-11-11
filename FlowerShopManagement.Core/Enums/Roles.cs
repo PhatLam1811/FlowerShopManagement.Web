@@ -1,8 +1,8 @@
 ﻿namespace FlowerShopManagement.Core.Enums;
 
-public enum Roles
+public struct Roles
 {
-    admin = 0,
-    staff = 1,
-    customer = 2
+    public const string Admin = "Admin";
+    public const string Staff = "Staff";
+    public const string Customer = "Customer";
 }

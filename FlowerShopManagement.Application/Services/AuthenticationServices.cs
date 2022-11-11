@@ -51,7 +51,7 @@ public class AuthenticationServices : IAuthenticationServices
         newStaff.email = email;
         newStaff.phoneNumber = phoneNb;
         newStaff.password = password;
-        newStaff.role = Roles.staff;
+        newStaff.role = Roles.Staff;
         if (!await _userRepository.Add(newStaff)) return null;
 
         // Set up current staff's model
@@ -74,7 +74,7 @@ public class AuthenticationServices : IAuthenticationServices
         // Set up model for found user
         UserModel currentUser;
 
-        if (result.role == Roles.customer)
+        if (result.role == Roles.Customer)
         {
             var customerCart = await _cartRepository.GetByField("customerId", result._id);
             currentUser = new CustomerModel(result, customerCart);

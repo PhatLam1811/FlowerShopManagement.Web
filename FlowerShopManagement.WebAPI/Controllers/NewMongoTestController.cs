@@ -1,25 +1,40 @@
-﻿using FlowerShopManagement.Application.MongoDB.Interfaces;
+﻿using FlowerShopManagement.Application.Interfaces;
+using FlowerShopManagement.Application.Models;
+using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FlowerShopManagement.WebAPI.Controllers;
 
+[AllowAnonymous]
 [ApiController]
 [Route("[controller]")]
 public class NewMongoTestController : ControllerBase
 {
     private IUserRepository _userRepository;
+    private IAppUserManager _appUserManager;
+    private IHttpContextAccessor _httpContextAccessor;
+    private string test;
 
-    public NewMongoTestController(IUserRepository userRepository)
+    public NewMongoTestController(
+        IUserRepository userRepository, 
+        IAppUserManager appUserManager,
+        IHttpContextAccessor httpContextAccessor)
     {
         _userRepository = userRepository;
+        _appUserManager = appUserManager;
+        _httpContextAccessor = httpContextAccessor;
+        test = httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     }
 
-    [HttpGet]
-    public async Task<IEnumerable<User>> GetAllUsers()
-    {
-        return await _userRepository.GetAll();
-    }
+    //[HttpGet]
+    //public async Task<IEnumerable<User>> GetAllUsers()
+    //{
+    //    return await _userRepository.GetAll();
+    //}
 
     //[HttpGet("{id}/user")]
     //public async Task<User> GetUserById(string id)
@@ -27,11 +42,11 @@ public class NewMongoTestController : ControllerBase
     //    return await _userRepository.GetById(id);
     //}
 
-    [HttpGet("{email}/user")]
-    public async Task<User> GetUserByEmail(string email)
-    {
-        return await _userRepository.GetByField("email", email);
-    }
+    //[HttpGet("{email}/user")]
+    //public async Task<User> GetUserByEmail(string email)
+    //{
+    //    return await _userRepository.GetByField("email", email);
+    //}
 
     //[HttpGet("{phoneNumber}/user")]
     //public async Task<User> GetUserByPhoneNumber(string phoneNumber)
@@ -47,6 +62,8 @@ public class NewMongoTestController : ControllerBase
         newUser.email = email;
         newUser.phoneNumber = phoneNumber;
         newUser.password = password;
+
+
 
         return await _userRepository.Add(newUser);
     }
@@ -81,5 +98,11 @@ public class NewMongoTestController : ControllerBase
     public async Task<bool> DeleteUserByEmail(string email)
     {
         return await _userRepository.RemoveByField("email", email);
+    }
+
+    [HttpGet]
+    public string? GetTest([FromQuery] IHttpContextAccessor httpContextAccessor)
+    {
+        return httpContextAccessor.HttpContext?.User?.FindFirst("4af0041e-89de-46d4-9ce1-6f25fb0c267f")?.Value;
     }
 }
