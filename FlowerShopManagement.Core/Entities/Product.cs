@@ -10,6 +10,7 @@ public class Product
     public List<Categories> _categories { get; set; }
     public float _rating { get; set; }
     public int _uniPrice { get; set; }
+    public int _amount { get; set; }
     public float _wholesaleDiscount { get; set; }
     public List<Review> _reviews { get; private set; } = new List<Review>();
 

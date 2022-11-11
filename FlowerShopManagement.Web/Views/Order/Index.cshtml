@@ -1,93 +1,75 @@
-﻿@{
+﻿@using FlowerShopManagement.Web.Views.Shared.Components;
+
+@{
 	ViewData["Title"] = "Order Page";
 }
 
-<div class="order-page">
-	<div class="order-item-part col-6">
+<div class="row mt-3">
+	<div class="col-6">
 		<div>
-			<h5>Order</h5>
-			<div class="order-item-card">
-				<div class="order-item-image"></div>
-				<div class="order-item-body">
-					<div>
-						<span class="text-title">Product name</span>
-						<span class="order-item-quantity">x1</span>
-					</div>
-					<div class="mt-1">
-						<span class="order-item-price">20.000</span>
-						<span class="order-item-total-price fw-bold">20.000</span>
-					</div>
-				</div>
-			</div>
-			<div class="order-item-card">
-				<div class="order-item-image"></div>
-				<div class="order-item-body">
-					<div>
-						<span class="text-title">Product name</span>
-						<span class="order-item-quantity">x1</span>
-					</div>
-					<div class="mt-1">
-						<span class="order-item-price">20.000</span>
-						<span class="order-item-total-price fw-bold">20.000</span>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="mt-5">
-			<div class="col-6">
-				<h5>Payment Method</h5>
-				<div class="order-payment-item">
-					<input type="radio" name="pm" value="cash" />
-					<label>cash</label>
-				</div>
-				<div class="order-payment-item">
-					<input type="radio" name="pm" value="cash1" />
-					<label>cash</label>
-				</div>
-			</div>
-			<div class="d-block">
-				<h5>Delivery Method</h5>
-				<div class="order-payment-item">
-					<input type="radio" name="dm" value="" />
-					<label>a</label>
-				</div>
-				<div class="order-payment-item">
-					<input type="radio" name="dm" value="" />
-					<label>b</label>
-				</div>
-			</div>
-		</div>
-		<div class="order-customer-info mt-4">
-			<h5>Information</h5>
-			<span>Customer Name</span>
-			<span>094xxxxxx73</span>
-			<span>Di An, Binh Duong</span>
+			<p class="h3 mb-3">Order</p>
+			<component type="typeof(OrderCardItem)" render-mode="Static" />
+			<component type="typeof(OrderCardItem)" render-mode="Static" />
 		</div>
 	</div>
-
-	<div class="order-price-part col-4">
+	<div class="col-2"></div>
+	<div class="col-4 d-flex flex-column justify-content-between">
 		<div>
-			<h5>voucher</h5>
-			<div class="w-100 d-inline-flex justify-content-between">
-				<input class="input" />
-				<button class="btn btn-primary order-voucher-check">Check</button>
+			<div class="">
+				<p class="h3 mb-2">Information</p>
+				<div>
+					<p class="m-0">Customer Name</p>
+					<p class="m-0">094xxxxxx73</p>
+					<p class="m-0">Di An, Binh Duong</p>
+				</div>
+			</div>
+			<div class="mt-4 row">
+				<div class="col-6">
+					<p class="h3 mb-2">Payment Method</p>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+						<label class="form-check-label" for="inlineRadio1">cash</label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+						<label class="form-check-label" for="inlineRadio1">atm</label>
+					</div>
+				</div>
+				<div class="col-6">
+					<p class="h3 mb-2">Delivery Method</p>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+						<label class="form-check-label" for="inlineRadio1">fast</label>
+					</div>
+					<div class="form-check">
+						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
+						<label class="form-check-label" for="inlineRadio1">normal</label>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="mt-5 d-flex justify-content-between">
-			<h5>Total</h5>
-			<h5>20.000</h5>
+		<div>
+			<div class="mt-5">
+				<p class="h3 mb-2">Voucher</p>
+				<div class="w-100 d-flex">
+					<input class="flex-grow-1 form-control" type="text" />
+					<button class="btn btn-primary">Check</button>
+				</div>
+			</div>
+			<div class="mt-5 d-flex justify-content-between">
+				<p class="h3 text-primary">Total</p>
+				<p class="h3 text-primary">$20</p>
+			</div>
+			<div class="mt-2 d-flex justify-content-between">
+				<p class="caption">Discount</p>
+				<p class="caption">20.000</p>
+			</div>
+			<div class="mt-2 d-flex justify-content-between">
+				<p class="h2">Balance</p>
+				<p class="h2">$40</p>
+			</div>
+			<button class="btn btn-primary w-100 mt-4">Confirm Order and Pay</button>
 		</div>
-		<div class="mt-2 d-flex justify-content-between">
-			<span class="text-caption">Discount</span>
-			<span class="text-caption fw-bolder">20.000</span>
-		</div>
-		<div class="mt-3 d-flex justify-content-between">
-			<h4>Balance</h4>
-			<h4>20.000</h4>
-		</div>
-		<a asp-controller="Order" asp-action="Index" class="btn btn-primary cart-btn-submit">
-			Confirm order and pay
-		</a>
 	</div>
 </div>
 
