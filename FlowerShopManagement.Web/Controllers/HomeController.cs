@@ -1,6 +1,4 @@
-﻿using FlowerShopManagement.Application.Interfaces.Temp;
-using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Core.Enums;
+﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
@@ -32,18 +30,20 @@ namespace FlowerShopManagement.Web.Controllers
         public Task<bool> AddNewCustomer()
         {
             // Hardcode a Customer object for simpleness
-            Customer customer = new Customer();
-            customer.password = "1"; // this should be encrypted later
-            customer.profile.fullName = "Lam Tan Phat";
+            //CustomerModel customer = new Customer();
+            //customer.password = "1"; // this should be encrypted later
+            //customer.profile.fullName = "Lam Tan Phat";
 
-            return _customerServices.AddNewCustomer(customer);
+            //return _customerServices.AddNewCustomer(customer);
+            throw new NotImplementedException();
         }
 
         public bool RemoveCustomerById()
         {
             // Hardcode for simpleness
-            string removedId = "1e69fd8b-ec24-4754-bee5-1151e8c78876";
-            return _customerServices.RemoveCustomerById(removedId);
+            //string removedId = "1e69fd8b-ec24-4754-bee5-1151e8c78876";
+            //return _customerServices.RemoveCustomerById(removedId);
+            throw new NotImplementedException();
         }
         
        

@@ -27,3 +27,5 @@ public interface IUserRepository : IBaseRepository<User>
 }
 
 public interface ICartRepository : IBaseRepository<Cart> { }
+
+public interface IOrderRepository : IBaseRepository<Order> { }

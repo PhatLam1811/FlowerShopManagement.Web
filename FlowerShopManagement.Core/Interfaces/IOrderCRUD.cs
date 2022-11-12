@@ -2,7 +2,7 @@
 
 namespace FlowerShopManagement.Infrustructure.Interfaces
 {
-    public interface IOrderCRUD
+    public interface IOrderRepository
     {
         public Task<bool> AddNewOrder(Order newOrder);
         public Task<List<Order>> GetAllOrders();

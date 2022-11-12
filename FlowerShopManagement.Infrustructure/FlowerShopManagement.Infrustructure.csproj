@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="DatabaseSettings\" />
     <Folder Include="Google\Interfaces\" />
   </ItemGroup>
 

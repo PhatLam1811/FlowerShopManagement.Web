@@ -14,14 +14,14 @@ namespace FlowerShopManagement.Core.Services
     public class StockServices : IStockServices
     {
         
-        public IProductCRUD _productCRUD;
+        // public IProductCRUD _productCRUD;
         
 
         // APPLICATION SERVICES (USE CASES)
-        public StockServices(IProductCRUD productCRUD)
-        {
-            _productCRUD = productCRUD;
-        }
+        //public StockServices(IProductCRUD productCRUD)
+        //{
+        //    _productCRUD = productCRUD;
+        //}
 
        
 

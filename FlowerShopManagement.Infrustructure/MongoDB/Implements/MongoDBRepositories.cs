@@ -164,3 +164,8 @@ public class CartRepository : BaseRepository<Cart>, ICartRepository
         CreateUniqueIndex("customerId");
     }
 }
+
+public class OrderRepository : BaseRepository<Order>, IOrderRepository
+{
+    public OrderRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+}

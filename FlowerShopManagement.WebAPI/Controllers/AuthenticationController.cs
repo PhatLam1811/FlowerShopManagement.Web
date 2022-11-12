@@ -46,6 +46,8 @@ public class AuthenticationController : ControllerBase
     {
         await _authServices.SignIn(emailOrPhoneNb, password);
 
+        if (_userManager.GetUser() == null) return null; 
+
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, _userManager.GetUser().id),
