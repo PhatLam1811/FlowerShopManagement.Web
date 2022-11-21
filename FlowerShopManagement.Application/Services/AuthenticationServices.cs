@@ -3,90 +3,109 @@ using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 namespace FlowerShopManagement.Application.Services;
 
 public class AuthenticationServices : IAuthenticationServices
 {
-    IAppUserManager _appUserManager;
-    IUserRepository _userRepository;
-    ICartRepository _cartRepository;
+    private readonly IUserRepository _userRepository;
+    private readonly ICartRepository _cartRepository;
+    private User? _currentUser;
 
     public AuthenticationServices(
         IUserRepository userRepository, 
-        ICartRepository cartRepository,
-        IAppUserManager appUserManager)
+        ICartRepository cartRepository)
     {
         _userRepository = userRepository;
         _cartRepository = cartRepository;
-        _appUserManager = appUserManager;
     }
 
-    public async Task<UserModel?> RegisterNewCustomer(string email, string phoneNb, string password)
+    public async Task<UserModel?> RegisterAsync(string email, string phoneNb, string password, Role? role = null)
     {
-        // Add new customer
-        User newCustomer = new();
-        newCustomer.email = email;
-        newCustomer.phoneNumber = phoneNb;
-        newCustomer.password = password;
-        if (!await _userRepository.Add(newCustomer)) return null;
+        // Encrypt the password using MD5
+        string encryptedPass = Validator.MD5Hash(password);
 
-        // Add new customer's cart
-        Cart newCart = new(newCustomer._id);
-        await _cartRepository.Add(newCart);
+        // Create new user
+        User newUser = new User();
 
-        // Set up current customer's model
-        CustomerModel currentUser = new(newCustomer, newCart);
+        newUser.email = email;
+        newUser.phoneNumber = phoneNb;
+        newUser.password = encryptedPass;
+        newUser.role = role != null ? role : Role.Customer;
 
-        // Set app's current user
-        _appUserManager.SetUser(currentUser);
+        // Try creating new user record in database
+        if (!await _userRepository.Add(newUser)) return null;
 
-        return currentUser;
+        // Customer's cart creation
+        if (newUser.role.Value.Equals(Role.Customer.Value))
+        {
+            Cart newCart = new Cart(newUser._id);
+
+            // Add created cart to the database
+            if (!await _cartRepository.Add(newCart))
+            {
+                // Remove the created user record since there's problem while creating customer's cart
+                await _userRepository.RemoveById(newUser._id);
+                return null;
+            }
+        }
+
+        // Assign Current User
+        _currentUser = newUser;
+
+        // Return User Model
+        return new UserModel(newUser);
     }
 
-    public async Task<UserModel?> RegisterNewStaff(string email, string phoneNb, string password)
+    public async Task<UserModel?> AuthenticateAsync(string emailOrPhoneNb, string password)
     {
-        // Add new staff
-        User newStaff = new();
-        newStaff.email = email;
-        newStaff.phoneNumber = phoneNb;
-        newStaff.password = password;
-        newStaff.role = Roles.Staff;
-        if (!await _userRepository.Add(newStaff)) return null;
+        // Try to find the matched user in database
+        var result = await _userRepository.GetByEmailOrPhoneNb(emailOrPhoneNb);
 
-        // Set up current staff's model
-        StaffModel currentUser = new(newStaff);
-
-        // Set app's current user
-        _appUserManager.SetUser(currentUser);
-
-        return currentUser;
-    }
-
-    public async Task<UserModel?> SignIn(string emailOrPhoneNb, string password)
-    {
-        // Try to find the authorized user in database
-        var result = await _userRepository.GetByEmailOrPhoneNb(emailOrPhoneNb, password);
-
-        // No user found
+        // Counldn't find the user with given email or phoneNb
         if (result == null) return null;
 
-        // Set up model for found user
-        UserModel currentUser;
+        // Encrypt the input password using MD5
+        string encryptedPass = Validator.MD5Hash(password);
 
-        if (result.role == Roles.Customer)
-        {
-            var customerCart = await _cartRepository.GetByField("customerId", result._id);
-            currentUser = new CustomerModel(result, customerCart);
-        }
-        else
-            currentUser = new StaffModel(result);
+        // Wrong password
+        if (!result.password.Equals(encryptedPass)) return null;
 
-        // Set up app's current user
-        _appUserManager.SetUser(currentUser);
+        // Assign Current User
+        _currentUser = result;
 
-        return currentUser;
+        return new UserModel(result);
     }
 
-    public void SignOut() => _appUserManager.SetUser(null);
+    public async Task<UserModel?> AuthenticateAsync(string id)
+    {
+        // Try to find the matched user in database
+        var result = await _userRepository.GetById(id);
+
+        // Counldn't find the user with given id
+        if (result == null) return null;
+
+        // Assign Current User
+        _currentUser = result;
+
+        return new UserModel(result);
+    }
+
+    public ClaimsPrincipal CreateUserClaims(string id, string role)
+    {
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, id),
+            new Claim(ClaimTypes.Role, role)
+        };
+
+        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        var principal = new ClaimsPrincipal(identity);
+
+        return principal;
+    }
+
+    public User? GetUser() => _currentUser;
 }

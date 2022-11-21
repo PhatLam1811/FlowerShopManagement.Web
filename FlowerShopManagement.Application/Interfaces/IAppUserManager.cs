@@ -10,7 +10,7 @@ public interface IAppUserManager
 
     public UserModel? GetUser();
 
-    public string? GetUserRole();
+    public Role? GetUserRole();
 
     public void EditProfile();
 }

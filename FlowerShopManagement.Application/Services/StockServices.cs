@@ -1,9 +1,7 @@
-﻿using FlowerShopManagement.Core.Interfaces;
-using FlowerShopManagement.Core.Entities;
+﻿using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Core.Enums;
 using System.Collections.Generic;
-using FlowerShopManagement.Infrustructure.Interfaces;
 
 // ************ THIS IS A SAMPLE INTERFACE FOR CUSTOMER SERVICES **************
 // - New adjustments could be made in future updates

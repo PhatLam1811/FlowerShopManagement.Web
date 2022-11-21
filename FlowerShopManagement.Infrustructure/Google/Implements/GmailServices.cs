@@ -1,12 +1,14 @@
-﻿using Google.Apis.Auth.OAuth2;
+﻿using FlowerShopManagement.Infrustructure.Google.Interfaces;
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.Gmail.v1;
 using Google.Apis.Gmail.v1.Data;
 using Google.Apis.Services;
 using Google.Apis.Util.Store;
+using MimeKit;
 
 namespace FlowerShopManagement.Infrustructure.Google.Implementations;
 
-public class GmailServices
+public class GmailServices : IGmailServices
 {
     static string[] Scopes = { GmailService.Scope.GmailSend };
     static string ApplicationName = "Dallas Flower Shop Website";
@@ -67,7 +69,7 @@ public class GmailServices
             UserCredential credential;
 
             // Load client secrets
-            using (var stream = new FileStream("./client_secret.json", FileMode.Open, FileAccess.Read))
+            using (var stream = new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
             {
                 /* The file token.json stores the user's access and refresh tokens, and is created
                  automatically when the authorization flow completes for the first time */
@@ -102,9 +104,26 @@ public class GmailServices
     {
         GmailService service = GetService();
 
-        Message newMsg = new Message();
+        MimeMessage newMsg = new MimeMessage();
 
-        service.Users.Messages.Send(newMsg, "phatlam1811@gmail.com");
+        newMsg.From.Add(new MailboxAddress("", "phatlam1811@gmail.com"));
+        newMsg.To.Add(new MailboxAddress("", "z613zgm@gmail.com"));
+        newMsg.Body = new TextPart("html")
+        {
+            Text = "2nd Test Email"
+        };
+
+        var ms = new MemoryStream();
+        newMsg.WriteTo(ms);
+        ms.Position = 0;
+        StreamReader sr = new StreamReader(ms);
+        Message msg = new Message();
+        string rawString = sr.ReadToEnd();
+
+        byte[] raw = System.Text.Encoding.UTF8.GetBytes(rawString);
+        msg.Raw = Base64UrlEncode(rawString);
+
+        service.Users.Messages.Send(msg, "me").Execute();
 
         return true;
     }

@@ -146,12 +146,10 @@ public class UserRepository : BaseRepository<User>, IUserRepository
         CreateUniqueIndex("phoneNumber");
     }
 
-    public async Task<User> GetByEmailOrPhoneNb(string emailOrPhoneNb, string password)
+    public async Task<User> GetByEmailOrPhoneNb(string emailOrPhoneNb)
     {
         var filter = Builders<User>.Filter.Eq("email", emailOrPhoneNb);
         filter |= Builders<User>.Filter.Eq("phoneNumber", emailOrPhoneNb);
-        filter &= Builders<User>.Filter.Eq("password", password);
-        filter &= Builders<User>.Filter.Eq("isDeleted", false);
         var result = await _mongoDbCollection.FindAsync(filter);
         return result.FirstOrDefault();
     }

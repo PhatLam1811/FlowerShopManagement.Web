@@ -19,6 +19,7 @@
     <PackageReference Include="Google.Apis.Gmail.v1" Version="1.57.0.2650" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
+    <PackageReference Include="MimeKit" Version="3.4.2" />
     <PackageReference Include="MongoDB.Driver" Version="2.18.0" />
   </ItemGroup>
 
@@ -29,7 +30,6 @@
 
   <ItemGroup>
     <Folder Include="DatabaseSettings\" />
-    <Folder Include="Google\Interfaces\" />
   </ItemGroup>
 
 </Project>

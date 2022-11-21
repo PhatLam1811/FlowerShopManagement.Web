@@ -23,7 +23,7 @@ public interface IBaseRepository<TEntity> : IDisposable where TEntity : class
 
 public interface IUserRepository : IBaseRepository<User> 
 {
-    public Task<User> GetByEmailOrPhoneNb(string emailOrPhoneNb, string password);
+    public Task<User> GetByEmailOrPhoneNb(string emailOrPhoneNb);
 }
 
 public interface ICartRepository : IBaseRepository<Cart> { }

@@ -1,5 +1,4 @@
-﻿using FlowerShopManagement.Core.Interfaces;
-using FlowerShopManagement.Core.Entities;
+﻿using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Application.Models;
@@ -30,11 +29,6 @@ public class CustomerManagementServices : ICustomerManagementServices
         throw new NotImplementedException();
     }
 
-    public Task<Profile> GetProfile(string customerId)
-    {
-        // return _profileCRUD.GetProfileById(customerId);
-        throw new NotImplementedException();
-    }
     public async Task<CustomerModel> GetUser(string customerId)
     {
         // return  await _userRepository.GetCustomerById(customerId);

@@ -5,29 +5,37 @@ namespace FlowerShopManagement.Application.Models;
 
 public class UserModel
 {
-    public string id { get; set; }
-    public string? email { get; set; }
-    public string phoneNumber { get; set; }
-    public string password { get; set; }
-    public string role { get; set; }
-    public Profile profile { get; set; }
+    public string Email { get; set; }
+    public string PhoneNumber { get; set; }
+    public string FullName { get; set; }
+    public string Avatar { get; set; }
+    public Gender Gender { get; set; }
+    public int BirthYear { get; set; }
+    public string[] Addresses { get; set; }
 
     public UserModel(User entity)
     {
-        id = entity._id;
-        email = entity.email;
-        phoneNumber = entity.phoneNumber;
-        password = entity.password;
-        role = entity.role;
-        profile = entity.profile;
+        Email = entity.email;
+        PhoneNumber = entity.phoneNumber;
+        FullName = entity.name;
+        Avatar = entity.avatar;
+        Gender = entity.gender;
+        BirthYear = entity.birthYear;
+        Addresses = entity.addresses;
     }
 
-    public User ToEntity() => new User(
-        this.id, 
-        this.email, 
-        this.phoneNumber, 
-        this.password, 
-        this.profile);
+    public User ToEntity(User entity)
+    {
+        entity.email = Email;
+        entity.phoneNumber = PhoneNumber;
+        entity.name = FullName;
+        entity.avatar = Avatar;
+        entity.gender = Gender;
+        entity.birthYear = BirthYear;
+        entity.addresses = Addresses;
+
+        return entity;
+    }
 }
 
 public class CustomerModel : UserModel
@@ -38,14 +46,4 @@ public class CustomerModel : UserModel
     {
         this.cart = cart;
     } 
-}
-
-public class StaffModel : UserModel
-{
-    public StaffModel(User entity) : base(entity) { }
-}
-
-public class AdminModel : StaffModel
-{
-    public AdminModel(User entity) : base(entity) { }
 }

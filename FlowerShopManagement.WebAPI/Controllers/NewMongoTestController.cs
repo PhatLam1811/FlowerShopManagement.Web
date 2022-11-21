@@ -15,17 +15,14 @@ namespace FlowerShopManagement.WebAPI.Controllers;
 public class NewMongoTestController : ControllerBase
 {
     private IUserRepository _userRepository;
-    private IAppUserManager _appUserManager;
     private IHttpContextAccessor _httpContextAccessor;
     private string test;
 
     public NewMongoTestController(
         IUserRepository userRepository, 
-        IAppUserManager appUserManager,
         IHttpContextAccessor httpContextAccessor)
     {
         _userRepository = userRepository;
-        _appUserManager = appUserManager;
         _httpContextAccessor = httpContextAccessor;
         test = httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     }

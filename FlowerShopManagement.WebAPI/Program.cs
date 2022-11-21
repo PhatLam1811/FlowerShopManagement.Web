@@ -2,9 +2,11 @@ using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Application.Services;
 using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Infrustructure.Google.Implementations;
+using FlowerShopManagement.Infrustructure.Google.Interfaces;
 using FlowerShopManagement.Infrustructure.MongoDB.Implements;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Google.Apis.Gmail.v1;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -67,8 +69,8 @@ BsonClassMap.RegisterClassMap<Order>(cm =>
 #endregion
 
 #region //================== App Services ==================//
-builder.Services.AddScoped<IAppUserManager, AppUserManager>();
 builder.Services.AddScoped<IAuthenticationServices, AuthenticationServices>();
+builder.Services.AddScoped<IGmailServices ,GmailServices>();
 #endregion
 
 #region Commentted
@@ -101,19 +103,6 @@ builder.Services.AddScoped<IAuthenticationServices, AuthenticationServices>();
 
 // HttpContextAccessor
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
-// Cookie Authentication
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
-
-// Custom Cookie Authentication
-//builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-//    .AddCookie("Cookies", options => 
-//    {
-//        options.LoginPath = "";
-//        options.LogoutPath = "";
-//        options.AccessDeniedPath = "";
-//        options.ReturnUrlParameter = "";
-//    });
 
 //// Swagger
 builder.Services.AddEndpointsApiExplorer();
