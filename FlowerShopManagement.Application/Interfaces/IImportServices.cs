@@ -1,9 +1,10 @@
-﻿namespace FlowerShopManagement.Application.Interfaces;
+﻿using FlowerShopManagement.Core.Entities;
+
+namespace FlowerShopManagement.Application.Interfaces;
 
 public interface IImportServices
 {
-    // Create Request Form
-    // Create Contract Form
-    // Request
-    // Verify
+    // Make Supply Request
+    public void RequestSupply(List<Product> productList, Supplier supplier);
+
 }

@@ -66,33 +66,57 @@ public class GmailServices : IGmailServices
     {
         try
         {
-            UserCredential credential;
+            //UserCredential credential;
 
-            // Load client secrets
-            using (var stream = new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
+            //// Load client secrets
+            //using (var stream = new FileStream("client_secret.json", FileMode.Open, FileAccess.Read))
+            //{
+            //    /* The file token.json stores the user's access and refresh tokens, and is created
+            //     automatically when the authorization flow completes for the first time */
+            //    string credPath = "token.json";
+
+            //    credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
+            //        GoogleClientSecrets.FromStream(stream).Secrets,
+            //        Scopes,
+            //        "user",
+            //        CancellationToken.None,
+            //        new FileDataStore(credPath, true)).Result;
+
+            //    Console.WriteLine("Credential file saved to: " + credPath);
+            //}
+
+            //// Create Gmail API service
+            //var service = new GmailService(new BaseClientService.Initializer
+            //{
+            //    HttpClientInitializer = credential,
+            //    ApplicationName = ApplicationName
+            //});
+
+            GoogleCredential credential;
+
+            try
             {
-                /* The file token.json stores the user's access and refresh tokens, and is created
-                 automatically when the authorization flow completes for the first time */
-                string credPath = "token.json";
+                using (var stream = new FileStream("SE100-N11-Proj-Cre.json", FileMode.Open, FileAccess.Read))
+                {
+                    credential = GoogleCredential.FromStream(stream)
+                        .CreateScoped(GmailService.Scope.GmailSend)
+                        .CreateWithUser("phatlam1811@gmail.com");
+                }
 
-                credential = GoogleWebAuthorizationBroker.AuthorizeAsync(
-                    GoogleClientSecrets.FromStream(stream).Secrets,
-                    Scopes,
-                    "user",
-                    CancellationToken.None,
-                    new FileDataStore(credPath, true)).Result;
+                var service = new GmailService(new BaseClientService.Initializer()
+                    {
+                        HttpClientInitializer = credential,
+                        ApplicationName = "SE100-N11-Proj"
+                    });
 
-                Console.WriteLine("Credential file saved to: " + credPath);
+                return service;
+            }
+            catch (Exception e)
+            {
+                throw new ApplicationException("Error logging into Google Mail", e);
             }
 
-            // Create Gmail API service
-            var service = new GmailService(new BaseClientService.Initializer
-            {
-                HttpClientInitializer = credential,
-                ApplicationName = ApplicationName
-            });
-
-            return service;
+            //return service;
         }
         catch (FileNotFoundException e)
         {
@@ -104,14 +128,27 @@ public class GmailServices : IGmailServices
     {
         GmailService service = GetService();
 
+        // Create the message
         MimeMessage newMsg = new MimeMessage();
+
+        string htmlPart = string.Empty;
+        using (StreamReader streamReader = new StreamReader("Test.html"))
+        {
+            htmlPart = streamReader.ReadToEnd();
+        }
+
+        // Add html part to the message
+        BodyBuilder bodyBuilder = new BodyBuilder();
+        bodyBuilder.TextBody = "Test email with html template";
+        bodyBuilder.HtmlBody = htmlPart;
 
         newMsg.From.Add(new MailboxAddress("", "phatlam1811@gmail.com"));
         newMsg.To.Add(new MailboxAddress("", "z613zgm@gmail.com"));
-        newMsg.Body = new TextPart("html")
-        {
-            Text = "2nd Test Email"
-        };
+        newMsg.Body = bodyBuilder.ToMessageBody();
+        //newMsg.Body = new TextPart(MimeKit.Text.TextFormat.Html)
+        //{
+        //    Text = htmlPart
+        //};
 
         var ms = new MemoryStream();
         newMsg.WriteTo(ms);
@@ -120,10 +157,16 @@ public class GmailServices : IGmailServices
         Message msg = new Message();
         string rawString = sr.ReadToEnd();
 
-        byte[] raw = System.Text.Encoding.UTF8.GetBytes(rawString);
         msg.Raw = Base64UrlEncode(rawString);
 
         service.Users.Messages.Send(msg, "me").Execute();
+
+        // Create the draft message
+        //Draft draft = new Draft();
+        //draft.Message = msg;
+        //draft = service.Users.Drafts.Create(draft, "me").Execute();
+
+        //service.Users.Drafts.Send(draft, "me").Execute();
 
         return true;
     }

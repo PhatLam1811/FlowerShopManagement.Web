@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using FlowerShopManagement.Infrustructure.Google.Interfaces;
+using FlowerShopManagement.Infrustructure.Mail;
+using FlowerShopManagement.Application.Templates;
 
 namespace FlowerShopManagement.Web.Controllers;
 
@@ -13,12 +15,14 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly IAuthenticationServices _authServices;
     private readonly IGmailServices _gmailServices;
+    private readonly MailServices _mailServices;
 
-    public HomeController(ILogger<HomeController> logger, IAuthenticationServices authServices, IGmailServices gmailServices)
+    public HomeController(ILogger<HomeController> logger, IAuthenticationServices authServices, IGmailServices gmailServices, MailServices mailServices)
     {
         _logger = logger;
         _authServices = authServices;
         _gmailServices = gmailServices;
+        _mailServices = mailServices;
     }
 
     // =======================================================================================================
@@ -72,10 +76,20 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    public Task<bool> SignIn()
+    public async Task<bool> SignIn()
     {
-        _gmailServices.Send();
-        return Task.FromResult(true);
+        // Create supply request form
+        var requestForm = new SupplyRequestFormModel(
+            "z613zgm@gmail.com",
+            "Supply Request From Dallas",
+            "This is a supply request form!",
+            null, new string[0] { }, new string[0] { }, new int[0] { });
+
+        //_gmailServices.Send();
+        await _mailServices.Send(requestForm);
+
+        return true;
+
         //// Authenticate input email or phone Nb & password
         //var result = await _authServices.AuthenticateAsync("phatlam1811@gmail.com", "123123");
 
