@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace FlowerShopManagement.Web.Controllers
+namespace FlowerShopManagement.Web.Controllers;
+
+public class ProfileController : Controller
 {
-    public class ProfileController : Controller
+    public IActionResult Index()
     {
-        
-        public IActionResult Index()
-        {
-            ViewBag.Profile = true;
-            return View();
-        }
+        ViewBag.Profile = true;
+        return View();
     }
 }
