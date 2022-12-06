@@ -1,73 +1,33 @@
-﻿@{
+﻿@using FlowerShopManagement.Web.Views.Shared.Components;
+
+@{
 	ViewData["Title"] = "Home Page";
 }
 
-<div class="linear-layout mt-3 col">
-	<div class="home-banner"></div>
-	<div class="mt-5">
-		<h5 class="home-label">Category</h5>
-		<ul class="">
-			<li class="">
-				<div class="category-item">
-					<div>
-						<i class="fa fa-seedling category-icon mb-2"></i>
-					</div>
-					<span class="category-name">Name</span>
-				</div>
-				<div class="category-item">
-					<div>
-						<i class="fa fa-seedling category-icon mb-2"></i>
-					</div>
-					<span class="category-name">Name</span>
-				</div>
-			</li>
-		</ul>
-	</div>
-	<div class="" style="margin-left: -0.5rem;
-    margin-right: -0.5rem;">
-		<h5 class="home-label mt-5">For you</h5>
-		@*<div class="product-card">
-			<div class="product-card-image"></div>
-			<div class="product-card-body">
-				<div class="d-flex">
-					<div class="" style="flex-grow: 1">
-						<span class="product-card-name">Product Name</span>
-						<span class="product-card-price">20.000</span>
-					</div>
-					<div>
-						<i class="fa-regular fa-heart fav-icon"></i>
-					</div>
-				</div>
-				<button class="btn-primary product-card-submit">
-					Add to Cart
-				</button>
-			</div>
-		</div>*@
-		@{
-		var i = 0;
-
-		while (i < 5)
-		{
-				<div class="product-card">
-					<div class="product-card-image"></div>
-					<div class="product-card-body">
-						<div class="d-flex">
-							<div class="" style="flex-grow: 1">
-									<a asp-controller="Home" asp-action="ProductDetail" style="text-decoration:none; color: black"><span class="product-card-name">Product Name</span></a>
-								<span class="product-card-price">20.000</span>
-							</div>
-							<div>
-								<i class="fa-regular fa-heart fav-icon"></i>
-							</div>
-						</div>
-						<button class="btn-primary product-card-submit">
-							Add to Cart
-						</button>
-					</div>
-				</div>
-
-		i++;
-		}
-		}
+<div>
+	<div class="h3 mb-3">Categories</div>
+	<div class="row gx-3">
+		<component type="typeof(CategoryCard)" render-mode="Static" />
+		<component type="typeof(CategoryCard)" render-mode="Static" />
+		<component type="typeof(CategoryCard)" render-mode="Static" />
 	</div>
 </div>
+
+<div class="mt-5">
+	<div class="h3 mb-3">Products</div>
+	<form asp-action="SignIn" method="SignIn()">
+		<button class="btn btn-default">Button</button>
+	</form>
+	<div class="row gx-3 gy-5">
+		<component type="typeof(ProductCard)" render-mode="Static" />
+		<component type="typeof(ProductCard)" render-mode="Static" />
+		<component type="typeof(ProductCard)" render-mode="Static" />
+		<component type="typeof(ProductCard)" render-mode="Static" />
+		<component type="typeof(ProductCard)" render-mode="Static" />
+		<component type="typeof(ProductCard)" render-mode="Static" />
+		<component type="typeof(ProductCard)" render-mode="Static" />
+	</div>
+</div>
+
+
+<div>Pagination</div>

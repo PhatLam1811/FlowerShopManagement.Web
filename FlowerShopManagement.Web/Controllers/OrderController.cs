@@ -6,7 +6,8 @@ namespace FlowerShopManagement.Web.Controllers
 	{
 		public IActionResult Index()
 		{
-			return View();
+            ViewBag.Order = true;
+            return View();
 		}
 	}
-}
+}		

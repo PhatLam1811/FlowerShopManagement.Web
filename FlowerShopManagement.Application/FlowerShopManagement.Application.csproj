@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,14 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="SampleUsecases\Commands\" />
-    <Folder Include="SampleUsecases\EventHandlers\" />
-    <Folder Include="SampleUsecases\Queries\" />
+    <Compile Remove="SampleUsecases\**" />
+    <EmbeddedResource Remove="SampleUsecases\**" />
+    <None Remove="SampleUsecases\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\FlowerShopManagement.Core\FlowerShopManagement.Core.csproj" />
-    <ProjectReference Include="..\FlowerShopManagement.Infrustructure\FlowerShopManagement.Infrustructure.csproj" />
   </ItemGroup>
 
 </Project>

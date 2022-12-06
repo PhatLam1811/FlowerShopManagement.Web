@@ -1,0 +1,44 @@
+﻿/*ICON*/
+.icon-delete:after {
+    content: "\f2ed";
+    font-family: 'FontAwesome';
+    margin: 0 5px 0 5px;
+}
+
+.icon-small {
+    font-size: 20px;
+}
+
+.icon-normal {
+    font-size: 24px;
+}
+
+.icon-plus:after {
+    content: "\002b";
+    font-family: 'FontAwesome';
+    margin: 0 5px 0 5px;
+}
+
+.icon-arrow:after {
+    content: "\f061";
+    font-family: 'FontAwesome';
+    margin: 0 5px 0 5px;
+}
+
+.icon-back:after {
+    content: "\f060";
+    font-family: 'FontAwesome';
+    margin: 0 5px 0 5px;
+}
+
+.icon-cart:after {
+    content: "\f07a";
+    font-family: 'FontAwesome';
+    margin: 0 5px 0 5px;
+}
+
+.icon-search:after {
+    content: "\f002";
+    font-family: 'FontAwesome';
+    margin: 0 5px 0 5px;
+}
