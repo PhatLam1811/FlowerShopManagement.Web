@@ -3,7 +3,8 @@ using FlowerShopManagement.Core.Enums;
 
 namespace FlowerShopManagement.Application.Interfaces;
 
-public interface IStockServices
+public interface IOrderServices
 {
+    
     
 }

@@ -6,7 +6,7 @@ public interface IBaseRepository<TEntity> : IDisposable where TEntity : class
 {
     public Task<bool> Add(TEntity entity);
 
-    public Task<IEnumerable<TEntity>> GetAll();
+    public Task<List<TEntity>> GetAll();
 
     public Task<TEntity> GetById(string id);
 
@@ -29,3 +29,4 @@ public interface IUserRepository : IBaseRepository<User>
 public interface ICartRepository : IBaseRepository<Cart> { }
 
 public interface IOrderRepository : IBaseRepository<Order> { }
+public interface IProductRepository : IBaseRepository<Product> { }

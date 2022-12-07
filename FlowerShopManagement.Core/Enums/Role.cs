@@ -9,4 +9,5 @@ public class Role
     public static Role Admin { get => new Role("Admin"); }
     public static Role Staff { get => new Role("Staff"); }
     public static Role Customer { get => new Role("Customer"); }
+    public static Role Passenger { get => new Role("Passenger"); }
 }
