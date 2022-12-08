@@ -1,5 +1,4 @@
-﻿using FlowerShopManagement.Core.Common;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace FlowerShopManagement.Core.Entities;
 
@@ -8,35 +7,33 @@ public class Review
     public string? _id { get; private set; }
 
     [Required]
-    public string _productID { get; set; }
+    public string productID { get; set; }
     [Required]
-    public string _authorID { get; set; }
-    public string _authorName { get; set; }
-    public string _authorAvatar { get; set; }
-    public string? _title { get; set; }
+    public string authorID { get; set; }
+    public string authorName { get; set; }
+    public string authorAvatar { get; set; }
+    public string? title { get; set; }
     [Required]
-    public string _body { get; set; }
-    public int _likes { get; set; }
-    public int _dislikes { get; set; }
-    public DateTime _createdDate { get; set; }
-    public DateTime _lastModified { get; set; }
-
-   
+    public string body { get; set; }
+    public int likes { get; set; }
+    public int dislikes { get; set; }
+    public DateTime createdDate { get; set; }
+    public DateTime lastModified { get; set; }
 
     public Review(
         string productID, string authorID, string authorName, string authorAvatar, 
         string? title, string body, 
         DateTime createdDate, DateTime lastModified)
     {
-        _productID = productID;
-        _authorID = authorID;
-        _authorName = authorName;
-        _authorAvatar = authorAvatar;
-        _title = title;
-        _body = body;
-        _likes = 0;
-        _dislikes = 0;
-        _createdDate = createdDate;
-        _lastModified = lastModified;
+        this.productID = productID;
+        this.authorID = authorID;
+        this.authorName = authorName;
+        this.authorAvatar = authorAvatar;
+        this.title = title;
+        this.body = body;
+        this.likes = 0;
+        this.dislikes = 0;
+        this.createdDate = createdDate;
+        this.lastModified = lastModified;
     }
 }

@@ -1,13 +1,12 @@
-﻿using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Core.Enums;
-using FlowerShopManagement.Core.Interfaces;
+﻿using FlowerShopManagement.Application.Models;
+using FlowerShopManagement.Core.Entities;
 
 namespace FlowerShopManagement.Application.Interfaces;
 
 public interface ISaleServices
 {
     public Task<List<Order>> GetOrderListAsync();
-    public List<Customer> GetCustomerList();
+    public List<CustomerModel> GetCustomerList();
     public Task<bool> VerifyOrder(string customerId, Order order);
     public bool CheckExistedCustomer(string id);
     public Task<bool> CancelOrder(string customerId, Order order);

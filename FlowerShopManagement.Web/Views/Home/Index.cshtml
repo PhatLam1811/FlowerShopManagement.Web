@@ -15,6 +15,9 @@
 
 <div class="mt-5">
 	<div class="h3 mb-3">Products</div>
+	<form asp-action="SignIn" method="SignIn()">
+		<button class="btn btn-default">Button</button>
+	</form>
 	<div class="row gx-3 gy-5">
 		<component type="typeof(ProductCard)" render-mode="Static" />
 		<component type="typeof(ProductCard)" render-mode="Static" />
