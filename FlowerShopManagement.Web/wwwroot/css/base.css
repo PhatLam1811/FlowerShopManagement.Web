@@ -81,7 +81,7 @@ p, span, h1, h2, h3, h4, h5, h6 {
     width: fit-content;
     height: auto;
     min-width: auto !important;
-    padding: 2px 12px;
+    padding: 10px 12px;
 }
 
 .btn-icon-primary {
