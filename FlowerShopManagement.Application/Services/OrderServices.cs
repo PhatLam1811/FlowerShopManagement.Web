@@ -31,7 +31,6 @@ namespace FlowerShopManagement.Core.Services
 			{
 
 				// Successful case happens
-				newOrder._isVerified = 1;
 				newOrder._status = Status.Waiting;//On waiting
 				var result = await orderRepository.Add(newOrder);
 				return result;

@@ -22,23 +22,21 @@ public class SaleServices : ISaleServices
 	}
 
 
-	public async Task<bool> VerifyOnlineOrder(string orderId, IOrderRepository orderRepository, IUserRepository userRepository, IProductRepository productRepository)
+	public async Task<bool> VerifyOnlineOrder(string? orderId, IOrderRepository orderRepository, IUserRepository userRepository, IProductRepository productRepository)
 	{
 
 		// Set default info for an order
 		//order._phoneNumber = user.phoneNumber;
 		//order._customerName = user.name;
+		if (orderId == null) { return false; }
 		var order = await orderRepository.GetById(orderId);
 		//update
 		if (order != null && order._id != null)
 		{
-			//Check if the order has been on DB 
-			var updateOrder = await orderRepository.GetById(order._id);
-			if (updateOrder != null)
-			{
-				// Successful case happens
-				List<Product> updateProductList = new List<Product>();
-				//Update product 
+			// Successful case happens
+			List<Product> updateProductList = new List<Product>();
+			//Check the amount is avaiable before updating
+			if (order._products != null)
 				foreach (var item in order._products)
 				{
 					if (item != null && item._id != null)
@@ -53,20 +51,18 @@ public class SaleServices : ISaleServices
 					}
 
 				}
-				foreach (var item in updateProductList)
+			//Updating product
+			foreach (var item in updateProductList)
+			{
+				if (item != null && item._id != null)
 				{
-					if (item != null && item._id != null)
-					{
-						var updateResult = await productRepository.UpdateById(item._id, item);
-						if (!updateResult)
-							return false;
-					}
+					var updateResult = await productRepository.UpdateById(item._id, item);
+					if (!updateResult)
+						return false;
 				}
-				order._isVerified = 1;
-				order._status = Status.sampleStatus;//Delivering
-				return await orderRepository.UpdateById(order._id, order);
 			}
-
+			order._status = Status.Delivering;//Delivering
+			return await orderRepository.UpdateById(order._id, order);
 		}
 		return false;
 	}
@@ -86,26 +82,31 @@ public class SaleServices : ISaleServices
 		{
 			//Customer is a passenger
 			newOrder._phoneNumber = user.PhoneNumber;
-			newOrder._customerName = user.FullName;
+			newOrder._customerName = user.CustomerName;
 		}
 
 		if (newOrder != null && newOrder._id != null)
 		{
 			List<Product> updateProductList = new List<Product>();
-			//Update product 
-			foreach (var item in newOrder._products)
-			{
-				if (item != null && item._id != null)
-				{
-					var product = await productRepository.GetById(item._id);
-					//Amount unavaibale => false
-					if (product._amount < item._amount) return false;
-					product._amount -= item._amount;
-					//Add to updateProList
-					updateProductList.Add(product);
-				}
 
+			if (newOrder._products != null)
+			{
+				// reduce the amount of product before updating
+				foreach (var item in newOrder._products)
+				{
+					if (item != null && item._id != null)
+					{
+						var product = await productRepository.GetById(item._id);
+						//Amount unavaibale => false
+						if (product._amount < item._amount) return false;
+						product._amount -= item._amount;
+						//Add to updateProList
+						updateProductList.Add(product);
+					}
+
+				}
 			}
+			// Updating...
 			foreach (var item in updateProductList)
 			{
 				if (item != null && item._id != null)
@@ -116,8 +117,7 @@ public class SaleServices : ISaleServices
 				}
 			}
 			// Successful case happens
-			newOrder._isVerified = 1;
-			newOrder._status = Status.sampleStatus;//On charging
+			newOrder._status = Status.Purchased;//On charging
 			var result = await orderRepository.Add(newOrder);
 			return result;
 

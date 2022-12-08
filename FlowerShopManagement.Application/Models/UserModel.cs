@@ -5,23 +5,23 @@ namespace FlowerShopManagement.Application.Models;
 
 public class UserModel
 {
-    public string Email { get; set; }
+    //public string Email { get; set; }
     public string PhoneNumber { get; set; }
-    public string FullName { get; set; }
+    public string CustomerName { get; set; }
 
     public UserModel(User entity)
     {
-        Email = entity.email;
+        //Email = entity.email;
         PhoneNumber = entity.phoneNumber;
-        FullName = entity.name;
+        CustomerName = entity.name;
        
     }
 
     public User ToEntity(User entity)
     {
-        entity.email = Email;
+        //entity.email = Email;
         entity.phoneNumber = PhoneNumber;
-        entity.name = FullName;
+        entity.name = CustomerName;
         return entity;
     }
 }
