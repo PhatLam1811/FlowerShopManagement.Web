@@ -120,12 +120,12 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(OrderModel orderModel, UserModel userModel)
         {
-            var result = _saleServices.CreateOfflineOrder(orderModel, userModel, _orderRepository, _userRepository, _productRepository);
-            if (result != null)
-            {
-                List<OrderModel> orders = await GetUpdatedOrders();
-                return PartialView(/*Coult be a ViewModel in here*/); // A updated _ViewAll
-            }
+            //var result = _saleServices.CreateOfflineOrder(orderModel, userModel, _orderRepository, _userRepository, _productRepository);
+            //if (result != null)
+            //{
+            //    List<OrderModel> orders = await GetUpdatedOrders();
+            //    return PartialView(/*Coult be a ViewModel in here*/); // A updated _ViewAll
+            //}
             return NotFound(); // Can be changed to Redirect
         }
 
