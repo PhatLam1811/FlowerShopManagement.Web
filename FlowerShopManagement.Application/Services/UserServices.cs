@@ -60,9 +60,24 @@ public class UserServices : IUserServices
         // Remove the user from the database
         return await _userRepository.RemoveById(entity._id);
     }
+
+    public async Task<List<UserModel>> GetUpdatedCustomers(IUserRepository userRepository)
+    {
+        List<User> users = await userRepository.GetAll();
+        users = users.Where(u => u.role.Equals(Role.Customer)).ToList();
+        List<UserModel> customers = new List<UserModel>();
+
+        foreach (var o in users)
+        {
+            customers.Add(new UserModel(o));
+        }
+        return customers;
+    }
 }
 
 public class CustomerServices : UserServices, ICustomerServices
 {
     public CustomerServices(IUserRepository userRepository, ICartRepository cartRepository) : base(userRepository, cartRepository) { }
+
+    
 }

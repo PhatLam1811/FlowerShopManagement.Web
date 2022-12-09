@@ -12,6 +12,7 @@ public interface ISaleServices
 	public Task<bool> CreateOfflineOrder(OrderModel order, UserModel user, IOrderRepository orderRepository,
 		IUserRepository userRepository, IProductRepository productRepository);
 
+	public Task<List<OrderModel>> GetUpdatedOrders(IOrderRepository orderRepository);
 
 
 }
