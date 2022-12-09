@@ -1,14 +1,17 @@
 ﻿using FlowerShopManagement.Application.Models;
+using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Core.Enums;
 
 namespace FlowerShopManagement.Application.Interfaces;
 
 public interface ISaleServices
 {
-    public Task<List<Order>> GetOrderListAsync();
-    public List<CustomerModel> GetCustomerList();
-    public Task<bool> VerifyOrder(string customerId, Order order);
-    public bool CheckExistedCustomer(string id);
-    public Task<bool> CancelOrder(string customerId, Order order);
-    public Task<bool> CreateAnOrder(string customerEmail,string customerPhoneNumnber, Order order);
+	public Task<bool> VerifyOnlineOrder(Order order, IOrderRepository orderRepository, IUserRepository userRepository, IProductRepository productRepository);
+	public Task<bool> VerifyOnlineOrder(string orderId, IOrderRepository orderRepository, IUserRepository userRepository, IProductRepository productRepository);
+	public Task<bool> CreateOfflineOrder(OrderModel order, UserModel user, IOrderRepository orderRepository,
+		IUserRepository userRepository, IProductRepository productRepository);
+
+
+
 }

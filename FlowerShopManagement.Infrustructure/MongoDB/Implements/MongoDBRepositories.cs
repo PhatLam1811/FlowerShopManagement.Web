@@ -44,7 +44,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
     }
 
-    public virtual async Task<IEnumerable<TEntity>> GetAll()
+    public virtual async Task<List<TEntity>> GetAll()
     {
         try
         {
@@ -166,4 +166,9 @@ public class CartRepository : BaseRepository<Cart>, ICartRepository
 public class OrderRepository : BaseRepository<Order>, IOrderRepository
 {
     public OrderRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+}
+
+public class ProductRepository : BaseRepository<Product>, IProductRepository
+{
+	public ProductRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 }

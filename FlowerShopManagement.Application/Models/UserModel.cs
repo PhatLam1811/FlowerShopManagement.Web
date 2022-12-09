@@ -5,35 +5,23 @@ namespace FlowerShopManagement.Application.Models;
 
 public class UserModel
 {
-    public string Email { get; set; }
+    //public string Email { get; set; }
     public string PhoneNumber { get; set; }
-    public string FullName { get; set; }
-    public string Avatar { get; set; }
-    public Gender Gender { get; set; }
-    public int BirthYear { get; set; }
-    public string[] Addresses { get; set; }
+    public string CustomerName { get; set; }
 
     public UserModel(User entity)
     {
-        Email = entity.email;
+        //Email = entity.email;
         PhoneNumber = entity.phoneNumber;
-        FullName = entity.name;
-        Avatar = entity.avatar;
-        Gender = entity.gender;
-        BirthYear = entity.birthYear;
-        Addresses = entity.addresses;
+        CustomerName = entity.name;
+       
     }
 
     public User ToEntity(User entity)
     {
-        entity.email = Email;
+        //entity.email = Email;
         entity.phoneNumber = PhoneNumber;
-        entity.name = FullName;
-        entity.avatar = Avatar;
-        entity.gender = Gender;
-        entity.birthYear = BirthYear;
-        entity.addresses = Addresses;
-
+        entity.name = CustomerName;
         return entity;
     }
 }

@@ -13,100 +13,120 @@ namespace FlowerShopManagement.Application.Services;
 
 public class SaleServices : ISaleServices
 {
-    public ICartRepository _cartRepository;
-    public IUserRepository _userReopsitory;
-    public IOrderRepository _orderRepository;
-    List<User> _customers;
-    //List<Order> _orders; 
+	//List<Order> _orders; 
 
-    // APPLICATION SERVICES (USE CASES)
-    public SaleServices(ICartRepository cartRepository, IUserRepository userRepository, IOrderRepository orderRepository)
-    {
-        _cartRepository = cartRepository;
-        _orderRepository = orderRepository;
-        _userReopsitory = userRepository;
-        _customers = _userReopsitory.GetAll().Result.ToList();
-    }
+	// APPLICATION SERVICES (USE CASES)
+	public SaleServices()
+	{
 
-    public async Task<List<Order>> GetOrderListAsync()
-    {
-        // return await _orderRepository.GetAll().Result.ToList();
-        throw new NotImplementedException();
-    }
+	}
 
 
-    public List<CustomerModel> GetCustomerList()
-    {
-        // return _customers;
-        throw new NotImplementedException();
-    }
+	public async Task<bool> VerifyOnlineOrder(string? orderId, IOrderRepository orderRepository, IUserRepository userRepository, IProductRepository productRepository)
+	{
 
-    public async Task<bool> VerifyOrder(string customerId, Order order)
-    {
-        //if (!CheckExistedCustomer(customerId)||!CheckExistedOrder(order._id))
-        //{
-        //    return false;
-        //}
-        ////update
-        
-        //order._isVerified = 1;
-        //await _orderRepository.UpdateOrder(order);
-        return true;
-    }
+		// Set default info for an order
+		//order._phoneNumber = user.phoneNumber;
+		//order._customerName = user.name;
+		if (orderId == null) { return false; }
+		var order = await orderRepository.GetById(orderId);
+		//update
+		if (order != null && order._id != null)
+		{
+			// Successful case happens
+			List<Product> updateProductList = new List<Product>();
+			//Check the amount is avaiable before updating
+			if (order._products != null)
+				foreach (var item in order._products)
+				{
+					if (item != null && item._id != null)
+					{
+						var product = await productRepository.GetById(item._id);
+						//Amount unavaibale => false
+						if (product._amount < item._amount)
+							return false;
+						product._amount -= item._amount;
+						//Add to updateProList
+						updateProductList.Add(product);
+					}
 
-    public bool CheckExistedCustomer(string? id)
-    {
-        //foreach (Customer customer in _customers)
-        //{
-        //    if (id == customer._id)
-        //    {
-        //        return true;
-        //    }
-        //}
-        return false;
+				}
+			//Updating product
+			foreach (var item in updateProductList)
+			{
+				if (item != null && item._id != null)
+				{
+					var updateResult = await productRepository.UpdateById(item._id, item);
+					if (!updateResult)
+						return false;
+				}
+			}
+			order._status = Status.Delivering;//Delivering
+			return await orderRepository.UpdateById(order._id, order);
+		}
+		return false;
+	}
+	public async Task<bool> CreateOfflineOrder(OrderModel order, UserModel user, IOrderRepository orderRepository,
+		IUserRepository userRepository, IProductRepository productRepository)
+	{
+		//Create OrderEntity object
+		var newOrder = order.ToEntity();
+		var cus = await userRepository.GetByEmailOrPhoneNb(user.PhoneNumber);
+		if (cus != null)
+		{
+			newOrder._accountID = cus._id;
+			newOrder._phoneNumber = cus.phoneNumber;
+			newOrder._customerName = cus.name;
+		}
+		else
+		{
+			//Customer is a passenger
+			newOrder._phoneNumber = user.PhoneNumber;
+			newOrder._customerName = user.CustomerName;
+		}
 
-    }
-    public bool CheckExistedOrder(string? id)
-    {
-        //if (!string.IsNullOrEmpty(id))
-        //{
-        //    var check = _orderRepository.GetOrderById(id);
-        //    if (check != null)
-        //    {
-        //        return true;
-        //    }
-        //}
-        
+		if (newOrder != null && newOrder._id != null)
+		{
+			List<Product> updateProductList = new List<Product>();
 
-        return false;
+			if (newOrder._products != null)
+			{
+				// reduce the amount of product before updating
+				foreach (var item in newOrder._products)
+				{
+					if (item != null && item._id != null)
+					{
+						var product = await productRepository.GetById(item._id);
+						//Amount unavaibale => false
+						if (product._amount < item._amount) return false;
+						product._amount -= item._amount;
+						//Add to updateProList
+						updateProductList.Add(product);
+					}
 
-    }
+				}
+			}
+			// Updating...
+			foreach (var item in updateProductList)
+			{
+				if (item != null && item._id != null)
+				{
+					var updateResult = await productRepository.UpdateById(item._id, item);
+					if (!updateResult)
+						return false;
+				}
+			}
+			// Successful case happens
+			newOrder._status = Status.Purchased;//On charging
+			var result = await orderRepository.Add(newOrder);
+			return result;
 
-    public async Task<bool> CancelOrder(string customerId, Order order)
-    {
-        //order._isVerified = -1;
-        //await _orderRepository.UpdateOrder(order);
-        return true;
-    }
+		}
+		return false;
+	}
 
-    // this methods help staff to make an order when cus is at shop
-    public async Task<bool> CreateAnOrder(string customerEmail, string customerPhoneNumnber, Order order)
-    {
-        //object? orderingCustomer = null;
-        //foreach (Profile customer in _profiles)
-        //{
-        //    if (customer._email == customerEmail || customer._phoneNumber == customerPhoneNumnber)
-        //    {
-        //        orderingCustomer = customer;
-        //    }
-        //}
-        //if (orderingCustomer != null)
-        //{
-        //    order._isVerified = 1;
-        //    await _orderRepository.Add(order);
-        //    return true;
-        //}
-        //else return false;
-        return false;
-    }
+	public Task<bool> VerifyOnlineOrder(Order order, IOrderRepository orderRepository, IUserRepository userRepository, IProductRepository productRepository)
+	{
+		throw new NotImplementedException();
+	}
 }
