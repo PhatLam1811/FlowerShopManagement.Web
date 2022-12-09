@@ -46,7 +46,7 @@ public class ProductModel
 }
 
 
-public class NewProductModel
+public class NewOrEditProductModel
 
 {
     public string? Id { get; set; }
@@ -56,7 +56,7 @@ public class NewProductModel
     public int Amount { get; set; }
     public float WholesaleDiscount { get; set; }
     public List<Categories> Categories { get; set; } = new List<Categories>();
-    public NewProductModel(Product entity)
+    public NewOrEditProductModel(Product entity)
     {
         Id = entity._id;
         Picture = entity._picture;
@@ -65,7 +65,7 @@ public class NewProductModel
         WholesaleDiscount = entity._wholesaleDiscount;
     }
 
-    public NewProductModel(string id, int amount)
+    public NewOrEditProductModel(string id, int amount)
     {
         Id = id;
         Picture = "";

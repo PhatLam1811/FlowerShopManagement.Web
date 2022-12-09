@@ -19,6 +19,16 @@ public class StockServices : IStockServices
 
 	}
 
+    public async Task<bool> CreateProduct(NewOrEditProductModel productModel, IProductRepository productRepository)
+    {
+        if(productModel!=null && productRepository != null)
+        {
+            var obj = productModel.ToEntity();
+            return await productRepository.Add(obj);
+        }
+        return false;
+    }
+
     public async Task<List<ProductModel>> GetUpdatedProducts(IProductRepository productRepository)
     {
         List<Product> products = await productRepository.GetAll();

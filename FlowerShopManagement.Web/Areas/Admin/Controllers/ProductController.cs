@@ -28,7 +28,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             //Set up default values for ProductPage
 
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
-            List<ProductModel> productMs = await GetUpdatedProducts();
+            List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
             return View(/*Coult be a ViewModel in here*/);
         }
 
@@ -38,7 +38,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         {
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
             //Should get a new one because an admin updates data realtime
-            var editProduct = await _productRepository.GetById(id);
+            NewOrEditProductModel editProduct = new NewOrEditProductModel(await _productRepository.GetById(id));
             if (editProduct != null)
             {
                 return PartialView(/*Coult be a ViewModel in here*/);
@@ -47,7 +47,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(ProductModel productModel)
+        public async Task<IActionResult> Update(NewOrEditProductModel productModel)
         {
             //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
 
@@ -64,7 +64,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
                 if (result != false)
                 {
                     //Update successfully, we pull new list of products
-                    List<ProductModel> proMs = await GetUpdatedProducts();
+                    List<ProductModel> proMs = await _stockServices.GetUpdatedProducts(_productRepository);
 
                     return PartialView(/*Coult be a UPDATED ViewModel in here*/);//for example: a _ViewAll 
 
@@ -74,7 +74,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Detele(ProductModel productModel)
+        public async Task<IActionResult> Detele(NewOrEditProductModel productModel)
         {
             //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
 
@@ -92,7 +92,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
                 else
                 {
                     //Detele successfully, we pull a new list of orders
-                    List<ProductModel> productMs = await GetUpdatedProducts();
+                    List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
 
                     return PartialView(/*Coult be a UPDATED ViewModel in here*/); //For example: a _ViewAll
                 }
@@ -118,27 +118,17 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
         // Confirm and create an Order
         [HttpPost]
-        public async Task<IActionResult> Create(ProductModel productModel)
+        public async Task<IActionResult> Create(NewOrEditProductModel productModel)
         {
-            var result = _saleServices.CreateOfflineOrder(productModel, userModel, _orderRepository, _userRepository, _productRepository);
-            if (result != null)
+            var result = await _stockServices.CreateProduct(productModel,_productRepository);
+            if (result == true)
             {
-                List<OrderModel> orders = await GetUpdatedOrders();
+                List<ProductModel> orders = await _stockServices.GetUpdatedProducts(_productRepository);
                 return PartialView(/*Coult be a ViewModel in here*/); // A updated _ViewAll
             }
             return NotFound(); // Can be changed to Redirect
         }
 
-        public async Task<List<ProductModel>> GetUpdatedProducts()
-        {
-            List<Product> products = await _productRepository.GetAll();
-            List<ProductModel> productMs = new List<ProductModel>();
-
-            foreach (var o in products)
-            {
-                productMs.Add(new ProductModel(o));
-            }
-            return productMs;
-        }
+       
     }
 }
