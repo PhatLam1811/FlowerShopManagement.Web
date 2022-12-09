@@ -12,19 +12,20 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
     {
         //Services
         IImportServices _importServices;
+        IStockServices _stockServices;
         //Repositories
         IProductRepository _productRepository;
-        public ProductController( IProductRepository productRepository, IImportServices importServices)
+        public ProductController(IProductRepository productRepository, IImportServices importServices, IStockServices stockServices)
         {
             _productRepository = productRepository;
             _importServices = importServices;
+            _stockServices = stockServices;
         }
 
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            ViewBag.Order = true;
-            //Set up default values for OrderPage
+            //Set up default values for ProductPage
 
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
             List<ProductModel> productMs = await GetUpdatedProducts();
@@ -52,8 +53,9 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             //If product get null or Id null ( somehow ) => notfound
             if (productModel == null || productModel.Id == null) return NotFound();
+
             //Check if the product still exists
-            var product = await _productRepository.GetById(productModel.Id);
+            var product = await _productRepository.GetById(productModel.Id); // this may be eleminated
             if (product != null)
             {
                 //If product != null => we will update this order by using directly orderModel.Id
@@ -72,25 +74,25 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Detele(OrderModel orderModel)
+        public async Task<IActionResult> Detele(ProductModel productModel)
         {
             //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
 
             //If order get null or Id null ( somehow ) => notfound
-            if (orderModel == null || orderModel.Id == null) return NotFound();
+            if (productModel == null || productModel.Id == null) return NotFound();
             //Check if the order still exists
-            var order = await _orderRepository.GetById(orderModel.Id);
-            if (order != null)
+            var product = await _productRepository.GetById(productModel.Id);
+            if (product != null)
             {
-                //If order != null => we will detele this order by using directly orderModel.Id
-                //Check orderModel for sure if losing some data
-                var result = await _orderRepository.RemoveById(orderModel.Id);
+                //If order != null => we will detele this order by using directly ProductModel.Id
+                //Check productModel for sure if losing some data
+                var result = await _productRepository.RemoveById(productModel.Id);
                 if (result == false)
-                    return RedirectToAction($"Unable to remove {result}");
+                    return RedirectToAction($"Unable to remove {productModel.Id}");
                 else
                 {
                     //Detele successfully, we pull a new list of orders
-                    List<OrderModel> orderMs = await GetUpdatedOrders();
+                    List<ProductModel> productMs = await GetUpdatedProducts();
 
                     return PartialView(/*Coult be a UPDATED ViewModel in here*/); //For example: a _ViewAll
                 }
@@ -98,34 +100,32 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             return NotFound();
         }
 
-        //Open an CreatePage
-        [HttpGet]
+        //Open an Create Dialog
+        [HttpPost]
         public async Task<IActionResult> Create()
         {
             //Set up default values for OrderPage
 
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
 
-            List<ProductModel> productMs = await GetUpdatedProducts();
-            List<UserModel> customerMs = await GetUpdatedCustomers();
             /*Set up viewmodel
 			 
 
 
 			*/
-            return View(/*Coult be a ViewModel in here*/);
+            return PartialView(/*Coult be a ViewModel in here*/); 
         }
 
         // Confirm and create an Order
         [HttpPost]
-        public async Task<IActionResult> Create(OrderModel orderModel, UserModel userModel)
+        public async Task<IActionResult> Create(ProductModel productModel)
         {
-            //var result = _saleServices.CreateOfflineOrder(orderModel, userModel, _orderRepository, _userRepository, _productRepository);
-            //if (result != null)
-            //{
-            //    List<OrderModel> orders = await GetUpdatedOrders();
-            //    return PartialView(/*Coult be a ViewModel in here*/); // A updated _ViewAll
-            //}
+            var result = _saleServices.CreateOfflineOrder(productModel, userModel, _orderRepository, _userRepository, _productRepository);
+            if (result != null)
+            {
+                List<OrderModel> orders = await GetUpdatedOrders();
+                return PartialView(/*Coult be a ViewModel in here*/); // A updated _ViewAll
+            }
             return NotFound(); // Can be changed to Redirect
         }
 
