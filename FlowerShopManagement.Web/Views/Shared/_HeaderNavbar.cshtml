@@ -28,20 +28,20 @@ else if (true)
     <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
         <ul class="navbar-nav flex-grow-1 justify-content-center align-items-center">
             <li class="nav-item px-3">
-                <a class="nav-link text-secondary @(ViewBag.Home==true?"active":"")" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                <a class="nav-link @(ViewBag.Home==true?"active":"")" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
             </li>
             <li class="nav-item px-3">
-                <a class="nav-link text-secondary @(ViewBag.WishList==true?"active":"")" asp-area="" asp-controller="WishList" asp-action="Index">WishList</a>
+                <a class="nav-link @(ViewBag.WishList==true?"active":"")" asp-area="" asp-controller="WishList" asp-action="Index">WishList</a>
             </li>
             </li>
             <li class="nav-item px-3">
-                <a class="nav-link text-secondary @(ViewBag.Orders==true?"active":"")" asp-area="" asp-controller="Order" asp-action="Index">Order</a>
+                <a class="nav-link @(ViewBag.Orders==true?"active":"")" asp-area="" asp-controller="Order" asp-action="Index">Order</a>
             </li>
-            <li class="nav-item px-3">
+            @*<li class="nav-item px-3">
                 <a class="nav-link text-secondary @(ViewBag.Profile==true?"active":"")" asp-area="" asp-controller="Profile" asp-action="Index">Account</a>
-            </li>
+            </li>*@
                 <li class="nav-item px-3">
-                <a class="nav-link text-secondary @(ViewBag.About==true?"active":"")" asp-area="" asp-controller="Home" asp-action="About">About</a>
+                <a class="nav-link @(ViewBag.About==true?"active":"")" asp-area="" asp-controller="Home" asp-action="About">About</a>
             </li>
         </ul>
     </div>

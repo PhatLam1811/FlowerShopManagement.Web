@@ -10,5 +10,10 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             ViewBag.User = true;
             return View();
         }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }

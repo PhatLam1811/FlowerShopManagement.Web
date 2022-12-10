@@ -11,14 +11,12 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         //Services
-        IImportServices _importServices;
         IStockServices _stockServices;
         //Repositories
         IProductRepository _productRepository;
-        public ProductController(IProductRepository productRepository, IImportServices importServices, IStockServices stockServices)
+        public ProductController(IProductRepository productRepository, IStockServices stockServices)
         {
             _productRepository = productRepository;
-            _importServices = importServices;
             _stockServices = stockServices;
         }
 
@@ -26,6 +24,8 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         public async Task<IActionResult> Index()
         {
             //Set up default values for ProductPage
+
+            ViewBag.Product = true;
 
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
