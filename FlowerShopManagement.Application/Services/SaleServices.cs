@@ -21,8 +21,18 @@ public class SaleServices : ISaleServices
 
 	}
 
+    public async Task<List<OrderModel>> GetUpdatedOrders(IOrderRepository orderRepository)
+    {
+        List<Order> orders = await orderRepository.GetAll();
+        List<OrderModel> orderMs = new List<OrderModel>();
 
-	public async Task<bool> VerifyOnlineOrder(string? orderId, IOrderRepository orderRepository, IUserRepository userRepository, IProductRepository productRepository)
+        foreach (var o in orders)
+        {
+            orderMs.Add(new OrderModel(o));
+        }
+        return orderMs;
+    }
+    public async Task<bool> VerifyOnlineOrder(string? orderId, IOrderRepository orderRepository, IUserRepository userRepository, IProductRepository productRepository)
 	{
 
 		// Set default info for an order
