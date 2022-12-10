@@ -31,6 +31,8 @@ builder.Services.AddSingleton<IMongoDBSettings>(_ => _.GetRequiredService<IOptio
 builder.Services.AddScoped<IMongoDBContext, MongoDBContext>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
 
 //-- Entities Mapping --//
 BsonClassMap.RegisterClassMap<User>(cm =>

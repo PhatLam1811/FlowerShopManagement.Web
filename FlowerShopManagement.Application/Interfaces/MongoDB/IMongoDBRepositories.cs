@@ -30,3 +30,4 @@ public interface ICartRepository : IBaseRepository<Cart> { }
 
 public interface IOrderRepository : IBaseRepository<Order> { }
 public interface IProductRepository : IBaseRepository<Product> { }
+public interface IVoucherRepository : IBaseRepository<Voucher> { }

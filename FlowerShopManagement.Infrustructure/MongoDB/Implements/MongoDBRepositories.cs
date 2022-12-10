@@ -171,4 +171,7 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
 public class ProductRepository : BaseRepository<Product>, IProductRepository
 {
 	public ProductRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+}public class VoucherRepository : BaseRepository<Voucher>, IVoucherRepository
+{
+	public VoucherRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 }

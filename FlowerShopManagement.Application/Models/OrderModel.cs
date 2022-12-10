@@ -15,6 +15,7 @@ public class OrderModel
 	public List<ProductModel> Products { get; set; } = new List<ProductModel>();
 	public string? Notes { get; set; }
 	public DateTime? Date { get; set; }
+	public int Amount { get; set; } = 0;
 	public long Total { get; set; } = 0;
 	public long DeliveryCharge { get; set; }
     // Could be added in future 
@@ -47,6 +48,7 @@ public class OrderModel
 			foreach (var pro in entity._products)
 			{
 				Products.Add(new ProductModel(pro));
+				Amount += pro._amount;
 			}
 
 		}

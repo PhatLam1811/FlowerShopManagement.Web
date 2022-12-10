@@ -13,18 +13,29 @@ namespace FlowerShopManagement.Application.Services;
 
 public class StockServices : IStockServices
 {
-	// APPLICATION SERVICES (USE CASES)
-	public StockServices()
-	{
-
-	}
-
-    public async Task<bool> CreateProduct(NewOrEditProductModel productModel, IProductRepository productRepository)
+    // APPLICATION SERVICES (USE CASES)
+    public StockServices()
     {
-        if(productModel!=null && productRepository != null)
+
+    }
+
+    public async Task<bool> CreateProduct(ProductDetailModel productModel, IProductRepository productRepository)
+    {
+        if (productModel != null && productRepository != null)
         {
             var obj = productModel.ToEntity();
             return await productRepository.Add(obj);
+        }
+        return false;
+    }
+
+    public async Task<bool> CreateVoucher(VoucherDetailModel VoucherDetailModel, IVoucherRepository voucherRepository)
+    {
+        if (VoucherDetailModel != null && voucherRepository != null)
+        {
+            var obj = VoucherDetailModel.ToEntity();
+            if (obj != null)
+                return await voucherRepository.Add(obj);
         }
         return false;
     }
@@ -40,5 +51,17 @@ public class StockServices : IStockServices
         }
         return productMs;
     }
+    public async Task<List<VoucherDetailModel>> GetUpdatedVouchers(IVoucherRepository voucherRepository)
+    {
+        List<Voucher> vouchers = await voucherRepository.GetAll();
+        List<VoucherDetailModel> voucherMs = new List<VoucherDetailModel>();
+
+        foreach (var o in vouchers)
+        {
+            voucherMs.Add(new VoucherDetailModel(o));
+        }
+        return voucherMs;
+    }
+
 
 }
