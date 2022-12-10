@@ -41,7 +41,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             VoucherDetailModel editProduct = new VoucherDetailModel(await _voucherRepository.GetById(id));
             if (editProduct != null)
             {
-                return PartialView(/*Coult be a ViewModel in here*/); // Edit like an dialog
+                return View(/*Coult be a ViewModel in here*/);
             }
             return RedirectToAction("Index");
         }
@@ -66,7 +66,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
                     //Update successfully, we pull new list of products
                     List<VoucherDetailModel> proMs = await _stockServices.GetUpdatedVouchers(_voucherRepository);
 
-                    return PartialView("Index"/*Coult be a ViewModel in here*/); // A updated _ViewAll
+                    return RedirectToAction("Index"/*Coult be a ViewModel in here*/); // A updated _ViewAll
 
                 }
             }
