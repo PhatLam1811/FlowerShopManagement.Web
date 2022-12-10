@@ -42,7 +42,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             return View(new List<OrderModel>());
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
             //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
@@ -50,7 +50,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             var order = new OrderModel(await _orderRepository.GetById(id));
             if (order != null)
             {
-                return PartialView(/*Coult be a ViewModel in here*/);
+                return View(/*Coult be a ViewModel in here*/);
             }
             return RedirectToAction("Index");
         }

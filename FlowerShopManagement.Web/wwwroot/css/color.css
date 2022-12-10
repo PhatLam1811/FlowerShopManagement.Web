@@ -1,3 +1,13 @@
 ﻿.text-color-pink {
     color: var(--bs-pink);
 }
+
+.text-color-fade {
+    --bs-text-opacity: 1;
+    color: rgba(173, 161, 230, 0.5) !important;
+}
+
+.text-color-secondary {
+    --bs-text-opacity: 1;
+    color: rgb(173, 161, 230) !important;
+}
