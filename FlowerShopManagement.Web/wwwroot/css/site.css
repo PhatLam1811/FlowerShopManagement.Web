@@ -16,6 +16,12 @@
         color: var(--bs-dark) !important;
     }
 
+.nav-icon-link:hover {
+    font-size: 23px;
+    transition-delay: 0.2s;
+    transition-duration: 0.2s;
+}
+
 /*CARD*/
 .card-img-top {
     width: 100%;
@@ -87,7 +93,7 @@
 }
 
     /* Style the buttons that are used to open the tab content */
-    .tabCustom button {
+    .tabCustom button, .tabCustom a {
         /* IsSelected=Yes */
         /* Auto layout */
         background-color: white;
@@ -101,24 +107,27 @@
         width: 100%;
         height: auto;
         font-size: 14px;
+        text-decoration: none;
     }
 
-        .tabCustom button:focus, button:active, button:visited {
+        .tabCustom button:focus, .tabCustom button:active, .tabCustom button:visited, .tabCustom a:focus, .tabCustom a:active, .tabCustom a:visited {
             text-decoration: underline;
             color: black;
             font-weight: 900;
-            background-color: #FBF3E9;
+            background-color: #DEE8FD;
             font-size: 16px;
             padding-top: 16px;
             padding-bottom: 16px;
+            text-decoration: inherit;
         }
 
-        .tabCustom button:hover {
+        .tabCustom button:hover, .tabCustom a:hover {
             color: black;
             font-weight: 900;
             font-size: 16px;
-            background-color: #FBF3E9;
+            background-color: #DEE8FD;
             transition: ease-in-out 300ms;
+            text-decoration: inherit;
         }
 
 .radioLayoutTabCustom {
@@ -166,9 +175,6 @@
 }
 
 /*FORM*/
-.form-floating {
-    margin-top: 20px;
-}
 
 /*PAGINATION*/
 .pagination {

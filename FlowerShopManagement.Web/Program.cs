@@ -74,6 +74,7 @@ builder.Services.AddScoped<IAuthenticationServices, AuthenticationServices>();
 builder.Services.AddScoped<IGmailServices, GmailServices>();
 builder.Services.AddScoped<ICustomerManagementServices, CustomerManagementServices>();
 builder.Services.AddScoped<ISaleServices, SaleServices>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IStockServices, StockServices>();
 
 // HttpContextAccessor

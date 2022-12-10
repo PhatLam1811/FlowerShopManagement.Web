@@ -1,118 +1,68 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<ProductModel>
+
 @{
+	List<string> categories = new List<string> { "Fa ke flower", "cay canh" };
+	List<string> prices = new List<string> { "0 - 10", "11 - 50", ">50" };
 }
-@using FlowerShopManagement.Web.Views.Shared.Components;
-<style>
 
+<div class="row">
+	<form asp-action="Sort" method="post" class="col-lg-2 d-lg-block collapse borderCustom1 um" onsubmit="return jQueryAjaxSort(this);">
+		<div class="col">
+			<span class="h4">Filter</span>
+			<div class="check-list mt-4">
+				<span class="">Categories</span>
+				<label class="check-list-item">
+					<input type="radio" class="form-check-input" value="" name="categoryRadio" checked />
+					All
+				</label>
+				@foreach (var i in categories)
+				{
+					<label class="check-list-item">
+						<input type="radio" class="form-check-input" value="" name="categoryRadio" />
+						@i
+					</label>
+				}
+			</div>
+			<div class="check-list">
+				<span class="">Prices</span>
+				<label class="check-list-item">
+					<input type="radio" class="form-check-input" value="" name="priceRadio" checked />
+					All
+				</label>
+				@foreach (var i in prices)
+				{
+					<label class="check-list-item">
+						<input type="radio" class="form-check-input" value="" name="priceRadio" />
+						@i
+					</label>
+				}
+			</div>
+		</div> @*used to col-3 vs col-10*@
+	</form>
 
-    table,
-    thead {
-        border-bottom: dotted;
-        border-bottom: 1px solid rgba(20, 33, 61, 0.1);
-    }
-
-</style>
-<div class="row borderCustom">
-
-    <div class="col-2 borderCustom1">
-        <div class="col">
-            <div class="row">
-                <ii class="row-1 h6 mb-2 mt-4">Category</ii>
-
-                <div class="tabCustom row-cols-6">
-                    <button class="tabCustom" onclick="openCity(event, 'London')">All</button>
-                    <button class="tabCustom" onclick="openCity(event, 'London')">Retro</button>
-                    <button class="tabCustom" onclick="openCity(event, 'London')">Basic</button>
-                    <button class="tabCustom" onclick="openCity(event, 'London')">Street</button>
-                    <button class="tabCustom" onclick="openCity(event, 'London')">Sweet</button>
-
-                </div>
-
-            </div>
-
-            <div class="row mt-3">
-                <ii class="row-1 h6">Price</ii>
-
-                <div class="radioLayoutTabCustom">
-
-                    <label class="radioLayoutTabCustom mt-4"> <input type="radio" name="answer">0-10</label>
-                    <label class="radioLayoutTabCustom mt-4"> <input type="radio" name="answer">10 - 100</label>
-                    <label class="radioLayoutTabCustom mt-4"> <input type="radio" name="answer">100 - 1000</label>
-
-                </div>
-            </div>
-        </div>
-    </div> @*used to col-3 vs col-10*@
-
-    <div class="container col-10">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-wrap">
-                    <table class="table myaccordion table-hover" id="accordion">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th class="button">Name</th>
-                                <th class="button">Price</th>
-                                <th class="button">Color</th>
-                                <th class="button">Category</th>
-                                <th class="button">Amount</th>
-
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed">
-                                <th scope="row">1</th>
-                                <td>Balenciaga Triple S</td>
-                                <td>$1000</td>
-                                <td>Black</td>
-                                <td>Dads shoe, Chunky, retro-styled</td>
-                                <td>12</td>
-                                @*                       <td>
-                                <i class="fa" aria-hidden="true"></i>
-                                </td>*@
-                            </tr>
-                            @*<tr>
-                            <td colspan="6" id="collapseOne" class="acc collapse" data-parent="#accordion" style="">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro iste, facere sunt sequi nostrum ipsa, amet doloremque magnam reiciendis tempore sapiente. Necessitatibus recusandae harum nam sit perferendis quia inventore natus.</p>
-                            </td>
-                            </tr>*@
-                            <tr data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" class="collapsed">
-                                <th scope="row">2</th>
-                                <td>UltraBoost 19</td>
-                                <td>$250</td>
-                                <td>Black</td>
-                                <td>Trainer</td>
-                                <td>12</td>
-                            </tr>
-
-                            <tr data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree" class="collapsed">
-                                <th scope="row">3</th>
-                                <td>Adidas super star</td>
-                                <td>$40</td>
-                                <td>Black,White</td>
-                                <td>Sneaker</td>
-                                <td>12</td>
-                            </tr>
-
-                            <tr data-toggle="collapse" data-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour" class="collapsed">
-                                <th scope="row">4</th>
-                                <td>NMD_R1 SHOES</td>
-                                <td>$150</td>
-                                <td>Black</td>
-                                <td>Running, Originals</td>
-                                <td>12</td>
-
-                            </tr>
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="col-lg-10 col-12 mt-3">
+		<div class="d-flex d-lg-block justify-content-between">
+			<button class="filter-icon border-0 d-lg-none fs-3" data-bs-toggle="collapse" data-bs-target=".um" aria-controls="navbarSupportedContent"
+					aria-expanded="false" aria-label="Toggle navigation">
+				<span class="h5">Filter</span>
+			</button>
+			<div class="d-flex justify-content-end">
+				<form asp-action="Search" method="post" onsubmit="return jQueryAjaxSort(this);" class="d-flex justify-content-end mb-2 w-100">
+					<input class="form-control" type="text" name="searchString" />
+					<button class="btn btn-secondary icon-search" type="submit" />
+				</form>
+			</div>
+		</div>
+		<div class="row">
+			<div class="" id="hihi">
+				<partial name="_ViewAll" model=@Model view-data="ViewData" />
+			</div>
+		</div>
+	</div>
 </div>
 
-<partial name="Create.cshtml"></partial>
+<div class="position-fixed d-flex flex-column gap-2 align-items-end" style="width:fit-content; bottom:60px; right:0">
+	<a class="btn btn-primary rounded" onclick="showContent2('@(Url.Action("AddCategory", "Product"))','Shoe Categories')">Category</a>
+	<a onclick="showContent2('@Url.Action("Create","Product",null,Context.Request.Scheme)','Add new Product')" class="border-1 table-icon btn btn-primary icon-plus rounded" style="width:fit-content">
+	</a>
+</div>

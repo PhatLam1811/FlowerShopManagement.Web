@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FlowerShopManagement.Application.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 {
@@ -8,7 +9,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         public IActionResult Index()
         {
             ViewBag.Order = true;
-            return View();
+            return View(new List<OrderModel>());
         }
 
         public IActionResult Create()

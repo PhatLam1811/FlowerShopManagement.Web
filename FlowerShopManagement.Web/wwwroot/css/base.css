@@ -39,9 +39,18 @@ p, span, h1, h2, h3, h4, h5, h6 {
     min-width: 150px;
 }
 
-.btn-priamry {
-
+.btn-primary {
 }
+
+    .btn-primary:hover {
+        background: var(--bs-dark);
+    }
+
+    .btn-primary:active, .btn-primary:focus {
+        background: var(--bs-dark);
+        border: none;
+        text-decoration: none;
+    }
 
 .btn-secondary {
     border: solid;
@@ -71,17 +80,11 @@ p, span, h1, h2, h3, h4, h5, h6 {
         font-weight: inherit;
     }
 
-.btn:active {
-    background-color: #E59512;
-    border: none;
-    text-decoration: none;
-}
-
 .btn-icon {
     width: fit-content;
     height: auto;
     min-width: auto !important;
-    padding: 10px 12px;
+    padding: 12px 16px;
 }
 
 .btn-icon-primary {
@@ -96,24 +99,28 @@ p, span, h1, h2, h3, h4, h5, h6 {
 }
 
 /*LABEL*/
-label {
-    font-size: 12px;
+.label {
+    font-size: 10px;
 }
 
 .form-check-label {
     font-size: 16px
 }
 
-
-/*DROPDOWN*/
-/*.dropdown-menu {
-    min-width: auto;
+/*CHECKBOX && RADIO */
+.check-list label {
+    display: block;
+    padding: 12px;
 }
 
-.row {
-    margin-right: 0;
+.check-list .check-list-item {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 15px;
 }
 
-.padding-cart {
-    padding: 0px 80px 0px 80px;
-}*/
+    .check-list .check-list-item input {
+        font-size: 20px;
+        margin: 0;
+    }
