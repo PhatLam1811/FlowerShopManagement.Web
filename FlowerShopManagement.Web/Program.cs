@@ -76,6 +76,8 @@ builder.Services.AddScoped<ICustomerManagementServices, CustomerManagementServic
 builder.Services.AddScoped<ISaleServices, SaleServices>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IStockServices, StockServices>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IUserServices, UserServices>();
 
 // HttpContextAccessor
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

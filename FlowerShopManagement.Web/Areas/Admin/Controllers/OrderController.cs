@@ -13,7 +13,6 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
     {
         //Services
         ISaleServices _saleServices;
-        IImportServices _importServices;
         IStockServices _stockServices;
         IUserServices _userServices;
         //Repositories
@@ -21,13 +20,12 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         IProductRepository _productRepository;
         IUserRepository _userRepository;
 
-        public OrderController(ISaleServices saleServices, IOrderRepository orderRepository, IProductRepository productRepository, IImportServices importServices,
+        public OrderController(ISaleServices saleServices, IOrderRepository orderRepository, IProductRepository productRepository, 
             IUserRepository userRepository, IStockServices stockServices, IUserServices userServices)
         {
             _orderRepository = orderRepository;
             _saleServices = saleServices;
             _productRepository = productRepository;
-            _importServices = importServices;
             _userRepository = userRepository;
             _stockServices = stockServices;
             _userServices = userServices;
