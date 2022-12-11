@@ -29,7 +29,10 @@ public class VoucherDetailModel
         State = entity._state;
         CreatedDate = entity._createdDate;  
     }
-
+    public VoucherDetailModel()
+    {
+        Code = new Guid().ToString();
+    }
 
     public Voucher? ToEntity()
     {

@@ -44,7 +44,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             ProductDetailModel editProduct = new ProductDetailModel(await _productRepository.GetById(id));
             if (editProduct != null)
             {
-                return View(/*Coult be a ViewModel in here*/);
+                return View(editProduct);
             }
             return RedirectToAction("Index");
         }
@@ -116,7 +116,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
 
 			*/
-            return View(/*Coult be a ViewModel in here*/); 
+            return View(new ProductDetailModel()); 
         }
 
         // Confirm and create an Order
