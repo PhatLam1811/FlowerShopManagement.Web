@@ -1,10 +1,5 @@
 ﻿@using FlowerShopManagement.Web.Views.Shared.Components;
-
-@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+@model ProductModel
 
 @{
 	ViewData["Title"] = "Detail Page";
@@ -17,20 +12,23 @@
 
 	<div class="col-5 d-flex flex-column justify-content-between">
 		<div>
-			<p class="h2">Flower Blue ne`</p>
-			<div class="form-group mt-4 w-50">
-				<label for="exampleFormControlSelect1" class="h6">Classified</label>
-				<select class="form-control-lg form-control" id="exampleFormControlSelect1">
-					<option>1</option>
-					<option>2</option>
-					<option>3</option>
-					<option>4</option>
-					<option>5</option>
-				</select>
-			</div>
+			<p class="h2">@Model.Name</p>
+			
 			<div class="form-group mt-4">
 				<label for="exampleFormControlInput1" class="h6">Amount</label>
-				<div>counter</div>
+				<input type="number" class="form-control" />
+			</div>
+			<div class="form-group mt-4">
+				<label for="exampleFormControlInput1" class="h6">Color</label>
+				<span>@Model.Amount</span>
+			</div>
+			<div class="form-group mt-4">
+				<label for="exampleFormControlInput1" class="h6">Material</label>
+				<span>@Model.Name</span>
+			</div>
+			<div class="form-group mt-4">
+				<label for="exampleFormControlInput1" class="h6">Dimension</label>
+				<span>@Model.Name</span>
 			</div>
 		</div>
 		<div class="d-flex flex-column">
