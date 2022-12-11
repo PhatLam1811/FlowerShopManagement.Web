@@ -12,7 +12,7 @@ namespace FlowerShopManagement.Web.Controllers
 
         public IActionResult ProductDetail()
         {
-            return View(new ProductModel(amount: 20, id: "huhu") { Name = "F hoa", UniPrice = 10 });
+            return View(new ProductDetailModel(amount: 20, id: "huhu") { Name = "F hoa", UniPrice = 10 });
         }
     }
 }
