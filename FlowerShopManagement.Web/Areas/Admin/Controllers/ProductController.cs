@@ -33,7 +33,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
         //Open edit dialog / modal
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
@@ -101,7 +101,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
         //Open an Create Dialog
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             //Set up default values for OrderPage
@@ -113,7 +113,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
 
 			*/
-            return PartialView(/*Coult be a ViewModel in here*/); 
+            return View(/*Coult be a ViewModel in here*/); 
         }
 
         // Confirm and create an Order

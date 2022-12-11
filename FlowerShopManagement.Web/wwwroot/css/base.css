@@ -37,6 +37,7 @@ p, span, h1, h2, h3, h4, h5, h6 {
     padding: 12px 10px;
     border-radius: 2px;
     min-width: 150px;
+    cursor: pointer;
 }
 
 .btn-primary {
@@ -55,7 +56,7 @@ p, span, h1, h2, h3, h4, h5, h6 {
 .btn-secondary {
     border: solid;
     border-width: 1px;
-    border-color: rgb(20, 33, 61);
+    border-color: var(--bs-dark);
     background-color: transparent;
     color: rgb(20, 33, 61);
     font-weight: 700;
@@ -72,12 +73,32 @@ p, span, h1, h2, h3, h4, h5, h6 {
         background-color: inherit;
         color: inherit;
         font-weight: inherit;
+        box-shadow: 0 0 0 0.25rem rgb(49 132 253 / 50%);
+        border: none;
     }
 
     .btn-secondary:focus {
         background-color: inherit;
         color: inherit;
         font-weight: inherit;
+        box-shadow: 0 0 0 0.25rem rgb(49 132 253 / 50%);
+        border: none;
+    }
+
+.btn-remove {
+    border-color: var(--bs-secondary);
+    background-color: transparent;
+    color: var(--bs-secondary);
+}
+
+.btn-remove:hover {
+    color: inherit;
+    opacity: 0.7;
+}
+
+    .btn-remove:focus, .btn-remove:active {
+        box-shadow: 0 0 0 0.25rem #ebc1ee;
+        border: none;
     }
 
 .btn-icon {

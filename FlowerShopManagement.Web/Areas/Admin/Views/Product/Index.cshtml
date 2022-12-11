@@ -6,7 +6,7 @@
 }
 
 <div class="row">
-	<form asp-action="Sort" method="post" class="col-lg-2 d-lg-block collapse borderCustom1 um" onsubmit="return jQueryAjaxSort(this);">
+	<div class="mt-3 col">
 		<div class="col">
 			<span class="h4">Filter</span>
 			<div class="check-list mt-4">
@@ -37,20 +37,23 @@
 					</label>
 				}
 			</div>
-		</div> @*used to col-3 vs col-10*@
-	</form>
+		</div> 
+	</div>
 
-	<div class="col-lg-10 col-12 mt-3">
+	<div class="col-lg-10 col-12">
 		<div class="d-flex d-lg-block justify-content-between">
 			<button class="filter-icon border-0 d-lg-none fs-3" data-bs-toggle="collapse" data-bs-target=".um" aria-controls="navbarSupportedContent"
 					aria-expanded="false" aria-label="Toggle navigation">
 				<span class="h5">Filter</span>
 			</button>
-			<div class="d-flex justify-content-end">
-				<form asp-action="Search" method="post" onsubmit="return jQueryAjaxSort(this);" class="d-flex justify-content-end mb-2 w-100">
-					<input class="form-control" type="text" name="searchString" />
-					<button class="btn btn-secondary icon-search" type="submit" />
-				</form>
+			<div class="d-flex w-100">
+				<div class="form-group flex-grow-1">
+					<input type="text" class="form-control form-control-lg h5 h-100 position-relative" style="z-index:99" id="floatingInput" placeholder="Abc">
+				</div>
+				<button class="btn btn-icon border border-primary position-relative" style="z-index:999">
+					Search
+					<i class="fa-solid fa-magnifying-glass"></i>
+				</button>
 			</div>
 		</div>
 		<div class="row">
