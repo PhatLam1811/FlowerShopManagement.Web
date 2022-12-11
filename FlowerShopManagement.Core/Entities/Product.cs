@@ -14,10 +14,18 @@ public class Product
     public float _wholesaleDiscount { get; set; }
     public List<Review> _reviews { get; private set; } = new List<Review>();
 
+    // adding attributes
+    public Color _color { get; set; }
+    public string _description { get; set; }
+    public string _material { get; set; }
+    public string _size { get; set; }
+    public string _maintainment { get; set; }
+
     public Product( string? id = null,
         string name = "", string picture = "", 
         List<Categories>? categories = null, int amount = 0,
-        int uniPrice = 0, float wholesaleDiscount = 0.0f)
+        int uniPrice = 0, float wholesaleDiscount = 0.0f, string description = "", 
+        string maintainment  = "", string size = "0cm x 0cm x 0cm", string material = "", Color color = Color.Sample)
     {
         if (id != null)
             _id = id;
@@ -29,5 +37,10 @@ public class Product
         _uniPrice = uniPrice;
         _wholesaleDiscount = wholesaleDiscount;
         _reviews = new List<Review>();
+        _color = color;
+        _description = description;
+        _maintainment = maintainment;
+        _size = size;
+        _material = material; 
     }
 }
