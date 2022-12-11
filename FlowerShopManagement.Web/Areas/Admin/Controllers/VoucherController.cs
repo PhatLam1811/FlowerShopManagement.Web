@@ -29,11 +29,11 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             ViewData["ValueType"] = Enum.GetValues(typeof(ValueType)).Cast<ValueType>().ToList();
             ViewData["VoucherStatus"] = Enum.GetValues(typeof(VoucherStatus)).Cast<VoucherStatus>().ToList();
             List<VoucherDetailModel> productMs = await _stockServices.GetUpdatedVouchers(_voucherRepository);
-            return View(/*Coult be a ViewModel in here*/);
+            return View(productMs);
         }
 
         //Open edit dialog / modal
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
@@ -41,7 +41,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             VoucherDetailModel editProduct = new VoucherDetailModel(await _voucherRepository.GetById(id));
             if (editProduct != null)
             {
-                return View(/*Coult be a ViewModel in here*/);
+                return View(editProduct);
             }
             return RedirectToAction("Index");
         }
@@ -101,7 +101,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
         //Open an Create Dialog
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             //Set up default values for OrderPage
@@ -113,7 +113,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
 
 			*/
-            return View(/*Coult be a ViewModel in here*/);
+            return View(new VoucherDetailModel());
         }
 
         // Confirm and create an Order

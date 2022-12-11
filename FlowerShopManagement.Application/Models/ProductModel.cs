@@ -32,6 +32,13 @@ public class ProductModel
         WholesaleDiscount = 0;
     }
 
+    public ProductModel()
+    {
+        Id = new Guid().ToString();
+        Picture = "";
+        Name = "";
+    }
+
     public bool IsEqualProduct(string id)
     {
         if (id == Id) 
@@ -76,6 +83,13 @@ public class ProductDetailModel
         Material = entity._material;
         Size = entity._size;
         Maintainment = entity._maintainment;
+    }
+
+    public ProductDetailModel()
+    {
+        Id = new Guid().ToString();
+        Picture = "";
+        Name = "";
     }
 
     public ProductDetailModel(string id, int amount)
