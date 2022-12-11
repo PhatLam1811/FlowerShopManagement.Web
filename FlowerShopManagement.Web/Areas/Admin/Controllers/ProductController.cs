@@ -120,7 +120,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(NewOrEditProductModel productModel)
         {
-            var result = await _stockServices.CreateProduct(productModel,_productRepository);
+            var result = await _stockServices.CreateProduct(productModel, _productRepository);
             if (result == true)
             {
                 List<ProductModel> orders = await _stockServices.GetUpdatedProducts(_productRepository);
@@ -129,6 +129,51 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             return NotFound(); // Can be changed to Redirect
         }
 
-       
+        public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString, int? pageNumber)
+        {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+            List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
+            if (productMs != null)
+            {
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    productMs = (List<ProductModel>)productMs.Where(s => s.Name.Contains(searchString));
+                }
+
+                switch (sortOrder)
+                {
+                    case "name_desc":
+                        productMs = (List<ProductModel>)productMs.OrderByDescending(s => s.Name);
+                        break;
+                    //case "Date":
+                    //    productMs = (List<ProductModel>)productMs.OrderBy(s => s.);
+                    //      break;
+                    case "name_asc":
+                        productMs = (List<ProductModel>)productMs.OrderBy(s => s.Name);
+                        break;
+                    default:
+                        //productMs = productMs.OrderBy(s => s.LastName);
+                        break;
+                }
+                int pageSize = 3;
+                return View(PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize));
+            }
+            return NotFound();
+
+        }
+
     }
 }
