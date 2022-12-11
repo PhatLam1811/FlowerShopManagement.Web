@@ -38,16 +38,16 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         {
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
             //Should get a new one because an admin updates data realtime
-            NewOrEditProductModel editProduct = new NewOrEditProductModel(await _productRepository.GetById(id));
+            ProductDetailModel editProduct = new ProductDetailModel(await _productRepository.GetById(id));
             if (editProduct != null)
             {
-                return PartialView(/*Coult be a ViewModel in here*/);
+                return View(/*Coult be a ViewModel in here*/);
             }
             return RedirectToAction("Index");
         }
 
         [HttpPut]
-        public async Task<IActionResult> Update(NewOrEditProductModel productModel)
+        public async Task<IActionResult> Update(ProductDetailModel productModel)
         {
             //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
 
@@ -66,7 +66,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
                     //Update successfully, we pull new list of products
                     List<ProductModel> proMs = await _stockServices.GetUpdatedProducts(_productRepository);
 
-                    return PartialView(/*Coult be a UPDATED ViewModel in here*/);//for example: a _ViewAll 
+                    return RedirectToAction("Index"/*Coult be a ViewModel in here*/); // A updated _ViewAll
 
                 }
             }
@@ -74,7 +74,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> Detele(NewOrEditProductModel productModel)
+        public async Task<IActionResult> Detele(ProductDetailModel productModel)
         {
             //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
 
@@ -94,7 +94,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
                     //Detele successfully, we pull a new list of orders
                     List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
 
-                    return PartialView(/*Coult be a UPDATED ViewModel in here*/); //For example: a _ViewAll
+                    return RedirectToAction("Index"/*Coult be a ViewModel in here*/); // A updated _ViewAll
                 }
             }
             return NotFound();
@@ -118,13 +118,13 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
         // Confirm and create an Order
         [HttpPost]
-        public async Task<IActionResult> Create(NewOrEditProductModel productModel)
+        public async Task<IActionResult> Create(ProductDetailModel productModel)
         {
             var result = await _stockServices.CreateProduct(productModel, _productRepository);
             if (result == true)
             {
                 List<ProductModel> orders = await _stockServices.GetUpdatedProducts(_productRepository);
-                return PartialView(/*Coult be a ViewModel in here*/); // A updated _ViewAll
+                return RedirectToAction("Index"/*Coult be a ViewModel in here*/); // A updated _ViewAll
             }
             return NotFound(); // Can be changed to Redirect
         }
