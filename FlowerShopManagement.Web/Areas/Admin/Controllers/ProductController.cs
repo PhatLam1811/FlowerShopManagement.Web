@@ -11,14 +11,12 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         //Services
-        IImportServices _importServices;
         IStockServices _stockServices;
         //Repositories
         IProductRepository _productRepository;
-        public ProductController(IProductRepository productRepository, IImportServices importServices, IStockServices stockServices)
+        public ProductController(IProductRepository productRepository, IStockServices stockServices)
         {
             _productRepository = productRepository;
-            _importServices = importServices;
             _stockServices = stockServices;
         }
 
@@ -27,13 +25,15 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         {
             //Set up default values for ProductPage
 
+            ViewBag.Product = true;
+
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
             return View(/*Coult be a ViewModel in here*/);
         }
 
         //Open edit dialog / modal
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
@@ -101,7 +101,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
         //Open an Create Dialog
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             //Set up default values for OrderPage
@@ -113,7 +113,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
 
 			*/
-            return View(/*Coult be a ViewModel in here*/);
+            return View(/*Coult be a ViewModel in here*/); 
         }
 
         // Confirm and create an Order
@@ -129,7 +129,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             return NotFound(); // Can be changed to Redirect
         }
 
-        public async Task<IActionResult> Sort(string sortOrder,string currentFilter, string searchString,int? pageNumber)
+        public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
             ViewData["CurrentSort"] = sortOrder;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";

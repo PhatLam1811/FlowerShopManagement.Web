@@ -13,7 +13,6 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
     {
         //Services
         ISaleServices _saleServices;
-        IImportServices _importServices;
         IStockServices _stockServices;
         IUserServices _userServices;
         //Repositories
@@ -21,13 +20,12 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         IProductRepository _productRepository;
         IUserRepository _userRepository;
 
-        public OrderController(ISaleServices saleServices, IOrderRepository orderRepository, IProductRepository productRepository, IImportServices importServices,
+        public OrderController(ISaleServices saleServices, IOrderRepository orderRepository, IProductRepository productRepository, 
             IUserRepository userRepository, IStockServices stockServices, IUserServices userServices)
         {
             _orderRepository = orderRepository;
             _saleServices = saleServices;
             _productRepository = productRepository;
-            _importServices = importServices;
             _userRepository = userRepository;
             _stockServices = stockServices;
             _userServices = userServices;
@@ -41,10 +39,10 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             ViewData["Categories"] = Enum.GetValues(typeof(Status)).Cast<Status>().ToList();
             List<OrderModel> orderMs = await _saleServices.GetUpdatedOrders(_orderRepository);
-            return View(/*Coult be a ViewModel in here*/);
+            return View(new List<OrderModel>());
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
             //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
@@ -52,7 +50,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             var order = new OrderModel(await _orderRepository.GetById(id));
             if (order != null)
             {
-                return PartialView(/*Coult be a ViewModel in here*/);
+                return View(/*Coult be a ViewModel in here*/);
             }
             return RedirectToAction("Index");
         }
