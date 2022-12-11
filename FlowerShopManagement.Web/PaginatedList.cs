@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FlowerShopManagement
+namespace FlowerShopManagement.Web
 {
     public class PaginatedList<T> : List<T>
     {

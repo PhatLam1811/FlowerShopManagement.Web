@@ -5,20 +5,33 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using FlowerShopManagement.Infrustructure.Google.Interfaces;
+using FlowerShopManagement.Core.Entities;
+using System.Security.Claims;
+using FlowerShopManagement.Application.MongoDB.Interfaces;
+using FlowerShopManagement.Core.Enums;
+using FlowerShopManagement.Application.Models;
+using FlowerShopManagement.Application.Services;
 
 namespace FlowerShopManagement.Web.Controllers;
 
 public class HomeController : Controller
 {
+    //Services
     private readonly ILogger<HomeController> _logger;
     private readonly IAuthenticationServices _authServices;
     private readonly IGmailServices _gmailServices;
+    private readonly IStockServices _stockServices;
 
-    public HomeController(ILogger<HomeController> logger, IAuthenticationServices authServices, IGmailServices gmailServices)
+    //Crud
+    IProductRepository _productRepository;
+    public HomeController(ILogger<HomeController> logger, IAuthenticationServices authServices, IGmailServices gmailServices, 
+        IProductRepository productRepository, IStockServices stockServices )
     {
         _logger = logger;
         _authServices = authServices;
         _gmailServices = gmailServices;
+        _productRepository = productRepository;
+        _stockServices = stockServices;
     }
 
     // =======================================================================================================
@@ -54,10 +67,63 @@ public class HomeController : Controller
    
     #endregion
 
-    public IActionResult Index()
+    [HttpGet]
+    public async Task<IActionResult> Index()
     {
         ViewBag.Home = true;
-        return View();
+        ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
+
+        List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
+
+        //Get wishlist
+        //
+        //
+        //
+        productMs = productMs.OrderBy(i => i.Name).ToList();
+        return View(/*Viewmodel*/);
+    }
+
+    public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString, int? pageNumber)
+    {
+        ViewData["CurrentSort"] = sortOrder;
+        ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "name_asc";
+        ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+        if (searchString != null)
+        {
+            pageNumber = 1;
+        }
+        else
+        {
+            searchString = currentFilter;
+        }
+
+        ViewData["CurrentFilter"] = searchString;
+        List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
+        if (productMs != null)
+        {
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                productMs = (List<ProductModel>)productMs.Where(s => s.Name.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    productMs = (List<ProductModel>)productMs.OrderByDescending(s => s.Name);
+                    break;
+                case "name_asc":
+                    productMs = (List<ProductModel>)productMs.OrderBy(s => s.Name);
+                    break;
+                default:
+                    //productMs = productMs.OrderBy(s => s.LastName);
+                    break;
+            }
+            int pageSize = 3;
+            return View(PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize));
+        }
+        return NotFound();
+
     }
 
     public IActionResult About()

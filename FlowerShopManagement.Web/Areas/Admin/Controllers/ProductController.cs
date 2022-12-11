@@ -4,6 +4,7 @@ using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
+using System.Drawing.Printing;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 {
@@ -29,7 +30,9 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
-            return View(/*Coult be a ViewModel in here*/);
+            
+            return View( PaginatedList<ProductModel>.CreateAsync(productMs, 1, 1));
+            
         }
 
         //Open edit dialog / modal
