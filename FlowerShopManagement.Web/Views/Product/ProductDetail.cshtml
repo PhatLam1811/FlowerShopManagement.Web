@@ -13,14 +13,16 @@
 	<div class="col-5 d-flex flex-column justify-content-between">
 		<div>
 			<p class="h2">@Model.Name</p>
-			
-			<div class="form-group mt-4">
-				<label for="exampleFormControlInput1" class="h6">Amount</label>
-				<input type="number" class="form-control" />
-			</div>
 			<div class="form-group mt-4">
 				<label for="exampleFormControlInput1" class="h6">Color</label>
 				<span>@Model.Amount</span>
+			</div>
+			<div class="form-group mt-4">
+				<label for="exampleFormControlInput1" class="h6">Amount</label>
+				<input type="number" class="form-control" />
+				<small id="passwordHelpInline" class="text-muted">
+					Remain: @Model.Amount
+				</small>
 			</div>
 			<div class="form-group mt-4">
 				<label for="exampleFormControlInput1" class="h6">Material</label>
@@ -38,7 +40,7 @@
 	</div>
 
 	<div class="col-3 d-flex flex-column justify-content-between">
-		
+
 		<div class="">
 			<label class="h6">Description</label>
 			<p class="mt-2">
@@ -46,13 +48,21 @@
 				Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
 				when an unknown printer took a galley of type and scrambled it to make a type specimen book.
 			</p>
-			
+
 		</div>
 		<div class="row gx-2 gy-3">
-				<component type="typeof(ProductInformationPanel)" render-mode="Static" />
-				<component type="typeof(ProductInformationPanel)" render-mode="Static" />
-				<component type="typeof(ProductInformationPanel)" render-mode="Static" />
-				<component type="typeof(ProductInformationPanel)" render-mode="Static" />
-			</div>
+			<component type="typeof(ProductInformationPanel)" render-mode="Static" />
+			<component type="typeof(ProductInformationPanel)" render-mode="Static" />
+			<component type="typeof(ProductInformationPanel)" render-mode="Static" />
+			<component type="typeof(ProductInformationPanel)" render-mode="Static" />
+		</div>
 	</div>
+</div>
+
+<div class="row mt-5">
+	<span>Review</span>
+</div>
+
+<div class="row mt-5">
+	<span>Relative Product</span>
 </div>
