@@ -9,8 +9,6 @@ using MongoDB.Bson;
 using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using FlowerShopManagement.Infrustructure.Google.Interfaces;
-using FlowerShopManagement.Infrustructure.Google.Implementations;
 using FlowerShopManagement.Infrustructure.Mail;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -68,28 +66,9 @@ BsonClassMap.RegisterClassMap<Order>(cm =>
 });
 #endregion
 
-//builder.Services.Configure<DatabaseSettings>(
-//    builder.Configuration.GetSection("CustomerDatabase"));
-
-///*builder.Services.AddSingleton<IDatabaseSettings>(sp =>
-//    sp.GetRequiredService<IOptions<DatabaseSettings>>().Value);*/
-
-//// Add database access services
-//builder.Services.AddSingleton<IMongoDbDAO, MongoDbDAO>();
-//builder.Services.AddSingleton<IMongoClient>(
-//    s => new MongoClient(builder.Configuration.GetValue<string>("CustomerDatabase:ConnectionString")));
-
-//// Add object CRUD operation services
-//builder.Services.AddScoped<ICartCRUD, CartCRUD>();
-//builder.Services.AddScoped<IUserRepository, CustomerCRUD>();
-//builder.Services.AddScoped<IOrderCRUD, OrderCRUD>();
-//builder.Services.AddScoped<IProfileCRUD, ProfileCRUD>();
-
 // Add application logic services
-builder.Services.AddScoped<IAuthenticationServices, AuthenticationServices>();
-builder.Services.AddScoped<IGmailServices, GmailServices>();
-builder.Services.AddScoped<MailServices>();
-builder.Services.AddScoped<ICustomerManagementServices, CustomerManagementServices>();
+builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<MailKitService>();
 
 // HttpContextAccessor
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

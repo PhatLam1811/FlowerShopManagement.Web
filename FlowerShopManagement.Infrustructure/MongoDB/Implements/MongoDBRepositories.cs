@@ -1,5 +1,6 @@
 ﻿using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
 using MongoDB.Driver;
 
@@ -153,6 +154,13 @@ public class UserRepository : BaseRepository<User>, IUserRepository
         var result = await _mongoDbCollection.FindAsync(filter);
         return result.FirstOrDefault();
     }
+
+    public async Task<List<User>> GetByRole(Role role)
+    {
+        var filter = Builders<User>.Filter.Eq("role", role);
+        var result = await _mongoDbCollection.FindAsync(filter);
+        return result.ToList();
+    }
 }
 
 public class CartRepository : BaseRepository<Cart>, ICartRepository
@@ -166,4 +174,16 @@ public class CartRepository : BaseRepository<Cart>, ICartRepository
 public class OrderRepository : BaseRepository<Order>, IOrderRepository
 {
     public OrderRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+}
+
+public class ProductRepository : BaseRepository<Product>, IProductRepository
+{
+    public ProductRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+
+    public async Task<List<Product>> GetAllLowOnStock(int minimumAmount)
+    {
+        var filter = Builders<Product>.Filter.Lte("amount", minimumAmount);
+        var result = await _mongoDbCollection.FindAsync(filter);
+        return result.ToList();
+    }
 }

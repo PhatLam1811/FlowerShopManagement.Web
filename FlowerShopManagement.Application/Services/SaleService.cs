@@ -11,7 +11,7 @@ using FlowerShopManagement.Application.Models;
 
 namespace FlowerShopManagement.Application.Services;
 
-public class SaleServices : ISaleServices
+public class SaleService : ISaleService
 {
     public ICartRepository _cartRepository;
     public IUserRepository _userReopsitory;
@@ -20,7 +20,7 @@ public class SaleServices : ISaleServices
     //List<Order> _orders; 
 
     // APPLICATION SERVICES (USE CASES)
-    public SaleServices(ICartRepository cartRepository, IUserRepository userRepository, IOrderRepository orderRepository)
+    public SaleService(ICartRepository cartRepository, IUserRepository userRepository, IOrderRepository orderRepository)
     {
         _cartRepository = cartRepository;
         _orderRepository = orderRepository;
@@ -35,7 +35,7 @@ public class SaleServices : ISaleServices
     }
 
 
-    public List<CustomerModel> GetCustomerList()
+    public List<UserModel> GetCustomerList()
     {
         // return _customers;
         throw new NotImplementedException();

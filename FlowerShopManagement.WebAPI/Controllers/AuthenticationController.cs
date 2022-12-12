@@ -11,9 +11,9 @@ namespace FlowerShopManagement.WebAPI.Controllers;
 [Route("[controller]")]
 public class AuthenticationController : ControllerBase
 {
-    private readonly IAuthenticationServices _authServices;
+    private readonly IAuthenticationService _authServices;
 
-    public AuthenticationController(IAuthenticationServices authServices)
+    public AuthenticationController(IAuthenticationService authServices)
     {
         _authServices = authServices;
     }

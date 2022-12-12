@@ -4,24 +4,21 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using FlowerShopManagement.Infrustructure.Google.Interfaces;
 using FlowerShopManagement.Infrustructure.Mail;
-using FlowerShopManagement.Application.Templates;
+using FlowerShopManagement.Application.Models;
 
 namespace FlowerShopManagement.Web.Controllers;
 
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly IAuthenticationServices _authServices;
-    private readonly IGmailServices _gmailServices;
-    private readonly MailServices _mailServices;
+    private readonly Application.Interfaces.IAuthenticationService _authServices;
+    private readonly MailKitService _mailServices;
 
-    public HomeController(ILogger<HomeController> logger, IAuthenticationServices authServices, IGmailServices gmailServices, MailServices mailServices)
+    public HomeController(ILogger<HomeController> logger, Application.Interfaces.IAuthenticationService authServices, MailKitService mailServices)
     {
         _logger = logger;
         _authServices = authServices;
-        _gmailServices = gmailServices;
         _mailServices = mailServices;
     }
 
@@ -78,18 +75,18 @@ public class HomeController : Controller
 
     public async Task<bool> SignIn()
     {
+        // Create request items list
+        List<LowOnStockProductModel> supplyItemModels = new List<LowOnStockProductModel>();
+
         // Create supply request form
-        var requestForm = new SupplyRequestFormModel(
-            "z613zgm@gmail.com",
-            "Supply Request From Dallas",
-            "This is a supply request form!",
-            null, new string[0] { }, new string[0] { }, new int[0] { });
+        var requestForm = new SupplyFormModel(new List<LowOnStockProductModel>(), new List<SupplierModel>());
 
         //_gmailServices.Send();
-        await _mailServices.Send(requestForm);
+        //await _mailServices.Send(requestForm);
 
         return true;
 
+        #region Authenticate login code
         //// Authenticate input email or phone Nb & password
         //var result = await _authServices.AuthenticateAsync("phatlam1811@gmail.com", "123123");
 
@@ -109,5 +106,6 @@ public class HomeController : Controller
         //    new AuthenticationProperties { IsPersistent = true });
 
         //return RedirectToAction("Index", "Profile");
+        #endregion
     }
 }

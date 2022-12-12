@@ -3,10 +3,10 @@ using FlowerShopManagement.Core.Entities;
 
 namespace FlowerShopManagement.Application.Interfaces;
 
-public interface ISaleServices
+public interface ISaleService
 {
     public Task<List<Order>> GetOrderListAsync();
-    public List<CustomerModel> GetCustomerList();
+    public List<UserModel> GetCustomerList();
     public Task<bool> VerifyOrder(string customerId, Order order);
     public bool CheckExistedCustomer(string id);
     public Task<bool> CancelOrder(string customerId, Order order);

@@ -1,4 +1,5 @@
 ﻿using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Core.Enums;
 
 namespace FlowerShopManagement.Application.MongoDB.Interfaces;
 
@@ -24,8 +25,16 @@ public interface IBaseRepository<TEntity> : IDisposable where TEntity : class
 public interface IUserRepository : IBaseRepository<User> 
 {
     public Task<User> GetByEmailOrPhoneNb(string emailOrPhoneNb);
+    public Task<List<User>> GetByRole(Role role);
 }
 
 public interface ICartRepository : IBaseRepository<Cart> { }
 
 public interface IOrderRepository : IBaseRepository<Order> { }
+
+public interface ISupplierRepository : IBaseRepository<Supplier> { }
+
+public interface IProductRepository : IBaseRepository<Product> 
+{
+    public Task<List<Product>> GetAllLowOnStock(int minimumAmount);
+}

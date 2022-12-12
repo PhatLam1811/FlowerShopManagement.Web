@@ -8,13 +8,13 @@ using System.Security.Claims;
 
 namespace FlowerShopManagement.Application.Services;
 
-public class AuthenticationServices : IAuthenticationServices
+public class AuthenticationService : IAuthenticationService
 {
     private readonly IUserRepository _userRepository;
     private readonly ICartRepository _cartRepository;
     private User? _currentUser;
 
-    public AuthenticationServices(
+    public AuthenticationService(
         IUserRepository userRepository, 
         ICartRepository cartRepository)
     {
@@ -59,7 +59,7 @@ public class AuthenticationServices : IAuthenticationServices
         return new UserModel(newUser);
     }
 
-    public async Task<UserModel?> AuthenticateAsync(string emailOrPhoneNb, string password)
+    public async Task<UserModel?> SignInAsync(string emailOrPhoneNb, string password)
     {
         // Try to find the matched user in database
         var result = await _userRepository.GetByEmailOrPhoneNb(emailOrPhoneNb);

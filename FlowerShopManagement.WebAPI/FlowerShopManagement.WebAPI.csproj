@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\FlowerShopManagement.Application\FlowerShopManagement.Application.csproj" />
     <ProjectReference Include="..\FlowerShopManagement.Infrustructure\FlowerShopManagement.Infrustructure.csproj" />
+    <ProjectReference Include="..\FlowerShopManagement.Web\FlowerShopManagement.Web.csproj" />
   </ItemGroup>
 
 </Project>
