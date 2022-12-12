@@ -31,7 +31,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
             
-            return View( PaginatedList<ProductModel>.CreateAsync(productMs, 1, 1));
+            return View( PaginatedList<ProductModel>.CreateAsync(productMs, 1, 6));
             
         }
 
@@ -116,7 +116,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
 
 			*/
-            return View(new ProductDetailModel()); 
+            return View(); 
         }
 
         // Confirm and create an Order
@@ -171,10 +171,16 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
                         //productMs = productMs.OrderBy(s => s.LastName);
                         break;
                 }
-                int pageSize = 3;
-                return View(PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize));
+                int pageSize = 6;
+                PaginatedList<ProductModel> objs = PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize);
+                return Json(new { isValid = true, 
+                    htmlViewAll = Helper.RenderRazorViewToString(this, "_ViewAll", objs) ,
+                    htmlPagination = Helper.RenderRazorViewToString(this, "_Pagination", objs)
+
+                });
+                //return PartialView("_ViewAll",PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize));
             }
-            return NotFound();
+            return NotFound();  
 
         }
 

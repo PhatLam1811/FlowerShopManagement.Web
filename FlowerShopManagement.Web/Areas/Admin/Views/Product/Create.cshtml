@@ -1,5 +1,8 @@
-﻿@model ProductDetailModel
+﻿@using FlowerShopManagement.Core.Enums
 
+@{
+	List<Categories>? categories = ViewData["Categories"] as List<Categories> ?? null;
+}
 <p class="mt-4"></p>
 <span class="h1">Create new Product</span>
 
@@ -9,37 +12,51 @@
 		<div class="row">
 			<div class="col-8 form-group">
 				<label class="form-label" for="exampleFormControlInput1">Name</label>
-				<input type="text" asp-for="@Model.Name" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
+				<input type="text" name="Name" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
 			</div>
 			<div class="col-4 form-group">
 				<label class="form-label" for="exampleFormControlInput1">Color</label>
-				<input type="text" asp-for="@Model.Color" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
+				<input type="text" name="Color" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-4 form-group">
-				<label class="form-label" for="exampleFormControlInput1">Dimension</label>
-				<input type="text" asp-for="@Model.Size" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
+				<label class="form-label" for="exampleFormControlInput1">Size</label>
+				<input type="text" name="Size" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
 			</div>
 			<div class="col-8 form-group">
 				<label class="form-label" for="exampleFormControlInput1">Material</label>
-				<input type="text" asp-for="@Model.Material" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
+				<input type="text" name="Material" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
 			</div>
 		</div>
 		<div class="row">
 			<div class="col form-group">
 				<label class="form-label" for="exampleFormControlInput1">Price</label>
-				<input type="number" asp-for="@Model.UniPrice" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
+				<input type="number" name="UniPrice" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
 			</div>
 
 			<div class="col form-group">
 				<label class="form-label" for="exampleFormControlInput1">Amount</label>
-				<input type="number" asp-for="@Model.Amount" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
+				<input type="number" name="Amount" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
 			</div>
 		</div>
 		<div class="form-group">
+			<div class="form-floating">
+				<select class="form-select" name="Categories" asp-items="@(new SelectList(categories))" id="selectCategory" aria-label="Floating label select example">
+				</select>
+				<label for="selectCategory">Category</label>
+				
+			</div>
+			
+		</div>
+		<div class="form-group">
+			<label class="form-label" for="exampleFormControlInput1">Maintainment</label>
+			<textarea type="text" name="Maintainment" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder=""></textarea>
+		</div>
+
+		<div class="form-group">
 			<label class="form-label" for="exampleFormControlInput1">Description</label>
-			<textarea type="text" asp-for="@Model.Description" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder=""></textarea>
+			<textarea type="text" name="Description" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder=""></textarea>
 		</div>
 
 		<div class="mt-5 d-flex gap-3">

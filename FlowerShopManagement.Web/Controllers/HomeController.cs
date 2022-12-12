@@ -1,4 +1,4 @@
-﻿using FlowerShopManagement.Application.Interfaces;
+﻿    using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Web.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
@@ -126,6 +126,23 @@ public class HomeController : Controller
 
     }
 
+    [HttpPost]
+    public IActionResult AddToWishList(string id)
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult RemoveFromWishList(string id)
+    {
+        return View();
+    }
+
+    public IActionResult Privacy()
+    {
+        return View();
+    }
+
     public IActionResult About()
     {
         ViewBag.About = true;
@@ -162,4 +179,6 @@ public class HomeController : Controller
 
         //return RedirectToAction("Index", "Profile");
     }
+
+
 }

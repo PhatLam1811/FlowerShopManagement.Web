@@ -4,7 +4,7 @@
 @{
     List<string> categories = new List<string> { "Fa ke flower", "cay canh" };
     List<string> prices = new List<string> { "0 - 10", "11 - 50", ">50" };
-    
+
     var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
     var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
@@ -64,22 +64,10 @@
         <div class="row">
             <div class="" id="hihi">
                 <partial name="_ViewAll" model=@Model view-data="ViewData" />
+
             </div>
-            <nav class="container">
-                <a asp-action="Index"
-                   asp-route-sortOrder="@ViewData["CurrentSort"]"
-                   asp-route-pageNumber="@(Model.PageIndex - 1)"
-                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                   class="btn btn-default @prevDisabled">
-                    Previous
-                </a>
-                <a asp-action="Index"
-                   asp-route-sortOrder="@ViewData["CurrentSort"]"
-                   asp-route-pageNumber="@(Model.PageIndex + 1)"
-                   asp-route-currentFilter="@ViewData["CurrentFilter"]"
-                   class="btn btn-default @nextDisabled">
-                    Next
-                </a>
+            <nav class="container" id="pagination">
+                <partial name="_pagination" model=@Model view-data="ViewData" />
             </nav>
         </div>
     </div>
@@ -87,6 +75,6 @@
 
 <div class="position-fixed d-flex flex-column gap-2 align-items-end" style="width:fit-content; bottom:60px; right:0">
     <a class="btn btn-primary rounded" onclick="showContent2('@(Url.Action("AddCategory", "Product"))','Shoe Categories')">Category</a>
-    <a onclick="showContent2('@Url.Action("Create","Product",null,Context.Request.Scheme)','Add new Product')" class="border-1 table-icon btn btn-primary icon-plus rounded" style="width:fit-content">
+    <a asp-action="Create" asp-controller="Product" asp-area="Admin" class="border-1 table-icon btn btn-primary icon-plus rounded" style="width:fit-content">
     </a>
 </div>

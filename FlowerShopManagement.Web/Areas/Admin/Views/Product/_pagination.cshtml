@@ -1,0 +1,19 @@
+﻿@using FlowerShopManagement.Web
+@using FlowerShopManagement.Application.Models
+@model PaginatedList<ProductModel>
+
+@{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<button onclick="jQueryAjaxReloadViewAll('@(Url.Action("Sort", "Product",new {sortOrder = ViewData["CurrentSort"],pageNumber=(Model.PageIndex - 1),
+                   currentFilter = ViewData["CurrentFilter"]}))')"
+        class="btn btn-default @prevDisabled">
+    Previous
+</button>
+<button onclick="jQueryAjaxReloadViewAll('@(Url.Action("Sort", "Product",new {sortOrder = ViewData["CurrentSort"],pageNumber=(Model.PageIndex + 1),
+                   currentFilter = ViewData["CurrentFilter"]}))')"
+        class="btn btn-default @nextDisabled">
+    Next
+</button>

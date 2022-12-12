@@ -1,4 +1,6 @@
-﻿@model List<ProductModel>
+﻿@using FlowerShopManagement.Web
+@using FlowerShopManagement.Application.Models
+@model PaginatedList<ProductModel>
 
 @{
 	int nProducts = 0;
@@ -49,14 +51,13 @@
 			@if (Model != null)
 			{
 				var a = nProducts * 10;
-				for (int i = (nProducts) * 10; i < Model.Count; i++)
+				foreach (var item in Model)
 				{
-					a++;
-					if (a == (nProducts + 1) * 10 + 1) break;
+					
 
 					<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
 
-						<th scope="row">@a</th>
+						<th scope="row">meme</th>
 						<td>
 							@*<div class="d-flex align-items-center gap-2">
 								@if (String.IsNullOrEmpty(Model[i].ImageName))
@@ -68,26 +69,26 @@
 							 class="rounded-circle"
 							 height="40" width="40"
 							 asp-append-version="true" />*@
-								<span class="limit-line">@Model[i].Name</span>
+								<span class="limit-line">@item.Name</span>
 							@*</div>*@
 
 						</td>
-						<td>$@Model[i].UniPrice</td>
+						<td>$@item.UniPrice</td>
 						<td>
 							<div class="d-none d-lg-block">
 
-								@Model[i].Name
+								@item.Name
 							</div>
 
 						</td>
-						<td>@Model[i].Amount</td>
+						<td>@item.Amount</td>
 						<td>
-							<a onclick="showContent('@Url.Action("Edit","Product",null,Context.Request.Scheme)','Edit Product @Model[i].Name','@Model[i].Id')" class="border-1 table-icon">
+							<a onclick="showContent('@Url.Action("Edit","Product",null,Context.Request.Scheme)','Edit Product @item.Name','@item.Id')" class="border-1 table-icon">
 								<i class="fas fa-edit"></i>
 							</a>
 						</td>
 						<td>
-							<a onclick="showContent('@Url.Action("ChooseSize","Product",null,Context.Request.Scheme)','Choose Sizes','@Model[i].Id')" class="link-info table-icon d-none d-lg-block">
+							<a onclick="showContent('@Url.Action("ChooseSize","Product",null,Context.Request.Scheme)','Choose Sizes','@item.Id')" class="link-info table-icon d-none d-lg-block">
 								<i class="fas fa-cart-plus"></i>
 							</a>
 						</td>

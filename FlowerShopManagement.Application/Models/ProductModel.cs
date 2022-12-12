@@ -21,6 +21,8 @@ public class ProductModel
         Name = entity._name;
         Amount = entity._amount;
         WholesaleDiscount = entity._wholesaleDiscount;
+        UniPrice = entity._uniPrice;
+        Color = entity._color;
     }
 
     public ProductModel(string id, int amount)
@@ -48,7 +50,7 @@ public class ProductModel
 
     public Product ToEntity()
     {
-        if (Id == null) Id = Guid.NewGuid().ToString();
+        if (Id == null || Id == "00000000-0000-0000-0000-000000000000") Id = Guid.NewGuid().ToString();
         return new Product(id: Id, name: Name, picture: Picture, uniPrice: UniPrice, amount: Amount, wholesaleDiscount: WholesaleDiscount);
 
     }
@@ -68,9 +70,8 @@ public class ProductDetailModel
     public string Material { get; set; } = string.Empty;
     public string Size { get; set; } = string.Empty;
     public string Maintainment { get; set; } = string.Empty;
-
-
     public List<Categories> Categories { get; set; } = new List<Categories>();
+
     public ProductDetailModel(Product entity)
     {
         Id = entity._id;
@@ -107,7 +108,7 @@ public class ProductDetailModel
 
     public Product ToEntity()
     {
-        if (Id == null) Id = Guid.NewGuid().ToString();
+        if (Id == null || Id == "00000000-0000-0000-0000-000000000000") Id = Guid.NewGuid().ToString();
         return new Product(id: Id, name: Name, picture: Picture, uniPrice: UniPrice, amount: Amount,
             wholesaleDiscount: WholesaleDiscount, categories: Categories, color: Color, 
             description: Description, material: Material, size: Size, maintainment: Maintainment);
