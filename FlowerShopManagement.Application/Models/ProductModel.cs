@@ -13,7 +13,7 @@ public class ProductModel
     public int Amount { get; set; }
     public Color Color { get; set; }
     public float WholesaleDiscount { get; set; }
-
+    public List<Categories>? Categories { get; set; }
     public ProductModel(Product entity)
     {
         Id = entity._id;
@@ -23,6 +23,7 @@ public class ProductModel
         WholesaleDiscount = entity._wholesaleDiscount;
         UniPrice = entity._uniPrice;
         Color = entity._color;
+        Categories = entity._categories;
     }
 
     public ProductModel(string id, int amount)
@@ -32,6 +33,7 @@ public class ProductModel
         Name = "";
         Amount = amount;
         WholesaleDiscount = 0;
+        Categories= new List<Categories>();
     }
 
     public ProductModel()
@@ -51,7 +53,7 @@ public class ProductModel
     public Product ToEntity()
     {
         if (Id == null || Id == "00000000-0000-0000-0000-000000000000") Id = Guid.NewGuid().ToString();
-        return new Product(id: Id, name: Name, picture: Picture, uniPrice: UniPrice, amount: Amount, wholesaleDiscount: WholesaleDiscount);
+        return new Product(id: Id, name: Name, picture: Picture, uniPrice: UniPrice, amount: Amount, wholesaleDiscount: WholesaleDiscount, categories: Categories);
 
     }
 }

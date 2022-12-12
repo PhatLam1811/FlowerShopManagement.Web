@@ -45,3 +45,35 @@ function jQueryAjaxReloadViewAll(url) {
         return false;
     }
 }
+
+
+function jQueryAjaxSearch(form) {
+    var obj = new FormData(form);
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: obj,
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#hihi').html(res.htmlViewAll);
+                    $('#pagination').html(res.htmlPagination);
+                }
+            },
+            error: function (err) {
+
+                console.log(err)
+            }
+        })
+        return false;
+    } catch (ex) {
+        console.log(ex)
+        return false;
+
+    }
+        //to prevent default form submit event
+
+
+}

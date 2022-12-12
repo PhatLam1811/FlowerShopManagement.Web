@@ -8,14 +8,14 @@
 }
 
 <button onclick="jQueryAjaxReloadViewAll('@(Url.Action("Sort", "Product",new {sortOrder = ViewData["CurrentSort"],pageNumber=(Model.PageIndex - 1),
-                   currentFilter = ViewData["CurrentFilter"]}))')"
+                   currentFilter = ViewData["CurrentFilter"],currentCategory = ViewData["CurrentCategory"],currentPrice=ViewData["CurrentPrice"]  }))')"
         class="btn btn-default @prevDisabled">
     Previous
 </button>
 @if((Model.PageIndex - 1) > 0)
 {
     <button onclick="jQueryAjaxReloadViewAll('@(Url.Action("Sort", "Product",new {sortOrder = ViewData["CurrentSort"],pageNumber=(Model.PageIndex-1),
-                   currentFilter = ViewData["CurrentFilter"]}))')"
+                   currentFilter = ViewData["CurrentFilter"] ,currentCategory = ViewData["CurrentCategory"],currentPrice=ViewData["CurrentPrice"]}))')"
         class="btn btn-default ">
     @(Model.PageIndex - 1)
 </button>
@@ -23,7 +23,7 @@
 
 
 <button onclick="jQueryAjaxReloadViewAll('@(Url.Action("Sort", "Product",new {sortOrder = ViewData["CurrentSort"],pageNumber=(Model.PageIndex),
-                   currentFilter = ViewData["CurrentFilter"]}))')"
+                   currentFilter = ViewData["CurrentFilter"] ,currentCategory = ViewData["CurrentCategory"],currentPrice=ViewData["CurrentPrice"]}))')"
         class="btn btn-default disabled">
     @Model.PageIndex
 </button>
@@ -32,7 +32,7 @@
 @if((Model.PageIndex + 1) <= Model.TotalPages)
 {
     <button onclick="jQueryAjaxReloadViewAll('@(Url.Action("Sort", "Product",new {sortOrder = ViewData["CurrentSort"],pageNumber=(Model.PageIndex + 1),
-                   currentFilter = ViewData["CurrentFilter"]}))')"
+                   currentFilter = ViewData["CurrentFilter"] ,currentCategory = ViewData["CurrentCategory"],currentPrice=ViewData["CurrentPrice"]}))')"
         class="btn btn-default ">
     @(Model.PageIndex + 1)
 </button>
@@ -41,7 +41,7 @@
 @if(Model.TotalPages - (Model.PageIndex + 1) >= 1)
 {
     <button onclick="jQueryAjaxReloadViewAll('@(Url.Action("Sort", "Product",new {sortOrder = ViewData["CurrentSort"],pageNumber=(Model.PageIndex + 1),
-                   currentFilter = ViewData["CurrentFilter"]}))')"
+                   currentFilter = ViewData["CurrentFilter"] ,currentCategory = ViewData["CurrentCategory"],currentPrice=ViewData["CurrentPrice"]}))')"
         class="btn btn-default disabled">
     ...
 </button>
@@ -50,13 +50,13 @@
 @if(Model.TotalPages - (Model.PageIndex + 1) >= 1)
 {
     <button onclick="jQueryAjaxReloadViewAll('@(Url.Action("Sort", "Product",new {sortOrder = ViewData["CurrentSort"],pageNumber=(Model.TotalPages),
-                   currentFilter = ViewData["CurrentFilter"]}))')"
+                   currentFilter = ViewData["CurrentFilter"] ,currentCategory = ViewData["CurrentCategory"],currentPrice=ViewData["CurrentPrice"]}))')"
         class="btn btn-default ">
     @(Model.TotalPages)
 </button>
 }
 <button onclick="jQueryAjaxReloadViewAll('@(Url.Action("Sort", "Product",new {sortOrder = ViewData["CurrentSort"],pageNumber=(Model.PageIndex + 1),
-                   currentFilter = ViewData["CurrentFilter"]}))')"
+                   currentFilter = ViewData["CurrentFilter"] ,currentCategory = ViewData["CurrentCategory"],currentPrice=ViewData["CurrentPrice"]}))')"
         class="btn btn-default @nextDisabled">
     Next
 </button>

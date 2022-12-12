@@ -1,10 +1,10 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
-using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System.Drawing.Printing;
+using System.Linq;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 {
@@ -31,8 +31,8 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
             int pageSizes = 6;
-            return View( PaginatedList<ProductModel>.CreateAsync(productMs, 1, 2));
-            
+            return View(PaginatedList<ProductModel>.CreateAsync(productMs, 1, 2));
+
         }
 
         //Open edit dialog / modal
@@ -116,7 +116,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
 
 			*/
-            return View(); 
+            return View();
         }
 
         // Confirm and create an Order
@@ -131,10 +131,13 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             }
             return NotFound(); // Can be changed to Redirect
         }
-
-        public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString, int? pageNumber)
+        [HttpPost]
+        public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString,
+            int? pageNumber, string? currentPrice, string? currentCategory)
         {
             ViewData["CurrentSort"] = sortOrder;
+            ViewData["CurrentPrice"] = currentPrice;
+            ViewData["CurrentCategory"] = currentCategory;
             ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
             ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
@@ -153,34 +156,59 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             {
                 if (!String.IsNullOrEmpty(searchString))
                 {
-                    productMs = (List<ProductModel>)productMs.Where(s => s.Name.Contains(searchString));
+                    productMs = productMs.Where(s => s.Name.Contains(searchString)).ToList();
                 }
 
                 switch (sortOrder)
                 {
                     case "name_desc":
-                        productMs = (List<ProductModel>)productMs.OrderByDescending(s => s.Name);
+                        productMs = productMs.OrderByDescending(s => s.Name).ToList();
                         break;
                     //case "Date":
                     //    productMs = (List<ProductModel>)productMs.OrderBy(s => s.);
                     //      break;
                     case "name_asc":
-                        productMs = (List<ProductModel>)productMs.OrderBy(s => s.Name);
+                        productMs = productMs.OrderBy(s => s.Name).ToList();
                         break;
                     default:
-                        //productMs = productMs.OrderBy(s => s.LastName);
+                        //case filter
+
                         break;
+                }
+                switch (currentPrice)
+                {
+                    case "0 - 10":
+                        productMs = productMs.Where(s => s.UniPrice > 0 && s.UniPrice <= 10).ToList();
+                        break;
+                    case "11 - 50":
+                        productMs = productMs.Where(s => s.UniPrice > 10 && s.UniPrice <= 50).ToList();
+                        break;
+                    case ">50":
+                        productMs = productMs.Where(s => s.UniPrice > 50).ToList();
+                        break;
+                    default:
+                      
+                        break;
+                }
+
+                if(currentCategory != null)
+                {
+                    Categories MyStatus = (Categories)Enum.Parse(typeof(Categories), currentCategory, true);
+                    productMs = productMs.Where(s => s.Categories != null && s.Categories.Contains(MyStatus)).ToList();
+                    
                 }
                 int pageSize = 6;
                 PaginatedList<ProductModel> objs = PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, 2);
-                return Json(new { isValid = true, 
-                    htmlViewAll = Helper.RenderRazorViewToString(this, "_ViewAll", objs) ,
+                return Json(new
+                {
+                    isValid = true,
+                    htmlViewAll = Helper.RenderRazorViewToString(this, "_ViewAll", objs),
                     htmlPagination = Helper.RenderRazorViewToString(this, "_Pagination", objs)
 
                 });
                 //return PartialView("_ViewAll",PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize));
             }
-            return NotFound();  
+            return NotFound();
 
         }
 
