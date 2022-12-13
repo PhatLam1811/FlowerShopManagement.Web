@@ -12,14 +12,14 @@ namespace FlowerShopManagement.Web.Controllers
     public class OrderController : Controller
     {
         //Services
-        ISaleServices _saleServices;
-        IImportServices _importServices;
+        ISaleService _saleServices;
+        IImportService _importServices;
         //Repositories
         IOrderRepository _orderRepository;
         IProductRepository _productRepository;
         IUserRepository _userRepository;
 
-        public OrderController(ISaleServices saleServices, IOrderRepository orderRepository, IProductRepository productRepository, IImportServices importServices,
+        public OrderController(ISaleService saleServices, IOrderRepository orderRepository, IProductRepository productRepository, IImportService importServices,
             IUserRepository userRepository)
         {
             _orderRepository = orderRepository;
@@ -126,7 +126,7 @@ namespace FlowerShopManagement.Web.Controllers
 
         // Confirm and create an Order
         [HttpPost]
-        public async Task<IActionResult> Create(OrderModel orderModel, UserModel userModel)
+        public async Task<IActionResult> Create(OrderModel orderModel, OfflineCustomerModel userModel)
         {
             var result = _saleServices.CreateOfflineOrder(orderModel, userModel, _orderRepository, _userRepository, _productRepository);
             if (result != null)

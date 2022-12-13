@@ -4,7 +4,7 @@ namespace FlowerShopManagement.Core.Entities;
 
 public class User
 {
-    public string _id { get; private set; }
+    public string _id { get; set; }
     public string email { get; set; }
     public string phoneNumber { get; set; }
     public string password { get; set; }
@@ -40,34 +40,34 @@ public class User
         this.lastModified = DateTime.Now;
     }
 
-    public User(User source)
+    public User(User user)
     {
         // ID
-        this._id = source._id;
+        this._id = user._id;
 
         // Account
-        this.email = source.email;
-        this.phoneNumber = source.phoneNumber;
-        this.password = source.password;
-        this.role = source.role;
+        this.email = user.email;
+        this.phoneNumber = user.phoneNumber;
+        this.password = user.password;
+        this.role = user.role;
 
         // Profile
-        this.name = source.name;
-        this.avatar = source.avatar;
-        this.gender = source.gender;
-        this.birthYear = source.birthYear;
-        this.addresses = source.addresses;
+        this.name = user.name;
+        this.avatar = user.avatar;
+        this.gender = user.gender;
+        this.birthYear = user.birthYear;
+        this.addresses = user.addresses;
 
         // Extra
-        this.createdDate = source.createdDate;
-        this.lastModified = source.lastModified;
+        this.createdDate = user.createdDate;
+        this.lastModified = user.lastModified;
     }
 
     public User(
         string id,
         string email, string phoneNb, string password, Role role,
         string name, string avatar, int birthYear, string[] addresses, Gender gender,
-        DateTime createdDate, bool isDeleted)
+        DateTime createdDate)
     {
         // ID
         this._id = id;

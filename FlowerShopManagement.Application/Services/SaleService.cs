@@ -11,12 +11,12 @@ using FlowerShopManagement.Application.Models;
 
 namespace FlowerShopManagement.Application.Services;
 
-public class SaleServices : ISaleServices
+public class SaleService : ISaleService
 {
 	//List<Order> _orders; 
 
 	// APPLICATION SERVICES (USE CASES)
-	public SaleServices()
+	public SaleService()
 	{
 
 	}
@@ -66,7 +66,7 @@ public class SaleServices : ISaleServices
 		}
 		return false;
 	}
-	public async Task<bool> CreateOfflineOrder(OrderModel order, UserModel user, IOrderRepository orderRepository,
+	public async Task<bool> CreateOfflineOrder(OrderModel order, OfflineCustomerModel user, IOrderRepository orderRepository,
 		IUserRepository userRepository, IProductRepository productRepository)
 	{
 		//Create OrderEntity object
@@ -82,7 +82,7 @@ public class SaleServices : ISaleServices
 		{
 			//Customer is a passenger
 			newOrder._phoneNumber = user.PhoneNumber;
-			newOrder._customerName = user.CustomerName;
+			newOrder._customerName = user.Name;
 		}
 
 		if (newOrder != null && newOrder._id != null)

@@ -4,13 +4,15 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using FlowerShopManagement.Infrustructure.Google.Interfaces;
+
+using FlowerShopManagement.Infrustructure.Mail;
+using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Core.Entities;
 using System.Security.Claims;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Enums;
-using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.Services;
+
 
 namespace FlowerShopManagement.Web.Controllers;
 
@@ -18,18 +20,17 @@ public class HomeController : Controller
 {
     //Services
     private readonly ILogger<HomeController> _logger;
-    private readonly IAuthenticationServices _authServices;
-    private readonly IGmailServices _gmailServices;
+    private readonly IAuthService _authServices;
     private readonly IStockServices _stockServices;
+    private readonly MailKitService _mailServices;
+    private readonly IProductRepository _productRepository;
 
-    //Crud
-    IProductRepository _productRepository;
-    public HomeController(ILogger<HomeController> logger, IAuthenticationServices authServices, IGmailServices gmailServices, 
-        IProductRepository productRepository, IStockServices stockServices )
+    public HomeController(ILogger<HomeController> logger, IAuthService authServices, MailKitService mailServices,
+        IProductRepository productRepository, IStockServices stockServices)
     {
         _logger = logger;
         _authServices = authServices;
-        _gmailServices = gmailServices;
+        _mailServices = mailServices;
         _productRepository = productRepository;
         _stockServices = stockServices;
     }
@@ -155,10 +156,20 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    public Task<bool> SignIn()
+    public async Task<bool> SignIn()
     {
-        _gmailServices.Send();
-        return Task.FromResult(true);
+        // Create request items list
+        List<LowOnStockProductModel> supplyItemModels = new List<LowOnStockProductModel>();
+
+        // Create supply request form
+        var requestForm = new SupplyFormModel(new List<LowOnStockProductModel>(), new List<SupplierModel>());
+
+        //_gmailServices.Send();
+        //await _mailServices.Send(requestForm);
+
+        return true;
+
+        #region Authenticate login code
         //// Authenticate input email or phone Nb & password
         //var result = await _authServices.AuthenticateAsync("phatlam1811@gmail.com", "123123");
 
@@ -178,6 +189,7 @@ public class HomeController : Controller
         //    new AuthenticationProperties { IsPersistent = true });
 
         //return RedirectToAction("Index", "Profile");
+        #endregion
     }
 
 
