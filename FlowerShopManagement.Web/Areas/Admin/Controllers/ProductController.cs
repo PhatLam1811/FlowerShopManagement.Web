@@ -12,10 +12,10 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
     public class ProductController : Controller
     {
         //Services
-        IStockServices _stockServices;
+        IStockService _stockServices;
         //Repositories
         IProductRepository _productRepository;
-        public ProductController(IProductRepository productRepository, IStockServices stockServices)
+        public ProductController(IProductRepository productRepository, IStockService stockServices)
         {
             _productRepository = productRepository;
             _stockServices = stockServices;

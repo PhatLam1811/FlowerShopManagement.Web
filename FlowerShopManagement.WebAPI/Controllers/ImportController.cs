@@ -15,15 +15,18 @@ public class ImportController : Controller
     private readonly ISupplierRepository _supplierRepository;
     private readonly IStockService _stockService;
     private readonly IImportService _importServices;
+    private readonly IProductRepository _productRepository;
 
     public ImportController(
         ISupplierRepository supplierRepository,
         IStockService stockService,
-        IImportService importServices)
+        IImportService importServices,
+        IProductRepository productRepository)
     {
         _supplierRepository = supplierRepository;
         _stockService = stockService;
         _importServices = importServices;
+        _productRepository = productRepository;
     }
 
     // Main page of import operation
@@ -31,7 +34,7 @@ public class ImportController : Controller
     public ImportIndexVM/*IActionResult*/ Index()
     {
         // Load data
-        var lowOnStockProducts = _stockService.GetLowOnStockProducts();
+        var lowOnStockProducts = _stockService.GetLowOnStockProducts(_productRepository);
      
         // Need to encapsulate the code
         var suppliers = new List<SupplierModel>();
@@ -52,13 +55,13 @@ public class ImportController : Controller
     }
 
     // Action performed after the user clicks the "Create Form" button
-    [HttpGet]
-    public SupplyFormModel/*IActionResult*/ CreateSupplyRequestForm(List<LowOnStockProductModel> supplyList, List<SupplierModel> supplierList)
-    {
-        var supplyFormModel = new SupplyFormModel(supplyList, supplierList);
+    //[HttpGet]
+    //public SupplyFormModel/*IActionResult*/ CreateSupplyRequestForm(List<LowOnStockProductModel> supplyList, List<SupplierModel> supplierList)
+    //{
+    //    var supplyFormModel = new SupplyFormModel(supplyList, supplierList);
 
-        return supplyFormModel;
-    }
+    //    return supplyFormModel;
+    //}
 
     // Action performed after user clicks the "Request" button
     [HttpPost]

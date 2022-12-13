@@ -3,7 +3,7 @@ using FlowerShopManagement.Application.MongoDB.Interfaces;
 
 namespace FlowerShopManagement.Application.Interfaces;
 
-public interface IStockServices
+public interface IStockService
 {
 	public Task<bool> CreateProduct(ProductDetailModel productModel, IProductRepository productRepository);
 	public Task<bool> CreateVoucher(VoucherDetailModel voucherDetailModel, IVoucherRepository voucherRepository);

@@ -11,7 +11,7 @@ using FlowerShopManagement.Application.Models;
 
 namespace FlowerShopManagement.Application.Services;
 
-public class StockServices : IStockServices
+public class StockServices : IStockService
 {
     // APPLICATION SERVICES (USE CASES)
     public StockServices()

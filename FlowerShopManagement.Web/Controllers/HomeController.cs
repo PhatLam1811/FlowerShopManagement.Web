@@ -21,12 +21,12 @@ public class HomeController : Controller
     //Services
     private readonly ILogger<HomeController> _logger;
     private readonly IAuthService _authServices;
-    private readonly IStockServices _stockServices;
+    private readonly IStockService _stockServices;
     private readonly MailKitService _mailServices;
     private readonly IProductRepository _productRepository;
 
     public HomeController(ILogger<HomeController> logger, IAuthService authServices, MailKitService mailServices,
-        IProductRepository productRepository, IStockServices stockServices)
+        IProductRepository productRepository, IStockService stockServices)
     {
         _logger = logger;
         _authServices = authServices;
@@ -167,7 +167,14 @@ public class HomeController : Controller
         //_gmailServices.Send();
         //await _mailServices.Send(requestForm);
 
-        return true;
+        var currentUser = await _authServices.RegisterAsync(HttpContext, "jahdkfjhsd@gmail.com", "0932766231", "123123");
+
+        //var currentUser = await _authServices.SignInAsync(HttpContext, "jahsdkfjhasd@gmail.com", "123123");
+
+        if (_authServices.GetUserRole(HttpContext) == Role.Customer.Value)
+            return false;
+        else
+            return true;
 
         #region Authenticate login code
         //// Authenticate input email or phone Nb & password
