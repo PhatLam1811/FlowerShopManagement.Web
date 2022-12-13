@@ -1,4 +1,5 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
+using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
@@ -12,16 +13,16 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
     public class OrderController : Controller
     {
         //Services
-        ISaleServices _saleServices;
+        ISaleService _saleServices;
         IStockServices _stockServices;
-        IUserServices _userServices;
+        IUserService _userServices;
         //Repositories
         IOrderRepository _orderRepository;
         IProductRepository _productRepository;
         IUserRepository _userRepository;
 
-        public OrderController(ISaleServices saleServices, IOrderRepository orderRepository, IProductRepository productRepository, 
-            IUserRepository userRepository, IStockServices stockServices, IUserServices userServices)
+        public OrderController(ISaleService saleServices, IOrderRepository orderRepository, IProductRepository productRepository, 
+            IUserRepository userRepository, IStockServices stockServices, IUserService userServices)
         {
             _orderRepository = orderRepository;
             _saleServices = saleServices;
@@ -117,7 +118,13 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
 
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
-            List<UserModel> customerMs = await _userServices.GetUpdatedCustomers(_userRepository);
+
+            // ================ NEED CHECK ===================
+            //
+            //List<UserModel> customerMs = await _userServices.GetUpdatedCustomers(_userRepository);
+            //
+            // ================ NEED CHECK ===================
+            
             /*Set up viewmodel
 			 
 
@@ -128,7 +135,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
         // Confirm and create an Order
         [HttpPost]
-        public async Task<IActionResult> Create(OrderModel orderModel, UserModel userModel)
+        public async Task<IActionResult> Create(OrderModel orderModel, OfflineCustomerModel userModel)
         {
             var result = _saleServices.CreateOfflineOrder(orderModel, userModel, _orderRepository, _userRepository, _productRepository);
             if (result != null)

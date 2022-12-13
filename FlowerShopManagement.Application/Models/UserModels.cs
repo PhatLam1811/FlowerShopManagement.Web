@@ -3,6 +3,18 @@ using FlowerShopManagement.Core.Enums;
 
 namespace FlowerShopManagement.Application.Models;
 
+public class OfflineCustomerModel
+{
+    public string Name { get; set; }
+    public string PhoneNumber { get; set; }
+
+    public OfflineCustomerModel()
+    {
+        Name = string.Empty;
+        PhoneNumber = string.Empty;
+    }
+}
+
 public class UserDetailsModel : UserModel
 {
     private string _id;

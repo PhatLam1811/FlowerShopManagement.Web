@@ -2,28 +2,28 @@
 
 namespace FlowerShopManagement.Application.Models;
 
-public class LowOnStockProductModel : ProductModel
+public class LowOnStockProductModel : ProductModelP
 {
     public int inStockAmount { get; set; }
 
     public LowOnStockProductModel(Product entity) : base(entity)
     {
-        inStockAmount = entity.amount;
+        inStockAmount = entity._amount;
     }
 }
 
-public class ProductModel
+public class ProductModelP
 {
     protected string _id { get; set; }
     public string Name { get; set; }
     public string Picture { get; set; }
     public int UnitPrice { get; set; }
 
-    public ProductModel(Product entity)
+    public ProductModelP(Product entity)
     {
         _id = entity._id;
-        Name = entity.name;
-        Picture = entity.pictures[0];
-        UnitPrice = entity.price;
+        Name = entity._name;
+        Picture = entity._picture;
+        UnitPrice = entity._uniPrice;
     }
 }

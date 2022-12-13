@@ -16,7 +16,7 @@ public class SaleService : ISaleService
 	//List<Order> _orders; 
 
 	// APPLICATION SERVICES (USE CASES)
-	public SaleServices()
+	public SaleService()
 	{
 
 	}
@@ -66,7 +66,7 @@ public class SaleService : ISaleService
 		}
 		return false;
 	}
-	public async Task<bool> CreateOfflineOrder(OrderModel order, UserModel user, IOrderRepository orderRepository,
+	public async Task<bool> CreateOfflineOrder(OrderModel order, OfflineCustomerModel user, IOrderRepository orderRepository,
 		IUserRepository userRepository, IProductRepository productRepository)
 	{
 		//Create OrderEntity object
@@ -82,7 +82,7 @@ public class SaleService : ISaleService
 		{
 			//Customer is a passenger
 			newOrder._phoneNumber = user.PhoneNumber;
-			newOrder._customerName = user.CustomerName;
+			newOrder._customerName = user.Name;
 		}
 
 		if (newOrder != null && newOrder._id != null)
