@@ -19,6 +19,23 @@ function showContent2(url, title) {
     })
 }
 
+function OpenPostDialog(url, title) {
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: {},
+        success: function (res) {
+            $("#form-modal .modal-body").html(res);
+            $("#form-modal .modal-title").html(title);
+            $("#form-modal").modal('show');
+            //$.notify("I'm over here !");
+            //$.notify("Access granted", "success", { position: "right" });
+
+        }
+    })
+}
+
 function EditPage(url, title, id) {
 
     $.ajax({

@@ -1,4 +1,4 @@
-namespace FlowerShopManagement.Web.Models
+namespace FlowerShopManagement.Web.ViewModels
 {
     public class ErrorViewModel
     {

@@ -3,6 +3,7 @@ using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
+using FlowerShopManagement.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers
@@ -117,13 +118,18 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
 
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
-            List<UserModel> customerMs = await _userServices.GetUpdatedCustomers(_userRepository);
-            /*Set up viewmodel
-			 
-
-
+            //List<UserModel> customerMs = await _userServices.GetUpdatedCustomers(_userRepository);
+            /*
+                Set up viewmodel
+			    Need a current picked items
+                Need a current picked customer
+                PageList<>
 			*/
-            return View(/*Coult be a ViewModel in here*/);
+            OrderVM orderVM = new OrderVM();
+            //orderVM.ProductModels= productMs;
+            //orderVM.UserModels = 
+            
+            return View(orderVM);
         }
 
         // Confirm and create an Order
@@ -144,7 +150,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         {
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
 
-            return PartialView(/*Coult be a ViewModel in here*/); // This will be an view for dialog / modal
+            return PartialView("_PickItem",productMs); // This will be an view for dialog / modal
         }
 
         [HttpPost]
@@ -199,7 +205,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             {
                 TempData["CurrentUser"] = user;
             }
-            return PartialView(/*Coult be a ViewModel in here*/); // This will be an update view for current customer table
+            return PartialView("_PickCustomer"/*Coult be a ViewModel in here*/); // This will be an update view for current customer table
         }
         
     }
