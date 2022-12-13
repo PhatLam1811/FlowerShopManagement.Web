@@ -1,18 +1,20 @@
 ﻿using FlowerShopManagement.Core.Entities;
+using System.ComponentModel;
 
 namespace FlowerShopManagement.Application.Models;
 
 public class SupplierDetailModel : SupplierModel
 {
+    private string _id;
+
     public string Address { get; set; }
-    public string Products { get; set; }
-    public string Note { get; set; }
+    public string Description { get; set; }
 
     public SupplierDetailModel(Supplier supplier) : base(supplier)
     {
-        Address = supplier._address;
-        Products = supplier._products;
-        Note = supplier._note;
+        _id = supplier._id;
+        Address = supplier.address;
+        Description = supplier.description;
     }
 }
 
@@ -24,8 +26,8 @@ public class SupplierModel
 
     public SupplierModel(Supplier supplier)
     {
-        Name = supplier._name;
-        Email = supplier._email;
-        PhoneNumber = supplier._phoneNumber;
+        Name = supplier.name;
+        Email = supplier.email;
+        PhoneNumber = supplier.phoneNumber;
     }
 }

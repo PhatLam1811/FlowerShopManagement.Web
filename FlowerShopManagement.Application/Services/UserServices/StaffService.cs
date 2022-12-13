@@ -2,7 +2,6 @@
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Core.Enums;
 
 namespace FlowerShopManagement.Application.Services.UserServices;
 
@@ -10,34 +9,34 @@ public class StaffService : UserService, IStaffService
 {
     private readonly IUserRepository _userRepository;
     private readonly ICartRepository _cartRepository;
+    private readonly ISupplierRepository _supplierRepository;
 
-    public StaffService(IUserRepository userRepository, ICartRepository cartRepository)
+    public StaffService(IUserRepository userRepository, ICartRepository cartRepository, ISupplierRepository supplierRepository)
         : base(userRepository, cartRepository)
     {
         _userRepository = userRepository;
         _cartRepository = cartRepository;
+        _supplierRepository = supplierRepository;
     }
 
-    public async Task<List<UserDetailsModel>?> GetStaffsAsync()
+    public async Task<List<UserDetailsModel>?> GetUsersAsync()
     {
-        var allStaffs = new List<UserDetailsModel>();
+        var users = new List<UserDetailsModel>();
 
         try
         {
-            // Get all users with the role of "Staff" or "Admin" from database
-            var staffs = await _userRepository.GetByRole(Role.Staff);
-            var admins = await _userRepository.GetByRole(Role.Admin);
-            var result = staffs.Concat(admins);
-
+            // Get all users from database
+            var result = await _userRepository.GetAll();
+            
             // Entities to Models
-            foreach (var staff in result)
+            foreach (var user in result)
             {
-                var model = new UserDetailsModel(staff);
-                allStaffs.Add(model);
+                var model = new UserDetailsModel(user);
+                users.Add(model);
             }
 
             // Successfully got staffs list
-            return allStaffs;
+            return users;
         }
         catch
         {
@@ -46,24 +45,24 @@ public class StaffService : UserService, IStaffService
         }
     }
 
-    public async Task<List<UserDetailsModel>?> GetCustomersAsync()
+    public async Task<List<SupplierModel>?> GetSuppliersAsync()
     {
-        var customers = new List<UserDetailsModel>();
+        var suppliers = new List<SupplierModel>();
 
         try
         {
             // Get all users with the role of "Customer" from database
-            var result = await _userRepository.GetByRole(Role.Customer);
+            var result = await _supplierRepository.GetAll();
 
             // Entities to Models
-            foreach (var customer in result)
+            foreach (var supplier in result)
             {
-                var model = new UserDetailsModel(customer);
-                customers.Add(model);
+                var model = new SupplierModel(supplier);
+                suppliers.Add(model);
             }
 
             // Successfully got customers list
-            return customers;
+            return suppliers;
         }
         catch
         {

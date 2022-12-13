@@ -1,15 +1,11 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace FlowerShopManagement.WebAPI.Controllers;
+namespace FlowerShopManagement.Web.Controllers;
 
-[AllowAnonymous]
-[ApiController]
-[Route("[controller]")]
-public class AuthenticationController : ControllerBase
+public class AuthenticationController : Controller
 {
     private readonly IAuthService _authServices;
 
@@ -17,7 +13,6 @@ public class AuthenticationController : ControllerBase
     {
         _authServices = authServices;
     }
-
 
     // ============ SIGN IN PAGE ============
     //[HttpGet]
@@ -33,9 +28,9 @@ public class AuthenticationController : ControllerBase
     //    return View();
     //}
 
-    // ============ REGISTER EVENT ============
+    // ============ REGISTER ACTION ============
     [HttpPost]
-    public async Task<UserModel?> Register([EmailAddress] string email, [Phone] string phoneNumber, string password)
+    public async Task<UserModel?> Register([EmailAddress] string email, [Phone] string phoneNumber, string password, string confirmPassword)
     {
         var currentUser = await _authServices.RegisterAsync(HttpContext, email, phoneNumber, password);
 
@@ -44,8 +39,8 @@ public class AuthenticationController : ControllerBase
         // return CustomerPageView(currentUser);
     }
 
-    // ============ SIGN IN EVENT ============
-    [HttpPost]
+    // ============ SIGN IN ACTION ============
+    [HttpPost("SignIn")]
     public async Task<UserModel?> SignIn(string emailOrPhoneNb, string password)
     {
         var currentUser = await _authServices.SignInAsync(HttpContext, emailOrPhoneNb, password);

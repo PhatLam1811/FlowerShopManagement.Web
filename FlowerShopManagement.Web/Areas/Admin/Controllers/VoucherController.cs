@@ -11,10 +11,10 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
     public class VoucherController : Controller
     {
         //Services
-        IStockServices _stockServices;
+        IStockService _stockServices;
         //Repositories
         IVoucherRepository _voucherRepository;
-        public VoucherController(IVoucherRepository voucherRepository, IStockServices stockServices)
+        public VoucherController(IVoucherRepository voucherRepository, IStockService stockServices)
         {
             _stockServices= stockServices;
             _voucherRepository= voucherRepository;

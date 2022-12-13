@@ -38,4 +38,5 @@ public interface IProductRepository : IBaseRepository<Product>
 {
     public Task<List<Product>> GetAllLowOnStock(int minimumAmount);
 }
+
 public interface IVoucherRepository : IBaseRepository<Voucher> { }

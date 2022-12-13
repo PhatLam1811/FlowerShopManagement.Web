@@ -3,38 +3,25 @@ using FlowerShopManagement.Core.Enums;
 
 namespace FlowerShopManagement.Application.Models;
 
-public class OfflineCustomerModel
-{
-    public string Name { get; set; }
-    public string PhoneNumber { get; set; }
-
-    public OfflineCustomerModel()
-    {
-        Name = string.Empty;
-        PhoneNumber = string.Empty;
-    }
-}
-
 public class UserDetailsModel : UserModel
 {
     private string _id;
-    private Role _role;
-    private DateTime _createdDate;
-
-    public string PhoneNumber { get; set; }
+    public Role Role { get; set; }
     public Gender Gender { get; set; }
     public int BirthYear { get; set; }
     public string[] Addresses { get; set; }
+    public DateTime CreatedDate { get; set; }
+    public DateTime LastModified { get; set; }
 
     public UserDetailsModel(User entity) : base(entity)
     {
         _id = entity._id;
-        _role = entity.role;
-        _createdDate = entity.createdDate;
-        PhoneNumber = entity.phoneNumber;
+        Role = entity.role;
         Gender = entity.gender;
         BirthYear = entity.birthYear;
         Addresses = entity.addresses;
+        CreatedDate = entity.createdDate;
+        LastModified = entity.lastModified;
     }
 
     public new void ToEntity(ref User entity)
@@ -42,12 +29,13 @@ public class UserDetailsModel : UserModel
         base.ToEntity(ref entity);
         
         entity._id = _id;
-        entity.role = _role;
-        entity.createdDate = _createdDate;
+        entity.role = Role;
         entity.phoneNumber = PhoneNumber;
         entity.gender = Gender;
         entity.birthYear = BirthYear;
         entity.addresses = Addresses;
+        entity.createdDate = CreatedDate;
+        entity.lastModified = LastModified;
     }
 
     public User ToNewEntity()
@@ -71,12 +59,14 @@ public class UserModel
     public string Name { get; set; }
     public string Avatar { get; set; }
     public string Email { get; set; }
+    public string PhoneNumber { get; set; }
 
     public UserModel(User entity)
     {
         Name = entity.name;
         Avatar = entity.avatar;
         Email = entity.email;
+        PhoneNumber = entity.phoneNumber;
     }
 
     public void ToEntity(ref User entity)
@@ -84,5 +74,6 @@ public class UserModel
         entity.name = Name;
         entity.avatar = Avatar;
         entity.email = Email;
+        entity.phoneNumber = PhoneNumber;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
+using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Application.Services;
@@ -13,39 +14,27 @@ namespace FlowerShopManagement.WebAPI.Controllers;
 [Route("[controller]")]
 public class ImportController : Controller
 {
-    private readonly ISupplierRepository _supplierRepository;
-    private readonly IStockServices _stockService;
-    private readonly IImportService _importServices;
+    private readonly IStaffService _staffService;
+    private readonly IStockService _stockService;
     private readonly IProductRepository _productRepository;
 
     public ImportController(
-        ISupplierRepository supplierRepository,
-        IStockServices stockService,
-        IImportService importServices,
+        IStaffService staffService,
+        IStockService stockService,
         IProductRepository productRepository)
     {
-        _supplierRepository = supplierRepository;
+        _staffService = staffService;
         _stockService = stockService;
-        _importServices = importServices;
         _productRepository = productRepository;
     }
 
-    // Main page of import operation
+    // ============ IMPORT PAGE ============
     [HttpGet]
     public ImportIndexVM/*IActionResult*/ Index()
     {
         // Load data
         var lowOnStockProducts = _stockService.GetLowOnStockProducts(_productRepository);
-     
-        // Need to encapsulate the code
-        var suppliers = new List<SupplierModel>();
-        var result = _supplierRepository.GetAll().Result;
-
-        foreach (var supplier in result)
-        {
-            var model = new SupplierModel(supplier);
-            suppliers.Add(model);
-        }
+        var suppliers = _staffService.GetSuppliersAsync().Result;
 
         // Parse to view model
         var viewModel = new ImportIndexVM();
@@ -53,16 +42,27 @@ public class ImportController : Controller
         viewModel.suppliers = suppliers;
 
         return viewModel;
+
+        //return View(viewModel);
     }
+
+    // ============ CREATE SUPPLY FORM ACTION ============
+    //[HttpPost]
+    //public SupplyFormModel /*IActionResult*/ CreateSupplyForm()
+    //{
+    //    return new NotImplementedException();
+    //}
+
+    // ============ REQUEST SUPPLY ACTION ============
 
     // Action performed after the user clicks the "Create Form" button
-    [HttpGet]
-    public SupplyFormModel/*IActionResult*/ CreateSupplyRequestForm(List<LowOnStockProductModel> supplyList, List<SupplierModel> supplierList)
-    {
-        var supplyFormModel = new SupplyFormModel(supplyList, supplierList);
+    //[HttpGet]
+    //public SupplyFormModel/*IActionResult*/ CreateSupplyRequestForm(List<LowOnStockProductModel> supplyList, List<SupplierModel> supplierList)
+    //{
+    //    var supplyFormModel = new SupplyFormModel(supplyList, supplierList);
 
-        return supplyFormModel;
-    }
+    //    return supplyFormModel;
+    //}
 
     // Action performed after user clicks the "Request" button
     [HttpPost]
@@ -70,7 +70,7 @@ public class ImportController : Controller
     {
         try
         {
-            _importServices.Request(supplyFormModel);
+            //_importServices.Request(supplyFormModel);
             
             // Successfully requested
             return true;
