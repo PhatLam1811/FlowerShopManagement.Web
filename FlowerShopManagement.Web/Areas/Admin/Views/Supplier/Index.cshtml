@@ -1,5 +1,39 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using FlowerShopManagement.Core.Enums;
+
+@model List<SupplierDetailModel>
+
 @{
+	Model.Add(new SupplierDetailModel() { Name = "Phat cong team", Email = "abc@gmail.com", PhoneNumber = "092732xxxx", Products = "Fake Flowers" });
 }
+
+<div class="row">
+	<div class="col-lg-2 d-lg-block collapse borderCustom1 um">
+		<p class="row-1 h4 mb-2 mt-3">Status</p>
+
+		@*<div class="tabCustom row-cols-6 w-100" style="max-height:260px; overflow-y:scroll; overflow-x:hidden">
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="All" type="button">All</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Admin" type="button">Admin</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Staff" type="button">Staff</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Customer" type="button">Customer</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Passenger" type="button">Passenger</a>
+		</div>*@
+	</div>
+
+	<div class="col-lg-10 col-12 mt-3 mt-lg-0">
+		<div class="d-flex justify-content-end d-lg-none">
+			<button class="filter-icon border-0 fs-3" data-bs-toggle="collapse" data-bs-target=".um" aria-controls="navbarSupportedContent"
+					aria-expanded="false" aria-label="Toggle navigation">
+				<span class="h5">Filter</span>
+			</button>
+		</div>
+
+		<partial name="_ViewAll" model=@Model />
+
+	</div>
+
+</div>
+
+<button class="btn btn-primary icon-plus rounded position-fixed" style="right:0; bottom:60px;" onclick="location.href = '@(Url.Action("Create", "Supplier"))'">Create new Supplier</button>
+
+
+<div c></div>

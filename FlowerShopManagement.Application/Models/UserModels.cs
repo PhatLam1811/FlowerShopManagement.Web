@@ -6,21 +6,27 @@ namespace FlowerShopManagement.Application.Models;
 public class UserDetailsModel : UserModel
 {
     private string _id;
-    private Role _role;
-    private DateTime _createdDate;
 
-    public Gender Gender { get; set; }
+    public Role Role { get; set; } = Role.Customer;
+    public DateTime CreatedDate { get; set; } = DateTime.Now;
+    public Gender Gender { get; set; } = Gender.Female;
     public int BirthYear { get; set; }
     public string[] Addresses { get; set; }
 
     public UserDetailsModel(User entity) : base(entity)
     {
         _id = entity._id;
-        _role = entity.role;
-        _createdDate = entity.createdDate;
+        Role = entity.role;
+        CreatedDate = entity.createdDate;
         Gender = entity.gender;
         BirthYear = entity.birthYear;
         Addresses = entity.addresses;
+    }
+
+    public UserDetailsModel() : base()
+    {
+        _id = new Guid().ToString();
+        Addresses = new string[2];
     }
 
     public new void ToEntity(ref User entity)
@@ -28,8 +34,8 @@ public class UserDetailsModel : UserModel
         base.ToEntity(ref entity);
         
         entity._id = _id;
-        entity.role = _role;
-        entity.createdDate = _createdDate;
+        entity.role = Role;
+        entity.createdDate = CreatedDate;
         entity.phoneNumber = PhoneNumber;
         entity.gender = Gender;
         entity.birthYear = BirthYear;
@@ -58,6 +64,14 @@ public class UserModel
     public string Avatar { get; set; }
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
+
+    public UserModel()
+    {
+        Name = "";
+        Avatar = "";
+        Email = "";
+        PhoneNumber = "";
+    }
 
     public UserModel(User entity)
     {

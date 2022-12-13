@@ -1,24 +1,19 @@
-﻿@model List<VoucherDetailModel>
+﻿@model List<SupplierDetailModel>
 
 <div class="table-wrap">
 	<table class="table myaccordion table-hover" id="accordion">
 		<thead>
 			<tr>
 				<th>#</th>
-				<th>Code</th>
+				<th>Name</th>
 				<th>
 					<div class="d-none d-lg-block">
-						Condition
+						Email
 					</div>
 				</th>
-				<th>Value</th>
-				<th>Start Date</th>
-				<th>
-					<div class="d-none d-lg-block">
-						Expire
-					</div>
-				</th>
-				<th>State</th>
+				<th>Phone Number</th>
+				<th>Products</th>
+				<th>Address</th>
 				<th></th>
 			</tr>
 		</thead>
@@ -29,22 +24,17 @@
 				<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
 
 					<th scope="row">@i</th>
-					<td>@Model[i-1].Code</td>
+					<td>@Model[i-1].Name</td>
 					<td>
 						<div class="d-none d-lg-block">
-								@Model[i-1].ConditionValue
+								@Model[i-1].Email
 						</div>
 					</td>
-					<td>@Model[i-1].ConditionValue</td>
-					<td>$@Model[i-1].CreatedDate</td>
+					<td>@Model[i-1].PhoneNumber</td>
+					<td>@Model[i-1].Products</td>
+					<td>@Model[i-1].Address</td>
 					<td>
-						<div class="d-none d-lg-block">
-								@Model[i-1].ExpiredDate.Value.ToString("dd MMM y HH:mm")
-						</div>
-					</td>
-					<td>@Model[i-1].State</td>
-					<td>
-						<a asp-action="Edit" asp-controller="Voucher" asp-area="Admin" class="border-1 link-info table-icon">
+						<a asp-action="Edit" asp-controller="Supplier" asp-area="Admin" class="border-1 link-info table-icon">
 							<i class="fas fa-edit"></i>
 						</a>
 					</td>

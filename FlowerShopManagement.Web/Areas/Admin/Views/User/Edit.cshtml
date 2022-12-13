@@ -49,15 +49,16 @@
 				</select>
 			</div>
 			@*<div class="col form-group">
-				<label class="form-label" for="floatingSelect">Gender</label>
-				<select class="form-select form-select-lg h5 py-3" asp-for="Gender" asp-items="@(new SelectList(genders))" id="floatingSelect" aria-label="Floating label select example" required>
-				</select>
+			<label class="form-label" for="floatingSelect">Gender</label>
+			<select class="form-select form-select-lg h5 py-3" asp-for="Gender" asp-items="@(new SelectList(genders))" id="floatingSelect" aria-label="Floating label select example" required>
+			</select>
 			</div>*@
 		</div>
 		<div class="row">
 			<div class="form-group">
 				<label class="form-label" for="exampleFormControlInput1">Address</label>
-				@if (Model.Addresses.Count() > 0) {
+				@if (Model.Addresses.Count() > 0)
+				{
 					<div class="d-flex">
 						<input type="text" asp-for="Addresses[0]" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
 					</div>
@@ -65,15 +66,18 @@
 				<button type="button" class="btn btn-secondary">Create New Address</button>
 			</div>
 		</div>
+
 		<div class="mt-5 d-flex gap-3">
 			<a class="btn btn-secondary">Back to List</a>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</div>
+		<a class="btn btn-remove mt-3">Remove</a>
 	</div>
 
 	<div class="col-6">
 		@*img*@
 	</div>
 </form>
+
 
 

@@ -1,4 +1,10 @@
-﻿@model List<UserModel>
+﻿@using FlowerShopManagement.Core.Enums;
+
+@model List<UserDetailsModel>
+
+@{
+	Model.Add(new UserDetailsModel() { Name = "Quy ganh team", Gender = Gender.Male, Role = Role.Customer, CreatedDate = DateTime.Now, Email = "abc@gmail.com" });
+}
 
 <div class="row">
 	<div class="col-lg-2 d-lg-block collapse borderCustom1 um">
@@ -6,9 +12,10 @@
 
 		<div class="tabCustom row-cols-6 w-100" style="max-height:260px; overflow-y:scroll; overflow-x:hidden">
 			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="All" type="button">All</a>
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Waiting" type="button">Using</a>
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Delivering" type="button">Out of date</a>
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Delivered" type="button">Coming soon</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Admin" type="button">Admin</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Staff" type="button">Staff</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Customer" type="button">Customer</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Passenger" type="button">Passenger</a>
 		</div>
 	</div>
 
@@ -27,4 +34,4 @@
 
 </div>
 
-<button class="btn btn-primary icon-plus rounded position-fixed" style="right:0; bottom:60px;" onclick="location.href = '@(Url.Action("Create", "Voucher"))'">Create new Voucher</button>
+<button class="btn btn-primary icon-plus rounded position-fixed" style="right:0; bottom:60px;" onclick="location.href = '@(Url.Action("Create", "User"))'">Create new User</button>
