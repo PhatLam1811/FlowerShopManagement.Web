@@ -2,7 +2,6 @@
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using System.Security.Claims;
@@ -24,66 +23,72 @@ public class AuthService : IAuthService
 
     public async Task<UserModel?> RegisterAsync(HttpContext httpContext, string email, string phoneNb, string password)
     {
-        // Encrypt the password using MD5
-        string encryptedPass = Validator.MD5Hash(password);
+        var customer = new User();
+        var cart = new Cart(customer._id);
 
-        // Create new user
-        User newUser = new User();
-
-        newUser.email = email;
-        newUser.phoneNumber = phoneNb;
-        newUser.password = encryptedPass;
-
-        // Try creating new user record in database
-        if (!await _userRepository.Add(newUser)) return null;
-
-        // Customer's cart creation
-        if (newUser.role.Value.Equals(Role.Customer.Value))
+        try
         {
-            Cart newCart = new Cart(newUser._id);
+            // Encrypt the password using MD5
+            string encryptedPass = Validator.MD5Hash(password);
 
-            // Add created cart to the database
-            if (!await _cartRepository.Add(newCart))
-            {
-                // Remove the created user record since there's problem while creating customer's cart
-                await _userRepository.RemoveById(newUser._id);
-                return null;
-            }
+            // Configure new customer's info
+            customer.email = email;
+            customer.phoneNumber = phoneNb;
+            customer.password = encryptedPass;
+
+            // Add to database
+            await _cartRepository.Add(cart);
+            await _userRepository.Add(customer);
+
+            // HttpContext sign in
+            await HttpSignIn(httpContext, customer._id, customer.role.Value);
+
+            return new UserModel(customer);
         }
-
-        // Return User Model
-        return new UserModel(newUser);
+        catch
+        {
+            // Failed to register new customer
+            return null;
+        }
     }
 
     public async Task<UserModel?> SignInAsync(HttpContext httpContext, string emailOrPhoneNb, string password)
     {
-        // Try to find the matched user in database
-        var user = await _userRepository.GetByEmailOrPhoneNb(emailOrPhoneNb);
+        try
+        {
+            // Try to find the matched user in database
+            var user = await _userRepository.GetByEmailOrPhoneNb(emailOrPhoneNb);
 
-        // Counldn't find the user with given email or phoneNb
-        if (user == null) return null;
+            // Counldn't find the user with given email or phoneNb
+            if (user == null) return null;
 
-        // Encrypt the input password using MD5
-        string encryptedPass = Validator.MD5Hash(password);
+            // Encrypt the input password using MD5
+            string encryptedPass = Validator.MD5Hash(password);
 
-        // Wrong password
-        if (!user.password.Equals(encryptedPass)) return null;
+            // Wrong password
+            if (!user.password.Equals(encryptedPass)) return null;
 
-        // HttpContext sign in
-        await HttpSignIn(httpContext, user._id, user.role.Value);
+            // HttpContext sign in
+            await HttpSignIn(httpContext, user._id, user.role.Value);
 
-        return new UserModel(user);
+            return new UserModel(user);
+        }
+        catch
+        {
+            // Failed to sign in
+            return null;
+        }
     }
 
     public async Task<UserModel?> AuthenticateAsync(string id)
     {
         // Try to find the matched user in database
-        var result = await _userRepository.GetById(id);
+        var user = await _userRepository.GetById(id);
 
         // Counldn't find the user with given id
-        if (result == null) return null;
+        if (user == null) return null;
 
-        return new UserModel(result);
+        return new UserModel(user);
     }
 
     private async Task HttpSignIn(HttpContext httpContext, string id, string role)
@@ -106,5 +111,11 @@ public class AuthService : IAuthService
         await httpContext.SignInAsync(
             scheme, principal,
             new AuthenticationProperties { IsPersistent = true });
+    }
+
+    public string? GetUserRole(HttpContext httpContext)
+    {
+        // Get claim's role value
+        return httpContext.User.Claims.ElementAt(1).Value;
     }
 }

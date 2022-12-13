@@ -9,7 +9,6 @@ public class UserDetailsModel : UserModel
     private Role _role;
     private DateTime _createdDate;
 
-    public string PhoneNumber { get; set; }
     public Gender Gender { get; set; }
     public int BirthYear { get; set; }
     public string[] Addresses { get; set; }
@@ -19,7 +18,6 @@ public class UserDetailsModel : UserModel
         _id = entity._id;
         _role = entity.role;
         _createdDate = entity.createdDate;
-        PhoneNumber = entity.phoneNumber;
         Gender = entity.gender;
         BirthYear = entity.birthYear;
         Addresses = entity.addresses;
