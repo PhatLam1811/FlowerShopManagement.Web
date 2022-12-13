@@ -1,9 +1,12 @@
 ﻿@using FlowerShopManagement.Web.ViewModels
+
 @model OrderVM
 
 @*ADMIN Creating Order*@
 @{
-    //Model.Products.Add(new ProductModel(amount: 2, id: "hihi") { Name = "F hoa", UniPrice = 20 });
+    this.Model.isOkay = true;
+    //var json = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model, Newtonsoft.Json.Formatting.Indented));
+    //TempData["orderVM"] = json.ToString();
 }
 
 <p class="mt-4"></p>
@@ -15,13 +18,14 @@
         <span class="h3 text-color-secondary">Products</span>
 
         @*Current picked items*@
-        <div class="table-wrap" id="picked-items">
+        <div id="picked-items"> <partial name="_PickedItemsTable" model=@Model.ProductModels /></div>
 
-            <partial name="_PickedItemsTable" model=@Model.ProductModels />
-        </div>
 
         <div class="mt-3">
-            <button class="btn btn-secondary" onclick="OpenPostDialog('@(Url.Action("PickItemDialog", "Order"))','Current Products')">Pick item</button>
+            <button class="btn btn-secondary" type="button"
+                    onclick="OpenPostDialog('@(Url.Action("PickItemDialog", "Order"))','Current Products')">
+                Pick item
+            </button>
         </div>
     </div>
 

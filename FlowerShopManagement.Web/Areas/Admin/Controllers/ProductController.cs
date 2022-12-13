@@ -117,7 +117,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
 
 			*/
-            return View();
+            return View(new ProductDetailModel());
         }
 
         // Confirm and create an Order

@@ -1,36 +1,38 @@
-﻿@model List<ProductModel>?
+﻿@model List<ProductModel>
+<div class="table-wrap" >
 
-<table class="table myaccordion table-hover" id="accordion">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Product Name</th>
-            <th>Color</th>
-            <th>Price</th>
-            <th>Amount</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @if ( Model != null)
-        {
-            @for (var i = 1; i <= Model.Count; i++)
+    <table class="table myaccordion table-hover" id="accordion">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Product Name</th>
+                <th>Color</th>
+                <th>Price</th>
+                <th>Amount</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
             {
-                <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
+                @for (var i = 1; i <= Model.Count; i++)
+                {
+                    <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
 
-                    <th scope="row">@i</th>
-                    <td>@Model[i-1].Name</td>
-                    <td>@Model[i-1].Name</td>
-                    <td>$@Model[i-1].UniPrice</td>
-                    <td>@Model[i-1].Amount</td>
-                    <td>
-                        <a class="border-1 table-icon text-secondary">
-                            <i class="fa-solid fa-trash-can"></i>
-                        </a>
-                    </td>
-                </tr>
+                        <th scope="row">@i</th>
+                        <td>@Model[i-1].Name</td>
+                        <td>@Model[i-1].Name</td>
+                        <td>$@Model[i-1].UniPrice</td>
+                        <td>@Model[i-1].Amount</td>
+                        <td>
+                            <a class="border-1 table-icon text-secondary">
+                                <i class="fa-solid fa-trash-can"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
             }
-        }
 
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>

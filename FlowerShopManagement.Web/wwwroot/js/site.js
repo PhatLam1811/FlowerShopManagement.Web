@@ -20,20 +20,31 @@ function showContent2(url, title) {
 }
 
 function OpenPostDialog(url, title) {
+    try {
+        $.ajax({
+            type: "POST",
+            url: url,
 
-    $.ajax({
-        type: "POST",
-        url: url,
-        data: {},
-        success: function (res) {
-            $("#form-modal .modal-body").html(res);
-            $("#form-modal .modal-title").html(title);
-            $("#form-modal").modal('show');
-            //$.notify("I'm over here !");
-            //$.notify("Access granted", "success", { position: "right" });
+            success: function (res) {
 
-        }
-    })
+                $("#form-modal .modal-body").html(res);
+                $("#form-modal .modal-title").html(title);
+                $("#form-modal").modal('show');
+                //$.notify("I'm over here !");
+                //$.notify("Access granted", "success", { position: "right" });
+            },
+            error: function (err) {
+                console.log(err);
+                alert(err);
+            }
+        })
+    }
+
+    catch (e) {
+        console.log(e);
+        alert(e);
+    }
+   
 }
 
 function EditPage(url, title, id) {
@@ -42,7 +53,7 @@ function EditPage(url, title, id) {
         type: "GET",
         url: url,
         data: { id: id },
-        
+
     })
 }
 
@@ -73,6 +84,41 @@ function jQueryAjaxReloadViewAll(url) {
     }
 }
 
+function jQueryAjaxReloadPickingTable(form) {
+    var obj = new FormData(form);
+    console.log(obj);
+
+    debugger;
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: obj,
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                alert(res);
+
+                $('#picked-items').html(res);
+                $("#form-modal .modal-body").html('');
+                $("#form-modal .modal-title").html('');
+                $("#form-modal").modal('hide');
+            },
+            error: function (err) {
+                alert("some error happens! ");
+
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+
+    } catch (ex) {
+
+        alert(ex);
+        return false;
+    }
+}
 
 function jQueryAjaxSearch(form) {
     var obj = new FormData(form);
@@ -100,7 +146,7 @@ function jQueryAjaxSearch(form) {
         return false;
 
     }
-        //to prevent default form submit event
+    //to prevent default form submit event
 
 
 }

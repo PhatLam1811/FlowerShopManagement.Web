@@ -6,6 +6,7 @@ using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 {
@@ -22,7 +23,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         IProductRepository _productRepository;
         IUserRepository _userRepository;
 
-        public OrderController(ISaleService saleServices, IOrderRepository orderRepository, IProductRepository productRepository, 
+        public OrderController(ISaleService saleServices, IOrderRepository orderRepository, IProductRepository productRepository,
             IUserRepository userRepository, IStockServices stockServices, IUserService userServices)
         {
             _orderRepository = orderRepository;
@@ -49,7 +50,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         {
             //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
             //Should get a new one because an admin updates data realtime
-            var order = await _saleServices.GetADetailOrder(id,_orderRepository);
+            var order = await _saleServices.GetADetailOrder(id, _orderRepository);
             if (order != null)
             {
                 return View(/*Coult be a ViewModel in here*/);
@@ -127,9 +128,11 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
                 PageList<>
 			*/
             OrderVM orderVM = new OrderVM();
-            //orderVM.ProductModels= productMs;
+            orderVM.AllProductModels = productMs;
+
+            TempData["orderVM"] = JsonConvert.SerializeObject(orderVM, Newtonsoft.Json.Formatting.Indented);
             //orderVM.UserModels = 
-            
+
             return View(orderVM);
         }
 
@@ -149,32 +152,56 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> PickItemDialog(string filter = "") // Also handle if there is a filter / search
         {
-            List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
+            string s = TempData["orderVM"] as string ?? "";
+            OrderVM? orderVM = null;
+            if (s != "")
+            {
+                orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
+            }
 
-            return PartialView("_PickItem",productMs); // This will be an view for dialog / modal
+            List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
+            if (orderVM != null)
+            {
+                TempData["orderVM1"] = JsonConvert.SerializeObject( orderVM, Newtonsoft.Json.Formatting.Indented);
+            }
+            int pageSizes = 8;
+            return PartialView("_PickItem", PaginatedList<ProductModel>.CreateAsync(productMs, 1, 20)); // This will be an view for dialog / modal
         }
 
         [HttpPost]
         public IActionResult PickedAnItem(List<string> ids, List<int> amounts) // These 2 list should have the same size // need 1 more parameters like PickItemDialog viewmodel
         {
-            OrderModel orderModel = new OrderModel();
-            if (ids != null && amounts != null)
+             string s = TempData["orderVM1"] as string ?? "";
+            OrderVM? orderVM = null;
+            if (s != "")
+            {
+                orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
+            }
+
+            if (orderVM == null || orderVM.Order == null) return NotFound();
+
+            OrderModel orderModel = orderVM.Order;
+            if (ids != null && amounts != null && orderVM.ProductModels != null && orderVM.AllProductModels != null)
             {
                 for (int i = 0; i < amounts.Count && i < ids.Count; i++)
                 {
                     if (amounts[i] != 0 && ids[i] != "")
                     {
-                        ProductModel product = new ProductModel(ids[i], amounts[i]);
 
-                        orderModel.Products.Add(product);
+                        ProductModel? product = orderVM.AllProductModels.FirstOrDefault(o => o.Id.Equals(ids[i]));
+                        if (product != null)
+                        {
+                            orderVM.ProductModels.Add(product);
+
+                        }
                     }
                 }
 
             }
             //CurrentOrder will be ready for the next request
-            TempData["CurrentOrder"] = orderModel;
+            TempData["orderVM"] = JsonConvert.SerializeObject(orderVM, Newtonsoft.Json.Formatting.Indented);
 
-            return PartialView(/*Coult be a ViewModel in here*/); // This will be an update view for current items table
+            return PartialView("_PickedItemsTable", orderVM.ProductModels);
         }
 
         [HttpPost]
@@ -208,6 +235,6 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             }
             return PartialView("_PickCustomer"/*Coult be a ViewModel in here*/); // This will be an update view for current customer table
         }
-        
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
+using FlowerShopManagement.Application.Services;
 using FlowerShopManagement.WebAPI.ViewModels.Import;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,17 +14,20 @@ namespace FlowerShopManagement.WebAPI.Controllers;
 public class ImportController : Controller
 {
     private readonly ISupplierRepository _supplierRepository;
-    private readonly IStockService _stockService;
+    private readonly IStockServices _stockService;
     private readonly IImportService _importServices;
+    private readonly IProductRepository _productRepository;
 
     public ImportController(
         ISupplierRepository supplierRepository,
-        IStockService stockService,
-        IImportService importServices)
+        IStockServices stockService,
+        IImportService importServices,
+        IProductRepository productRepository)
     {
         _supplierRepository = supplierRepository;
         _stockService = stockService;
         _importServices = importServices;
+        _productRepository = productRepository;
     }
 
     // Main page of import operation
@@ -31,7 +35,7 @@ public class ImportController : Controller
     public ImportIndexVM/*IActionResult*/ Index()
     {
         // Load data
-        var lowOnStockProducts = _stockService.GetLowOnStockProducts();
+        var lowOnStockProducts = _stockService.GetLowOnStockProducts(_productRepository);
      
         // Need to encapsulate the code
         var suppliers = new List<SupplierModel>();
