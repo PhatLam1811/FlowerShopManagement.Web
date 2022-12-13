@@ -66,7 +66,7 @@ public class SaleService : ISaleService
 		}
 		return false;
 	}
-	public async Task<bool> CreateOfflineOrder(OrderModel order, OfflineCustomerModel user, IOrderRepository orderRepository,
+	public async Task<bool> CreateOfflineOrder(OrderModel order, UserModel user, IOrderRepository orderRepository,
 		IUserRepository userRepository, IProductRepository productRepository)
 	{
 		//Create OrderEntity object
