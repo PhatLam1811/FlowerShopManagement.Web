@@ -11,7 +11,7 @@ using FlowerShopManagement.Application.Models;
 
 namespace FlowerShopManagement.Application.Services;
 
-public class StockServices : IStockServices
+public class StockServices : IStockService
 {
     // APPLICATION SERVICES (USE CASES)
     public StockServices()
@@ -38,6 +38,36 @@ public class StockServices : IStockServices
                 return await voucherRepository.Add(obj);
         }
         return false;
+    }
+
+	public async Task<ProductDetailModel> GetADetailProduct(string id,IProductRepository productRepository)
+	{
+		Product product = await productRepository.GetById(id);
+		ProductDetailModel productMs = new ProductDetailModel(product);
+
+		return productMs;
+	}
+
+    public List<LowOnStockProductModel> GetLowOnStockProducts(IProductRepository productRepository)
+    {
+        // This is only a temporary value of the minimum amount
+        // needed for supply request
+        int minimumAmount = 20;
+        List<LowOnStockProductModel> lowOnStockProducts = new List<LowOnStockProductModel>();
+
+        var result = productRepository.GetAllLowOnStock(minimumAmount).Result;
+
+        // Convert Product to SupplyItemModel
+        foreach (var item in result)
+        {
+            // Convert product to model
+            var model = new LowOnStockProductModel(item);
+
+            // Add model to list
+            lowOnStockProducts.Add(model);
+        }
+
+        return lowOnStockProducts;
     }
 
     public async Task<List<ProductModel>> GetUpdatedProducts(IProductRepository productRepository)

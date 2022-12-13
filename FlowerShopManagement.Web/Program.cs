@@ -1,4 +1,3 @@
-using MongoDB.Driver;
 using FlowerShopManagement.Core.Entities;
 using MongoDB.Bson.Serialization;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
@@ -8,11 +7,11 @@ using Microsoft.Extensions.Options;
 using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Bson;
 using FlowerShopManagement.Application.Interfaces;
-using FlowerShopManagement.Core.Services;
 using FlowerShopManagement.Application.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using FlowerShopManagement.Infrustructure.Google.Interfaces;
-using FlowerShopManagement.Infrustructure.Google.Implementations;
+using FlowerShopManagement.Infrustructure.Mail;
+using FlowerShopManagement.Application.Interfaces.UserSerivices;
+using FlowerShopManagement.Application.Services.UserServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,14 +71,13 @@ BsonClassMap.RegisterClassMap<Order>(cm =>
 #endregion
 
 // Add application logic services
-builder.Services.AddScoped<IAuthenticationServices, AuthenticationServices>();
-builder.Services.AddScoped<IGmailServices, GmailServices>();
-builder.Services.AddScoped<ICustomerManagementServices, CustomerManagementServices>();
-builder.Services.AddScoped<ISaleServices, SaleServices>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<ISaleService, SaleService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IStockServices, StockServices>();
+builder.Services.AddScoped<IStockService, StockServices>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
-builder.Services.AddScoped<IUserServices, UserServices>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<MailKitService>();
 
 // HttpContextAccessor
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

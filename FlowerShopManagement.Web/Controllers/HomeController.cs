@@ -4,21 +4,35 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using FlowerShopManagement.Infrustructure.Google.Interfaces;
+
+using FlowerShopManagement.Infrustructure.Mail;
+using FlowerShopManagement.Application.Models;
+using FlowerShopManagement.Core.Entities;
+using System.Security.Claims;
+using FlowerShopManagement.Application.MongoDB.Interfaces;
+using FlowerShopManagement.Core.Enums;
+using FlowerShopManagement.Application.Services;
+
 
 namespace FlowerShopManagement.Web.Controllers;
 
 public class HomeController : Controller
 {
+    //Services
     private readonly ILogger<HomeController> _logger;
-    private readonly IAuthenticationServices _authServices;
-    private readonly IGmailServices _gmailServices;
+    private readonly IAuthService _authServices;
+    private readonly IStockService _stockServices;
+    private readonly MailKitService _mailServices;
+    private readonly IProductRepository _productRepository;
 
-    public HomeController(ILogger<HomeController> logger, IAuthenticationServices authServices, IGmailServices gmailServices)
+    public HomeController(ILogger<HomeController> logger, IAuthService authServices, MailKitService mailServices,
+        IProductRepository productRepository, IStockService stockServices)
     {
         _logger = logger;
         _authServices = authServices;
-        _gmailServices = gmailServices;
+        _mailServices = mailServices;
+        _productRepository = productRepository;
+        _stockServices = stockServices;
     }
 
     // =======================================================================================================
@@ -54,9 +68,79 @@ public class HomeController : Controller
    
     #endregion
 
-    public IActionResult Index()
+    [HttpGet]
+    public async Task<IActionResult> Index()
     {
         ViewBag.Home = true;
+        ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
+
+        List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
+
+        //Get wishlist
+        //
+        //
+        //
+        productMs = productMs.OrderBy(i => i.Name).ToList();
+        return View(/*Viewmodel*/);
+    }
+
+    public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString, int? pageNumber)
+    {
+        ViewData["CurrentSort"] = sortOrder;
+        ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "name_asc";
+        ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+        if (searchString != null)
+        {
+            pageNumber = 1;
+        }
+        else
+        {
+            searchString = currentFilter;
+        }
+
+        ViewData["CurrentFilter"] = searchString;
+        List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
+        if (productMs != null)
+        {
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                productMs = (List<ProductModel>)productMs.Where(s => s.Name.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    productMs = (List<ProductModel>)productMs.OrderByDescending(s => s.Name);
+                    break;
+                case "name_asc":
+                    productMs = (List<ProductModel>)productMs.OrderBy(s => s.Name);
+                    break;
+                default:
+                    //productMs = productMs.OrderBy(s => s.LastName);
+                    break;
+            }
+            int pageSize = 3;
+            return View(PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize));
+        }
+        return NotFound();
+
+    }
+
+    [HttpPost]
+    public IActionResult AddToWishList(string id)
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult RemoveFromWishList(string id)
+    {
+        return View();
+    }
+
+    public IActionResult Privacy()
+    {
         return View();
     }
 
@@ -72,10 +156,27 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    public Task<bool> SignIn()
+    public async Task<bool> SignIn()
     {
-        _gmailServices.Send();
-        return Task.FromResult(true);
+        // Create request items list
+        List<LowOnStockProductModel> supplyItemModels = new List<LowOnStockProductModel>();
+
+        // Create supply request form
+        var requestForm = new SupplyFormModel(new List<LowOnStockProductModel>(), new List<SupplierModel>());
+
+        //_gmailServices.Send();
+        //await _mailServices.Send(requestForm);
+
+        var currentUser = await _authServices.RegisterAsync(HttpContext, "jahdkfjhsd@gmail.com", "0932766231", "123123");
+
+        //var currentUser = await _authServices.SignInAsync(HttpContext, "jahsdkfjhasd@gmail.com", "123123");
+
+        if (_authServices.GetUserRole(HttpContext) == Role.Customer.Value)
+            return false;
+        else
+            return true;
+
+        #region Authenticate login code
         //// Authenticate input email or phone Nb & password
         //var result = await _authServices.AuthenticateAsync("phatlam1811@gmail.com", "123123");
 
@@ -95,5 +196,8 @@ public class HomeController : Controller
         //    new AuthenticationProperties { IsPersistent = true });
 
         //return RedirectToAction("Index", "Profile");
+        #endregion
     }
+
+
 }

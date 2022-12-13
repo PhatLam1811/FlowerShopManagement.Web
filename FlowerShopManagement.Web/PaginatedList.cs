@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace FlowerShopManagement
+namespace FlowerShopManagement.Web
 {
     public class PaginatedList<T> : List<T>
     {
@@ -22,10 +22,11 @@ namespace FlowerShopManagement
 
         public bool HasNextPage => PageIndex < TotalPages;
 
-        public static PaginatedList<T> CreateAsync(IList<T> source, int pageIndex, int pageSize)
+        public static PaginatedList<T> CreateAsync(IEnumerable<T> source, int pageIndex, int pageSize)
         {
             var count = source.Count();
             var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
+            
             return new PaginatedList<T>(items, count, pageIndex, pageSize);
         }
     }

@@ -24,7 +24,7 @@ public class NewMongoTestController : ControllerBase
     {
         _userRepository = userRepository;
         _httpContextAccessor = httpContextAccessor;
-        test = httpContextAccessor.HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        test = HttpContext?.User?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     }
 
     //[HttpGet]

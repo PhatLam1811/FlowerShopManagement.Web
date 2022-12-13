@@ -4,7 +4,7 @@ using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
-using static FlowerShopManagement.Helper;
+using static FlowerShopManagement.Web.Helper;
 namespace FlowerShopManagement.Web.Controllers
 {
     //--------------------------------------Customer Order Controller--------------------------------------------------
@@ -12,14 +12,14 @@ namespace FlowerShopManagement.Web.Controllers
     public class OrderController : Controller
     {
         //Services
-        ISaleServices _saleServices;
-        IImportServices _importServices;
+        ISaleService _saleServices;
+        IImportService _importServices;
         //Repositories
         IOrderRepository _orderRepository;
         IProductRepository _productRepository;
         IUserRepository _userRepository;
 
-        public OrderController(ISaleServices saleServices, IOrderRepository orderRepository, IProductRepository productRepository, IImportServices importServices,
+        public OrderController(ISaleService saleServices, IOrderRepository orderRepository, IProductRepository productRepository, IImportService importServices,
             IUserRepository userRepository)
         {
             _orderRepository = orderRepository;

@@ -10,51 +10,50 @@ using System;
 // - New adjustments could be made in future updates
 // - This should be a use case logic contains the CRUD operation of Customer & Cart objects 
 
-namespace FlowerShopManagement.Core.Services
+namespace FlowerShopManagement.Core.Services;
+
+public class OrderServices : IOrderServices
 {
-	public class OrderServices : IOrderServices
+	public async Task<bool> CreateOrder(OrderModel order, UserModel user, IOrderRepository orderRepository, 
+		IUserRepository userRepository, IProductRepository productRepository)
 	{
-		public async Task<bool> CreateOrder(OrderModel order, UserModel user, IOrderRepository orderRepository, 
-			IUserRepository userRepository, IProductRepository productRepository)
+		//Create OrderEntity object
+		var newOrder = order.ToEntity();
+		var cus = await userRepository.GetByEmailOrPhoneNb(user.Email);
+		if (cus != null)
 		{
-			//Create OrderEntity object
-			var newOrder = order.ToEntity();
-			var cus = await userRepository.GetByEmailOrPhoneNb(user.PhoneNumber);
-			if (cus != null)
-			{
-				newOrder._accountID = cus._id;
-				newOrder._phoneNumber = cus.phoneNumber;
-				newOrder._customerName = cus.name;
-			}
-
-			if (newOrder != null && newOrder._id != null)
-			{
-
-				// Successful case happens
-				newOrder._status = Status.Waiting;//On waiting
-				var result = await orderRepository.Add(newOrder);
-				return result;
-
-			}
-			return false;
+			newOrder._accountID = cus._id;
+			newOrder._phoneNumber = cus.phoneNumber;
+			newOrder._customerName = cus.name;
 		}
 
-		public void SetDeliveryMethod(OrderModel order, string type)
+		if (newOrder != null && newOrder._id != null)
 		{
-			//this's also bullshit
-			order.DeliveryMethod = (DeliverryMethods)Enum.Parse(typeof(DeliverryMethods), type);
+
+			// Successful case happens
+			newOrder._status = Status.Waiting;//On waiting
+			var result = await orderRepository.Add(newOrder);
+			return result;
+
 		}
-		public void SetAmount(OrderModel order, int amount)
-		{
-			//bullshit
-		}
-		public void SetNote(OrderModel order, string note)
-		{
-			//bullshit
-		}
-		public void SetAddress(OrderModel order, string address)
-		{
-			//bullshit
-		}
+		return false;
+	}
+
+	public void SetDeliveryMethod(OrderModel order, string type)
+	{
+		//this's also bullshit
+		order.DeliveryMethod = (DeliverryMethods)Enum.Parse(typeof(DeliverryMethods), type);
+	}
+	public void SetAmount(OrderModel order, int amount)
+	{
+		//bullshit
+	}
+	public void SetNote(OrderModel order, string note)
+	{
+		//bullshit
+	}
+	public void SetAddress(OrderModel order, string address)
+	{
+		//bullshit
 	}
 }

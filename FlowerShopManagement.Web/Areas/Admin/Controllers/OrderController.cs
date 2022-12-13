@@ -1,4 +1,5 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
+using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
@@ -12,16 +13,16 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
     public class OrderController : Controller
     {
         //Services
-        ISaleServices _saleServices;
-        IStockServices _stockServices;
-        IUserServices _userServices;
+        ISaleService _saleServices;
+        IStockService _stockServices;
+        IUserService _userServices;
         //Repositories
         IOrderRepository _orderRepository;
         IProductRepository _productRepository;
         IUserRepository _userRepository;
 
-        public OrderController(ISaleServices saleServices, IOrderRepository orderRepository, IProductRepository productRepository, 
-            IUserRepository userRepository, IStockServices stockServices, IUserServices userServices)
+        public OrderController(ISaleService saleServices, IOrderRepository orderRepository, IProductRepository productRepository, 
+            IUserRepository userRepository, IStockService stockServices, IUserService userServices)
         {
             _orderRepository = orderRepository;
             _saleServices = saleServices;
@@ -47,7 +48,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         {
             //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
             //Should get a new one because an admin updates data realtime
-            var order = new OrderModel(await _orderRepository.GetById(id));
+            var order = await _saleServices.GetADetailOrder(id,_orderRepository);
             if (order != null)
             {
                 return View(/*Coult be a ViewModel in here*/);
@@ -117,7 +118,13 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
 
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
-            List<UserModel> customerMs = await _userServices.GetUpdatedCustomers(_userRepository);
+
+            // ================ NEED CHECK ===================
+            //
+            //List<UserModel> customerMs = await _userServices.GetUpdatedCustomers(_userRepository);
+            //
+            // ================ NEED CHECK ===================
+            
             /*Set up viewmodel
 			 
 
