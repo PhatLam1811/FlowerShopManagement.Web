@@ -56,12 +56,14 @@ public class AuthenticationController : Controller
     }
 
     // ============ SIGN IN ACTION ============
-    [HttpPost("SignIn")]
-    public async Task<UserModel?> SignIn(string emailOrPhoneNb, string password)
+    [HttpPost]
+    public async Task<IActionResult> SignIn(AuthenticationModel model)
     {
-        var currentUser = await _authServices.SignInAsync(HttpContext, emailOrPhoneNb, password);
+        // model state
 
-        return currentUser;
+        var currentUser = await _authServices.SignInAsync(HttpContext, model.Email, model.Password);
+
+        return RedirectToAction("Index", "Home");
 
         //if (_authServices.GetUserRole == Role.Customer.Value)
         //    return CustomerPageView(userModel);
