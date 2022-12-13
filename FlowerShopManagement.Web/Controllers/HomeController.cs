@@ -167,11 +167,11 @@ public class HomeController : Controller
         //_gmailServices.Send();
         //await _mailServices.Send(requestForm);
 
-        var currentUser = await _authServices.RegisterAsync(HttpContext, "jahdkfjhsd@gmail.com", "0932766231", "123123");
+        //var currentUser = await _authServices.RegisterAsync(HttpContext, "jah@gmail.com", "0932826231", "123123");
 
-        //var currentUser = await _authServices.SignInAsync(HttpContext, "jahsdkfjhasd@gmail.com", "123123");
+        //var currentUser = await _authServices.SignInAsync(HttpContext, "jahdkd@gmail.com", "123123");
 
-        if (_authServices.GetUserRole(HttpContext) == Role.Customer.Value)
+        if (_authServices.GetUserRole(HttpContext) == Role.Customer.ToString())
             return false;
         else
             return true;

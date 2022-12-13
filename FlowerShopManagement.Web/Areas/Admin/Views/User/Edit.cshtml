@@ -3,8 +3,8 @@
 @model UserDetailsModel
 
 @{
-	//var roles = Enum.GetValues(typeof(FlowerShopManagement.Core.Enums.Role)).Cast<FlowerShopManagement.Core.Enums.Role>().ToList();
-	//var genders = Enum.GetValues(typeof(FlowerShopManagement.Core.Enums.Gender)).Cast<FlowerShopManagement.Core.Enums.Gender>().ToList();
+	var roles = Enum.GetValues(typeof(FlowerShopManagement.Core.Enums.Role)).Cast<FlowerShopManagement.Core.Enums.Role>().ToList();
+	var genders = Enum.GetValues(typeof(FlowerShopManagement.Core.Enums.Gender)).Cast<FlowerShopManagement.Core.Enums.Gender>().ToList();
 }
 
 <p class="mt-4"></p>
@@ -17,14 +17,9 @@
 				<label class="form-label" for="exampleFormControlInput1">Name</label>
 				<input type="text" asp-for="Name" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
 			</div>
-			@*<div class="col form-group">
-			<label class="form-label" for="floatingSelect">Role</label>
-			<select class="form-select form-select-lg h5 py-3" asp-for="Role" asp-items="@(new SelectList(roles))" id="floatingSelect" aria-label="Floating label select example" required>
-			</select>
-			</div>*@
-			<div class="col-5 form-group">
+			<div class="col form-group">
 				<label class="form-label" for="floatingSelect">Role</label>
-				<select class="form-select form-select-lg h5 py-3" asp-for="Role" id="floatingSelect" aria-label="Floating label select example" required>
+				<select class="form-select form-select-lg h5 py-3" asp-for="Role" asp-items="@(new SelectList(roles))" id="floatingSelect" aria-label="Floating label select example" required>
 				</select>
 			</div>
 		</div>
@@ -45,14 +40,9 @@
 			</div>
 			<div class="col form-group">
 				<label class="form-label" for="floatingSelect">Gender</label>
-				<select class="form-select form-select-lg h5 py-3" asp-for="Gender" id="floatingSelect" aria-label="Floating label select example" required>
+				<select class="form-select form-select-lg h5 py-3" asp-for="Gender" asp-items="@(new SelectList(genders))" id="floatingSelect" aria-label="Floating label select example" required>
 				</select>
 			</div>
-			@*<div class="col form-group">
-			<label class="form-label" for="floatingSelect">Gender</label>
-			<select class="form-select form-select-lg h5 py-3" asp-for="Gender" asp-items="@(new SelectList(genders))" id="floatingSelect" aria-label="Floating label select example" required>
-			</select>
-			</div>*@
 		</div>
 		<div class="row">
 			<div class="form-group">

@@ -10,8 +10,11 @@ public class AdminService : StaffService, IAdminService
 {
     private readonly IUserRepository _userRepository;
 
-    public AdminService(IUserRepository userRepository, ICartRepository cartRepository) 
-        : base(userRepository, cartRepository)
+    public AdminService(
+        IUserRepository userRepository, 
+        ICartRepository cartRepository, 
+        ISupplierRepository supplierRepository) 
+        : base(userRepository, cartRepository, supplierRepository)
     {
         _userRepository = userRepository;
     }
