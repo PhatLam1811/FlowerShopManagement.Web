@@ -14,7 +14,6 @@ public class AuthenticationController : Controller
         _authServices = authServices;
     }
 
-
     // ============ SIGN IN PAGE ============
     //[HttpGet]
     //public IActionResult SignIn()
@@ -29,7 +28,7 @@ public class AuthenticationController : Controller
     //    return View();
     //}
 
-    // ============ REGISTER EVENT ============
+    // ============ REGISTER ACTION ============
     [HttpPost]
     public async Task<UserModel?> Register([EmailAddress] string email, [Phone] string phoneNumber, string password, string confirmPassword)
     {
@@ -40,7 +39,7 @@ public class AuthenticationController : Controller
         // return CustomerPageView(currentUser);
     }
 
-    // ============ SIGN IN EVENT ============
+    // ============ SIGN IN ACTION ============
     [HttpPost("SignIn")]
     public async Task<UserModel?> SignIn(string emailOrPhoneNb, string password)
     {

@@ -2,7 +2,6 @@
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Core.Enums;
 
 namespace FlowerShopManagement.Application.Services.UserServices;
 
@@ -20,56 +19,28 @@ public class StaffService : UserService, IStaffService
         _supplierRepository = supplierRepository;
     }
 
-    public async Task<List<UserDetailsModel>?> GetStaffsAsync()
+    public async Task<List<UserDetailsModel>?> GetUsersAsync()
     {
-        var allStaffs = new List<UserDetailsModel>();
+        var users = new List<UserDetailsModel>();
 
         try
         {
-            // Get all users with the role of "Staff" or "Admin" from database
-            var staffs = await _userRepository.GetByRole(Role.Staff);
-            var admins = await _userRepository.GetByRole(Role.Admin);
-            var result = staffs.Concat(admins);
-
+            // Get all users from database
+            var result = await _userRepository.GetAll();
+            
             // Entities to Models
-            foreach (var staff in result)
+            foreach (var user in result)
             {
-                var model = new UserDetailsModel(staff);
-                allStaffs.Add(model);
+                var model = new UserDetailsModel(user);
+                users.Add(model);
             }
 
             // Successfully got staffs list
-            return allStaffs;
+            return users;
         }
         catch
         {
             // Failed to get staffs list
-            return null;
-        }
-    }
-
-    public async Task<List<UserDetailsModel>?> GetCustomersAsync()
-    {
-        var customers = new List<UserDetailsModel>();
-
-        try
-        {
-            // Get all users with the role of "Customer" from database
-            var result = await _userRepository.GetByRole(Role.Customer);
-
-            // Entities to Models
-            foreach (var customer in result)
-            {
-                var model = new UserDetailsModel(customer);
-                customers.Add(model);
-            }
-
-            // Successfully got customers list
-            return customers;
-        }
-        catch
-        {
-            // Failed to get customers list
             return null;
         }
     }
