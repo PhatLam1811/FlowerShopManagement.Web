@@ -18,7 +18,7 @@
 }
 
 .link-secondary {
-  color: #ada1e6;
+  color: #d562be;
 }
 .link-secondary:hover, .link-secondary:focus {
   color: #565e64;
@@ -60,7 +60,7 @@
 }
 
 .link-dark {
-  color: #212529;
+  color: #1c0e58;
 }
 .link-dark:hover, .link-dark:focus {
   color: #1a1e21;
@@ -468,7 +468,7 @@
 }
 
 .border-secondary {
-  border-color: #ada1e6 !important;
+  border-color: #d562be !important;
 }
 
 .border-success {
@@ -492,7 +492,7 @@
 }
 
 .border-dark {
-  border-color: #212529 !important;
+  border-color: #1c0e58 !important;
 }
 
 .border-white {
@@ -1349,7 +1349,7 @@
 
 .text-muted {
   --bs-text-opacity: 1;
-  color: #ada1e6 !important;
+  color: #d562be !important;
 }
 
 .text-black-50 {

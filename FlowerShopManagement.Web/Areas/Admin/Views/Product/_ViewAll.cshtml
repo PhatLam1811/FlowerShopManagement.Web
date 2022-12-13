@@ -1,0 +1,98 @@
+﻿@using FlowerShopManagement.Web
+@using FlowerShopManagement.Application.Models
+@model PaginatedList<ProductModel>
+
+@{
+	int nProducts = 0;
+	//nProducts = Model.page;
+	nProducts = 1;
+	//nProducts = Int32.Parse(ViewData["nProducts"].ToString());
+
+	int countPage()
+	{
+
+		int numberPages = 0;
+		int numberProducts = 0;
+
+		//foreach (Product i in Model.products)
+		//{
+		//	numberProducts++;
+		//}
+
+		numberPages = numberProducts / 10;
+
+		if (numberProducts % 10 != 0)
+			numberPages++;
+
+		return numberPages;
+	}
+}
+
+<div class="table-wrap">
+	<table class="table myaccordion table-hover" id="accordion">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th class="button">Name</th>
+				<th class="button">Price</th>
+				@*<th class="button" onclick="jQueryAjaxTableSort('@(Url.Action("TableSort", "Product"))', 'Color')">Color</th>*@
+				<th class="button">
+					<div class="d-none d-lg-block">
+						Category
+					</div>
+				</th>
+				<th class="button">Amount</th>
+				<th class="button">
+					Edit
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			@if (Model != null)
+			{
+				var a = nProducts * 10;
+				foreach (var item in Model)
+				{
+					
+
+					<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
+
+						<th scope="row">meme</th>
+						<td>
+							@*<div class="d-flex align-items-center gap-2">
+								@if (String.IsNullOrEmpty(Model[i].ImageName))
+								{
+									Model[i].ImageName = "product-empty.png";
+								}
+
+								<img src="~/image/@Model[i].Image"
+							 class="rounded-circle"
+							 height="40" width="40"
+							 asp-append-version="true" />*@
+								<span class="limit-line">@item.Name</span>
+							@*</div>*@
+
+						</td>
+						<td>$@item.UniPrice</td>
+						<td>
+							<div class="d-none d-lg-block">
+
+								@item.Name
+							</div>
+
+						</td>
+						<td>@item.Amount</td>
+						<td>
+							<a href="@Url.Action("Edit","Product",@item.Id,Context.Request.Scheme)" class="border-1 table-icon">
+								<i class="fas fa-edit"></i>
+							</a>
+						</td>
+						
+					</tr>
+				}
+			}
+		</tbody>
+	</table>
+
+	
+</div>

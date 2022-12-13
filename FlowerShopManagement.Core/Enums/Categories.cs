@@ -2,8 +2,9 @@
 
 public enum Categories
 {
-    artfFlower = 0,
-    furniture = 1,
-    entertainmentEquipment = 2
+    ArtfFlower = 0,
+    Furniture = 1,
+    EntertainmentEquipment = 2,
+    All = 3
 }
 

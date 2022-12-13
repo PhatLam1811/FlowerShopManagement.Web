@@ -45,7 +45,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
     }
 
-    public virtual async Task<IEnumerable<TEntity>> GetAll()
+    public virtual async Task<List<TEntity>> GetAll()
     {
         try
         {
@@ -186,4 +186,9 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
         var result = await _mongoDbCollection.FindAsync(filter);
         return result.ToList();
     }
+}
+
+public class VoucherRepository : BaseRepository<Voucher>, IVoucherRepository
+{
+	public VoucherRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 }

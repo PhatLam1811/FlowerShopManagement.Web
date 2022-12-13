@@ -1,5 +1,6 @@
-﻿<div class="col-3">
-	<div class="card">
+﻿@if (product != null)
+{
+	<div class="card border-0">
 		<div class="">
 			<img src="image/flower1.png" class="card-img-top" />
 		</div>
@@ -7,18 +8,32 @@
 		<div class="card-body">
 			<div class="d-flex justify-content-between">
 				<div>
-					<p class="h4">Flower</p>
-					<span class="h3">$20</span>
+					<p class="h4">@product.Name</p>
+					<span class="h3 text-secondary">$@product.UniPrice</span>
 				</div>
 				<p class="fa-regular fa-heart icon-normal"></p>
 			</div>
-			<button class="btn btn-primary mt-4 float-end w-100 button" asp-action="SignIn">Add to Cart</button>
+
 		</div>
+
+		<button class="btn btn-primary mt-2 w-100 button" asp-action="SignIn" @onclick="AddToCart">Add to Cart</button>
 	</div>
-</div>
+}
 
 @code {
-	//public async Task SignIn() 
+
+	[Parameter]
+	public ProductModel product { get; set; }
+
+	[Parameter]
+	public string url { get; set; } = "";
+
+	private void AddToCart()
+	{
+		// code xu li
+	}
+
+	//public async Task SignIn()
 	//{
 	//	await SignIn();
 	//}

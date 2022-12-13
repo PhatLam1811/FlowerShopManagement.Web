@@ -28,6 +28,8 @@ builder.Services.AddSingleton<IMongoDBSettings>(_ => _.GetRequiredService<IOptio
 builder.Services.AddScoped<IMongoDBContext, MongoDBContext>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
 
 //-- Entities Mapping --//
 BsonClassMap.RegisterClassMap<User>(cm =>
@@ -67,6 +69,14 @@ BsonClassMap.RegisterClassMap<Order>(cm =>
 #endregion
 
 // Add application logic services
+builder.Services.AddScoped<IAuthenticationServices, AuthenticationServices>();
+builder.Services.AddScoped<IGmailServices, GmailServices>();
+builder.Services.AddScoped<ICustomerManagementServices, CustomerManagementServices>();
+builder.Services.AddScoped<ISaleServices, SaleServices>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IStockServices, StockServices>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IUserServices, UserServices>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<MailKitService>();
 

@@ -13,6 +13,11 @@
     font-size: 24px;
 }
 
+.table-icon {
+    font-size: 20px;
+    padding: 8px;
+}
+
 .icon-plus:after {
     content: "\002b";
     font-family: 'FontAwesome';

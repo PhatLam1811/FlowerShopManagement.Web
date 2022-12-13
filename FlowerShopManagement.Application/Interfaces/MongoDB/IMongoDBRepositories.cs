@@ -7,7 +7,7 @@ public interface IBaseRepository<TEntity> : IDisposable where TEntity : class
 {
     public Task<bool> Add(TEntity entity);
 
-    public Task<IEnumerable<TEntity>> GetAll();
+    public Task<List<TEntity>> GetAll();
 
     public Task<TEntity> GetById(string id);
 
@@ -38,3 +38,4 @@ public interface IProductRepository : IBaseRepository<Product>
 {
     public Task<List<Product>> GetAllLowOnStock(int minimumAmount);
 }
+public interface IVoucherRepository : IBaseRepository<Voucher> { }

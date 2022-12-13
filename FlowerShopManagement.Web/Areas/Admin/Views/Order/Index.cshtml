@@ -1,65 +1,35 @@
-﻿@using FlowerShopManagement.Web.Views.Shared.Components;
-<style>
+﻿@model List<OrderModel>
 
-</style>
-<div class="row borderCustom">
-    <div class="col-2 borderCustom1">
-        <div class="row">
-            <ii class="row-1 h6 mb-2 mt-4">Category</ii>
+@{
+	Model.Add(new OrderModel() { AccountID = "12", Date = DateTime.Now, FullName = "Abc", Status = FlowerShopManagement.Core.Enums.Status.Waiting, DeliveryCharge = 5, Total = 200 });
+}
 
-            <div class="tabCustom row-cols-6">
-                <button class="tabCustom" onclick="openCity(event, 'London')">All</button>
-                <button class="tabCustom" onclick="openCity(event, 'London')">Retro</button>
-                <button class="tabCustom" onclick="openCity(event, 'London')">Basic</button>
-                <button class="tabCustom" onclick="openCity(event, 'London')">Street</button>
-                <button class="tabCustom" onclick="openCity(event, 'London')">Sweet</button>
+<div class="row">
+	<div class="col-lg-2 d-lg-block collapse borderCustom1 um">
+		<p class="row-1 h4 mb-2 mt-3">Status</p>
 
-            </div>
-        </div>
-    </div> @*used to col-3 vs col-10*@
+		<div class="tabCustom row-cols-6 w-100" style="max-height:260px; overflow-y:scroll; overflow-x:hidden">
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="All" type="button">All</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Waiting" type="button">Waiting</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Delivering" type="button">Delivering</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Delivered" type="button">Delivered</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Canceled" type="button">Canceled</a>
+		</div>
+	</div>
 
-    <div class="container col-10">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-wrap">
-                    <table class="table myaccordion table-hover" id="accordion">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Code</th>
-                                <th>Customer</th>
-                                <th>Price</th>
-                                <th>Amount</th>
-                                <th>Date Create</th>
-                                <th>State</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed">
-                                <th scope="row">1</th>
-                                <td>11</td>
-                                <td>Hoang Le</td>
-                                <td>$100</td>
-                                <td>12</td>
 
-                                <td>Today</td>
-                                <td>waiting</td>
-                                <td>
-                                    <p class="icon-plus m-0"></p>
-                                </td>
-                            </tr>
-                            @*<tr>
-                            <td colspan="6" id="collapseOne" class="acc collapse" data-parent="#accordion" style="">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro iste, facere sunt sequi nostrum ipsa, amet doloremque magnam reiciendis tempore sapiente. Necessitatibus recusandae harum nam sit perferendis quia inventore natus.</p>
-                            </td>
-                            </tr>*@
+	<div class="col-lg-10 col-12 mt-3 mt-lg-0">
+		<div class="d-flex justify-content-end d-lg-none">
+			<button class="filter-icon border-0 fs-3" data-bs-toggle="collapse" data-bs-target=".um" aria-controls="navbarSupportedContent"
+					aria-expanded="false" aria-label="Toggle navigation">
+				<span class="h5">Filter</span>
+			</button>
+		</div>
+		
+		<partial name="_ViewAll" model=@Model />
 
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+	</div>
+
 </div>
-@*<partial name="Add.cshtml"></partial>*@
+
+<button class="btn btn-primary icon-plus rounded position-fixed" style="right:0; bottom:60px;" onclick="location.href = '@(Url.Action("Create", "Order"))'">Create new Order</button>

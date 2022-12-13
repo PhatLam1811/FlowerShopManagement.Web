@@ -1,5 +1,66 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
+	ViewData["Title"] = "WishList";
+
+	List<string> categories = new List<string> { "Fa ke flower", "cay canh" };
+	List<string> prices = new List<string> { "0 - 10", "11 - 50", ">50" };
+	List<ProductModel> products = new List<ProductModel>();
 }
+<div class="row">
+	<div class="col-3 mt-3">
+		<span class="h4">Filter</span>
+		<div class="check-list mt-4">
+			<span class="">Categories</span>
+			<label class="check-list-item">
+				<input type="radio" class="form-check-input" value="" name="categoryRadio" checked />
+				All
+			</label>
+			@foreach (var i in categories)
+			{
+				<label class="check-list-item">
+					<input type="radio" class="form-check-input" value="" name="categoryRadio" />
+					@i
+				</label>
+			}
+		</div>
+		<div class="check-list">
+			<span class="">Prices</span>
+			<label class="check-list-item">
+				<input type="radio" class="form-check-input" value="" name="priceRadio" checked />
+				All
+			</label>
+			@foreach (var i in prices)
+			{
+				<label class="check-list-item">
+					<input type="radio" class="form-check-input" value="" name="priceRadio" />
+					@i
+				</label>
+			}
+		</div>
+	</div>
+
+	<div class="col-9">
+		@*	<form asp-action="SignIn" method="SignIn()">
+		<button class="btn btn-default">Button</button>
+		</form>*@
+		<div class="d-flex w-100">
+			<div class="form-group flex-grow-1">
+				<input type="text" class="form-control form-control-lg h5 h-100 position-relative" style="z-index:99" id="floatingInput" placeholder="Abc">
+			</div>
+			<button class="btn btn-icon border border-primary position-relative" style="z-index:999">
+				Search
+				<i class="fa-solid fa-magnifying-glass"></i>
+			</button>
+		</div>
+
+		<div class="row mt-3">
+			@foreach (var i in products)
+			{
+				<div class="col-4">
+					<component type="typeof(ProductCard)" render-mode="ServerPrerendered" param-product=@i />
+				</div>
+			}
+
+		</div>
+	</div>
+</div>
+
