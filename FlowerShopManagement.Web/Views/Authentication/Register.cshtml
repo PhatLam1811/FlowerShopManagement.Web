@@ -1,0 +1,55 @@
+﻿@{
+
+}
+
+<div class="container">
+	<p class="h1 mt-5 text-center">Register</p>
+
+	<div class="d-flex justify-content-center mt-5">
+		<form class="h-auto" style="width: 300px">
+			<div class="form-group">
+				<label class="form-label" for="exampleFormControlInput1">Email</label>
+				<input type="email" id="Email" name="Email" class="form-control form-control-lg h5 py-3" placeholder="">
+			</div>
+			<div class="form-group">
+				<label class="form-label" for="exampleFormControlInput1">Phone Number</label>
+				<input type="tel" id="Phone" name="Email" class="form-control form-control-lg h5 py-3" placeholder="">
+			</div>
+			<div class="form-group">
+				<label class="form-label" for="exampleFormControlInput1">Password</label>
+				<input type="password" name="Password" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
+			</div>
+			<div class="form-group">
+				<label class="form-label" for="exampleFormControlInput1">Confirm Password</label>
+				<input type="password" name="Password" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
+			</div>
+
+			<button class="btn btn-primary mt-5 float-end">Submit</button>
+		</form>
+	</div>
+
+	<button class="btn btn-secondary mt-5">Back</button>
+</div>
+
+@*<script>
+	function validateInput() {
+		var fieldValue = document.getElementById("Email").value;
+
+		var phoneValidation = /^([\+]?84[-]?|[0])?[1-9][0-9]{8}$/;
+		var mailValidation = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+
+		if (fieldValue.match(phoneValidation)) {
+			// correct phone structure
+			alert("true");
+			return true;
+		} else if (fieldValue.match(mailValidation)) {
+			// correct mail format
+			alert("true");
+			return true;
+		} else {
+			alert("sai format");
+			// incorrect structure
+			return false;
+		}
+	}
+</script>*@

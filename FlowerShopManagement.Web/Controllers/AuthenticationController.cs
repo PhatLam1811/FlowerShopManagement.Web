@@ -27,6 +27,10 @@ public class AuthenticationController : Controller
     //{
     //    return View();
     //}
+    public IActionResult Index()
+    {
+        return View();
+    }
 
     [HttpGet]
     public IActionResult Register()
