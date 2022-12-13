@@ -5,11 +5,11 @@ using FlowerShopManagement.Core.Enums;
 
 namespace FlowerShopManagement.Application.Interfaces;
 
-public interface ISaleServices
+public interface ISaleService
 {
 	public Task<bool> VerifyOnlineOrder(Order order, IOrderRepository orderRepository, IUserRepository userRepository, IProductRepository productRepository);
 	public Task<bool> VerifyOnlineOrder(string orderId, IOrderRepository orderRepository, IUserRepository userRepository, IProductRepository productRepository);
-	public Task<bool> CreateOfflineOrder(OrderModel order, UserModel user, IOrderRepository orderRepository,
+	public Task<bool> CreateOfflineOrder(OrderModel order, OfflineCustomerModel user, IOrderRepository orderRepository,
 		IUserRepository userRepository, IProductRepository productRepository);
 
 	public Task<List<OrderModel>> GetUpdatedOrders(IOrderRepository orderRepository);

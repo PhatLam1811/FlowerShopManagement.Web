@@ -2,11 +2,8 @@ using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Application.Services;
 using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Infrustructure.Google.Implementations;
-using FlowerShopManagement.Infrustructure.Google.Interfaces;
 using FlowerShopManagement.Infrustructure.MongoDB.Implements;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
-using Google.Apis.Gmail.v1;
 using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
@@ -69,36 +66,7 @@ BsonClassMap.RegisterClassMap<Order>(cm =>
 #endregion
 
 #region //================== App Services ==================//
-builder.Services.AddScoped<IAuthenticationServices, AuthenticationServices>();
-builder.Services.AddScoped<IGmailServices ,GmailServices>();
-#endregion
-
-#region Commentted
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-//builder.Services.AddSingleton<IMongoDbContext, MongoDbContext>();
-//builder.Services.AddSingleton<IMongoClient>(
-//   s => new MongoClient(builder.Configuration.GetValue<string>("CustomerDatabase:ConnectionString")));
-// builder.Services.AddSingleton<IMongoDBServices, MongoDBServices>(
-//    s => new MongoDBServices(
-//        builder.Configuration.GetValue<string>("DatabaseSettings:ConnectionString"),
-//        builder.Configuration.GetValue<string>("DatabaseSettings:DatabaseName")));
-
-
-// Add object CRUD operation services
-//builder.Services.AddScoped<ICartDAOServices, CartServices>();
-//builder.Services.AddScoped<ICustomer, FlowerShopManagement.Infrustructure.DatabaseSettings.CustomerServices>();
-//builder.Services.AddScoped<IProduct, ProductServices>();
-
-// Add application logic services
-//builder.Services.AddScoped<ICustomerServices, FlowerShopManagement.Application.Services.Temp.CustomerServices>();
-
-// Authentication logic services
-// builder.Services.AddScoped<IApplicationUserServices, ApplicationUserServices>();
-// builder.Services.AddScoped<IAuthenticationServices, AuthenticationServices>();
-
-// builder.Services.AddScoped<IUserDAOServices, UserDAOServices>();
-// builder.Services.AddScoped<ICartDAOServices, CartDAOServices>();
-// builder.Services.AddScoped<ISecurityServices, SecurityServices>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 #endregion
 
 // HttpContextAccessor

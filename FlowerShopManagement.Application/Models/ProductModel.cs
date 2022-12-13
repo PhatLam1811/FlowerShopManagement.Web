@@ -22,7 +22,7 @@ public class ProductModel
         Amount = entity._amount;
         WholesaleDiscount = entity._wholesaleDiscount;
         UniPrice = entity._uniPrice;
-        Color = entity._color;
+        //Color = entity.colors;
         Categories = entity._categories;
     }
 
