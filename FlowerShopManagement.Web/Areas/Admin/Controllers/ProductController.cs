@@ -41,7 +41,8 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         {
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
             //Should get a new one because an admin updates data realtime
-            ProductDetailModel editProduct = new ProductDetailModel(await _productRepository.GetById(id));
+             
+            ProductDetailModel editProduct = await _stockServices.GetADetailProduct(id,_productRepository);
             if (editProduct != null)
             {
                 return View(editProduct);
@@ -191,7 +192,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
                         break;
                 }
 
-                if(currentCategory != null)
+                if(currentCategory != null && currentCategory != "All")
                 {
                     Categories MyStatus = (Categories)Enum.Parse(typeof(Categories), currentCategory, true);
                     productMs = productMs.Where(s => s.Categories != null && s.Categories.Contains(MyStatus)).ToList();

@@ -21,17 +21,7 @@ public class SaleServices : ISaleServices
 
 	}
 
-    public async Task<List<OrderModel>> GetUpdatedOrders(IOrderRepository orderRepository)
-    {
-        List<Order> orders = await orderRepository.GetAll();
-        List<OrderModel> orderMs = new List<OrderModel>();
-
-        foreach (var o in orders)
-        {
-            orderMs.Add(new OrderModel(o));
-        }
-        return orderMs;
-    }
+    
     public async Task<bool> VerifyOnlineOrder(string? orderId, IOrderRepository orderRepository, IUserRepository userRepository, IProductRepository productRepository)
 	{
 
@@ -138,5 +128,22 @@ public class SaleServices : ISaleServices
 	public Task<bool> VerifyOnlineOrder(Order order, IOrderRepository orderRepository, IUserRepository userRepository, IProductRepository productRepository)
 	{
 		throw new NotImplementedException();
+	}
+public async Task<List<OrderModel>> GetUpdatedOrders(IOrderRepository orderRepository)
+    {
+        List<Order> orders = await orderRepository.GetAll();
+        List<OrderModel> orderMs = new List<OrderModel>();
+
+        foreach (var o in orders)
+        {
+            orderMs.Add(new OrderModel(o));
+        }
+        return orderMs;
+    }
+	public async Task<OrderModel> GetADetailOrder(string id,IOrderRepository orderRepository)
+	{
+		Order order = await orderRepository.GetById(id);
+		OrderModel orderMs = new OrderModel(order);
+		return orderMs;
 	}
 }

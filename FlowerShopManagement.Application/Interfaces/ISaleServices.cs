@@ -13,6 +13,7 @@ public interface ISaleServices
 		IUserRepository userRepository, IProductRepository productRepository);
 
 	public Task<List<OrderModel>> GetUpdatedOrders(IOrderRepository orderRepository);
+	public Task<OrderModel> GetADetailOrder(string id, IOrderRepository orderRepository);
 
 
 }

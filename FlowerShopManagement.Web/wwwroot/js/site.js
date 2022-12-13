@@ -19,6 +19,16 @@ function showContent2(url, title) {
     })
 }
 
+function EditPage(url, title, id) {
+
+    $.ajax({
+        type: "GET",
+        url: url,
+        data: { id: id },
+        
+    })
+}
+
 function jQueryAjaxReloadViewAll(url) {
     try {
         $.ajax({

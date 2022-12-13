@@ -47,7 +47,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         {
             //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
             //Should get a new one because an admin updates data realtime
-            var order = new OrderModel(await _orderRepository.GetById(id));
+            var order = await _saleServices.GetADetailOrder(id,_orderRepository);
             if (order != null)
             {
                 return View(/*Coult be a ViewModel in here*/);

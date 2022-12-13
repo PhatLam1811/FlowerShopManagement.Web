@@ -83,15 +83,11 @@
 						</td>
 						<td>@item.Amount</td>
 						<td>
-							<a onclick="showContent('@Url.Action("Edit","Product",null,Context.Request.Scheme)','Edit Product @item.Name','@item.Id')" class="border-1 table-icon">
+							<a href="@Url.Action("Edit","Product",@item.Id,Context.Request.Scheme)" class="border-1 table-icon">
 								<i class="fas fa-edit"></i>
 							</a>
 						</td>
-						<td>
-							<a onclick="showContent('@Url.Action("ChooseSize","Product",null,Context.Request.Scheme)','Choose Sizes','@item.Id')" class="link-info table-icon d-none d-lg-block">
-								<i class="fas fa-cart-plus"></i>
-							</a>
-						</td>
+						
 					</tr>
 				}
 			}

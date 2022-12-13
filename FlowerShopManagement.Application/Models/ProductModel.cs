@@ -87,8 +87,12 @@ public class ProductDetailModel
         Size = entity._size;
         Maintainment = entity._maintainment;
     }
+	public ProductDetailModel(string id)
+	{
+		Id = id;
+	}
 
-    public ProductDetailModel()
+	public ProductDetailModel()
     {
         Id = new Guid().ToString();
         Picture = "";

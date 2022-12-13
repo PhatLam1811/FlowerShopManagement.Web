@@ -40,7 +40,15 @@ public class StockServices : IStockServices
         return false;
     }
 
-    public async Task<List<ProductModel>> GetUpdatedProducts(IProductRepository productRepository)
+	public async Task<ProductDetailModel> GetADetailProduct(string id,IProductRepository productRepository)
+	{
+		Product product = await productRepository.GetById(id);
+		ProductDetailModel productMs = new ProductDetailModel(product);
+
+		return productMs;
+	}
+
+	public async Task<List<ProductModel>> GetUpdatedProducts(IProductRepository productRepository)
     {
         List<Product> products = await productRepository.GetAll();
         List<ProductModel> productMs = new List<ProductModel>();
