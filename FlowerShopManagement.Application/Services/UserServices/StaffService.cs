@@ -10,12 +10,14 @@ public class StaffService : UserService, IStaffService
 {
     private readonly IUserRepository _userRepository;
     private readonly ICartRepository _cartRepository;
+    private readonly ISupplierRepository _supplierRepository;
 
-    public StaffService(IUserRepository userRepository, ICartRepository cartRepository)
+    public StaffService(IUserRepository userRepository, ICartRepository cartRepository, ISupplierRepository supplierRepository)
         : base(userRepository, cartRepository)
     {
         _userRepository = userRepository;
         _cartRepository = cartRepository;
+        _supplierRepository = supplierRepository;
     }
 
     public async Task<List<UserDetailsModel>?> GetStaffsAsync()
@@ -64,6 +66,32 @@ public class StaffService : UserService, IStaffService
 
             // Successfully got customers list
             return customers;
+        }
+        catch
+        {
+            // Failed to get customers list
+            return null;
+        }
+    }
+
+    public async Task<List<SupplierModel>?> GetSuppliersAsync()
+    {
+        var suppliers = new List<SupplierModel>();
+
+        try
+        {
+            // Get all users with the role of "Customer" from database
+            var result = await _supplierRepository.GetAll();
+
+            // Entities to Models
+            foreach (var supplier in result)
+            {
+                var model = new SupplierModel(supplier);
+                suppliers.Add(model);
+            }
+
+            // Successfully got customers list
+            return suppliers;
         }
         catch
         {
