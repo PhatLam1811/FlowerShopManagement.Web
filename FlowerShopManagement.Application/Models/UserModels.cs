@@ -3,18 +3,6 @@ using FlowerShopManagement.Core.Enums;
 
 namespace FlowerShopManagement.Application.Models;
 
-public class OfflineCustomerModel
-{
-    public string Name { get; set; }
-    public string PhoneNumber { get; set; }
-
-    public OfflineCustomerModel()
-    {
-        Name = string.Empty;
-        PhoneNumber = string.Empty;
-    }
-}
-
 public class UserDetailsModel : UserModel
 {
     private string _id;
@@ -71,12 +59,14 @@ public class UserModel
     public string Name { get; set; }
     public string Avatar { get; set; }
     public string Email { get; set; }
+    public string PhoneNumber { get; set; }
 
     public UserModel(User entity)
     {
         Name = entity.name;
         Avatar = entity.avatar;
         Email = entity.email;
+        PhoneNumber = entity.phoneNumber;
     }
 
     public void ToEntity(ref User entity)
@@ -84,5 +74,6 @@ public class UserModel
         entity.name = Name;
         entity.avatar = Avatar;
         entity.email = Email;
+        entity.phoneNumber = PhoneNumber;
     }
 }

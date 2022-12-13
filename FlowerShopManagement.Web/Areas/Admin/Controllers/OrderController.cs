@@ -135,7 +135,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
         // Confirm and create an Order
         [HttpPost]
-        public async Task<IActionResult> Create(OrderModel orderModel, OfflineCustomerModel userModel)
+        public async Task<IActionResult> Create(OrderModel orderModel, UserModel userModel)
         {
             var result = _saleServices.CreateOfflineOrder(orderModel, userModel, _orderRepository, _userRepository, _productRepository);
             if (result != null)
