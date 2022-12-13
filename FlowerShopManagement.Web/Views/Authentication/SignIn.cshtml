@@ -1,4 +1,4 @@
-﻿@model AuthenticationModel;
+﻿@model SignInModel;
 
 <div class="container">
 	<p class="h1 mt-5 text-center">Login</p>
@@ -7,50 +7,18 @@
 		<form class="h-auto" method="post" asp-action="SignIn" asp-controller="Authentication" style="width: 300px">
 			<div class="form-group">
 				<label class="form-label" for="exampleFormControlInput1">Email/Phone Number</label>
-				<input type="text" asp-for="Email" class="form-control form-control-lg h5 py-3" placeholder="">
+				<input type="text" asp-for="EmailorPhone" class="form-control form-control-lg h5 py-3" placeholder="">
+				<span asp-validation-for="EmailorPhone"></span>
 			</div>
 			<div class="form-group">
 				<label class="form-label" for="exampleFormControlInput1">Password</label>
 				<input type="password" asp-for="Password" name="Password" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
+				<span asp-validation-for="Password"></span>
 			</div>
 
 			<button class="btn btn-primary mt-5 float-end">Go to App</button>
 		</form>
 	</div>
 
-	<button class="btn btn-secondary mt-5">Register</button>
+	<a class="btn btn-secondary mt-5" asp-action="Register" asp-controller="Authentication">Register</a>
 </div>
-
-@*<script>
-	function validateInput(emailOrPhoneNb, password) {
-		var fieldValue = document.getElementById("Email").value;
-
-		var phoneValidation = /^([\+]?84[-]?|[0])?[1-9][0-9]{8}$/;
-		var mailValidation = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-
-		if (fieldValue.match(phoneValidation)) {
-			// correct phone structure
-			alert("true");
-			$.ajax({
-				type: "POST",
-				url: "Authentication/SignIn",
-				data: { emailOrPhoneNb: emailOrPhoneNb, password: password },
-				success: function () {
-				},
-				error: function () {
-				}
-
-			})
-			return true;
-		} else if (fieldValue.match(mailValidation)) {
-			// correct mail format
-
-			alert("true");
-			return true;
-		} else {
-			alert("sai format");
-			// incorrect structure
-			return false;
-		}
-	}
-</script>*@

@@ -40,9 +40,9 @@ public class AuthenticationController : Controller
 
     // ============ REGISTER ACTION ============
     [HttpPost]
-    public async Task<UserModel?> Register([EmailAddress] string email, [Phone] string phoneNumber, string password, string confirmPassword)
+    public async Task<UserModel?> Register(RegisterModel model)
     {
-        var currentUser = await _authServices.RegisterAsync(HttpContext, email, phoneNumber, password);
+        var currentUser = await _authServices.RegisterAsync(HttpContext, model.Email, model.PhoneNumber, model.Password);
 
         return currentUser;
 
@@ -57,13 +57,19 @@ public class AuthenticationController : Controller
 
     // ============ SIGN IN ACTION ============
     [HttpPost]
-    public async Task<IActionResult> SignIn(AuthenticationModel model)
+    public async Task<IActionResult> SignIn(SignInModel model)
     {
         // model state
+        if (ModelState.IsValid)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        else
+            return View();
 
-        var currentUser = await _authServices.SignInAsync(HttpContext, model.Email, model.Password);
+        //var currentUser = await _authServices.SignInAsync(HttpContext, model.Email, model.Password);
 
-        return RedirectToAction("Index", "Home");
+        //return RedirectToAction("Index", "Home");
 
         //if (_authServices.GetUserRole == Role.Customer.Value)
         //    return CustomerPageView(userModel);

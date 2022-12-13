@@ -1,4 +1,4 @@
-﻿@model AuthenticationModel;
+﻿@model RegisterModel;
 
 <div class="container">
 	<p class="h1 mt-5 text-center">Register</p>
@@ -28,26 +28,3 @@
 
 	<button class="btn btn-secondary mt-5">Back</button>
 </div>
-
-@*<script>
-	function validateInput() {
-		var fieldValue = document.getElementById("Email").value;
-
-		var phoneValidation = /^([\+]?84[-]?|[0])?[1-9][0-9]{8}$/;
-		var mailValidation = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-
-		if (fieldValue.match(phoneValidation)) {
-			// correct phone structure
-			alert("true");
-			return true;
-		} else if (fieldValue.match(mailValidation)) {
-			// correct mail format
-			alert("true");
-			return true;
-		} else {
-			alert("sai format");
-			// incorrect structure
-			return false;
-		}
-	}
-</script>*@
