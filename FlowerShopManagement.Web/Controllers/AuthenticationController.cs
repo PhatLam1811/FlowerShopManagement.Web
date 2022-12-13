@@ -29,6 +29,12 @@ public class AuthenticationController : Controller
     //    return View();
     //}
 
+    [HttpGet]
+    public IActionResult Register()
+    {
+        return View();
+    }
+
     // ============ REGISTER EVENT ============
     [HttpPost]
     public async Task<UserModel?> Register([EmailAddress] string email, [Phone] string phoneNumber, string password, string confirmPassword)
@@ -38,6 +44,12 @@ public class AuthenticationController : Controller
         return currentUser;
 
         // return CustomerPageView(currentUser);
+    }
+
+    [HttpGet]
+    public IActionResult SignIn()
+    {
+        return View();
     }
 
     // ============ SIGN IN EVENT ============
