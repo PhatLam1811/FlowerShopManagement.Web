@@ -67,7 +67,7 @@ BsonClassMap.RegisterClassMap<Order>(cm =>
 #endregion
 
 // Add application logic services
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<MailKitService>();
 
 // HttpContextAccessor

@@ -1,5 +1,6 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
@@ -18,6 +19,12 @@ public class AuthenticationController : ControllerBase
         _authServices = authServices;
     }
 
+    //[HttpGet]
+    //public IActionResult Index()
+    //{
+    //    return View();
+    //}
+
     //[HttpPost]
     //public async Task<UserModel?> RegisterNewCustomer(string email, string phoneNumber, string password)
     //{
@@ -31,28 +38,28 @@ public class AuthenticationController : ControllerBase
         return await _authServices.RegisterAsync(email, phoneNumber, password);
     }
 
-    //[HttpPost]
-    //public async Task<UserModel?> SignIn(string emailOrPhoneNb, string password)
-    //{
-    //    await _authServices.SignIn(emailOrPhoneNb, password);
+    [HttpPost]
+    public async Task<UserModel?> SignIn(string emailOrPhoneNb, string password)
+    {
+        await _authServices.SignIn(emailOrPhoneNb, password);
 
-    //    if (_userManager.GetUser() == null) return null; 
+        if (_userManager.GetUser() == null) return null;
 
-    //    var claims = new List<Claim>
-    //    {
-    //        new Claim(ClaimTypes.NameIdentifier, _userManager.GetUser().id),
-    //        new Claim(ClaimTypes.Email, _userManager.GetUser().email),
-    //        new Claim(ClaimTypes.Role, _userManager.GetUserRole())
-    //    };
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, _userManager.GetUser().id),
+            new Claim(ClaimTypes.Email, _userManager.GetUser().email),
+            new Claim(ClaimTypes.Role, _userManager.GetUserRole())
+        };
 
-    //    var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-    //    var principal = new ClaimsPrincipal(identity);
+        var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+        var principal = new ClaimsPrincipal(identity);
 
-    //    await HttpContext.SignInAsync(
-    //        CookieAuthenticationDefaults.AuthenticationScheme, 
-    //        principal, 
-    //        new AuthenticationProperties { IsPersistent = true });
+        await HttpContext.SignInAsync(
+            CookieAuthenticationDefaults.AuthenticationScheme,
+            principal,
+            new AuthenticationProperties { IsPersistent = true });
 
-    //    return _userManager.GetUser();
-    //}
+        return _userManager.GetUser();
+    }
 }

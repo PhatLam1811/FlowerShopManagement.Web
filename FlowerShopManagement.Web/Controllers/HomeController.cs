@@ -12,10 +12,10 @@ namespace FlowerShopManagement.Web.Controllers;
 public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
-    private readonly Application.Interfaces.IAuthenticationService _authServices;
+    private readonly Application.Interfaces.IAuthService _authServices;
     private readonly MailKitService _mailServices;
 
-    public HomeController(ILogger<HomeController> logger, Application.Interfaces.IAuthenticationService authServices, MailKitService mailServices)
+    public HomeController(ILogger<HomeController> logger, Application.Interfaces.IAuthService authServices, MailKitService mailServices)
     {
         _logger = logger;
         _authServices = authServices;

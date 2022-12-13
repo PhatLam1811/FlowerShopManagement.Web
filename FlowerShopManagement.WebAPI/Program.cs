@@ -66,7 +66,7 @@ BsonClassMap.RegisterClassMap<Order>(cm =>
 #endregion
 
 #region //================== App Services ==================//
-builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
 #endregion
 
 // HttpContextAccessor
