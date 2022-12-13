@@ -41,7 +41,7 @@ public class AuthService : IAuthService
             await _userRepository.Add(customer);
 
             // HttpContext sign in
-            await HttpSignIn(httpContext, customer._id, customer.role.Value);
+            await HttpSignIn(httpContext, customer._id, customer.role.ToString());
 
             return new UserModel(customer);
         }
@@ -69,7 +69,7 @@ public class AuthService : IAuthService
             if (!user.password.Equals(encryptedPass)) return null;
 
             // HttpContext sign in
-            await HttpSignIn(httpContext, user._id, user.role.Value);
+            await HttpSignIn(httpContext, user._id, user.role.ToString());
 
             return new UserModel(user);
         }

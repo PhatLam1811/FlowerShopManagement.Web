@@ -1,13 +1,9 @@
 ﻿namespace FlowerShopManagement.Core.Enums;
 
-public class Role
+public enum Role
 {
-    public string Value { get; private set; }
-
-    private Role(string value) => Value = value;
-
-    public static Role Admin { get => new Role("Admin"); }
-    public static Role Staff { get => new Role("Staff"); }
-    public static Role Customer { get => new Role("Customer"); }
-    public static Role Passenger { get => new Role("Passenger"); }
+    Customer = 0,
+    Staff = 1,
+    Admin = 2,
+    Passenger = 3
 }

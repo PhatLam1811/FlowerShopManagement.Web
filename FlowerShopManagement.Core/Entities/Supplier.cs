@@ -2,11 +2,20 @@
 
 public class Supplier
 {
-    public string? _id { get; private set; }
-    public string _name { get; set; } = string.Empty;
-    public string _address { get; set; } = string.Empty;
-    public string _products { get; set; } = string.Empty; // Type could change depends on how UI displays the suppliers
-    public string _phoneNumber { get; set; } = string.Empty;
-    public string _email { get; set; } = string.Empty;
-    public string _note { get; set; } = string.Empty;
+    public string _id { get; set; }
+    public string name { get; set; }
+    public string address { get; set; }
+    public string email { get; set; }
+    public string phoneNumber { get; set; }
+    public string description { get; set; }
+
+    public Supplier()
+    {
+        _id = Guid.NewGuid().ToString();
+        name = string.Empty;
+        address = string.Empty;
+        email = string.Empty;
+        phoneNumber = string.Empty;
+        description = string.Empty;
+    }
 }
