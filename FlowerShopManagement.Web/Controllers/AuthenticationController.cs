@@ -27,25 +27,49 @@ public class AuthenticationController : Controller
     //{
     //    return View();
     //}
+    public IActionResult Index()
+    {
+        return View();
+    }
+
+    [HttpGet]
+    public IActionResult Register()
+    {
+        return View();
+    }
 
     // ============ REGISTER ACTION ============
     [HttpPost]
-    public async Task<UserModel?> Register([EmailAddress] string email, [Phone] string phoneNumber, string password, string confirmPassword)
+    public async Task<UserModel?> Register(RegisterModel model)
     {
-        var currentUser = await _authServices.RegisterAsync(HttpContext, email, phoneNumber, password);
+        var currentUser = await _authServices.RegisterAsync(HttpContext, model.Email, model.PhoneNumber, model.Password);
 
         return currentUser;
 
         // return CustomerPageView(currentUser);
     }
 
-    // ============ SIGN IN ACTION ============
-    [HttpPost("SignIn")]
-    public async Task<UserModel?> SignIn(string emailOrPhoneNb, string password)
+    [HttpGet]
+    public IActionResult SignIn()
     {
-        var currentUser = await _authServices.SignInAsync(HttpContext, emailOrPhoneNb, password);
+        return View();
+    }
 
-        return currentUser;
+    // ============ SIGN IN ACTION ============
+    [HttpPost]
+    public async Task<IActionResult> SignIn(SignInModel model)
+    {
+        // model state
+        if (ModelState.IsValid)
+        {
+            return RedirectToAction("Index", "Home");
+        }
+        else
+            return View();
+
+        //var currentUser = await _authServices.SignInAsync(HttpContext, model.Email, model.Password);
+
+        //return RedirectToAction("Index", "Home");
 
         //if (_authServices.GetUserRole == Role.Customer.Value)
         //    return CustomerPageView(userModel);
