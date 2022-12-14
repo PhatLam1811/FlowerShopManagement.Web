@@ -1,5 +1,4 @@
 ﻿using FlowerShopManagement.Core.Entities;
-using System.ComponentModel;
 
 namespace FlowerShopManagement.Application.Models;
 
@@ -16,6 +15,30 @@ public class SupplierDetailModel : SupplierModel
         Address = supplier.address;
         Description = supplier.description;
     }
+
+    public override void ToEntity(ref Supplier entity)
+    {
+        entity._id = _id;
+        entity.name = Name;
+        entity.email = Email;
+        entity.phoneNumber = PhoneNumber;
+        entity.address = Address;
+        entity.description = Description;
+    }
+
+    public Supplier ToNewEntity()
+    {
+        var entity = new Supplier();
+
+        entity._id = _id;
+        entity.name = Name;
+        entity.email = Email;
+        entity.phoneNumber = PhoneNumber;
+        entity.address = Address;
+        entity.description = Description;
+
+        return entity;
+    }
 }
 
 public class SupplierModel
@@ -29,5 +52,12 @@ public class SupplierModel
         Name = supplier.name;
         Email = supplier.email;
         PhoneNumber = supplier.phoneNumber;
+    }
+
+    public virtual void ToEntity(ref Supplier entity)
+    {
+        entity.name = Name;
+        entity.email = Email;
+        entity.phoneNumber = PhoneNumber;
     }
 }
