@@ -84,6 +84,33 @@ function jQueryAjaxReloadViewAll(url) {
     }
 }
 
+function jQueryAjaxPickCustomer(url,id) {
+    try {
+        $.ajax({
+            type: 'POST',
+            url: url,
+            success: function (res) {
+                if (res.isValid) {
+                    $('#hihi').html(res.htmlViewAll);
+                    $('#pagination').html(res.htmlPagination);
+                }
+            },
+            error: function (err) {
+                alert(err);
+
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+
+    } catch (ex) {
+
+        alert(ex);
+        return false;
+    }
+}
+
 function jQueryAjaxReloadPickingTable(form) {
     var obj = new FormData(form);
     console.log(obj);

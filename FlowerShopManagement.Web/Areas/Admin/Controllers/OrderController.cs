@@ -18,13 +18,14 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         ISaleService _saleServices;
         IStockService _stockServices;
         IUserService _userServices;
+        IStaffService _staffService;
         //Repositories
         IOrderRepository _orderRepository;
         IProductRepository _productRepository;
         IUserRepository _userRepository;
 
         public OrderController(ISaleService saleServices, IOrderRepository orderRepository, IProductRepository productRepository, 
-            IUserRepository userRepository, IStockService stockServices, IUserService userServices)
+            IUserRepository userRepository, IStockService stockServices, IUserService userServices, IStaffService staffService)
         {
             _orderRepository = orderRepository;
             _saleServices = saleServices;
@@ -32,6 +33,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             _userRepository = userRepository;
             _stockServices = stockServices;
             _userServices = userServices;
+            _staffService = staffService;
         }
 
         [HttpGet]
@@ -120,19 +122,18 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
 
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
-            //List<UserModel> customerMs = await _userServices.GetUpdatedCustomers(_userRepository);
+            List<UserDetailsModel>? customerMs = await _staffService.GetUsersAsync();
             /*
                 Set up viewmodel
 			    Need a current picked items
                 Need a current picked customer
                 PageList<>
 			*/
+            if(productMs == null || customerMs == null) return NotFound();
             OrderVM orderVM = new OrderVM();
             orderVM.AllProductModels = productMs;
-
-            TempData["orderVM"] = JsonConvert.SerializeObject(orderVM, Newtonsoft.Json.Formatting.Indented);
-            //orderVM.UserModels = 
-
+            orderVM.customerMs = customerMs;
+            TempData["orderVM"] = JsonConvert.SerializeObject(orderVM, Formatting.Indented);
             return View(orderVM);
         }
 
@@ -150,13 +151,13 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PickItemDialog(string filter = "") // Also handle if there is a filter / search
+        public async Task<IActionResult> PickItemDialog(string filter = "", string om = "") // Also handle if there is a filter / search
         {
             string s = TempData["orderVM"] as string ?? "";
             OrderVM? orderVM = null;
-            if (s != "")
+            if (om != "")
             {
-                orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
+                orderVM = JsonConvert.DeserializeObject<OrderVM>(om);
             }
 
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
@@ -224,16 +225,18 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult PickCustomer(string id)
+        public async Task<IActionResult> PickCustomer(string phone)
         {
             OrderModel? orderModel = null;
 
-            var user = _userRepository.GetById(id);
+            var user = await _staffService.GetUserByPhone(phone);
             if (user != null)
             {
                 TempData["CurrentUser"] = user;
+                return PartialView("_PickedCustomer"/*Coult be a ViewModel in here*/); // This will be an update view for current customer table
+
             }
-            return PartialView("_PickCustomer"/*Coult be a ViewModel in here*/); // This will be an update view for current customer table
+            return NotFound();
         }
 
     }

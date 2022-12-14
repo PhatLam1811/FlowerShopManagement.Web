@@ -14,7 +14,7 @@ public class AuthService : IAuthService
     private readonly ICartRepository _cartRepository;
 
     public AuthService(
-        IUserRepository userRepository, 
+        IUserRepository userRepository,
         ICartRepository cartRepository)
     {
         _userRepository = userRepository;
@@ -117,5 +117,25 @@ public class AuthService : IAuthService
     {
         // Get claim's role value
         return httpContext.User.Claims.ElementAt(1).Value;
+    }
+    public string? GetUserId(HttpContext httpContext)
+    {
+        // Get claim's role value
+        return httpContext.User.Claims.ElementAt(0).Value;
+    }
+    public async Task<UserModel?> GetUser(HttpContext httpContext)
+    {
+        // Get claim's role value
+        var id = httpContext.User.Claims.ElementAt(0).Value;
+        if (id != null)
+        {
+            var userE = await _userRepository.GetById(id);
+            if (userE != null)
+            {
+                UserModel? userModel = new UserModel(userE);
+                return userModel;
+            }
+        }
+        return null;
     }
 }

@@ -9,4 +9,6 @@ public interface IAuthService
     public Task<UserModel?> SignInAsync(HttpContext httpContext, string emailOrPhoneNb, string password);
     public Task<UserModel?> AuthenticateAsync(string id);
     public string? GetUserRole(HttpContext httpContext);
+    public string? GetUserId(HttpContext httpContext);
+    public Task<UserModel?> GetUser(HttpContext httpContext);
 }
