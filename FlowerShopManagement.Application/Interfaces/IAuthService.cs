@@ -12,4 +12,6 @@ public interface IAuthService
     public Task<UserDetailsModel> GetUserAsync(HttpContext httpContext);
     public string? GetUserId(HttpContext httpContext);
     public string? GetUserRole(HttpContext httpContext);
+    public string? GetUserId(HttpContext httpContext);
+    public Task<UserModel?> GetUser(HttpContext httpContext);
 }

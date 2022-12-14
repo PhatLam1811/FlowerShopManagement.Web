@@ -120,4 +120,26 @@ public class StaffService : UserService, IStaffService
             return false;
         }
     }
+
+    public async Task<UserDetailsModel?> GetUserByPhone(string phoneNb)
+    {
+
+        try
+        {
+            // Get all users from database
+            var result = await _userRepository.GetByEmailOrPhoneNb(phoneNb);
+
+            // Entities to Models
+            if (result == null) return null; ;
+            var users = new UserDetailsModel(result);
+
+            // Successfully got staffs list
+            return users;
+        }
+        catch
+        {
+            // Failed to get staffs list
+            return null;
+        }
+    }
 }

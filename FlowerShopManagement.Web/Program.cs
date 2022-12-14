@@ -75,7 +75,9 @@ BsonClassMap.RegisterClassMap<Order>(cm =>
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISaleService, SaleService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<IStockService, StockServices>();
+builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IPersonalService, UserService>();
 builder.Services.AddScoped<IStaffService, StaffService>();
