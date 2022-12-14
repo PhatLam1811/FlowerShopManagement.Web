@@ -9,6 +9,8 @@ namespace FlowerShopManagement.Application.Services.UserServices;
 public class AdminService : StaffService, IAdminService
 {
     private readonly IUserRepository _userRepository;
+    private readonly ICartRepository _cartRepository;
+    private readonly ISupplierRepository _supplierRepository;
 
     public AdminService(
         IUserRepository userRepository, 
@@ -17,6 +19,8 @@ public class AdminService : StaffService, IAdminService
         : base(userRepository, cartRepository, supplierRepository)
     {
         _userRepository = userRepository;
+        _cartRepository = cartRepository;
+        _supplierRepository = supplierRepository;
     }
 
     public async Task<bool> AddStaffAsync(UserDetailsModel newStaffModel, Role role)
@@ -42,6 +46,28 @@ public class AdminService : StaffService, IAdminService
             // Failed to add new staff account
             return false;
         }
+    }
+
+    public async Task<bool> AddSupplierAsync(SupplierDetailModel newSupplierModel)
+    {
+        try
+        {
+            // Model to entity
+            var supplier = newSupplierModel.ToNewEntity();
+
+            // Added to database
+            return await _supplierRepository.Add(supplier);
+        }
+        catch
+        {
+            // Failed to add new supplier
+            return false;
+        }
+    }
+
+    public Task<bool> RemoveSupplierAsync(SupplierModel supplierModel)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<bool> EditUserRoleAsync(UserDetailsModel userModel, Role role)

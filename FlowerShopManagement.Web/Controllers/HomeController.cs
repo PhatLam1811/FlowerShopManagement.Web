@@ -1,5 +1,5 @@
-﻿using FlowerShopManagement.Application.Interfaces;
-using FlowerShopManagement.Web.Models;
+﻿    using FlowerShopManagement.Application.Interfaces;
+using FlowerShopManagement.Web.ViewModels;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;

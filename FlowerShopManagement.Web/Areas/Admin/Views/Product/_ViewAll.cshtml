@@ -83,7 +83,7 @@
 						</td>
 						<td>@item.Amount</td>
 						<td>
-							<a href="@Url.Action("Edit","Product",@item.Id,Context.Request.Scheme)" class="border-1 table-icon">
+							<a href="@Url.Action("Edit","Product",new {id = @item.Id})" class="border-1 table-icon">
 								<i class="fas fa-edit"></i>
 							</a>
 						</td>
