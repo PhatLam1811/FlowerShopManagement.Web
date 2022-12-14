@@ -6,6 +6,7 @@ namespace FlowerShopManagement.Application.Models;
 public class UserDetailsModel : UserModel
 {
     private string _id;
+    private string _password;
     public Role Role { get; set; }
     public Gender Gender { get; set; }
     public int BirthYear { get; set; }
@@ -16,6 +17,7 @@ public class UserDetailsModel : UserModel
     public UserDetailsModel(User entity) : base(entity)
     {
         _id = entity._id;
+        _password = entity.password;
         Role = entity.role;
         Gender = entity.gender;
         BirthYear = entity.birthYear;
@@ -27,6 +29,7 @@ public class UserDetailsModel : UserModel
     public UserDetailsModel() : base()
     {
         _id = new Guid().ToString();
+        _password = string.Empty;
         CreatedDate = DateTime.Now;
         Role = Role.Customer;
         Gender = Gender.Female;
@@ -38,6 +41,7 @@ public class UserDetailsModel : UserModel
         base.ToEntity(ref entity);
         
         entity._id = _id;
+        entity.password = _password;
         entity.role = Role;
         entity.phoneNumber = PhoneNumber;
         entity.gender = Gender;
@@ -51,6 +55,7 @@ public class UserDetailsModel : UserModel
     {
         var entity = new User();
 
+        entity.password = _password;
         entity.name = Name;
         entity.avatar = Avatar;
         entity.email = Email;
@@ -60,6 +65,11 @@ public class UserDetailsModel : UserModel
         entity.addresses = Addresses;
 
         return entity;
+    }
+
+    public bool IsPasswordMatched(string encryptedPassword)
+    {
+        return _password == encryptedPassword;
     }
 }
 

@@ -7,4 +7,5 @@ public interface IStaffService : IUserService
     public Task<List<UserDetailsModel>?> GetUsersAsync();
     public Task<List<SupplierModel>?> GetSuppliersAsync();
     public Task<bool> AddCustomerAsync(UserDetailsModel newCustomerModel);
+    public Task<bool> RemoveUserAsync(UserDetailsModel userModel);
 }

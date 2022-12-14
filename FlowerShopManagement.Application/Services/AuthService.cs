@@ -126,11 +126,16 @@ public class AuthService : IAuthService
             new AuthenticationProperties { IsPersistent = true });
     }
 
-    public async Task<User>GetUserAsync(HttpContext httpContext)
+    public async Task<UserDetailsModel> GetUserAsync(HttpContext httpContext)
     {
         var userId = httpContext.User.Claims.ElementAt(0).Value;
         var user = await _userRepository.GetById(userId);
-        return user;
+        return new UserDetailsModel(user);
+    }
+
+    public string? GetUserId(HttpContext httpContext)
+    {
+        return httpContext.User.Claims.ElementAt(0).Value;
     }
 
     public string? GetUserRole(HttpContext httpContext)

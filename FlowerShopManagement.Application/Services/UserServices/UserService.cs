@@ -42,7 +42,6 @@ public class UserService : IPersonalService
     public async Task<bool> ChangePasswordAsync(UserDetailsModel userModel, string newPassword)
     {
         var user = new User();
-
         try
         {
             // Model to entity
@@ -67,26 +66,23 @@ public class UserService : IPersonalService
         }
     }
 
-    public async Task<bool> ResetPasswordAsync(UserDetailsModel userModel)
+    public async Task<bool> ResetPasswordAsync(UserDetailsModel user)
     {
-        return await ChangePasswordAsync(userModel, "1");
+        // Should have the email verification over here...
+
+        return await ChangePasswordAsync(user, "1");
     }
 
-    public async Task<bool> RemoveAccountAsync(UserDetailsModel userModel)
+    public async Task<bool> RemoveAccountAsync(string userId, string userRole)
     {
-        var user = new User();
-
         try
         {
-            // Model to entity
-            userModel.ToEntity(ref user);
-
             // Remove cart if user is customer
-            if (user.role == Role.Customer)
-                await _cartRepository.RemoveByField("customerId", user._id);
+            if (userRole == Role.Customer.ToString())
+                await _cartRepository.RemoveByField("customerId", userId);
 
             // Remove user from database
-            await _userRepository.RemoveById(user._id);
+            await _userRepository.RemoveById(userId);
 
             // Successfully removed user
             return true;
