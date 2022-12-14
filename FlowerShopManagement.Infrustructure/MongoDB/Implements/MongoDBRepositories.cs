@@ -175,6 +175,7 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
 {
     public OrderRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 }
+
 public class SupplierRepository : BaseRepository<Supplier>, ISupplierRepository
 {
     public SupplierRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
@@ -190,11 +191,6 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
         var result = await _mongoDbCollection.FindAsync(filter);
         return result.ToList();
     }
-}
-
-public class SupplierRepository : BaseRepository<Supplier>, ISupplierRepository
-{
-    public SupplierRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 }
 
 public class VoucherRepository : BaseRepository<Voucher>, IVoucherRepository

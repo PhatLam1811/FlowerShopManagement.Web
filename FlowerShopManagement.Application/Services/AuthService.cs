@@ -133,11 +133,6 @@ public class AuthService : IAuthService
         return new UserDetailsModel(user);
     }
 
-    public string? GetUserId(HttpContext httpContext)
-    {
-        return httpContext.User.Claims.ElementAt(0).Value;
-    }
-
     public string? GetUserRole(HttpContext httpContext)
     {
         // Get claim's role value
@@ -145,7 +140,7 @@ public class AuthService : IAuthService
     }
     public string? GetUserId(HttpContext httpContext)
     {
-        // Get claim's role value
+        // Get claim's id value
         return httpContext.User.Claims.ElementAt(0).Value;
     }
     public async Task<UserModel?> GetUser(HttpContext httpContext)
