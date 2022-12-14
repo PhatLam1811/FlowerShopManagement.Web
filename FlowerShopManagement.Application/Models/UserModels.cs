@@ -24,6 +24,15 @@ public class UserDetailsModel : UserModel
         LastModified = entity.lastModified;
     }
 
+    public UserDetailsModel() : base()
+    {
+        _id = new Guid().ToString();
+        CreatedDate = DateTime.Now;
+        Role = Role.Customer;
+        Gender = Gender.Female;
+        Addresses = new string[2];
+    }
+
     public new void ToEntity(ref User entity)
     {
         base.ToEntity(ref entity);
@@ -60,6 +69,14 @@ public class UserModel
     public string Avatar { get; set; }
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
+
+    public UserModel()
+    {
+        Name = "";
+        Avatar = "";
+        Email = "";
+        PhoneNumber = "";
+    }
 
     public UserModel(User entity)
     {

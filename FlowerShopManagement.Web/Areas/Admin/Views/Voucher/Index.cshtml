@@ -6,10 +6,9 @@
 
 		<div class="tabCustom row-cols-6 w-100" style="max-height:260px; overflow-y:scroll; overflow-x:hidden">
 			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="All" type="button">All</a>
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Waiting" type="button">Waiting</a>
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Delivering" type="button">Delivering</a>
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Delivered" type="button">Delivered</a>
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Canceled" type="button">Canceled</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Waiting" type="button">Using</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Delivering" type="button">Out of date</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Delivered" type="button">Coming soon</a>
 		</div>
 	</div>
 
@@ -28,4 +27,4 @@
 
 </div>
 
-<button class="btn btn-primary icon-plus rounded position-fixed" style="right:0; bottom:60px;" onclick="location.href = '@(Url.Action("Create", "Order"))'">Create new Order</button>
+<button class="btn btn-primary icon-plus rounded position-fixed" style="right:0; bottom:60px;" onclick="location.href = '@(Url.Action("Create", "Voucher"))'">Create new Voucher</button>

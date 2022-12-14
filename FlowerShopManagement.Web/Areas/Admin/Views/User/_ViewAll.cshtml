@@ -1,0 +1,46 @@
+﻿@model List<UserDetailsModel>
+
+<div class="table-wrap">
+	<table class="table myaccordion table-hover" id="accordion">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Name</th>
+				<th>
+					<div class="d-none d-lg-block">
+						Email
+					</div>
+				</th>
+				<th>Orders</th>
+				<th>Start Date</th>
+				<th>Role</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed">
+				@for (var i = 1; i <= Model.Count; i++)
+				{
+				<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
+
+					<th scope="row">@i</th>
+					<td>@Model[i-1].Name</td>
+					<td>
+						<div class="d-none d-lg-block">
+								@Model[i-1].Email
+						</div>
+					</td>
+					<td></td>
+					<td>@Model[i-1].CreatedDate.ToShortDateString()</td>
+					<td>@Model[i-1].Role.ToString()</td>
+					<td>
+						<a asp-action="Edit" asp-controller="User" asp-area="Admin" class="border-1 link-info table-icon">
+							<i class="fas fa-edit"></i>
+						</a>
+					</td>
+				</tr>
+				}
+			</tr>
+		</tbody>
+	</table>
+</div>

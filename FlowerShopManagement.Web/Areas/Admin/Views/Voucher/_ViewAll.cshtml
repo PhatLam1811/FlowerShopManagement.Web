@@ -1,0 +1,56 @@
+﻿@model List<VoucherDetailModel>
+
+<div class="table-wrap">
+	<table class="table myaccordion table-hover" id="accordion">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th>Code</th>
+				<th>
+					<div class="d-none d-lg-block">
+						Condition
+					</div>
+				</th>
+				<th>Value</th>
+				<th>Start Date</th>
+				<th>
+					<div class="d-none d-lg-block">
+						Expire
+					</div>
+				</th>
+				<th>State</th>
+				<th></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed">
+				@for (var i = 1; i <= Model.Count; i++)
+				{
+				<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
+
+					<th scope="row">@i</th>
+					<td>@Model[i-1].Code</td>
+					<td>
+						<div class="d-none d-lg-block">
+								@Model[i-1].ConditionValue
+						</div>
+					</td>
+					<td>@Model[i-1].ConditionValue</td>
+					<td>$@Model[i-1].CreatedDate</td>
+					<td>
+						<div class="d-none d-lg-block">
+								@Model[i-1].ExpiredDate.Value.ToString("dd MMM y HH:mm")
+						</div>
+					</td>
+					<td>@Model[i-1].State</td>
+					<td>
+						<a asp-action="Edit" asp-controller="Voucher" asp-area="Admin" class="border-1 link-info table-icon">
+							<i class="fas fa-edit"></i>
+						</a>
+					</td>
+				</tr>
+				}
+			</tr>
+		</tbody>
+	</table>
+</div>

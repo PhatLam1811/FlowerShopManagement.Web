@@ -10,6 +10,11 @@ public class SupplierDetailModel : SupplierModel
     public string Address { get; set; }
     public string Description { get; set; }
 
+    public SupplierDetailModel() : base()
+    {
+       
+    }
+
     public SupplierDetailModel(Supplier supplier) : base(supplier)
     {
         _id = supplier._id;
@@ -23,6 +28,13 @@ public class SupplierModel
     public string Name { get; set; }
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
+
+    public SupplierModel()
+    {
+        Name = "";
+        Email = "";
+        PhoneNumber = "";
+    }
 
     public SupplierModel(Supplier supplier)
     {
