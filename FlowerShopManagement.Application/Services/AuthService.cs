@@ -80,6 +80,19 @@ public class AuthService : IAuthService
         }
     }
 
+    public async Task<bool> SignOutAsync(HttpContext httpContext)
+    {
+        try
+        {
+            await httpContext.SignOutAsync("Cookies");
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
     public async Task<UserModel?> AuthenticateAsync(string id)
     {
         // Try to find the matched user in database
