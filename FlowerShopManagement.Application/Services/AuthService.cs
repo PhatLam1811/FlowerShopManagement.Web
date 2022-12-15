@@ -126,11 +126,11 @@ public class AuthService : IAuthService
             new AuthenticationProperties { IsPersistent = true });
     }
 
-    public async Task<User>GetUserAsync(HttpContext httpContext)
+    public async Task<UserDetailsModel> GetUserAsync(HttpContext httpContext)
     {
         var userId = httpContext.User.Claims.ElementAt(0).Value;
         var user = await _userRepository.GetById(userId);
-        return user;
+        return new UserDetailsModel(user);
     }
 
     public string? GetUserRole(HttpContext httpContext)
@@ -140,7 +140,7 @@ public class AuthService : IAuthService
     }
     public string? GetUserId(HttpContext httpContext)
     {
-        // Get claim's role value
+        // Get claim's id value
         return httpContext.User.Claims.ElementAt(0).Value;
     }
     public async Task<UserModel?> GetUser(HttpContext httpContext)

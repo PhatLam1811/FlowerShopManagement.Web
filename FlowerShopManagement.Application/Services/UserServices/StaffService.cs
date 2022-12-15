@@ -99,6 +99,28 @@ public class StaffService : UserService, IStaffService
         }
     }
 
+    public async Task<bool> RemoveUserAsync(UserDetailsModel userModel)
+    {
+        var user = new User();
+
+        try
+        {
+            // Model to entity
+            userModel.ToEntity(ref user);
+
+            // Remove the selected user account
+            await RemoveAccountAsync(user._id, user.role.ToString());
+
+            // Successfully removed the selected account
+            return true;
+        }
+        catch
+        {
+            // Failed to remove the selected account
+            return false;
+        }
+    }
+
     public async Task<UserDetailsModel?> GetUserByPhone(string phoneNb)
     {
 
