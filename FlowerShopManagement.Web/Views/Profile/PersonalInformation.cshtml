@@ -1,0 +1,50 @@
+﻿@model UserDetailsModel
+
+@{
+	ViewData["Title"] = "Personal Information";
+}
+
+<h2 class="mt-4">@ViewData["Title"]</h2>
+
+<form class="mt-3">
+	<div class="row">
+		<div class="col-8">
+			<div class="row">
+				<div class="col form-group">
+					<label class="form-label" for="exampleFormControlInput1">Name</label>
+					<input type="text" asp-for="Name" class="form-control form-control-lg h5 py-3" placeholder="">
+					<span asp-validation-for="Name"></span>
+				</div>
+				<div class="col form-group">
+					<label class="form-label" for="exampleFormControlInput1">Gender</label>
+					<input type="text" asp-for="Gender" class="form-control form-control-lg h5 py-3" placeholder="">
+					<span asp-validation-for="Gender"></span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col form-group">
+					<label class="form-label" for="exampleFormControlInput1">BirthYear</label>
+					<input type="number" asp-for="BirthYear" class="form-control form-control-lg h5 py-3" placeholder="">
+					<span asp-validation-for="BirthYear"></span>
+				</div>
+				<div class="col form-group">
+					<label class="form-label" for="exampleFormControlInput1">Phone</label>
+					<input type="tel" asp-for="PhoneNumber" class="form-control form-control-lg h5 py-3" placeholder="">
+					<span asp-validation-for="PhoneNumber"></span>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col form-group">
+					<label class="form-label" for="exampleFormControlInput1">Email</label>
+					<input type="email" asp-for="Email" class="form-control form-control-lg h5 py-3" placeholder="">
+					<span asp-validation-for="Email"></span>
+				</div>
+			</div>
+		</div>
+		<div class="col-4">
+			@*avt*@
+		</div>
+	</div>
+
+	<button class="btn btn-primary w-100 mt-5">Submit</button>
+</form>

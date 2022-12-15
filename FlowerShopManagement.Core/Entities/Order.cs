@@ -21,9 +21,10 @@ public class Order
 	public DeliverryMethods _deliveryMethod { get; set; }
 	public long _deliveryCharge { get; set; }
 	public string? _notes { get; set; }
+	public string? _address { get; set; }
 
 	public Order(string id = "", string? accountID = null, DateTime? date = null, List<Product>? products = null, string? customerName = "", string? phoneNumber = "",
-		long total = 0, Status status = Status.sampleStatus, DeliverryMethods deliveryMethod = DeliverryMethods.sampleMethod, long deliveryCharge = 0, string? notes = null)
+		long total = 0, Status status = Status.sampleStatus, DeliverryMethods deliveryMethod = DeliverryMethods.sampleMethod, long deliveryCharge = 0, string? notes = null, string? address = null)
 	{
 		if (id != "")
 			_id = id;
@@ -38,6 +39,7 @@ public class Order
 		_notes = notes;
 		_customerName = customerName;
 		_phoneNumber = phoneNumber;
+		_address = address;
 	}
 	public Order(Order s)
 	{
@@ -51,6 +53,7 @@ public class Order
 		_notes = s._notes;
 		_customerName = s._customerName;
 		_phoneNumber = s._phoneNumber;
+		_address = s._address;
 	}
 
 	public Order()
