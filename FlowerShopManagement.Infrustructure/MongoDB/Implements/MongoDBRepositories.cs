@@ -175,6 +175,7 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
 {
     public OrderRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 }
+
 public class SupplierRepository : BaseRepository<Supplier>, ISupplierRepository
 {
     public SupplierRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }

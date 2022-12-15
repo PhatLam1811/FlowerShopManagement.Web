@@ -8,4 +8,5 @@ public interface IStaffService : IUserService
     public Task<UserDetailsModel?> GetUserByPhone(string phoneNb);
     public Task<List<SupplierModel>?> GetSuppliersAsync();
     public Task<bool> AddCustomerAsync(UserDetailsModel newCustomerModel);
+    public Task<bool> RemoveUserAsync(UserDetailsModel userModel);
 }
