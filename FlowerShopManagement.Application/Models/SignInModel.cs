@@ -16,6 +16,7 @@ namespace FlowerShopManagement.Application.Models
 
         [Required]
         [MinLength(6, ErrorMessage = "Password have to be greater than 6 characters")]
+        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Password format invalid")]
         public string Password { set; get; } = "";
     }
 }
