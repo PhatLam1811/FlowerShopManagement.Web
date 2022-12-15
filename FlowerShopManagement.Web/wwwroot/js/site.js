@@ -19,6 +19,22 @@ function showContent2(url, title) {
     })
 }
 
+function showPartialView(url) {
+
+    $.ajax({
+        type: "GET",
+        url: url,
+        data: {},
+        success: function (res) {
+            $("#pw").html(res);
+        },
+        error: function (err) {
+            console.log(err);
+            alert(err);
+        }
+    })
+}
+
 function OpenPostDialog(url, title) {
     try {
         $.ajax({
