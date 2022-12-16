@@ -35,11 +35,11 @@ else if (true)
             </li>
             </li>
             <li class="nav-item px-3">
-                <a class="nav-link @(ViewBag.Orders==true?"active":"")" asp-area="" asp-controller="Order" asp-action="Index">Order</a>
+                <a class="nav-link @(ViewBag.Order==true?"active":"")" asp-area="" asp-controller="Order" asp-action="Index">Order</a>
             </li>
-            @*<li class="nav-item px-3">
-                <a class="nav-link text-secondary @(ViewBag.Profile==true?"active":"")" asp-area="" asp-controller="Profile" asp-action="Index">Account</a>
-            </li>*@
+            <li class="nav-item px-3">
+                <a class="nav-link @(ViewBag.Profile==true?"active":"")" asp-area="" asp-controller="Profile" asp-action="Index">Account</a>
+            </li>
                 <li class="nav-item px-3">
                 <a class="nav-link @(ViewBag.About==true?"active":"")" asp-area="" asp-controller="Home" asp-action="About">About</a>
             </li>

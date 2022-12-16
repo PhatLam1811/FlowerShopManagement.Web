@@ -1,75 +1,32 @@
-﻿@using FlowerShopManagement.Web.Views.Shared.Components;
+﻿@model List<OrderModel>
 
 @{
 	ViewData["Title"] = "Order Page";
 }
+<div class="row">
+	<div class="col-lg-3 d-lg-block collapse borderCustom1 um">
+		<p class="row-1 h4 mb-2 mt-3">Status</p>
 
-<div class="row mt-3">
-	<div class="col-6">
-		<div>
-			<p class="h3 mb-3">Order</p>
-			<component type="typeof(OrderCardItem)" render-mode="Static" />
-			<component type="typeof(OrderCardItem)" render-mode="Static" />
+		<div class="tabCustom row-cols-6 w-100" style="max-height:260px; overflow-y:scroll; overflow-x:hidden">
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="All" type="button">All</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Waiting" type="button">Waiting</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Delivering" type="button">Delivering</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Delivered" type="button">Delivered</a>
 		</div>
 	</div>
-	<div class="col-2"></div>
-	<div class="col-4 d-flex flex-column justify-content-between">
-		<div>
-			<div class="">
-				<p class="h3 mb-2">Information</p>
-				<div>
-					<p class="m-0">Customer Name</p>
-					<p class="m-0">094xxxxxx73</p>
-					<p class="m-0">Di An, Binh Duong</p>
-				</div>
-			</div>
-			<div class="mt-4 row">
-				<div class="col-6">
-					<p class="h3 mb-2">Payment Method</p>
-					<div class="form-check">
-						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-						<label class="form-check-label" for="inlineRadio1">cash</label>
-					</div>
-					<div class="form-check">
-						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-						<label class="form-check-label" for="inlineRadio1">atm</label>
-					</div>
-				</div>
-				<div class="col-6">
-					<p class="h3 mb-2">Delivery Method</p>
-					<div class="form-check">
-						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-						<label class="form-check-label" for="inlineRadio1">fast</label>
-					</div>
-					<div class="form-check">
-						<input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="option1">
-						<label class="form-check-label" for="inlineRadio1">normal</label>
-					</div>
-				</div>
-			</div>
+
+
+	<div class="col-lg-9 col-12 mt-3 mt-lg-0">
+		<div class="d-flex justify-content-end d-lg-none">
+			<button class="filter-icon border-0 fs-3" data-bs-toggle="collapse" data-bs-target=".um" aria-controls="navbarSupportedContent"
+					aria-expanded="false" aria-label="Toggle navigation">
+				<span class="h5">Filter</span>
+			</button>
 		</div>
-		<div>
-			<div class="mt-5">
-				<p class="h3 mb-2">Voucher</p>
-				<div class="w-100 d-flex">
-					<input class="flex-grow-1 form-control" type="text" />
-					<button class="btn btn-primary">Check</button>
-				</div>
-			</div>
-			<div class="mt-5 d-flex justify-content-between">
-				<p class="h3 text-primary">Total</p>
-				<p class="h3 text-primary">$20</p>
-			</div>
-			<div class="mt-2 d-flex justify-content-between">
-				<p class="caption">Discount</p>
-				<p class="caption">20.000</p>
-			</div>
-			<div class="mt-2 d-flex justify-content-between">
-				<p class="h2">Balance</p>
-				<p class="h2">$40</p>
-			</div>
-			<button class="btn btn-primary w-100 mt-4">Confirm Order and Pay</button>
-		</div>
+
+		<partial name="_ViewAll" model=@Model />
+
 	</div>
+
 </div>
 

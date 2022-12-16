@@ -162,14 +162,14 @@ public class HomeController : Controller
         List<LowOnStockProductModel> supplyItemModels = new List<LowOnStockProductModel>();
 
         // Create supply request form
-        var requestForm = new SupplyFormModel(new List<LowOnStockProductModel>(), new List<SupplierModel>());
+        //var requestForm = new SupplyFormModel(new List<LowOnStockProductModel>(), new List<SupplierModel>());
 
         //_gmailServices.Send();
         //await _mailServices.Send(requestForm);
 
         //var currentUser = await _authServices.RegisterAsync(HttpContext, "jah@gmail.com", "0932826231", "123123");
 
-        //var currentUser = await _authServices.SignInAsync(HttpContext, "jahdkd@gmail.com", "123123");
+        var currentUser = await _authServices.SignInAsync(HttpContext, "jahdkd@gmail.com", "123123");
 
         if (_authServices.GetUserRole(HttpContext) == Role.Customer.ToString())
             return false;

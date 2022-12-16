@@ -1,14 +1,30 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model UserDetailsModel
 
-<div class="form-floating">
-	<input class="form-control" />
-	<label class="form-label">Name</label>
-	<span class="text-danger"></span>
-		<form asp-action="Index" method="Index()">
-		<button class="btn btn-default">Button</button>
-	</form>
+@{
+	ViewData["Title"] = "Personal Page";
+}
+<div class="row">
+	<div class="col-lg-3 d-lg-block collapse borderCustom1 um">
+		<div class="tabCustom row-cols-6 w-100 mt-3" style="max-height:260px;">
+			<button class="tabCustom" style="height:50px;" onclick="showPartialView('@Url.Action("PersonalInformation","Profile")')" type="button">Personal Information</button>
+			<button class="tabCustom" style="height:50px;" onclick="showPartialView('@Url.Action("ChangePassword","Profile")')" type="button">Change Password</button>
+			<button class="tabCustom" style="height:50px;" onclick="showPartialView('@Url.Action("ManageAddress","Profile")')" type="button">Manage Address</button>
+			<button class="tabCustom" style="height:50px;" onclick="showPartialView('@Url.Action("Voucher","Profile")')" type="button">Voucher</button>
+			<button class="tabCustom" style="height:50px;" onclick="showPartialView('@Url.Action("ManageAccount","Profile")')" type="button">Manage Account</button>
+		</div>
+	</div>
+
+
+	<div class="col-lg-9 col-12 mt-3 mt-lg-0">
+		<div class="d-flex justify-content-end d-lg-none">
+			<button class="filter-icon border-0 fs-3" data-bs-toggle="collapse" data-bs-target=".um" aria-controls="navbarSupportedContent"
+					aria-expanded="false" aria-label="Toggle navigation">
+				<span class="h5">Menu</span>
+			</button>
+		</div>
+		<div id="pw">
+			<partial name="PersonalInformation" model="@Model"/>
+		</div>
+	</div>
+
 </div>

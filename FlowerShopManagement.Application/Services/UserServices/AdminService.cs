@@ -27,7 +27,6 @@ public class AdminService : StaffService, IAdminService
     {
         try
         {
-            // Model to entity
             var staff = newStaffModel.ToNewEntity();
 
             // Set default password - "1"
@@ -38,7 +37,6 @@ public class AdminService : StaffService, IAdminService
             if (role == Role.Customer) return false; 
             staff.role = role;
 
-            // Add to database
             return await _userRepository.Add(staff);
         }
         catch
@@ -52,10 +50,8 @@ public class AdminService : StaffService, IAdminService
     {
         try
         {
-            // Model to entity
             var supplier = newSupplierModel.ToNewEntity();
 
-            // Added to database
             return await _supplierRepository.Add(supplier);
         }
         catch
@@ -65,9 +61,38 @@ public class AdminService : StaffService, IAdminService
         }
     }
 
-    public Task<bool> RemoveSupplierAsync(SupplierModel supplierModel)
+    public async Task<bool> EditSupplierAsync(SupplierDetailModel supplierModel)
     {
-        throw new NotImplementedException();
+        var supplier = new Supplier();
+
+        try
+        {
+            supplierModel.ToEntity(ref supplier);
+
+            return await _supplierRepository.UpdateById(supplier._id, supplier);
+        }
+        catch
+        {
+            // Failed to update the selected supplier
+            return false;
+        }
+    }
+
+    public async Task<bool> RemoveSupplierAsync(SupplierModel supplierModel)
+    {
+        var supplier = new Supplier();
+
+        try
+        {
+            supplierModel.ToEntity(ref supplier);
+
+            return await _supplierRepository.RemoveById(supplier._id);
+        }
+        catch
+        {
+            // Failed to remove the selected supplier
+            return false;
+        }
     }
 
     public async Task<bool> EditUserRoleAsync(UserDetailsModel userModel, Role role)
