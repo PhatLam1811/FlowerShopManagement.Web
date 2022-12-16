@@ -136,7 +136,6 @@ function jQueryAjaxReloadPickingTable(form) {
     var obj = new FormData(form);
     console.log(obj);
 
-    debugger;
     try {
         $.ajax({
             type: 'POST',

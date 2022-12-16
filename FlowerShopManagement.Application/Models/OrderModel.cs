@@ -14,7 +14,7 @@ public class OrderModel
 	public Status Status { get; set; }
 	public List<ProductModel> Products { get; set; } = new List<ProductModel>();
 	public string? Notes { get; set; }
-	public DateTime? Date { get; set; }
+	public DateTime? Date { get; set; } = default(DateTime?);
 	public int Amount { get; set; } = 0;
 	public long Total { get; set; } = 0;
 	public long DeliveryCharge { get; set; }
@@ -53,6 +53,8 @@ public class OrderModel
 
 		}
 		Notes = entity._notes;
+		Total = entity._total;
+		Date = entity._date;
 	}
 
 	public Order ToEntity()

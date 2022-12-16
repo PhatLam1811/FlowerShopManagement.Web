@@ -36,13 +36,13 @@
 						 height="40" width="40"
 						 asp-append-version="true" />
 						}*@
-						@Model.[i-1].FullName
+						@Model[i-1].Name
 					</td>
 					<td> @Model[i-1].Email </td>
 					<td> @Model[i-1].PhoneNumber </td>
 					<td> @Model[i-1].BirthYear </td>
 					<td>
-						<button type="button" class="btn btn-secondary" onclick="jQueryAjaxPickCustomer('@Url.Action("PickItemDialog","Order",null,Context.Request.Scheme)',@Model[i-1].Email)"> Pick</button>
+						<button type="button" class="btn btn-secondary" onclick="jQueryAjaxPickCustomer('@Url.Action("PickedCustomer","Order")','@Model[i-1].PhoneNumber')"> Pick</button>
 					</td>
 
 				</tr>

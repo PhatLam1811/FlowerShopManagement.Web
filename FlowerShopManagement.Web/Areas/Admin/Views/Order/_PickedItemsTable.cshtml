@@ -18,12 +18,11 @@
                 @for (var i = 1; i <= Model.Count; i++)
                 {
                     <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
-
                         <th scope="row">@i</th>
-                        <td>@Model[i-1].Name</td>
-                        <td>@Model[i-1].Name</td>
-                        <td>$@Model[i-1].UniPrice</td>
-                        <td>@Model[i-1].Amount</td>
+                        <td name="Name">@Model[i-1].Name</td>
+                        <td name="Color">@Model[i-1].Color</td>
+                        <td name="UniPrice">$@Model[i-1].UniPrice</td>
+                        <td name="Amount">@Model[i-1].Amount</td>
                         <td>
                             <a class="border-1 table-icon text-secondary">
                                 <i class="fa-solid fa-trash-can"></i>

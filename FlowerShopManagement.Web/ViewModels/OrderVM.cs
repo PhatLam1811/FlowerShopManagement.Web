@@ -4,6 +4,7 @@ namespace FlowerShopManagement.Web.ViewModels
 {
     public class OrderVM
     {
+        public List<OrderModel> orderMs = new List<OrderModel>();
         public OrderModel? Order = new OrderModel();
         public UserDetailsModel? Customer = null;
         public List<ProductModel>? ProductModels = new List<ProductModel>();

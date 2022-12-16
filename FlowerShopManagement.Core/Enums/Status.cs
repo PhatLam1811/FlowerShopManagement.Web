@@ -7,5 +7,7 @@ public enum Status
     Paying = 2,
     Purchased = 3,
     Delivering = 4,
-    Deliverd = 5,
+    Delivered = 5,
+    OutOfStock = 6,
+    Canceled = 7,
 }
