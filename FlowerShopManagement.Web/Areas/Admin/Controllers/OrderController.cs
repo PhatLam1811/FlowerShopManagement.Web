@@ -5,6 +5,7 @@ using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Web.ViewModels;
+using MailKit.Search;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
@@ -24,7 +25,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         IProductRepository _productRepository;
         IUserRepository _userRepository;
 
-        public OrderController(ISaleService saleServices, IOrderRepository orderRepository, IProductRepository productRepository, 
+        public OrderController(ISaleService saleServices, IOrderRepository orderRepository, IProductRepository productRepository,
             IUserRepository userRepository, IStockService stockServices, IUserService userServices, IStaffService staffService)
         {
             _orderRepository = orderRepository;
@@ -129,7 +130,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
                 Need a current picked customer
                 PageList<>
 			*/
-            if(productMs == null || customerMs == null) return NotFound();
+            if (productMs == null || customerMs == null) return NotFound();
             OrderVM orderVM = new OrderVM();
             orderVM.AllProductModels = productMs;
             orderVM.customerMs = customerMs;
@@ -151,28 +152,34 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> PickItemDialog(string filter = "", string om = "") // Also handle if there is a filter / search
+        public async Task<IActionResult> PickItemDialog(string filter = "") // Also handle if there is a filter / search
         {
-            string s = TempData["orderVM"] as string ?? "";
             OrderVM? orderVM = null;
-            if (om != "")
+
+            if (TempData["orderVM"] != null)
             {
-                orderVM = JsonConvert.DeserializeObject<OrderVM>(om);
+                string s = TempData["orderVM"] as string ?? "";
+                if (s != "")
+                {
+                    orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
+                }
             }
+
 
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
             if (orderVM != null)
             {
-                TempData["orderVM1"] = JsonConvert.SerializeObject( orderVM, Newtonsoft.Json.Formatting.Indented);
+                orderVM.AllProductModels = productMs;
+                TempData["orderVM1"] = JsonConvert.SerializeObject(orderVM, Formatting.Indented);
             }
-            int pageSizes = 8;
-            return PartialView("_PickItem", PaginatedList<ProductModel>.CreateAsync(productMs, 1, 20)); // This will be an view for dialog / modal
+            int pageSizes = 99;
+            return PartialView("_PickItem", PaginatedList<ProductModel>.CreateAsync(productMs, 1, pageSizes)); // This will be an view for dialog / modal
         }
 
         [HttpPost]
         public IActionResult PickedAnItem(List<string> ids, List<int> amounts) // These 2 list should have the same size // need 1 more parameters like PickItemDialog viewmodel
         {
-             string s = TempData["orderVM1"] as string ?? "";
+            string s = TempData["orderVM1"] as string ?? "";
             OrderVM? orderVM = null;
             if (s != "")
             {
@@ -189,7 +196,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
                     if (amounts[i] != 0 && ids[i] != "")
                     {
 
-                        ProductModel? product = orderVM.AllProductModels.FirstOrDefault(o => o.Id.Equals(ids[i]));
+                        ProductModel? product = orderVM.AllProductModels.FirstOrDefault(o => o.Id != null && o.Id.Equals(ids[i]));
                         if (product != null)
                         {
                             orderVM.ProductModels.Add(product);
@@ -223,19 +230,56 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             //Should update Viewmodel for newest updates
             return PartialView(/*Coult be a ViewModel in here*/);// This will be an update view for current order table
         }
-
         [HttpPost]
-        public async Task<IActionResult> PickCustomer(string phone)
+        public async Task<IActionResult> PickCustomerDialog(string filter = "") // Also handle if there is a filter / search
         {
-            OrderModel? orderModel = null;
+            OrderVM? orderVM = null;
+            
 
-            var user = await _staffService.GetUserByPhone(phone);
-            if (user != null)
+            if (TempData["orderVM"] != null)
             {
-                TempData["CurrentUser"] = user;
-                return PartialView("_PickedCustomer"/*Coult be a ViewModel in here*/); // This will be an update view for current customer table
+                string s = TempData["orderVM"] as string ?? "";
+                if (s != "")
+                {
+                    orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
+                }
+
+                List<UserDetailsModel>? userMS = await _staffService.GetUsersAsync();
+                if (orderVM != null)
+                {
+                    orderVM.customerMs = userMS;
+                    TempData["orderVM1"] = JsonConvert.SerializeObject(orderVM, Formatting.Indented);
+                }
+                if (userMS != null)
+                {
+                    int pageSizes = 99;
+                    return PartialView("_PickCustomer", PaginatedList<UserDetailsModel>.CreateAsync(userMS, 1, pageSizes)); // This will be an view for dialog / modal
+                }
 
             }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PickedCustomer(string phone)
+        {
+            OrderVM? orderModel = null;
+            if (TempData["orderVM1"] != null)
+            {
+                string s = TempData["orderVM1"] as string ?? "";
+                if (s != "")
+                {
+                    orderModel = JsonConvert.DeserializeObject<OrderVM>(s);
+                }
+                var user = await _staffService.GetUserByPhone(phone);
+                if (user != null && orderModel != null)
+                {
+                    orderModel.Customer = user;
+                    return PartialView("_PickedCustomer"/*Coult be a ViewModel in here*/); // This will be an update view for current customer table
+
+                }
+            }
+
             return NotFound();
         }
 
