@@ -160,8 +160,6 @@ function jQueryAjaxReloadPickingTable(form) {
             contentType: false,
             processData: false,
             success: function (res) {
-                alert(res);
-
                 $('#picked-items').html(res);
                 $("#form-modal .modal-body").html('');
                 $("#form-modal .modal-title").html('');
