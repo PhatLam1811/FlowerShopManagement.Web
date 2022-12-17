@@ -21,7 +21,7 @@ public class AuthService : IAuthService
         _cartRepository = cartRepository;
     }
 
-    public async Task<UserModel?> RegisterAsync(HttpContext httpContext, string email, string phoneNb, string password)
+    public async Task<bool> RegisterAsync(HttpContext httpContext, string email, string phoneNb, string password)
     {
         var customer = new User();
         var cart = new Cart(customer._id);
@@ -43,40 +43,49 @@ public class AuthService : IAuthService
             // HttpContext sign in
             await HttpSignIn(httpContext, customer._id, customer.role.ToString());
 
-            return new UserModel(customer);
+            // Set session
+            httpContext.Session.SetString("NameIdentifier", customer._id);
+            httpContext.Session.SetString("Role", customer.role.ToString());
+            httpContext.Session.SetString("Username", customer.name);
+
+            return true;
         }
         catch
         {
             // Failed to register new customer
-            return null;
+            return false;
         }
     }
 
-    public async Task<UserModel?> SignInAsync(HttpContext httpContext, string emailOrPhoneNb, string password)
+    public async Task<bool> SignInAsync(HttpContext httpContext, string emailOrPhoneNb, string password)
     {
         try
         {
-            // Try to find the matched user in database
             var user = await _userRepository.GetByEmailOrPhoneNb(emailOrPhoneNb);
 
-            // Counldn't find the user with given email or phoneNb
-            if (user == null) return null;
+            // Wrong email or phone number
+            if (user == null) return false;
 
             // Encrypt the input password using MD5
             string encryptedPass = Validator.MD5Hash(password);
 
             // Wrong password
-            if (!user.password.Equals(encryptedPass)) return null;
+            if (!user.password.Equals(encryptedPass)) return false;
 
             // HttpContext sign in
             await HttpSignIn(httpContext, user._id, user.role.ToString());
 
-            return new UserModel(user);
+            // Set session
+            httpContext.Session.SetString("NameIdentifier", user._id);
+            httpContext.Session.SetString("Role", user.role.ToString());
+            httpContext.Session.SetString("Username", user.name);
+
+            return true;
         }
         catch
         {
             // Failed to sign in
-            return null;
+            return false;
         }
     }
 
@@ -91,17 +100,6 @@ public class AuthService : IAuthService
         {
             return false;
         }
-    }
-
-    public async Task<UserModel?> AuthenticateAsync(string id)
-    {
-        // Try to find the matched user in database
-        var user = await _userRepository.GetById(id);
-
-        // Counldn't find the user with given id
-        if (user == null) return null;
-
-        return new UserModel(user);
     }
 
     private async Task HttpSignIn(HttpContext httpContext, string id, string role)
@@ -124,15 +122,11 @@ public class AuthService : IAuthService
         await httpContext.SignInAsync(
             scheme, principal,
             new AuthenticationProperties { IsPersistent = true });
-
-        // Set session
-        httpContext.Session.SetString("NameIdentifier", id);
-        httpContext.Session.SetString("Role", role);
     }
 
     public async Task<UserDetailsModel> GetUserAsync(HttpContext httpContext)
     {
-        var userId = httpContext.User.Claims.ElementAt(0).Value;
+        var userId = GetUserId(httpContext);
         var user = await _userRepository.GetById(userId);
         return new UserDetailsModel(user);
     }
@@ -140,18 +134,17 @@ public class AuthService : IAuthService
     public string? GetUserRole(HttpContext httpContext)
     {
         if (httpContext.User.Claims.ElementAt(1) != null)
-            return httpContext.User.Claims.ElementAt(1).Value;
+            return httpContext.User.Claims.ElementAt(1).Value; // Get from cookies
         else
-            return httpContext.Session.GetString("Role");
+            return httpContext.Session.GetString("Role"); // Get from session
     }
 
     public string? GetUserId(HttpContext httpContext)
     {
-        // Get claim's id value
         if (httpContext.User.Claims.ElementAt(0) != null)
-            return httpContext.User.Claims.ElementAt(0).Value;
+            return httpContext.User.Claims.ElementAt(0).Value; // Get from cookies
         else
-            return httpContext.Session.GetString("NameIdentifier");
+            return httpContext.Session.GetString("NameIdentifier"); // Get from session
     }
     
     public async Task<UserModel?> GetUser(HttpContext httpContext)

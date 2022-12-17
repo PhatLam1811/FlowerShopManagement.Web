@@ -1,18 +1,11 @@
-﻿    using FlowerShopManagement.Application.Interfaces;
+﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Web.ViewModels;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-
 using FlowerShopManagement.Infrustructure.Mail;
 using FlowerShopManagement.Application.Models;
-using FlowerShopManagement.Core.Entities;
-using System.Security.Claims;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Enums;
-using FlowerShopManagement.Application.Services;
-
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
 
 namespace FlowerShopManagement.Web.Controllers;
 
@@ -158,46 +151,15 @@ public class HomeController : Controller
 
     public async Task<bool> SignIn()
     {
-        // Create request items list
-        List<LowOnStockProductModel> supplyItemModels = new List<LowOnStockProductModel>();
+        try
+        {
+            var currentUser = await _authServices.SignOutAsync(HttpContext);
 
-        // Create supply request form
-        //var requestForm = new SupplyFormModel(new List<LowOnStockProductModel>(), new List<SupplierModel>());
-
-        //_gmailServices.Send();
-        //await _mailServices.Send(requestForm);
-
-        //var currentUser = await _authServices.RegisterAsync(HttpContext, "jah@gmail.com", "0932826231", "123123");
-
-        var currentUser = await _authServices.SignInAsync(HttpContext, "jahdkd@gmail.com", "123123");
-
-        if (_authServices.GetUserRole(HttpContext) == Role.Customer.ToString())
-            return false;
-        else
             return true;
-
-        #region Authenticate login code
-        //// Authenticate input email or phone Nb & password
-        //var result = await _authServices.AuthenticateAsync("phatlam1811@gmail.com", "123123");
-
-        //// Invalid account
-        //if (_authServices.GetUser() == null) return View("Error");
-
-        //// Get user's id and role
-        //string userId = _authServices.GetUser()._id;
-        //string userRole = _authServices.GetUser().role.Value;
-
-        //// Cookies authenticating section
-        //var principal = _authServices.CreateUserClaims(userId, userRole);
-
-        //await HttpContext.SignInAsync(
-        //    CookieAuthenticationDefaults.AuthenticationScheme,
-        //    principal,
-        //    new AuthenticationProperties { IsPersistent = true });
-
-        //return RedirectToAction("Index", "Profile");
-        #endregion
+        }
+        catch
+        {
+            return false;
+        }
     }
-
-
 }

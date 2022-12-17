@@ -14,39 +14,13 @@ public class AuthenticationController : Controller
         _authServices = authServices;
     }
 
-    // ============ SIGN IN PAGE ============
-    //[HttpGet]
-    //public IActionResult SignIn()
-    //{
-    //    return View();
-    //}
+    // ========================== VIEWS ========================== //
 
-    // ============ REGISTER PAGE ============
-    //[HttpGet]
-    //public IActionResult Register()
-    //{
-    //    return View();
-    //}
-    public IActionResult Index()
-    {
-        return View();
-    }
-
+    #region Views
     [HttpGet]
     public IActionResult Register()
     {
         return View();
-    }
-
-    // ============ REGISTER ACTION ============
-    [HttpPost]
-    public async Task<UserModel?> Register(RegisterModel model)
-    {
-        var currentUser = await _authServices.RegisterAsync(HttpContext, model.Email, model.PhoneNumber, model.Password);
-
-        return currentUser;
-
-        // return CustomerPageView(currentUser);
     }
 
     [HttpGet]
@@ -54,28 +28,61 @@ public class AuthenticationController : Controller
     {
         return View();
     }
+    #endregion
 
-    // ============ SIGN IN ACTION ============
+    // ========================== ACTIONS ========================== //
+
+    #region Actions
     [HttpPost]
-    public async Task<IActionResult> SignIn(SignInModel model)
+    public async Task<IActionResult> RegisterAsync(RegisterModel model)
     {
-        // model state
-        if (ModelState.IsValid)
-        {
-            var currentUser = await _authServices.SignInAsync(HttpContext, model.EmailorPhone, model.Password);
+        // Model validation
+        if (!ModelState.IsValid) return Register();
 
-            return RedirectToAction("Index", "Home");
-        }
+        string email = model.Email;
+        string phoneNb = model.PhoneNumber;
+        string password = model.Password;
+
+        // Email verification
+
+        // Register new user
+        var isSuccess = await _authServices.RegisterAsync(HttpContext, email, phoneNb, password);
+
+        // Redirect
+        if (isSuccess)
+            return RedirectToAction("Index", "Home"); // Successfully registered!
         else
-            return View();
-
-        //var currentUser = await _authServices.SignInAsync(HttpContext, model.Email, model.Password);
-
-        //return RedirectToAction("Index", "Home");
-
-        //if (_authServices.GetUserRole == Role.Customer.Value)
-        //    return CustomerPageView(userModel);
-        //else
-        //    return StaffPageView(userModel);
+            return Register(); // Failed to register!
     }
+
+    [HttpPost]
+    public async Task<IActionResult> SignInAsync(SignInModel model)
+    {
+        // Model validation
+        if (!ModelState.IsValid) return SignIn();
+
+        string emailOrPhoneNb = model.EmailorPhone;
+        string password = model.Password;
+
+        // Sign in to system
+        var isSuccess = await _authServices.SignInAsync(HttpContext, emailOrPhoneNb, password);
+
+        // Redirect
+        if (isSuccess)
+            return RedirectToAction("Index", "Home"); // Successfully signed in!
+        else
+            return SignIn(); // Failed to sign in!
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SignOutAsync()
+    {
+        var isSuccess = await _authServices.SignOutAsync(HttpContext);
+
+        if (isSuccess)
+            return RedirectToAction("Index", "Home"); // Signed out successfully!
+        else
+            return View(); // Failed to sign out!
+    }
+    #endregion
 }
