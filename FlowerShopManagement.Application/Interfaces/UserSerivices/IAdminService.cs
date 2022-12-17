@@ -10,4 +10,5 @@ public interface IAdminService : IStaffService
     public Task<bool> EditSupplierAsync(SupplierDetailModel supplierModel);
     public Task<bool> RemoveSupplierAsync(SupplierModel supplierModel);
     public Task<bool> EditUserRoleAsync(UserDetailsModel userModel, Role role);
+    public Task<bool> EditUserAsync(UserDetailsModel userModel);
 }

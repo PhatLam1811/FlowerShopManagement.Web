@@ -12,7 +12,7 @@ public class User
     public string name { get; set; }
     public string avatar { get; set; }
     public Gender gender { get; set; }
-    public int birthYear { get; set; }
+    public DateTime birthYear { get; set; }
     public string[] addresses { get; set; }
     public DateTime createdDate { get; set; }
     public DateTime lastModified { get; set; }
@@ -32,7 +32,7 @@ public class User
         this.name = string.Empty;
         this.avatar = string.Empty;
         this.gender = Gender.Male;
-        this.birthYear = DateTime.Now.Year - 18;
+        this.birthYear = DateTime.Now;
         this.addresses = new string[0];
 
         // Extra
@@ -66,7 +66,7 @@ public class User
     public User(
         string id,
         string email, string phoneNb, string password, Role role,
-        string name, string avatar, int birthYear, string[] addresses, Gender gender,
+        string name, string avatar, DateTime birthYear, string[] addresses, Gender gender,
         DateTime createdDate)
     {
         // ID

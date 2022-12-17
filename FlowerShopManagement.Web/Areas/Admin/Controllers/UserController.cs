@@ -27,7 +27,7 @@ public class UserController : Controller
         _personalService = personalService;
     }
 
-    public async Task<IActionResult> IndexAsync()
+    public async Task<IActionResult> Index()
     {
         try
         {
@@ -59,23 +59,45 @@ public class UserController : Controller
     }
 
     [HttpGet]
-    public IActionResult Edit(string id)
+    public async Task<IActionResult> Edit(string id)
     {
         // Get user
+        try
+        {
+            var user = await _adminService.GetUserByPhone(id);
+            return View(user);
+        }
+        catch { return NotFound(); }
 
-        return View();
     }
 
     [HttpPost]
-    public IActionResult Edit(UserDetailsModel model)
+    public async Task<IActionResult> Edit(UserDetailsModel model)
     {
-        if (ModelState.IsValid)
-        {
-            return PartialView("_ViewAll");
-        }
 
-        return View();
+        try
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _adminService.EditUserAsync(model);
+                var users = new List<UserDetailsModel>();
+
+               
+
+                return RedirectToAction("Index"); // return the List of Models or attach it to the view model
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+        catch
+        {
+            return NotFound(); // Notify failed to retrieve the list of users for some reasons!
+        }
     }
+
+
 
     // ========================= ADMIN ========================= //
 
@@ -257,10 +279,10 @@ public class UserController : Controller
             return; // Notify failed to remove the account for some reasons!
         }
     }
-  
+
     public async Task EditPersonalInfoAsync(UserDetailsModel userModel)
     {
-        try 
+        try
         {
             // Change & save the editted info from front-end to database
             await _personalService.EditInfoAsync(userModel);

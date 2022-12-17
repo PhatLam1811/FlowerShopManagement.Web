@@ -3,6 +3,7 @@ using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
+using System.Data;
 
 namespace FlowerShopManagement.Application.Services.UserServices;
 
@@ -112,6 +113,30 @@ public class AdminService : StaffService, IAdminService
 
             // Update database
             return await _userRepository.UpdateById(staff._id, staff);
+        }
+        catch
+        {
+            // Failed to edit user's role
+            return false;
+        }
+    }
+
+    public async Task<bool> EditUserAsync(UserDetailsModel userModel)
+    {
+        var user = new User();
+
+        try
+        {
+            // Model to entity
+            userModel.ToEntity(ref user);
+
+     
+
+            // Set modified date
+            user.lastModified = DateTime.Now;
+
+            // Update database
+            return await _userRepository.UpdateById(user._id, user);
         }
         catch
         {

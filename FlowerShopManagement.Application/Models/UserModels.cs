@@ -5,11 +5,11 @@ namespace FlowerShopManagement.Application.Models;
 
 public class UserDetailsModel : UserModel
 {
-    private string _id;
+    public string _id { get; set; }
     private string _password;
     public Role Role { get; set; }
     public Gender Gender { get; set; }
-    public int BirthYear { get; set; }
+    public DateTime BirthYear { get; set; }
     public string[] Addresses { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime LastModified { get; set; }
