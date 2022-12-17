@@ -129,9 +129,6 @@ public class AdminService : StaffService, IAdminService
         {
             // Model to entity
             userModel.ToEntity(ref user);
-
-     
-
             // Set modified date
             user.lastModified = DateTime.Now;
 

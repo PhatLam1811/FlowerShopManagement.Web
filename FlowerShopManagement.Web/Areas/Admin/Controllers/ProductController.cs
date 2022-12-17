@@ -30,8 +30,8 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
-            int pageSizes = 6;
-            return View(PaginatedList<ProductModel>.CreateAsync(productMs, 1, 2));
+            int pageSizes = 8;
+            return View(PaginatedList<ProductModel>.CreateAsync(productMs, 1, pageSizes));
 
         }
 
@@ -198,8 +198,8 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
                     productMs = productMs.Where(s => s.Categories != null && s.Categories.Contains(MyStatus)).ToList();
                     
                 }
-                int pageSize = 6;
-                PaginatedList<ProductModel> objs = PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, 2);
+                int pageSize = 8;
+                PaginatedList<ProductModel> objs = PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize);
                 return Json(new
                 {
                     isValid = true,
