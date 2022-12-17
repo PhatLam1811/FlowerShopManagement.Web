@@ -1,7 +1,5 @@
 ﻿using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Application.Interfaces;
-using FlowerShopManagement.Core.Enums;
-using System.Collections.Generic;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Application.Models;
 

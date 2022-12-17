@@ -124,6 +124,10 @@ public class AuthService : IAuthService
         await httpContext.SignInAsync(
             scheme, principal,
             new AuthenticationProperties { IsPersistent = true });
+
+        // Set session
+        httpContext.Session.SetString("NameIdentifier", id);
+        httpContext.Session.SetString("Role", role);
     }
 
     public async Task<UserDetailsModel> GetUserAsync(HttpContext httpContext)
@@ -135,14 +139,21 @@ public class AuthService : IAuthService
 
     public string? GetUserRole(HttpContext httpContext)
     {
-        // Get claim's role value
-        return httpContext.User.Claims.ElementAt(1).Value;
+        if (httpContext.User.Claims.ElementAt(1) != null)
+            return httpContext.User.Claims.ElementAt(1).Value;
+        else
+            return httpContext.Session.GetString("Role");
     }
+
     public string? GetUserId(HttpContext httpContext)
     {
         // Get claim's id value
-        return httpContext.User.Claims.ElementAt(0).Value;
+        if (httpContext.User.Claims.ElementAt(0) != null)
+            return httpContext.User.Claims.ElementAt(0).Value;
+        else
+            return httpContext.Session.GetString("NameIdentifier");
     }
+    
     public async Task<UserModel?> GetUser(HttpContext httpContext)
     {
         // Get claim's role value

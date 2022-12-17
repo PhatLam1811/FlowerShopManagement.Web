@@ -62,6 +62,8 @@ public class AuthenticationController : Controller
         // model state
         if (ModelState.IsValid)
         {
+            var currentUser = await _authServices.SignInAsync(HttpContext, model.EmailorPhone, model.Password);
+
             return RedirectToAction("Index", "Home");
         }
         else
