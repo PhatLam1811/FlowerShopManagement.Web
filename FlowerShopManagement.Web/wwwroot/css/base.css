@@ -40,6 +40,17 @@ p, span, h1, h2, h3, h4, h5, h6 {
     cursor: pointer;
 }
 
+.btn-no-min {
+    padding: 12px 16px;
+    border-radius: 2px;
+    min-width: auto !important;
+    cursor: pointer;
+}
+
+    .btn-no-min.focus {
+        background-color: rgb(173, 161, 230) !important;
+    }
+
 .btn-primary {
 }
 
