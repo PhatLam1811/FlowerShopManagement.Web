@@ -74,6 +74,7 @@ public class ProductDetailModel
     public string Size { get; set; } = string.Empty;
     public string Maintainment { get; set; } = string.Empty;
     public List<Categories> Categories { get; set; } = new List<Categories>();
+    public IFormFile FormPicture { get; set; }
 
     public ProductDetailModel(Product entity)
     {
