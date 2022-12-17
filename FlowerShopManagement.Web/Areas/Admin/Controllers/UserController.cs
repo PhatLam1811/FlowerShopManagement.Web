@@ -29,6 +29,8 @@ public class UserController : Controller
 
     public async Task<IActionResult> IndexAsync()
     {
+        ViewBag.User = true;
+
         try
         {
             var users = new List<UserDetailsModel>();

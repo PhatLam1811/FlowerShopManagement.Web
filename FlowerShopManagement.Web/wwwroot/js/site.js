@@ -180,7 +180,30 @@ function jQueryAjaxReloadPickingTable(form) {
         return false;
     }
 }
+function jQueryAjaxReloadPickingTableWithId(url,id) {
 
+    try {
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {id:id},
+            success: function (res) {
+                $('#picked-items').html(res);
+            },
+            error: function (err) {
+                alert("some error happens! ");
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+
+    } catch (ex) {
+
+        alert(ex);
+        return false;
+    }
+}
 function jQueryAjaxSearch(form) {
     var obj = new FormData(form);
     try {

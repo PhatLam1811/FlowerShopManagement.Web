@@ -52,5 +52,12 @@
 
 	<div class="col-4">
 		@*add image*@
+		<img src="~/image/flower1.png"
+			 class="w-100 h-auto"
+			 asp-append-version="true" />
+		<div class="form-floating">
+			<input asp-for="FormPicture" accept="image/*" class="form-control" />
+			<label for="FormPicture">Image</label>
+		</div>
 	</div>
 </form>

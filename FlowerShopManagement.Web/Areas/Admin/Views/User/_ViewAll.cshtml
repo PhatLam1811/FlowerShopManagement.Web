@@ -26,7 +26,21 @@
 					<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
 
 						<th scope="row">@i</th>
-						<td>@Model[i-1].Name</td>
+						<td>
+							<div class="d-flex align-items-center gap-2">
+									@if (String.IsNullOrEmpty(@Model[i - 1].Avatar))
+									{
+										Model[i-1].Avatar = "flower1.png";
+									}
+
+								<img src="~/image/@Model[i-1].Avatar"
+							 class="rounded-circle"
+							 height="40" width="40"
+							 asp-append-version="true" />
+								<span class="limit-line">@Model[i-1].Name</span>
+							</div>
+								
+						</td>
 						<td>
 							<div class="d-none d-lg-block">
 									@Model[i-1].Email
