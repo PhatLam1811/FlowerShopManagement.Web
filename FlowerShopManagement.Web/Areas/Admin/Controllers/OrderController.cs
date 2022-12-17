@@ -186,24 +186,13 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         public async Task<IActionResult> PickItemDialog(string filter = "") // Also handle if there is a filter / search
         {
             OrderVM? orderVM = null;
+            string s = TempData["orderVM1"] as string ?? TempData["orderVM"] as string ?? TempData["orderVM2"] as string ?? "";
 
-            if (TempData["orderVM"] != null)
+          
+            if (s != "")
             {
-                string s = TempData["orderVM"] as string ?? "";
-                if (s != "")
-                {
-                    orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
-                }
+                orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
             }
-            else if (TempData["orderVM1"] != null)
-            {
-                string s = TempData["orderVM1"] as string ?? "";
-                if (s != "")
-                {
-                    orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
-                }
-            }
-
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
             if (orderVM != null)
             {
@@ -217,8 +206,10 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         [HttpPost]
         public IActionResult PickedAnItem(List<string> ids, List<int> amounts) // These 2 list should have the same size // need 1 more parameters like PickItemDialog viewmodel
         {
-            string s = TempData["orderVM1"] as string ?? "";
             OrderVM? orderVM = null;
+            string s = TempData["orderVM1"] as string ?? TempData["orderVM"] as string ?? TempData["orderVM2"] as string ?? "";
+
+
             if (s != "")
             {
                 orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
@@ -261,44 +252,43 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        public IActionResult DeteleItem(string id)
+        public IActionResult DeleteItem(string id)
         {
-            OrderModel? orderModel = null;
-            if (TempData["CurrentOrder"] != null)
-                orderModel = TempData["CurrentOrder"] as OrderModel;
-            if (orderModel != null)
+            OrderVM? orderVM = null;
+            string s = TempData["orderVM1"] as string ?? TempData["orderVM"] as string ?? TempData["orderVM2"] as string ?? "";
+
+
+            if (s != "")
             {
-                foreach (var i in orderModel.Products)
-                    if (i.IsEqualProduct(id))
-                        orderModel.Products.Remove(i);
+                orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
             }
             //CurrentOrder will be ready for the next request
-            TempData["CurrentOrder"] = orderModel;
+           
+            if (orderVM != null && orderVM.ProductModels != null)
+            {
+                
+                orderVM.ProductModels = orderVM.ProductModels.Where(p => p.Id != id).ToList();
+                TempData["orderVM2"] = JsonConvert.SerializeObject(orderVM, Formatting.Indented);
+                return PartialView("_PickedItemsTable", orderVM.ProductModels??new List<ProductModel>());
 
+            }
+
+            return NotFound();
             //Should update Viewmodel for newest updates
-            return PartialView(/*Coult be a ViewModel in here*/);// This will be an update view for current order table
+
         }
 
         [HttpPost]
         public async Task<IActionResult> PickCustomerDialog(string filter = "") // Also handle if there is a filter / search
         {
-            OrderVM? orderVM = null;
 
-            if (TempData["orderVM"] != null)
+            OrderVM? orderVM = null;
+            string s = TempData["orderVM1"] as string ?? TempData["orderVM"] as string ?? TempData["orderVM2"] as string ?? "";
+
+
+            if (s != "")
             {
-                string s = TempData["orderVM"] as string ?? "";
-                if (s != "")
-                {
-                    orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
-                }
-            }
-            else if (TempData["orderVM1"] != null)
-            {
-                string s = TempData["orderVM1"] as string ?? "";
-                if (s != "")
-                {
-                    orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
-                }
+                orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
             }
             List<UserDetailsModel>? userMS = await _staffService.GetUsersAsync();
             if (orderVM != null)
@@ -331,7 +321,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
                 {
                     orderVM.Customer = user;
                     TempData["orderVM"] = JsonConvert.SerializeObject(orderVM, Formatting.Indented);
-                    return PartialView("_PickedCustomer", user); // This will be an update view for current customer table
+                    return PartialView("_PickedCustomerTable", user); // This will be an update view for current customer table
 
                 }
             }

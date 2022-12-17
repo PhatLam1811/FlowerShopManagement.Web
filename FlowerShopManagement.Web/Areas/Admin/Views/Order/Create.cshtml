@@ -31,11 +31,11 @@
 
     @*Customer Infomation*@
     <div class="col-5">
-        <div id="picked-cus"> <partial name="_PickedCustomer" model=@Model.Customer /></div>
+        <div id="picked-cus"> <partial name="_PickedCustomerTable" model=@Model.Customer /></div>
         <div class="mt-3">
             <button class="btn btn-secondary" type="button"
                     onclick="OpenPostDialog('@(Url.Action("PickCustomerDialog", "Order"))','Current Customers')">
-                Pick item
+                Pick customer
             </button>
         </div>
     </div>
