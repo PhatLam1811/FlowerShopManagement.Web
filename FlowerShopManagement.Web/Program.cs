@@ -81,6 +81,7 @@ builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IPersonalService, UserService>();
 builder.Services.AddScoped<IStaffService, StaffService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<MailKitService>();
 
@@ -124,11 +125,12 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
       name: "Admin",
-      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+      pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}"
     );
-    endpoints.MapControllerRoute(
+    endpoints.MapAreaControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    areaName: "Admin",
+    pattern: "{controller=Product}/{action=Index}/{id?}");
     //app.MapRazorPages();
 });
 

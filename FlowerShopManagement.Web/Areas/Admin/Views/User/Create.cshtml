@@ -3,8 +3,9 @@
 @model UserDetailsModel
 
 @{
-	var roles = Enum.GetValues(typeof(FlowerShopManagement.Core.Enums.Role)).Cast<FlowerShopManagement.Core.Enums.Role>().ToList();
+	var roles = Enum.GetValues(typeof(FlowerShopManagement.Core.Enums.Role)).Cast<FlowerShopManagement.Core.Enums.Role>().Where(i => i.ToString() != "Passenger" && i.ToString() != "Admin").ToList();
 	var genders = Enum.GetValues(typeof(FlowerShopManagement.Core.Enums.Gender)).Cast<FlowerShopManagement.Core.Enums.Gender>().ToList();
+	Model.BirthYear = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 }
 
 <p class="mt-4"></p>
@@ -27,6 +28,10 @@
 			<div class="col-7 form-group">
 				<label class="form-label" for="exampleFormControlInput1">Email</label>
 				<input type="email" asp-for="Email" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
+			</div>
+			<div class="col-7 form-group">
+				<label class="form-label" for="exampleFormControlInput1">Phone</label>
+				<input type="tel" asp-for="PhoneNumber" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
 			</div>
 			<div class="col-5 form-group">
 				<label class="form-label" for="exampleFormControlInput1">Start Date</label>

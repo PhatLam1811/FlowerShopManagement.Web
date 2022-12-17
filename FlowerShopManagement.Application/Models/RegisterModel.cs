@@ -17,6 +17,7 @@ namespace FlowerShopManagement.Application.Models
         public string PhoneNumber { set; get; } = "";
         [Required]
         [MinLength(6, ErrorMessage = "Password have to be greater than 6 characters")]
+        [RegularExpression(@"^[a-zA-Z0-9]+$", ErrorMessage = "Password format invalid")]
         public string Password { set; get; } = "";
         [Required]
         public string ConfirmPassword { set; get; } = "";

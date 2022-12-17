@@ -40,9 +40,7 @@ function OpenPostDialog(url, title) {
         $.ajax({
             type: "POST",
             url: url,
-
             success: function (res) {
-
                 $("#form-modal .modal-body").html(res);
                 $("#form-modal .modal-title").html(title);
                 $("#form-modal").modal('show');
@@ -61,6 +59,28 @@ function OpenPostDialog(url, title) {
         alert(e);
     }
    
+}
+function OpenGetPage(url) {
+    try {
+        $.ajax({
+            type: "GET",
+            url: url,
+
+            success: function (res) {
+                $("#main").html(res);
+            },
+            error: function (err) {
+                console.log(err);
+                alert(err);
+            }
+        })
+    }
+
+    catch (e) {
+        console.log(e);
+        alert(e);
+    }
+
 }
 
 function EditPage(url, title, id) {
@@ -105,11 +125,12 @@ function jQueryAjaxPickCustomer(url,id) {
         $.ajax({
             type: 'POST',
             url: url,
+            data: {phone: id},
             success: function (res) {
-                if (res.isValid) {
-                    $('#hihi').html(res.htmlViewAll);
-                    $('#pagination').html(res.htmlPagination);
-                }
+                $("#form-modal .modal-body").html('');
+                $("#form-modal .modal-title").html('');
+                $("#form-modal").modal('hide');
+                $('#picked-cus').html(res);
             },
             error: function (err) {
                 alert(err);
@@ -131,7 +152,6 @@ function jQueryAjaxReloadPickingTable(form) {
     var obj = new FormData(form);
     console.log(obj);
 
-    debugger;
     try {
         $.ajax({
             type: 'POST',
@@ -140,8 +160,6 @@ function jQueryAjaxReloadPickingTable(form) {
             contentType: false,
             processData: false,
             success: function (res) {
-                alert(res);
-
                 $('#picked-items').html(res);
                 $("#form-modal .modal-body").html('');
                 $("#form-modal .modal-title").html('');
@@ -162,7 +180,30 @@ function jQueryAjaxReloadPickingTable(form) {
         return false;
     }
 }
+function jQueryAjaxReloadPickingTableWithId(url,id) {
 
+    try {
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: {id:id},
+            success: function (res) {
+                $('#picked-items').html(res);
+            },
+            error: function (err) {
+                alert("some error happens! ");
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+
+    } catch (ex) {
+
+        alert(ex);
+        return false;
+    }
+}
 function jQueryAjaxSearch(form) {
     var obj = new FormData(form);
     try {

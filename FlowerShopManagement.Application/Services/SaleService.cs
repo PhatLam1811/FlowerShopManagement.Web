@@ -98,8 +98,10 @@ public class SaleService : ISaleService
 					{
 						var product = await productRepository.GetById(item._id);
 						//Amount unavaibale => false
-						if (product._amount < item._amount) return false;
+						if (product == null || product._amount < item._amount) 
+							return false;
 						product._amount -= item._amount;
+						newOrder._total += product._amount * product._uniPrice;
 						//Add to updateProList
 						updateProductList.Add(product);
 					}
@@ -116,6 +118,7 @@ public class SaleService : ISaleService
 						return false;
 				}
 			}
+			newOrder._date = DateTime.Now;
 			// Successful case happens
 			newOrder._status = Status.Purchased;//On charging
 			var result = await orderRepository.Add(newOrder);
