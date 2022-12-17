@@ -27,8 +27,53 @@ public class UserController : Controller
         _personalService = personalService;
     }
 
-    public IActionResult Index()
+    public async Task<IActionResult> IndexAsync()
     {
+        try
+        {
+            var users = new List<UserDetailsModel>();
+
+            // Get all users registered (both customers & staffs)
+            users = await _staffService.GetUsersAsync();
+
+            return View(users); // return the List of Models or attach it to the view model
+        }
+        catch
+        {
+            return NotFound(); // Notify failed to retrieve the list of users for some reasons!
+        }
+    }
+
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return View(new UserDetailsModel());
+    }
+
+    [HttpPost]
+    public IActionResult Create(UserDetailsModel model)
+    {
+        // Create
+
+        return View();
+    }
+
+    [HttpGet]
+    public IActionResult Edit(string id)
+    {
+        // Get user
+
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult Edit(UserDetailsModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            return PartialView("_ViewAll");
+        }
+
         return View();
     }
 
