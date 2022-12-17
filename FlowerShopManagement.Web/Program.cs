@@ -113,11 +113,12 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
       name: "Admin",
-      pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
+      pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}"
     );
-    endpoints.MapControllerRoute(
+    endpoints.MapAreaControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    areaName: "Admin",
+    pattern: "{controller=Product}/{action=Index}/{id?}");
     //app.MapRazorPages();
 });
 

@@ -35,7 +35,6 @@
 				<th>#</th>
 				<th class="button">Name</th>
 				<th class="button">Price</th>
-				@*<th class="button" onclick="jQueryAjaxTableSort('@(Url.Action("TableSort", "Product"))', 'Color')">Color</th>*@
 				<th class="button">
 					<div class="d-none d-lg-block">
 						Category
@@ -51,27 +50,27 @@
 			@if (Model != null)
 			{
 				var a = nProducts * 10;
+				var i = 0;
 				foreach (var item in Model)
 				{
-					
+					i++;
 
 					<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
 
-						<th scope="row">meme</th>
+						<th scope="row">@i</th>
 						<td>
-							@*<div class="d-flex align-items-center gap-2">
-								@if (String.IsNullOrEmpty(Model[i].ImageName))
+							<div class="d-flex align-items-center gap-2">
+								@if (String.IsNullOrEmpty(item.Picture))
 								{
-									Model[i].ImageName = "product-empty.png";
+									item.Picture = "flower1.png";
 								}
 
-								<img src="~/image/@Model[i].Image"
+								<img src="~/image/@item.Picture"
 							 class="rounded-circle"
 							 height="40" width="40"
-							 asp-append-version="true" />*@
+							 asp-append-version="true" />
 								<span class="limit-line">@item.Name</span>
-							@*</div>*@
-
+							</div>
 						</td>
 						<td>$@item.UniPrice</td>
 						<td>

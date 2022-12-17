@@ -1,5 +1,6 @@
 ﻿using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
+using Microsoft.AspNetCore.Http;
 
 namespace FlowerShopManagement.Application.Models;
 
@@ -73,6 +74,7 @@ public class ProductDetailModel
     public string Size { get; set; } = string.Empty;
     public string Maintainment { get; set; } = string.Empty;
     public List<Categories> Categories { get; set; } = new List<Categories>();
+    public IFormFile FormPicture { get; set; }
 
     public ProductDetailModel(Product entity)
     {
