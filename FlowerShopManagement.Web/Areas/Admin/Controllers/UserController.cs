@@ -27,7 +27,7 @@ public class UserController : Controller
 		_personalService = personalService;
 	}
 
-	public async Task<IActionResult> Index()
+	public async Task<IActionResult> Index(string filter = "")
 	{
 		ViewBag.User = true;
 
@@ -35,8 +35,21 @@ public class UserController : Controller
 		{
 			var users = new List<UserDetailsModel>();
 
+
 			// Get all users registered (both customers & staffs)
 			users = await _staffService.GetUsersAsync();
+			if (users != null)
+			{
+				if (filter == "" || filter == "All")
+				{
+					users = users.OrderBy(i => i.CreatedDate).ToList();
+				}
+				else
+				{
+					users = users.Where(i => i.Role.ToString().Equals(filter)).ToList();
+				}
+			}
+
 
 			return View(users); // return the List of Models or attach it to the view model
 		}
@@ -63,7 +76,7 @@ public class UserController : Controller
 				result = await _adminService.AddCustomerAsync(model);
 			else if (model.Role == Role.Staff)
 			{
-				result = await _adminService.AddStaffAsync(model,Role.Staff);
+				result = await _adminService.AddStaffAsync(model, Role.Staff);
 
 			}
 			return RedirectToAction("Index");
