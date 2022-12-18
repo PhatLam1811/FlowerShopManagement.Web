@@ -19,8 +19,19 @@ public class ImportService : IImportService
         _mailService.Send(mimeMessage);
     }
 
-    public SupplyFormModel CreateSupplyForm(List<LowOnStockProductModel> supplyItems, List<SupplierModel> supplier)
+    public SupplyFormModel? CreateSupplyForm(List<ProductDetailModel> productList, List<int> amounts, List<SupplierModel> supplier)
     {
-        return new SupplyFormModel(supplyItems, supplier);
+        // All parameters must not be null
+        if (productList == null || amounts == null || supplier == null) return null;
+
+        // All lists must have at least one element
+        if (productList.Count == 0 || amounts.Count == 0 || supplier.Count == 0) return null;
+
+        // 40 <= amount <= 100
+        foreach (var index in amounts)
+            if (index < 40 || index > 100) return null;
+
+        // Successfully created a request supply form
+        return new SupplyFormModel(productList, amounts, supplier);
     }
 }

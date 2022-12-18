@@ -1,7 +1,5 @@
 ﻿using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Application.Interfaces;
-using FlowerShopManagement.Core.Enums;
-using System.Collections.Generic;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Application.Models;
 
@@ -48,20 +46,20 @@ public class StockServices : IStockService
 		return productMs;
 	}
 
-    public List<LowOnStockProductModel> GetLowOnStockProducts(IProductRepository productRepository)
+    public async Task<List<ProductModel>> GetLowOnStockProducts(IProductRepository productRepository)
     {
         // This is only a temporary value of the minimum amount
         // needed for supply request
         int minimumAmount = 20;
-        List<LowOnStockProductModel> lowOnStockProducts = new List<LowOnStockProductModel>();
+        List<ProductModel> lowOnStockProducts = new List<ProductModel>();
 
-        var result = productRepository.GetAllLowOnStock(minimumAmount).Result;
+        var result = await productRepository.GetAllLowOnStock(minimumAmount);
 
         // Convert Product to SupplyItemModel
         foreach (var item in result)
         {
             // Convert product to model
-            var model = new LowOnStockProductModel(item);
+            var model = new ProductModel(item);
 
             // Add model to list
             lowOnStockProducts.Add(model);

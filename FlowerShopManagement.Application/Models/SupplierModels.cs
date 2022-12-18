@@ -48,12 +48,14 @@ public class SupplierDetailModel : SupplierModel
 
 public class SupplierModel
 {
+    public string _id { get; set; }
     public string Name { get; set; }
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
 
     public SupplierModel()
     {
+        _id = "";
         Name = "";
         Email = "";
         PhoneNumber = "";
@@ -61,6 +63,7 @@ public class SupplierModel
 
     public SupplierModel(Supplier supplier)
     {
+        _id = supplier._id;
         Name = supplier.name;
         Email = supplier.email;
         PhoneNumber = supplier.phoneNumber;
@@ -68,6 +71,7 @@ public class SupplierModel
 
     public virtual void ToEntity(ref Supplier entity)
     {
+        entity._id = _id;
         entity.name = Name;
         entity.email = Email;
         entity.phoneNumber = PhoneNumber;
