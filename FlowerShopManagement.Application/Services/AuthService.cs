@@ -4,7 +4,9 @@ using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using System.Runtime.InteropServices;
 using System.Security.Claims;
+using System.Text.RegularExpressions;
 
 namespace FlowerShopManagement.Application.Services;
 
@@ -23,30 +25,20 @@ public class AuthService : IAuthService
 
     public async Task<bool> RegisterAsync(HttpContext httpContext, string email, string phoneNb, string password)
     {
-        var customer = new User();
-        var cart = new Cart(customer._id);
+        // Add new user to dabase
+        var user = await RegisterAsync(email, phoneNb, password);
 
-        try
+        if (user == null) return false;
+
+        try 
         {
-            // Encrypt the password using MD5
-            string encryptedPass = Validator.MD5Hash(password);
-
-            // Configure new customer's info
-            customer.email = email;
-            customer.phoneNumber = phoneNb;
-            customer.password = encryptedPass;
-
-            // Add to database
-            await _cartRepository.Add(cart);
-            await _userRepository.Add(customer);
-
             // HttpContext sign in
-            await HttpSignIn(httpContext, customer._id, customer.role.ToString());
+            await HttpSignIn(httpContext, user._id, user.role.ToString());
 
             // Set session
-            httpContext.Session.SetString("NameIdentifier", customer._id);
-            httpContext.Session.SetString("Role", customer.role.ToString());
-            httpContext.Session.SetString("Username", customer.name);
+            httpContext.Session.SetString("NameIdentifier", user._id);
+            httpContext.Session.SetString("Role", user.role.ToString());
+            httpContext.Session.SetString("Username", user.name);
 
             return true;
         }
@@ -55,6 +47,39 @@ public class AuthService : IAuthService
             // Failed to register new customer
             return false;
         }
+    }
+
+    public async Task<User?> RegisterAsync(string? email, string? phoneNb, string? password)
+    {
+        var emailRgx = new Regex(@"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$");
+        var phoneNbRgx = new Regex(@"^([\\+]?84[-]?|[0])?[1-9][0-9]{8}$");
+        var passRgx = new Regex(@"^[a-zA-Z0-9]+$");
+
+        if (password == null || email == null || phoneNb == null || password == null) return null;
+        if (password.Length < 6 || !emailRgx.IsMatch(email) || !phoneNbRgx.IsMatch(phoneNb) || !passRgx.IsMatch(password)) return null;
+
+        try
+        {
+            // Encrypt password
+            string encryptedPass = Validator.MD5Hash(password);
+
+            // Create new user
+            var newUser = new User();
+
+            newUser.email = email;
+            newUser.phoneNumber = phoneNb;
+            newUser.password = encryptedPass;
+
+            // Add to database
+            var result = await _userRepository.Add(newUser);
+
+            return newUser;
+        }
+        catch
+        {
+            return null;
+        }
+
     }
 
     public async Task<bool> SignInAsync(HttpContext httpContext, string emailOrPhoneNb, string password)
