@@ -21,9 +21,11 @@ builder.Services.AddControllersWithViews();
 
 #region //============= MongoDb Configurations =============//
 //-- Database Configurations --//
-builder.Services.Configure<MongoDBSettings>(mongoDBSettings => {
+builder.Services.Configure<MongoDBSettings>(mongoDBSettings =>
+{
     mongoDBSettings.ConnectionString = builder.Configuration.GetSection("DatabaseSettings:ConnectionString").Value;
-    mongoDBSettings.DatabaseName = builder.Configuration.GetSection("DatabaseSettings:DatabaseName").Value;});
+    mongoDBSettings.DatabaseName = builder.Configuration.GetSection("DatabaseSettings:DatabaseName").Value;
+});
 
 builder.Services.AddSingleton<IMongoDBSettings>(_ => _.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 
@@ -128,17 +130,18 @@ app.UseSession();
 
 app.UseEndpoints(endpoints =>
 {
-    //endpoints.MapControllerRoute(
-    //name: "default",
-    //pattern: "{controller=Home}/{action=Index}/{id?}");
-
     endpoints.MapControllerRoute(
-    name: "Admin",
-    pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}");
+    name: "default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    // endpoints.MapAreaControllerRoute(
+    // areaName: "Admin",
+    // name: "Admin",
+    // pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}");
 
     endpoints.MapAreaControllerRoute(
-    name: "default",
     areaName: "Admin",
+    name: "admin",
     pattern: "{controller=Product}/{action=Index}/{id?}");
 
     //app.MapRazorPages();
