@@ -29,6 +29,10 @@ public class AuthenticationController : Controller
     {
         return View();
     }
+
+  
+
+  
     #endregion
 
     // ========================== ACTIONS ========================== //
@@ -76,7 +80,7 @@ public class AuthenticationController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> SignOutAsync()
+    public async Task<IActionResult> SignOut()
     {
         var isSuccess = await _authServices.SignOutAsync(HttpContext);
 
@@ -85,5 +89,6 @@ public class AuthenticationController : Controller
         else
             return NotFound(); // Failed to sign out!
     }
+
     #endregion
 }
