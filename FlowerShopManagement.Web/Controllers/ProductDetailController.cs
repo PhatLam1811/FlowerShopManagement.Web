@@ -3,7 +3,7 @@ using FlowerShopManagement.Application.Models;
 
 namespace FlowerShopManagement.Web.Controllers;
 
-public class ProductController : Controller
+public class ProductDetailController : Controller
 {
     public IActionResult Index()
     {
