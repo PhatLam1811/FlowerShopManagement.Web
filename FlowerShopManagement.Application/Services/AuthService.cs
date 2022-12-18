@@ -71,9 +71,12 @@ public class AuthService : IAuthService
             newUser.password = encryptedPass;
 
             // Add to database
-            var result = await _userRepository.Add(newUser);
+            var isSuccess = await _userRepository.Add(newUser);
 
-            return newUser;
+            if (isSuccess)
+                return newUser;
+            else
+                return null;
         }
         catch
         {
