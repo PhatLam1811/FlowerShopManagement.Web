@@ -1,7 +1,7 @@
-﻿@model PaginatedList<ProductModel>?
+﻿@model PaginatedList<SupplierModel>?
 
 <form method="post" action="@(Url.Action("PickedAnItem", "Import"))" style="width:800px" onsubmit="return jQueryAjaxReloadPickingTable(this);">
-    
+
     <div class="row">
         <div class="col p-0 mt-2">
             <div class="col d-flex flex-column gap-2">
@@ -21,17 +21,15 @@
                                             <tr>
                                                 <th>#</th>
                                                 <th class="button">Name</th>
-                                                <th class="button">Price</th>
-                                                <th class="button">Color</th>
-                                                <th class="button">Amount</th>
-                                                <th class="button">Quantity</th>
+                                                <th class="button">Phone</th>
+                                                <th class="button">Email</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             @if (Model != null)
                                                 @foreach (var i in Model)
                                                 {
-                                                    <input name="ids" value="@i.Id" hidden />
+                                                    <input name="ids" value="@i._id" hidden />
                                                     <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed w-100">
 
                                                         <th>
@@ -50,16 +48,11 @@
 
                                                         </th>
                                                         <td>@i.Name</td>
-                                                        <td>$@i.UniPrice</td>
-                                                        <td>@i.Color</td>
-                                                        <td>@i.Amount</td>
+                                                        <td>$@i.PhoneNumber</td>
+                                                        <td>@i.Email</td>
 
                                                         <td>
-                                                            <div class="">
-                                                                <label class="form-check-label ml-5 d-flex align-items-center">
-                                                                    <input type="number" name="amounts" value="0" placeholder="0" id="input_@i.Id" class="form-control ms-2" style="width:100px;" />
-                                                                </label>
-                                                            </div>
+                                                           Check box nef
                                                         </td>
                                                     </tr>
                                                 }
