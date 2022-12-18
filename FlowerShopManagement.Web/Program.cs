@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using FlowerShopManagement.Infrustructure.Mail;
 using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Services.UserServices;
+using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -89,7 +90,21 @@ builder.Services.AddScoped<MailKitService>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 // Cookie Authentication
-builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/authentication/signin";
+    });
+
+// Session
+builder.Services.AddDistributedMemoryCache();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromSeconds(10);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -109,16 +124,23 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseSession();
+
 app.UseEndpoints(endpoints =>
 {
+    //endpoints.MapControllerRoute(
+    //name: "default",
+    //pattern: "{controller=Home}/{action=Index}/{id?}");
+
     endpoints.MapControllerRoute(
-      name: "Admin",
-      pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}"
-    );
+    name: "Admin",
+    pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}");
+
     endpoints.MapAreaControllerRoute(
     name: "default",
     areaName: "Admin",
     pattern: "{controller=Product}/{action=Index}/{id?}");
+
     //app.MapRazorPages();
 });
 

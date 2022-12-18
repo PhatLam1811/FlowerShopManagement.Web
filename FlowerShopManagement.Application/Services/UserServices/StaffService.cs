@@ -45,7 +45,7 @@ public class StaffService : UserService, IStaffService
         }
     }
 
-    public async Task<List<SupplierModel>?> GetSuppliersAsync()
+    public async Task<List<SupplierModel>?> GetAllSuppliersAsync()
     {
         var suppliers = new List<SupplierModel>();
 
@@ -67,6 +67,25 @@ public class StaffService : UserService, IStaffService
         catch
         {
             // Failed to get customers list
+            return null;
+        }
+    }
+
+    public async Task<SupplierModel?> GetSupplierAsync(string id)
+    {
+        try
+        {
+            var supplier = await _supplierRepository.GetById(id);
+
+            // Entity to model
+            var supplierModel = new SupplierModel(supplier);
+
+            // Successfully got the supplier
+            return supplierModel;
+        }
+        catch
+        {
+            // Failed to get the supplier
             return null;
         }
     }
