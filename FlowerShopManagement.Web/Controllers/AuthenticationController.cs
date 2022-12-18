@@ -1,10 +1,11 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 
 namespace FlowerShopManagement.Web.Controllers;
 
+[AllowAnonymous]
 public class AuthenticationController : Controller
 {
     private readonly IAuthService _authServices;
@@ -43,7 +44,7 @@ public class AuthenticationController : Controller
         string phoneNb = model.PhoneNumber;
         string password = model.Password;
 
-        // Email verification
+        // Email verification?
 
         // Register new user
         var isSuccess = await _authServices.RegisterAsync(HttpContext, email, phoneNb, password);

@@ -129,18 +129,17 @@ app.UseSession();
 app.UseEndpoints(endpoints =>
 {
     //endpoints.MapControllerRoute(
-    //  name: "Admin",
-    //  pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}"
-    //);
-    //endpoints.MapAreaControllerRoute(
     //name: "default",
-    //areaName: "Admin",
-    //pattern: "{controller=Product}/{action=Index}/{id?}");
+    //pattern: "{controller=Home}/{action=Index}/{id?}");
 
     endpoints.MapControllerRoute(
-      name: "default",
-      pattern: "{controller=Home}/{action=Index}/{id?}"
-    );
+    name: "Admin",
+    pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}");
+
+    endpoints.MapAreaControllerRoute(
+    name: "default",
+    areaName: "Admin",
+    pattern: "{controller=Product}/{action=Index}/{id?}");
 
     //app.MapRazorPages();
 });

@@ -248,7 +248,7 @@ public class UserController : Controller
 		{
 			var suppliers = new List<SupplierModel>();
 
-			suppliers = await _staffService.GetSuppliersAsync();
+			suppliers = await _staffService.GetAllSuppliersAsync();
 
 			return; // return the List of Models or attach it to the view model
 		}

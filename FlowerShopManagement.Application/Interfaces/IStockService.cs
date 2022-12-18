@@ -10,5 +10,5 @@ public interface IStockService
 	public Task<List<ProductModel>> GetUpdatedProducts(IProductRepository productRepository);
 	public Task<ProductDetailModel> GetADetailProduct(string id, IProductRepository productRepository);
 	public Task<List<VoucherDetailModel>> GetUpdatedVouchers(IVoucherRepository voucherRepository);
-    public List<LowOnStockProductModel> GetLowOnStockProducts(IProductRepository productRepository);
+    public Task<List<ProductModel>> GetLowOnStockProducts(IProductRepository productRepository);
 }

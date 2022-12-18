@@ -37,7 +37,7 @@ public class ImportController : Controller
     {
         // Load data
         var lowOnStockProducts = _stockService.GetLowOnStockProducts(_productRepository);
-        var suppliers = _staffService.GetSuppliersAsync().Result;
+        var suppliers = _staffService.GetAllSuppliersAsync().Result;
 
         // Parse to view model
         var viewModel = new ImportIndexVM();

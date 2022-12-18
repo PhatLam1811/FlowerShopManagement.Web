@@ -146,20 +146,4 @@ public class AuthService : IAuthService
         else
             return httpContext.Session.GetString("NameIdentifier"); // Get from session
     }
-    
-    public async Task<UserModel?> GetUser(HttpContext httpContext)
-    {
-        // Get claim's role value
-        var id = httpContext.User.Claims.ElementAt(0).Value;
-        if (id != null)
-        {
-            var userE = await _userRepository.GetById(id);
-            if (userE != null)
-            {
-                UserModel? userModel = new UserModel(userE);
-                return userModel;
-            }
-        }
-        return null;
-    }
 }
