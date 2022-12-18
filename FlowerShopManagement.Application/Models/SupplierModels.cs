@@ -35,7 +35,7 @@ public class SupplierDetailModel : SupplierModel
     {
         var entity = new Supplier();
 
-        entity._id = _id;
+        //entity._id = _id;
         entity.name = Name;
         entity.email = Email;
         entity.phoneNumber = PhoneNumber;
