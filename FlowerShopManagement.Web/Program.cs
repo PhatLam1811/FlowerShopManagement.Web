@@ -93,7 +93,7 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/authentication/signin";
+        options.LoginPath = "/Authentication/SignIn";
     });
 
 // Session
@@ -131,15 +131,16 @@ app.UseEndpoints(endpoints =>
     //endpoints.MapControllerRoute(
     //name: "default",
     //pattern: "{controller=Home}/{action=Index}/{id?}");
-
+    //endpoints.MapBlazorHub();
     endpoints.MapControllerRoute(
-    name: "Admin",
-    pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}");
+        name: "Admin",
+        pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}"
+    );
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Authentication}/{action=SignIn}/{id?}");
 
-    endpoints.MapAreaControllerRoute(
-    name: "default",
-    areaName: "Admin",
-    pattern: "{controller=Product}/{action=Index}/{id?}");
+    //endpoints.MapRazorPages();
 
     //app.MapRazorPages();
 });

@@ -18,14 +18,13 @@ namespace BlackBoxTestProject
 		[Test]
 		public void Test1()
 		{
-			driver.Url = "http://www.google.com.vn";
-			Assert.Pass();
-		}
-		[OneTimeTearDown]
-		public void CloseTest()
-		{
+			driver.Navigate().GoToUrl("https://localhost:7120/");
 
-			driver.Close();
+
+			//Submit login
+			IWebElement webElement = driver.FindElement(By.Id("btn-gotoapp"));
+			webElement.Click();
 		}
+
 	}
 }

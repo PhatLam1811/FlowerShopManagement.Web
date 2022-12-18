@@ -70,7 +70,7 @@ public class AuthenticationController : Controller
 
         // Redirect
         if (isSuccess)
-            return RedirectToAction("Index", "Home"); // Successfully signed in!
+            return RedirectToAction("Index","Product"); // Successfully signed in!
         else
             return SignIn(); // Failed to sign in!
     }
