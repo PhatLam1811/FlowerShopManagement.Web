@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[Route("[area]/[controller]")]
+[Route("")]
 [Authorize]
 public class ProductController : Controller
 {
@@ -21,6 +23,8 @@ public class ProductController : Controller
         _stockServices = stockServices;
     }
 
+    [Route("Index")]
+    [Route("")]
     [HttpGet]
     public async Task<IActionResult> Index()
     {
@@ -36,6 +40,7 @@ public class ProductController : Controller
     }
 
     //Open edit dialog / modal
+    [Route("Edit")]
     [HttpGet]
     public async Task<IActionResult> Edit(string id)
     {
@@ -50,6 +55,7 @@ public class ProductController : Controller
         return RedirectToAction("Index");
     }
 
+    [Route("Update")]
     [HttpPut]
     public async Task<IActionResult> Update(ProductDetailModel productModel)
     {
@@ -77,6 +83,7 @@ public class ProductController : Controller
         return RedirectToAction("Index");
     }
 
+    [Route("Delete")]
     [HttpDelete]
     public async Task<IActionResult> Detele(ProductDetailModel productModel)
     {
@@ -105,6 +112,7 @@ public class ProductController : Controller
     }
 
     //Open an Create Dialog
+    [Route("Create")]
     [HttpGet]
     public async Task<IActionResult> Create()
     {
@@ -121,6 +129,7 @@ public class ProductController : Controller
     }
 
     // Confirm and create an Order
+    [Route("Create")]
     [HttpPost]
     public async Task<IActionResult> Create(ProductDetailModel productModel)
     {
@@ -132,6 +141,8 @@ public class ProductController : Controller
         }
         return NotFound(); // Can be changed to Redirect
     }
+
+    [Route("Sort")]
     [HttpPost]
     public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString,
         int? pageNumber, string? currentPrice, string? currentCategory)

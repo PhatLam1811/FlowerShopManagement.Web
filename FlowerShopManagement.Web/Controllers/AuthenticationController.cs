@@ -70,20 +70,20 @@ public class AuthenticationController : Controller
 
         // Redirect
         if (isSuccess)
-            return RedirectToAction("Index", "Home"); // Successfully signed in!
+            return RedirectToAction("Index", "Product", new { action = "Index", area ="Admin"}); // Successfully signed in!
         else
             return SignIn(); // Failed to sign in!
     }
 
-    [HttpPost]
+    [HttpGet]
     public async Task<IActionResult> SignOutAsync()
     {
         var isSuccess = await _authServices.SignOutAsync(HttpContext);
 
         if (isSuccess)
-            return RedirectToAction("Index", "Home"); // Signed out successfully!
+            return RedirectToAction("SignIn", "Authentication"); // Signed out successfully!
         else
-            return View(); // Failed to sign out!
+            return NotFound(); // Failed to sign out!
     }
     #endregion
 }
