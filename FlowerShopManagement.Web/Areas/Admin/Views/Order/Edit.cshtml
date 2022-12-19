@@ -78,7 +78,7 @@
 
         <button type="submit" class="btn btn-primary flex-grow-1" asp-action="ConfirmCheck" asp-controller="Order" asp-route-id=@Model.Id>Confirm</button>
 
-        <button type="submit" class="btn btn-secondary ms-1 icon-delete" asp-action="CanceledCheck" asp-controller="Order" asp-route-id=@Model.Id>Cancel</button>
+        <button type="submit" class="btn btn-secondary ms-1 icon-delete" asp-action="CanceledCheck" id="cancel-@Model.Id" asp-controller="Order" asp-route-id=@Model.Id>Cancel</button>
     </div>
     @Html.AntiForgeryToken()
 </form>

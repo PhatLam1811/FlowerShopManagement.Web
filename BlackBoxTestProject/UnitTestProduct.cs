@@ -72,16 +72,18 @@ namespace BlackBoxTestProject
 
 
         }
-        [Test]
-        public void Test3K()
-        {
-            
-            IWebElement filter = driver.FindElement(By.Id("ArtfFlower"));
-			//Submit login
-			filter.Click();
 
-        }
-        
-        
-    }
+		[Test]
+		public void TestEdit()
+		{
+			//Submit login
+			IWebElement webElement = driver.FindElement(By.Id("a97e30fe-53d9-4895-9dda-79655d0421c4"));
+			webElement.Click();
+			IWebElement cancel = driver.FindElement(By.Id("cancel-a97e30fe-53d9-4895-9dda-79655d0421c4"));
+			cancel.Click();
+			Assert.Pass();
+		}
+
+
+	}
 }

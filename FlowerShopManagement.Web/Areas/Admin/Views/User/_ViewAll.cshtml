@@ -48,7 +48,7 @@
 						<td>@Model[i-1].CreatedDate.ToShortDateString()</td>
 						<td>@Model[i-1].Role.ToString()</td>
 						<td>
-							<a asp-action="Edit" asp-controller="User" asp-area="Admin" asp-route-id="@Model[i-1].Email" class="border-1 link-info table-icon">
+							<a asp-action="Edit" asp-controller="User" asp-area="Admin" id="@Model[i-1].Email" asp-route-id="@Model[i-1].Email" class="border-1 link-info table-icon">
 								<i class="fas fa-edit"></i>
 							</a>
 						</td>
