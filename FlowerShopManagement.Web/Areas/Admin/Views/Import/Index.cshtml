@@ -4,12 +4,17 @@
 
 }
 
+<form method="post" asp-action="CreateSupplyRequestFormAsync" asp-controller="Import" asp-area="Admin">
 
-    <div class="col-4">
-        <partial name="_PickItem" model=@Model._lowOnStockProducts />
-    </div>
+	<div class="row">
+		<div class="col-7" id="pick_item">
+			<partial name="_PickItem" model=@Model._lowOnStockProducts />
+		</div>
 
-    <div class="col-4">
-     <partial name="_PickItem" model=@Model._lowOnStockProducts />
-        
-    </div>
+		<div class="col-5" id="pick_supplier">
+			<partial name="_PickSupplier" model=@Model._suppliers />
+		</div>
+	</div>
+
+	<button class="btn btn-primary">Send Request Form Via Email</button>
+</form>

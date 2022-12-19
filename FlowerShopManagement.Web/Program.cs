@@ -23,9 +23,11 @@ builder.Services.AddControllersWithViews();
 
 #region //============= MongoDb Configurations =============//
 //-- Database Configurations --//
-builder.Services.Configure<MongoDBSettings>(mongoDBSettings => {
+builder.Services.Configure<MongoDBSettings>(mongoDBSettings =>
+{
     mongoDBSettings.ConnectionString = builder.Configuration.GetSection("DatabaseSettings:ConnectionString").Value;
-    mongoDBSettings.DatabaseName = builder.Configuration.GetSection("DatabaseSettings:DatabaseName").Value;});
+    mongoDBSettings.DatabaseName = builder.Configuration.GetSection("DatabaseSettings:DatabaseName").Value;
+});
 
 builder.Services.AddSingleton<IMongoDBSettings>(_ => _.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 
@@ -97,8 +99,9 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/authentication/signin";
+        options.LoginPath = "/Authentication/SignIn";
     });
+
 
 // Session
 builder.Services.AddDistributedMemoryCache();
@@ -132,18 +135,14 @@ app.UseSession();
 
 app.UseEndpoints(endpoints =>
 {
-    //endpoints.MapControllerRoute(
-    //name: "default",
-    //pattern: "{controller=Home}/{action=Index}/{id?}");
-
     endpoints.MapControllerRoute(
-    name: "Admin",
-    pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}");
+    name: "default",
+    pattern: "{controller=Product}/{action=Index}/{id?}");
 
     endpoints.MapAreaControllerRoute(
-    name: "default",
     areaName: "Admin",
-    pattern: "{controller=Import}/{action=Index}/{id?}");
+    name: "admin",
+    pattern: "{controller=Product}/{action=Index}/{id?}");
 
     //app.MapRazorPages();
 });

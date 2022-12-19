@@ -6,6 +6,7 @@ using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Web.ViewModels;
 using MailKit.Search;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Org.BouncyCastle.Asn1.X509;
@@ -14,6 +15,8 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 {
     //--------------------------------------Admin Order Controller--------------------------------------------------
     [Area("Admin")]
+    [Route("[area]/[controller]")]
+    [Authorize]
     public class OrderController : Controller
     {
         //Services
@@ -57,6 +60,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             return View(orderMs);
         }
 
+        [Route("Edit")]
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
@@ -71,6 +75,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        [Route("Update")]
         [HttpPut]
         public async Task<IActionResult> Update(OrderModel orderModel)
         {
@@ -97,6 +102,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        [Route("Delete")]
         [HttpDelete]
         public async Task<IActionResult> Detele(OrderModel orderModel)
         {
@@ -125,6 +131,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
         //Open an CreatePage
+        [Route("Create")]
         [HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -151,6 +158,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
         // Confirm and create an Order
+        [Route("Create")]
         [HttpPost]
         public async Task<IActionResult> Create(UserModel userModel)
         {
@@ -182,6 +190,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             return NotFound(); // Can be changed to Redirect
         }
 
+        [Route("PickItemDialog")]
         [HttpPost]
         public async Task<IActionResult> PickItemDialog(string filter = "") // Also handle if there is a filter / search
         {
@@ -194,6 +203,10 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
                 orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
             }
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
+            if(filter != "")
+            {
+                productMs = productMs.Where(i => i.Name.Contains(filter)).ToList();
+            }
             if (orderVM != null)
             {
                 orderVM.AllProductModels = productMs;
@@ -203,7 +216,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             return PartialView("_PickItem", PaginatedList<ProductModel>.CreateAsync(productMs, 1, pageSizes)); // This will be an view for dialog / modal
         }
 
-        [HttpPost]
+        [Route("PickedAnItem")]
         public IActionResult PickedAnItem(List<string> ids, List<int> amounts) // These 2 list should have the same size // need 1 more parameters like PickItemDialog viewmodel
         {
             OrderVM? orderVM = null;
@@ -251,6 +264,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             return PartialView("_PickedItemsTable", orderVM.ProductModels);
         }
 
+        [Route("DeleteItem")]
         [HttpPost]
         public IActionResult DeleteItem(string id)
         {
@@ -278,6 +292,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
         }
 
+        [Route("PickCustomerDialog")]
         [HttpPost]
         public async Task<IActionResult> PickCustomerDialog(string filter = "") // Also handle if there is a filter / search
         {
@@ -304,7 +319,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
 
-
+        [Route("PickedCustomer")]
         [HttpPost]
         public async Task<IActionResult> PickedCustomer(string phone)
         {
@@ -329,6 +344,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             return NotFound();
         }
 
+        [Route("CompletedCheck")]
         public async Task<IActionResult> CompletedCheck(string id)
         {
 
@@ -348,6 +364,8 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             }
         }
         //Confirm that cus Order is ready and on way delivering
+
+        [Route("ConfirmCheck/id={id}")]
         public async Task<IActionResult> ConfirmCheck(string id)
         {
             if (id == null) return NotFound();
@@ -392,6 +410,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             }
         }
 
+        [Route("CanceledCheck")]
         public async Task<IActionResult> CanceledCheck(string id)
         {
 

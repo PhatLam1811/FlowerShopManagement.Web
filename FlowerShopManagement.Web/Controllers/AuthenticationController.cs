@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FlowerShopManagement.Web.Controllers;
 
 [AllowAnonymous]
+[Route("[controller]")]
 public class AuthenticationController : Controller
 {
     private readonly IAuthService _authServices;
@@ -18,22 +19,28 @@ public class AuthenticationController : Controller
     // ========================== VIEWS ========================== //
 
     #region Views
+    [Route("Register")]
     [HttpGet]
     public IActionResult Register()
     {
         return View();
     }
 
+    [Route("SignIn")]
     [HttpGet]
+
     public IActionResult SignIn()
     {
         return View();
     }
+
+
     #endregion
 
     // ========================== ACTIONS ========================== //
 
     #region Actions
+    [Route("RegisterAsync")]
     [HttpPost]
     public async Task<IActionResult> RegisterAsync(RegisterModel model)
     {
@@ -56,6 +63,7 @@ public class AuthenticationController : Controller
             return Register(); // Failed to register!
     }
 
+    [Route("SignInAsync")]
     [HttpPost]
     public async Task<IActionResult> SignInAsync(SignInModel model)
     {
@@ -70,20 +78,22 @@ public class AuthenticationController : Controller
 
         // Redirect
         if (isSuccess)
-            return RedirectToAction("Index", "Home"); // Successfully signed in!
+            return RedirectToAction("Index", "Product", new { action = "Index", area ="Admin"}); // Successfully signed in!
         else
             return SignIn(); // Failed to sign in!
     }
 
     [HttpPost]
-    public async Task<IActionResult> SignOutAsync()
+	[Route("SignOutAsync")]
+	public async Task<IActionResult> SignOutAsync()
     {
         var isSuccess = await _authServices.SignOutAsync(HttpContext);
 
         if (isSuccess)
-            return RedirectToAction("Index", "Home"); // Signed out successfully!
+            return RedirectToAction("SignIn", "Authentication"); // Signed out successfully!
         else
-            return View(); // Failed to sign out!
+            return NotFound(); // Failed to sign out!
     }
+
     #endregion
 }

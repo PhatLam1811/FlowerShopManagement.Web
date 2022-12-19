@@ -3,29 +3,7 @@
 @model PaginatedList<ProductModel>
 
 @{
-	int nProducts = 0;
-	//nProducts = Model.page;
-	nProducts = 1;
-	//nProducts = Int32.Parse(ViewData["nProducts"].ToString());
-
-	int countPage()
-	{
-
-		int numberPages = 0;
-		int numberProducts = 0;
-
-		//foreach (Product i in Model.products)
-		//{
-		//	numberProducts++;
-		//}
-
-		numberPages = numberProducts / 10;
-
-		if (numberProducts % 10 != 0)
-			numberPages++;
-
-		return numberPages;
-	}
+	
 }
 
 <div class="table-wrap">
@@ -49,7 +27,6 @@
 		<tbody>
 			@if (Model != null)
 			{
-				var a = nProducts * 10;
 				var i = 0;
 				foreach (var item in Model)
 				{

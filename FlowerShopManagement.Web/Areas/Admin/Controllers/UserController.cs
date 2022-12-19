@@ -3,11 +3,14 @@ using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.Services;
 using FlowerShopManagement.Core.Enums;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[Route("[area]/[controller]")]
+[Authorize]
 public class UserController : Controller
 {
 	private readonly IAuthService _authService;
@@ -27,6 +30,7 @@ public class UserController : Controller
 		_personalService = personalService;
 	}
 
+	[Route("Index")]
 	public async Task<IActionResult> Index(string filter = "")
 	{
 		ViewBag.User = true;
@@ -59,6 +63,7 @@ public class UserController : Controller
 		}
 	}
 
+	[Route("Create")]
 	[HttpGet]
 	public IActionResult Create()
 	{
@@ -84,6 +89,7 @@ public class UserController : Controller
 		catch { return NotFound(); }
 	}
 
+	[Route("Edit")]
 	[HttpGet]
 	public async Task<IActionResult> Edit(string id)
 	{
@@ -97,6 +103,7 @@ public class UserController : Controller
 
 	}
 
+	[Route("Edit")]
 	[HttpPost]
 	public async Task<IActionResult> Edit(UserDetailsModel model)
 	{
