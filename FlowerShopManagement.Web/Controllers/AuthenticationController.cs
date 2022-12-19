@@ -19,26 +19,29 @@ public class AuthenticationController : Controller
     // ========================== VIEWS ========================== //
 
     #region Views
+    [Route("Register")]
     [HttpGet]
     public IActionResult Register()
     {
         return View();
     }
 
+    [Route("SignIn")]
     [HttpGet]
+
     public IActionResult SignIn()
     {
         return View();
     }
 
-  
 
-  
     #endregion
 
     // ========================== ACTIONS ========================== //
 
     #region Actions
+    [Route("RegisterAsync")]
+
     [HttpPost]
     public async Task<IActionResult> RegisterAsync(RegisterModel model)
     {
@@ -60,6 +63,7 @@ public class AuthenticationController : Controller
         else
             return Register(); // Failed to register!
     }
+    [Route("SignInAsync")]
 
     [HttpPost]
     public async Task<IActionResult> SignInAsync(SignInModel model)

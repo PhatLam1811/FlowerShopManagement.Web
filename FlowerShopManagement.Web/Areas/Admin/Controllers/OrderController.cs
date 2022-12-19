@@ -41,7 +41,6 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             _staffService = staffService;
         }
 
-        [Route("Index")]
         [HttpGet]
         public async Task<IActionResult> Index(string filter = "")
         {
