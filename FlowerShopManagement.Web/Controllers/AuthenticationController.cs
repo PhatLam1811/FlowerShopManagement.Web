@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FlowerShopManagement.Web.Controllers;
 
 [AllowAnonymous]
+[Route("[controller]")]
 public class AuthenticationController : Controller
 {
     private readonly IAuthService _authServices;
@@ -79,8 +80,9 @@ public class AuthenticationController : Controller
             return SignIn(); // Failed to sign in!
     }
 
-    [HttpGet]
-    public async Task<IActionResult> SignOutAsync()
+    [HttpPost]
+	[Route("SignOutAsync")]
+	public async Task<IActionResult> SignOutAsync()
     {
         var isSuccess = await _authServices.SignOutAsync(HttpContext);
 

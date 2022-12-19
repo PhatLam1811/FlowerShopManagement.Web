@@ -42,7 +42,6 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
         [Route("Index")]
-        [Route("")]
         [HttpGet]
         public async Task<IActionResult> Index(string filter = "")
         {
