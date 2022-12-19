@@ -23,13 +23,13 @@
 				<div class="d-flex w-100">
 					<input type="text" name="pageNumber" value="1"
 						   class="form-control form-control-lg h5 h-100 position-relative" style="z-index:99"
-						   id="floatingInput" placeholder="Abc" hidden>
+						   placeholder="Abc" hidden>
 
-					<input type="text" name="searchString" value="@ViewData["CurrentFilter"]"
+					<input type="text" name="searchString" id="ip-search" value="@ViewData["CurrentFilter"]"
 						   class="form-control form-control-lg h5 h-auto position-relative m-0" style="z-index:99"
-						   id="floatingInput" placeholder="Name of product">
+						    placeholder="Name of product">
 
-					<button class="btn btn-icon border border-primary position-relative d-flex gap-2 align-items-center" style="z-index:999"
+					<button class="btn btn-icon border border-primary position-relative d-flex gap-2 align-items-center" id="btn-search" style="z-index:999"
 							type="submit">
 						Search
 						<i class="fa-solid fa-magnifying-glass"></i>
@@ -51,6 +51,6 @@
 
 <div class="position-fixed d-flex flex-column gap-2 align-items-end" style="width:fit-content; bottom:60px; right:0">
 	<a class="btn btn-primary rounded" hidden>Category</a>
-	<a asp-action="Create" asp-controller="Product" asp-area="Admin" class="border-1 table-icon btn btn-primary icon-plus rounded" style="width:fit-content">
+	<a asp-action="Create" asp-controller="Product" asp-area="Admin" id="btn-create" class="border-1 table-icon btn btn-primary icon-plus rounded" style="width:fit-content">
 	</a>
 </div>

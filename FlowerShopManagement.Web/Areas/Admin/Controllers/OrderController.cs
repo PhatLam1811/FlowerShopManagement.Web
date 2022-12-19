@@ -205,6 +205,10 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
                 orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
             }
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
+            if(filter != "")
+            {
+                productMs = productMs.Where(i => i.Name.Contains(filter)).ToList();
+            }
             if (orderVM != null)
             {
                 orderVM.AllProductModels = productMs;

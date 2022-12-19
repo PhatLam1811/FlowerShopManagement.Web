@@ -80,7 +80,7 @@ public class AuthenticationController : Controller
     }
 
     [HttpGet]
-    public async Task<IActionResult> SignOut()
+    public async Task<IActionResult> SignOutAsync()
     {
         var isSuccess = await _authServices.SignOutAsync(HttpContext);
 

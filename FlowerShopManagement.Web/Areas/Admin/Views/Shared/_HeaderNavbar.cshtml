@@ -7,19 +7,19 @@
 			<a class="nav-link @(ViewBag.Product==true?"active":"")" asp-area="Admin" asp-controller="Product" asp-action="Index">Product</a>
 		</li>
 		<li class="nav-item px-3">
-			<a class="nav-link @(ViewBag.Order==true?"active":"")" asp-area="Admin" asp-controller="Order" asp-action="Index">Order</a>
+			<a class="nav-link @(ViewBag.Order==true?"active":"")" id="order-nav" asp-area="Admin" asp-controller="Order" asp-action="Index">Order</a>
 		</li>
 @*		<li class="nav-item px-3">
 			<a class="nav-link @(ViewBag.Voucher==true?"active":"")" asp-area="Admin" asp-controller="Voucher" asp-action="Index">Voucher</a>
 		</li>*@
 		<li class="nav-item px-3">
-			<a class="nav-link @(ViewBag.User==true?"active":"")" asp-area="Admin" asp-controller="User" asp-action="Index">User</a>
+			<a class="nav-link @(ViewBag.User==true?"active":"")" id="user-nav" asp-area="Admin" asp-controller="User" asp-action="Index">User</a>
 		</li>
 		<li class="nav-item px-3">
-			<a class="nav-link @(ViewBag.Supplier==true?"active":"")" asp-area="Admin" asp-controller="Supplier" asp-action="Index">Supplier</a>
+			<a class="nav-link @(ViewBag.Supplier==true?"active":"")" id="supplier-nav" asp-area="Admin" asp-controller="Supplier" asp-action="Index">Supplier</a>
 		</li>
 		<li class="nav-item px-3">
-			<a class="nav-link @(ViewBag.Report==true?"active":"")" asp-area="Admin" asp-controller="Report" asp-action="Index">Report</a>
+			<a class="nav-link @(ViewBag.Report==true?"active":"")" id="report-nav" asp-area="Admin" asp-controller="Report" asp-action="Index">Report</a>
 		</li>
 		@*<li class="nav-item px-3">
 		<a class="nav-link   @(ViewBag.WishList==true?"active":"")" asp-area="Admin" asp-controller="Home" asp-action="Wishes">Account</a>
