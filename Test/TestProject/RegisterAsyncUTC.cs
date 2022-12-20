@@ -194,7 +194,7 @@ public class RegisterAsyncUTC
     public async Task F01UTCID13()
     {
         // Safe input
-        Email = "huyen123@gmai.com";
+        Email = "huyen123@gmail.com";
         PhoneNumber = "0344238212";
         Password = "abc123";
 
