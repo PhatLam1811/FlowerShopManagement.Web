@@ -8,6 +8,8 @@ using Microsoft.AspNetCore.Mvc;
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[Route("[controller]")]
+[Authorize]
 public class ImportController : Controller
 {
     private readonly IStaffService _staffService;
@@ -34,6 +36,7 @@ public class ImportController : Controller
 
     #region Views
     [HttpGet]
+    [Route("Index")]
     public async Task<IActionResult> Index()
     {
         // Load data
@@ -47,7 +50,8 @@ public class ImportController : Controller
     }
 
     [HttpGet]
-    public IActionResult SupplyRequestForm(SupplyFormModel model)
+    [Route("SupplyForm")]
+    public IActionResult SupplyForm(SupplyFormModel model)
     {
         return View(model);
     }
@@ -57,13 +61,14 @@ public class ImportController : Controller
 
     #region Actions
     [HttpPost]
-    public async Task<IActionResult> CreateSupplyRequestFormAsync(List<string> selectedProductIds, List<int> amounts, List<string> supplierIds)
+    [Route("CreateSupplyRequestFormAsync")]
+    public async Task<IActionResult> CreateSupplyRequestFormAsync(List<string> ids, List<int> amounts, List<string> supplierIds)
     {
         var products = new List<ProductDetailModel>();
         var suppilers = new List<SupplierModel>();
 
         // Get selected products detail
-        foreach(var id in selectedProductIds)
+        foreach(var id in ids)
         {
             var result = await _stockService.GetADetailProduct(id, _productRepository);
             products.Add(result);
@@ -80,11 +85,13 @@ public class ImportController : Controller
         var requestForm = _importService.CreateSupplyForm(products, amounts, suppilers);
 
         if (requestForm != null)
-            return SupplyRequestForm(requestForm); // Successfully created a new supply request form!
+            return SupplyForm(requestForm); // Successfully created a new supply request form!
         else
             return NotFound(); // Failed to create a new supply request form!
     }
 
+    [HttpPost]
+    [Route("RequestSupply")]
     public async Task<IActionResult> RequestSupply()
     {
 

@@ -4,7 +4,6 @@ using FlowerShopManagement.Application.MongoDB.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using FlowerShopManagement.Core.Entities;
-using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
 
@@ -69,6 +68,7 @@ public class AuthService : IAuthService
             newUser.email = email;
             newUser.phoneNumber = phoneNb;
             newUser.password = encryptedPass;
+            newUser.role = Core.Enums.Role.Staff;
 
             // Add to database
             var isSuccess = await _userRepository.Add(newUser);

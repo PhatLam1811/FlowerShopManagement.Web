@@ -68,6 +68,8 @@ public class SaleService : ISaleService
 	public async Task<bool> CreateOfflineOrder(OrderModel order, UserModel user, IOrderRepository orderRepository,
 		IUserRepository userRepository, IProductRepository productRepository)
 	{
+		if (order.Products == null || user == null || order.Products.Count > 20 || order.Products.Count == 0) return false;
+
 		//Create OrderEntity object
 		var newOrder = order.ToEntity();
 		var cus = await userRepository.GetByEmailOrPhoneNb(user.PhoneNumber);

@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlowerShopManagement.Web", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlowerShopManagement.WebAPI", "FlowerShopManagement.WebAPI\FlowerShopManagement.WebAPI.csproj", "{29D6EC36-7D19-4275-8D28-B40E3EC8FA37}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestProject", "Test\TestProject\TestProject.csproj", "{786B3460-8B2B-4DED-9A13-BC697DC5D696}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WhiteBox TestProject", "Test\TestProject\WhiteBox TestProject.csproj", "{786B3460-8B2B-4DED-9A13-BC697DC5D696}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlackBoxTestProject", "BlackBoxTestProject\BlackBoxTestProject.csproj", "{5D057481-05F9-4976-8569-74493248CFCC}"
 EndProject

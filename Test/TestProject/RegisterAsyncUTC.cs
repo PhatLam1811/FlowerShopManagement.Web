@@ -181,7 +181,7 @@ public class RegisterAsyncUTC
     public async Task F01UTCID12()
     {
         // Safe input
-        Email = "lamphat613@gmail.com";
+        Email = "lamphatz613@gmail.com";
         PhoneNumber = "0344235212";
         Password = "abc123";
 
@@ -200,6 +200,6 @@ public class RegisterAsyncUTC
 
         var result = await _authService.RegisterAsync(Email, PhoneNumber, Password);
 
-        Assert.IsInstanceOf<User>(result);
+        Assert.IsNull(result);
     }
 }

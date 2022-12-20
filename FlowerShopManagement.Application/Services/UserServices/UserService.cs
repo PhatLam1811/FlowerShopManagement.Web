@@ -66,6 +66,34 @@ public class UserService : IPersonalService
         }
     }
 
+    public async Task<bool> ChangePasswordAsync(string id, string oldPassword, string newPassword)
+    {
+        var user = new User();
+
+        try
+        {
+            // Model to entity
+            //userModel.ToEntity(ref user);
+
+            // Encrypt password using MD5
+            var encryptedPass = Validator.MD5Hash(newPassword);
+
+            // Set new password
+            user.password = encryptedPass;
+
+            // Set last modified date
+            user.lastModified = DateTime.Now;
+
+            // Update database
+            return await _userRepository.UpdateById(user._id, user);
+        }
+        catch
+        {
+            // Failed to change user's password
+            return false;
+        }
+    }
+
     public async Task<bool> ResetPasswordAsync(UserDetailsModel user)
     {
         // Should have the email verification over here...

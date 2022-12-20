@@ -23,7 +23,7 @@ public class CreateRequestFormUTC
     private List<SupplierModel>? _suppliers = new List<SupplierModel>();
 
     private List<ProductDetailModel>? SelectedProducts = new List<ProductDetailModel>();
-    private List<int>? Amounts = new List<int>();
+    private List<int>? Amounts;
     private List<SupplierModel>? SelectedSuppliers = new List<SupplierModel>();
 
     [SetUp]
@@ -38,6 +38,8 @@ public class CreateRequestFormUTC
         _mailService = new MailKitService();
         _supplierRepository = new SupplierRepository(_mongoDBContext);
         _productRepository = new ProductRepository(_mongoDBContext);
+
+        Amounts = new List<int>();
 
         var result = await _productRepository.GetAll();
 
@@ -162,7 +164,7 @@ public class CreateRequestFormUTC
             Assert.AreEqual(result.To[i], SelectedSuppliers[i].Email);
     }
 
-    [Test] // Defect
+    [Test]
     public void F04UTCID07()
     {
         // Safe input
@@ -239,13 +241,6 @@ public class CreateRequestFormUTC
 
         var result = _importService.CreateSupplyForm(SelectedProducts, Amounts, SelectedSuppliers);
 
-        Assert.IsNotNull(result);
-        foreach (var item in result.Products)
-        {
-            Assert.AreEqual(result.Products, SelectedProducts);
-            Assert.AreEqual(result.Amounts, Amounts);
-        }
-        for (var i = 0; i < result.To.Count; i++)
-            Assert.AreEqual(result.To[i], SelectedSuppliers[i].Email);
+        Assert.IsNull(result);
     }
 }

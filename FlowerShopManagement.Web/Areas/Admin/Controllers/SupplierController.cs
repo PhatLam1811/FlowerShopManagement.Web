@@ -3,10 +3,12 @@ using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize]
     public class SupplierController : Controller
     {
         private readonly IAuthService _authService;
@@ -24,10 +26,11 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             _staffService = staffService;
             _personalService = personalService;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
             ViewBag.Supplier = true;
-            return View(new List<SupplierDetailModel>());
+            var supplier = await _staffService.GetAllSupplierDetailsAsync();
+            return View(supplier);
         }
 
         [HttpGet]
@@ -60,9 +63,26 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
         [HttpGet]
-        public IActionResult Edit()
+        public async Task<IActionResult> Edit(string id)
         {
-            return View(new SupplierDetailModel());
+            var supplier = await _staffService.GetSupplierDetailAsync(id);
+            return View(supplier);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(SupplierDetailModel supplier)
+        {
+            var isSuccess = await _adminService.EditSupplierAsync(supplier);
+
+            if (isSuccess)
+                return RedirectToAction("Index", "Supplier");
+            else
+                return RedirectToAction("Edit", "Supplier");
+        }
+
+        public IActionResult Back()
+        {
+            return Redirect(Request.Headers["Referer"].ToString());
         }
     }
 }

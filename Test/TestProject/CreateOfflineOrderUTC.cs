@@ -170,7 +170,7 @@ public class CreateOfflineOrderUTC
         Assert.IsTrue(await _saleService.CreateOfflineOrder(Order, User, _orderRepository, _userRepository, _productRepository));
     }
 
-    [Test] // Defect
+    [Test]
     public async Task F03UTCID09()
     {
         // Safe input
