@@ -5,11 +5,11 @@ using OpenQA.Selenium.Support.UI;
 
 namespace BlackBoxTestProject
 {
-	public class Test2s
+	public class TestSales
 	{
 		IWebDriver driver;
 
-		[OneTimeSetUp]
+		[SetUp]
 		public void StartChrome()
 		{
 			
@@ -28,7 +28,7 @@ namespace BlackBoxTestProject
 		}
 
 		[Test]
-		public void TestGoToOrderPage()
+		public void TestFilterCanceledOrder()
 		{
 			//Submit login
 			IWebElement webElement = driver.FindElement(By.Id("filter-canceled"));
@@ -37,7 +37,7 @@ namespace BlackBoxTestProject
 		}
 
         [Test]
-        public void Test3Create()
+        public void TestCreate()
         {
            
 			//open create order page

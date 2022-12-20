@@ -56,7 +56,7 @@ public class ProductController : Controller
     }
 
     [Route("Update")]
-    [HttpPut]
+    [HttpPost]
     public async Task<IActionResult> Update(ProductDetailModel productModel)
     {
         //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
@@ -83,23 +83,22 @@ public class ProductController : Controller
         return RedirectToAction("Index");
     }
 
-    [Route("Delete")]
     [HttpDelete]
-    public async Task<IActionResult> Detele(ProductDetailModel productModel)
+    public async Task<IActionResult> Detele(string id)
     {
         //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
 
         //If order get null or Id null ( somehow ) => notfound
-        if (productModel == null || productModel.Id == null) return NotFound();
+        if ( id == null) return NotFound();
         //Check if the order still exists
-        var product = await _productRepository.GetById(productModel.Id);
+        var product = await _productRepository.GetById(id);
         if (product != null)
         {
             //If order != null => we will detele this order by using directly ProductModel.Id
             //Check productModel for sure if losing some data
-            var result = await _productRepository.RemoveById(productModel.Id);
+            var result = await _productRepository.RemoveById(id);
             if (result == false)
-                return RedirectToAction($"Unable to remove {productModel.Id}");
+                return RedirectToAction($"Unable to remove {id}");
             else
             {
                 //Detele successfully, we pull a new list of orders

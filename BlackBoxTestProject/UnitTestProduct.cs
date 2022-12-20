@@ -4,11 +4,11 @@ using OpenQA.Selenium.Chrome;
 
 namespace BlackBoxTestProject
 {
-	public class Test1s
+	public class TestProducts
 	{
 		IWebDriver driver;
 
-		[OneTimeSetUp]
+		[SetUp]
 		public void StartChrome()
 		{
 			
@@ -22,6 +22,11 @@ namespace BlackBoxTestProject
             webElement.Click();
         }
 
+		[TearDown]
+		public void EndChrome()
+		{
+			driver.Close();
+		}
 		[Test]
 		public void TestGoToProductPage()
 		{
@@ -77,13 +82,27 @@ namespace BlackBoxTestProject
 		public void TestEdit()
 		{
 			//Submit login
-			IWebElement webElement = driver.FindElement(By.Id("a97e30fe-53d9-4895-9dda-79655d0421c4"));
+			IWebElement webElement = driver.FindElement(By.Id("f6f4196f-0a70-4b34-9b50-52defa621166"));
 			webElement.Click();
-			IWebElement cancel = driver.FindElement(By.Id("cancel-a97e30fe-53d9-4895-9dda-79655d0421c4"));
-			cancel.Click();
+			IWebElement price = driver.FindElement(By.Id("ip-price"));
+			price.SendKeys("10");
+			IWebElement btnSearch = driver.FindElement(By.Id("btn-submit"));
+			btnSearch.Click();
 			Assert.Pass();
 		}
+		[Test]
+		public void TestDelete()
+		{
+			//Submit login
+			IWebElement webElement = driver.FindElement(By.Id("f6f4196f-0a70-4b34-9b50-52defa621166"));
 
+			webElement.Click();
+			IWebElement btnD = driver.FindElement(By.Id("btn-delete"));
+			btnD.Click();
+			//Submit login
+			IWebElement home = driver.FindElement(By.Id("hihi"));
+			Assert.That(home.Displayed, Is.True);
+		}
 
 	}
 }

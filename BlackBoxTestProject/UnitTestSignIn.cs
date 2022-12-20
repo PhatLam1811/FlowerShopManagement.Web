@@ -4,18 +4,18 @@ using OpenQA.Selenium.Chrome;
 
 namespace BlackBoxTestProject
 {
-	public class Tests
+	public class TestSignIns
 	{
 		IWebDriver driver;
 
-		[OneTimeSetUp]
+		[SetUp]
 		public void StartChrome()
 		{
 			driver = new ChromeDriver(".");
 		}
 
 		[Test]
-		public void TestShowLoginInPage()
+		public void TestNoUserNameOrPassword()
 		{
 			driver.Navigate().GoToUrl("https://localhost:7120/");
 
@@ -75,7 +75,10 @@ namespace BlackBoxTestProject
             IWebElement webElement1 = driver.FindElement(By.Id("btn-submit"));
             webElement1.Click();
 
-        }
+			IWebElement main = driver.FindElement(By.Id("btn-submit"));
+			main.Click();
+
+		}
 
     }
 }

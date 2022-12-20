@@ -5,7 +5,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace BlackBoxTestProject
 {
-	public class TestUsers
+	public class TestSupplier
 	{
 		IWebDriver driver;
 
@@ -21,41 +21,31 @@ namespace BlackBoxTestProject
             account.SendKeys("jah@gmail.com");
             password.SendKeys("123123");
             webElement.Click();
-			IWebElement userNAV = driver.FindElement(By.Id("user-nav"));
+			IWebElement userNAV = driver.FindElement(By.Id("supplier-nav"));
             userNAV.Click();
 
 
 		}
 
-		[Test]
-		public void TestFilterCustomer()
-		{
-			//Submit login
-			IWebElement webElement = driver.FindElement(By.Id("filter-cus"));
-            webElement.Click();
-            Assert.Pass();
-		}
 
         [Test]
-        public void TestUserCreate()
+        public void TestSupplierCreate()
         {
            
 			//open create order page
             IWebElement btnCreate = driver.FindElement(By.Id("btn-create"));
             btnCreate.Click();
 			//set up data for create an order
-
-
 		
 			//cus info
 			IWebElement ipCusName = driver.FindElement(By.Id("ip-name"));
 			ipCusName.SendKeys("TEst cus");
 
 			IWebElement ipCusPhone = driver.FindElement(By.Id("ip-phone"));
-			ipCusPhone.SendKeys("0123321133");
+			ipCusPhone.SendKeys("0123321123");
 
 			IWebElement ipCusEmail = driver.FindElement(By.Id("ip-email"));
-			ipCusEmail.SendKeys("test11@gmail.com");
+			ipCusEmail.SendKeys("test1@gmail.com");
 
 			IWebElement ipCusaddress = driver.FindElement(By.Id("ip-address"));
 			ipCusaddress.SendKeys("test adress");
@@ -73,13 +63,12 @@ namespace BlackBoxTestProject
         }
 
 		[Test]
-		public void TestUserEdit()
+		public void TestSupplierEdit()
 		{
 			//Submit login
 			IWebElement webElement = driver.FindElement(By.Id("jahdkd@gmail.com"));
 			webElement.Click();	
-			IWebElement address = driver.FindElement(By.Id("ip-address"));
-			address.SendKeys("test");
+			
 			IWebElement submit = driver.FindElement(By.Id("btn-submit"));
 			submit.Click();
 			//Submit success

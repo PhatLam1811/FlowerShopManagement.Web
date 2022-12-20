@@ -5,11 +5,11 @@ using OpenQA.Selenium.Support.UI;
 
 namespace BlackBoxTestProject
 {
-	public class TestUsers
+	public class TestImport
 	{
 		IWebDriver driver;
 
-		[SetUp]
+		[OneTimeSetUp]
 		public void StartChrome()
 		{
 			
@@ -21,57 +21,32 @@ namespace BlackBoxTestProject
             account.SendKeys("jah@gmail.com");
             password.SendKeys("123123");
             webElement.Click();
-			IWebElement userNAV = driver.FindElement(By.Id("user-nav"));
+			IWebElement userNAV = driver.FindElement(By.Id("import-nav"));
             userNAV.Click();
 
 
 		}
 
+
+
 		[Test]
-		public void TestFilterCustomer()
+		public void TestUserCreate()
 		{
-			//Submit login
-			IWebElement webElement = driver.FindElement(By.Id("filter-cus"));
-            webElement.Click();
-            Assert.Pass();
-		}
-
-        [Test]
-        public void TestUserCreate()
-        {
-           
-			//open create order page
-            IWebElement btnCreate = driver.FindElement(By.Id("btn-create"));
-            btnCreate.Click();
-			//set up data for create an order
 
 
+			IWebElement btnCreate = driver.FindElement(By.Id("f6f4196f-0a70-4b34-9b50-52defa621166"));
+			btnCreate.SendKeys("3");
 		
+
+
 			//cus info
-			IWebElement ipCusName = driver.FindElement(By.Id("ip-name"));
-			ipCusName.SendKeys("TEst cus");
-
-			IWebElement ipCusPhone = driver.FindElement(By.Id("ip-phone"));
-			ipCusPhone.SendKeys("0123321133");
-
-			IWebElement ipCusEmail = driver.FindElement(By.Id("ip-email"));
-			ipCusEmail.SendKeys("test11@gmail.com");
-
-			IWebElement ipCusaddress = driver.FindElement(By.Id("ip-address"));
-			ipCusaddress.SendKeys("test adress");
+			IWebElement ipCusName = driver.FindElement(By.Id("1"));
+			ipCusName.Submit();
 
 			IWebElement submit = driver.FindElement(By.Id("btn-submit"));
 			submit.Click();
 
-
-
-			//Submit success
-			IWebElement webElement = driver.FindElement(By.Id("hihi"));
-			Assert.That(webElement.Displayed, Is.True);
-
-
-        }
-
+		}
 		[Test]
 		public void TestUserEdit()
 		{

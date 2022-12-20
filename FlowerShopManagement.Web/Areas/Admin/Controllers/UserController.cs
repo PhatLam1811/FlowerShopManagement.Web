@@ -70,6 +70,7 @@ public class UserController : Controller
 		return View(new UserDetailsModel());
 	}
 
+	[Route("Create")]
 	[HttpPost]
 	public async Task<IActionResult> Create(UserDetailsModel model)
 	{
