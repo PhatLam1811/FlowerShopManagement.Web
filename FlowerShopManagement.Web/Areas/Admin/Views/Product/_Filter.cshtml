@@ -28,7 +28,7 @@
                         @if (i.ToString() != currentCategory.ToString())
                         {
                             <label class="check-list-item">
-                                <input type="radio" class="form-check-input" value="@i" name="currentCategory" onclick="this.form.onsubmit()" />
+                                <input type="radio" class="form-check-input" value="@i" id="@i" name="currentCategory" onclick="this.form.onsubmit()" />
                                 @i
                             </label>
                         }

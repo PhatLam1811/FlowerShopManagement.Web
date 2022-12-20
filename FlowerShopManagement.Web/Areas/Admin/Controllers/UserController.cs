@@ -31,7 +31,6 @@ public class UserController : Controller
 	}
 
 	[Route("Index")]
-	[Route("")]
 	public async Task<IActionResult> Index(string filter = "")
 	{
 		ViewBag.User = true;

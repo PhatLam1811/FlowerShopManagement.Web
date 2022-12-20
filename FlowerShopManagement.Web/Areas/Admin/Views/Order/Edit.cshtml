@@ -1,84 +1,78 @@
 ﻿@model OrderModel;
 
-<form method="post" asp-action="Update" asp-controller="Order" asp-area="Admin" class="modal-content border-0" style="width: 800px" enctype="multipart/form-data">
-    <div class="row">
-        <div class="col-8">
-            <div class="row">
-                <input hidden asp-for="Id" />
-                @*user info*@
-                <div class="col d-grid gap-2">
-                    <div class="form-floating">
-                        <input type="text" asp-for="FullName" readonly class="form-control" id="floatingInput" placeholder="Annanas A">
-                        <label for="floatingInput">User Name</label>
-                        <span asp-validation-for="FullName" class="text-danger"></span>
-                    </div>
+<form method="post" asp-action="Update" asp-controller="Order" asp-area="Admin" class="modal-content border-0" enctype="multipart/form-data">
+	<div class="row mt-4">
+		<div class="col">
+			<input hidden asp-for="Id" />
+			@*user info*@
+			<div class="h3 fw-bold text-info">@Model.Status</div>
+			<div class="row mt-3">
+				<div class="col d-grid gap-2">
+					<div class="form-group">
+						<label for="floatingInput">User Name</label>
+						<input type="text" asp-for="FullName" readonly class="form-control form-control-lg h5 py-3" id="floatingInput">
+						<span asp-validation-for="FullName" class="text-danger"></span>
+					</div>
 
-                    <div class="form-floating flex-grow-1">
-                        <textarea class="form-control" style="height:120px" readonly asp-for="PhoneNumber" placeholder="Leave a comment here" id="floatingTextarea"></textarea>
-                        <label for="floatingTextarea">Phone number</label>
-                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-                    </div>
-                </div>
-                @*charge info*@
-                <div class="col d-grid gap-2" style="height:fit-content">
-                    <div class="form-floating">
-                        <input type="text" asp-for="Status" readonly class="form-control" id="floatingInput" placeholder="$20">
-                        <label for="floatingInput">Status</label>
-                        <span asp-validation-for="Status" class="text-danger"></span>
-                    </div>
-                    <div class="form-floating">
-                        <input type="text" asp-for="DeliveryMethod" readonly class="form-control" id="floatingInput" placeholder="$20">
-                        <label for="floatingInput">DeliveryMethod</label>
-                        <span asp-validation-for="DeliveryMethod" class="text-danger"></span>
-                    </div>
-                    <div class="form-floating">
-                        <input type="number" asp-for="DeliveryCharge" readonly class="form-control" id="floatingInput" placeholder="1">
-                        <label for="floatingInput">DeliveryCharge</label>
-                        <span asp-validation-for="DeliveryCharge" class="text-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="table-wrap">
-                    <table class="table myaccordion table-hover" id="accordion">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th class="button">Name</th>
-                                <th class="button">Price</th>
-                                <th class="button">Color</th>
-                                <th class="button">Amount</th>
+					<div class="form-group flex-grow-1">
+						<label for="floatingTextarea">Phone number</label>
+						<input class="form-control form-control-lg h5 py-3" readonly asp-for="PhoneNumber" placeholder="Leave a comment here" id="floatingTextarea"></input>
+						<span asp-validation-for="PhoneNumber" class="text-danger"></span>
+					</div>
+				</div>
+				@*charge info*@
+				<div class="col d-grid gap-2">
+					<div class="form-group">
+						<label for="floatingInput">DeliveryMethod</label>
+						<input type="text" asp-for="DeliveryMethod" readonly class="form-control form-control-lg h5 py-3" id="floatingInput" placeholder="$20">
+						<span asp-validation-for="DeliveryMethod" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label for="floatingInput">DeliveryCharge</label>
+						<input type="number" asp-for="DeliveryCharge" readonly class="form-control form-control-lg h5 py-3" id="floatingInput" placeholder="1">
+						<span asp-validation-for="DeliveryCharge" class="text-danger"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="col">
+			<div class="table-wrap">
+				<table class="table myaccordion table-hover" id="accordion">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th class="button">Name</th>
+							<th class="button">Price</th>
+							<th class="button">Color</th>
+							<th class="button">Amount</th>
 
-                            </tr>
-                        </thead>
-                        <tbody>
+						</tr>
+					</thead>
+					<tbody>
 
-                            @for (var i = 1; i <= Model.Products.Count; i++)
-                            {
-                                <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed">
+						@for (var i = 1; i <= Model.Products.Count; i++)
+						{
+							<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed">
 
-                                    <th scope="row">@i</th>
-                                    <td>@Model.Products[i-1].Name</td>
-                                    <td>@Model.Products[i-1].UniPrice</td>
-                                    <td>@Model.Products[i-1].Color</td>
-                                    <td>@Model.Products[i-1].Amount</td>
+								<th scope="row">@i</th>
+								<td>@Model.Products[i-1].Name</td>
+								<td>@Model.Products[i-1].UniPrice</td>
+								<td>@Model.Products[i-1].Color</td>
+								<td>@Model.Products[i-1].Amount</td>
 
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-    </div>
-    <div class="d-flex justify-content-end mt-3 pe-3">
-
-        <button type="submit" class="btn btn-primary flex-grow-1" asp-action="CompletedCheck" asp-controller="Order" asp-route-id=@Model.Id>Completed</button>
-
-        <button type="submit" class="btn btn-primary flex-grow-1" asp-action="ConfirmCheck" asp-controller="Order" asp-route-id=@Model.Id>Confirm</button>
-
-        <button type="submit" class="btn btn-secondary ms-1 icon-delete" asp-action="CanceledCheck" asp-controller="Order" asp-route-id=@Model.Id>Cancel</button>
-    </div>
-    @Html.AntiForgeryToken()
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="fixed-bottom bottom-50 start-50">
+		<div class="d-flex gap-2">
+			<button type="submit" class="btn btn-outline-info" asp-action="CompletedCheck" asp-controller="Order" asp-route-id=@Model.Id>Completed</button>
+			<button type="submit" class="btn btn-primary" asp-action="ConfirmCheck" asp-controller="Order" asp-route-id=@Model.Id>Confirm</button>
+		</div>
+		<button type="submit" class="btn btn-outline-secondary icon-delete" asp-action="CanceledCheck" asp-controller="Order" asp-route-id=@Model.Id>Cancel</button>
+	</div>
+	@Html.AntiForgeryToken()
 </form>

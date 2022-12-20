@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FlowerShopManagement.Web.Controllers;
 
 [AllowAnonymous]
+[Route("[controller]")]
 public class AuthenticationController : Controller
 {
     private readonly IAuthService _authServices;
@@ -18,22 +19,28 @@ public class AuthenticationController : Controller
     // ========================== VIEWS ========================== //
 
     #region Views
+    [Route("Register")]
     [HttpGet]
     public IActionResult Register()
     {
         return View();
     }
 
+    [Route("SignIn")]
     [HttpGet]
+
     public IActionResult SignIn()
     {
         return View();
     }
+
+
     #endregion
 
     // ========================== ACTIONS ========================== //
 
     #region Actions
+    [Route("RegisterAsync")]
     [HttpPost]
     public async Task<IActionResult> RegisterAsync(RegisterModel model)
     {
@@ -56,6 +63,7 @@ public class AuthenticationController : Controller
             return Register(); // Failed to register!
     }
 
+    [Route("SignInAsync")]
     [HttpPost]
     public async Task<IActionResult> SignInAsync(SignInModel model)
     {
@@ -75,8 +83,9 @@ public class AuthenticationController : Controller
             return SignIn(); // Failed to sign in!
     }
 
-    [HttpGet]
-    public async Task<IActionResult> SignOutAsync()
+    [HttpPost]
+	[Route("SignOutAsync")]
+	public async Task<IActionResult> SignOutAsync()
     {
         var isSuccess = await _authServices.SignOutAsync(HttpContext);
 
@@ -85,5 +94,6 @@ public class AuthenticationController : Controller
         else
             return NotFound(); // Failed to sign out!
     }
+
     #endregion
 }

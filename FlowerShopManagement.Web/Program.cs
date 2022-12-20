@@ -99,8 +99,9 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
-        options.LoginPath = "/authentication/signin";
+        options.LoginPath = "/Authentication/SignIn";
     });
+
 
 // Session
 builder.Services.AddDistributedMemoryCache();
@@ -136,12 +137,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-    // endpoints.MapAreaControllerRoute(
-    // areaName: "Admin",
-    // name: "Admin",
-    // pattern: "{area:exists}/{controller=Product}/{action=Index}/{id?}");
+    pattern: "{controller=Product}/{action=Index}/{id?}");
 
     endpoints.MapAreaControllerRoute(
     areaName: "Admin",

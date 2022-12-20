@@ -56,6 +56,7 @@ public class ImportController : Controller
     // ========================== ACTIONS ========================== //
 
     #region Actions
+    [HttpPost]
     public async Task<IActionResult> CreateSupplyRequestFormAsync(List<string> selectedProductIds, List<int> amounts, List<string> supplierIds)
     {
         var products = new List<ProductDetailModel>();

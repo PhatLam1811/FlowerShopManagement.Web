@@ -41,8 +41,6 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             _staffService = staffService;
         }
 
-        [Route("Index")]
-        [Route("")]
         [HttpGet]
         public async Task<IActionResult> Index(string filter = "")
         {
@@ -205,6 +203,10 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
                 orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
             }
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
+            if(filter != "")
+            {
+                productMs = productMs.Where(i => i.Name.Contains(filter)).ToList();
+            }
             if (orderVM != null)
             {
                 orderVM.AllProductModels = productMs;
