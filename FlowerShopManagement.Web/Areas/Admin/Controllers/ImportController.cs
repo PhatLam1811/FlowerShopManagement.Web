@@ -2,10 +2,12 @@
 using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 
+[Area("Admin")]
 public class ImportController : Controller
 {
     private readonly IStaffService _staffService;
@@ -39,7 +41,7 @@ public class ImportController : Controller
         var suppliers = await _staffService.GetAllSuppliersAsync();
 
         // Configure viewmodel
-        var viewmodel = new ImportViewModel(lowOnStockProducts, suppliers);
+        var viewmodel = new ImportViewModel(PaginatedList<ProductModel>.CreateAsync(lowOnStockProducts,1,10), suppliers);
 
         return View(viewmodel);
     }
@@ -54,6 +56,7 @@ public class ImportController : Controller
     // ========================== ACTIONS ========================== //
 
     #region Actions
+    [HttpPost]
     public async Task<IActionResult> CreateSupplyRequestFormAsync(List<string> selectedProductIds, List<int> amounts, List<string> supplierIds)
     {
         var products = new List<ProductDetailModel>();
@@ -94,14 +97,14 @@ public class ImportController : Controller
 
 public class ImportViewModel
 {
-    public List<ProductModel>? _lowOnStockProducts { get; set; }
-    public List<SupplierModel>? _suppliers { get; set; }
+    public PaginatedList<ProductModel>? _lowOnStockProducts { get; set; }
+    public List<SupplierModel>? _suppliers { get; set; } = new List<SupplierModel>();
 
     public ImportViewModel(
-        List<ProductModel>? lowOnStockProducts, 
+        PaginatedList<ProductModel>? lowOnStockProducts, 
         List<SupplierModel>? suppliers)
     {
         _lowOnStockProducts = lowOnStockProducts;
-        _suppliers = suppliers;
+        _suppliers = suppliers ?? new List<SupplierModel>();
     }
 }

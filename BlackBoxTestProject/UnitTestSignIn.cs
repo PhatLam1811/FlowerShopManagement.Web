@@ -11,7 +11,6 @@ namespace BlackBoxTestProject
 		[OneTimeSetUp]
 		public void StartChrome()
 		{
-			
 			driver = new ChromeDriver(".");
 		}
 

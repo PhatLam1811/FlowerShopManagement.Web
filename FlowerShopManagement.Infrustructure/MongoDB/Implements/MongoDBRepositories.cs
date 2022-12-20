@@ -187,7 +187,7 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
 
     public async Task<List<Product>> GetAllLowOnStock(int minimumAmount)
     {
-        var filter = Builders<Product>.Filter.Lte("amount", minimumAmount);
+        var filter = Builders<Product>.Filter.Lte("_amount", minimumAmount);
         var result = await _mongoDbCollection.FindAsync(filter);
         return result.ToList();
     }

@@ -13,6 +13,8 @@ using FlowerShopManagement.Infrustructure.Mail;
 using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Services.UserServices;
 using Microsoft.AspNetCore.Builder;
+using MailKit;
+using IMailService = FlowerShopManagement.Application.Interfaces.IMailService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -79,6 +81,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISaleService, SaleService>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+builder.Services.AddScoped<IImportService, ImportService>();
 builder.Services.AddScoped<IStockService, StockServices>();
 builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
@@ -86,7 +89,8 @@ builder.Services.AddScoped<IPersonalService, UserService>();
 builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
-builder.Services.AddScoped<MailKitService>();
+builder.Services.AddScoped<IMailService, MailKitService>();
+//builder.Services.AddScoped<MailKitService>();
 
 // HttpContextAccessor
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
