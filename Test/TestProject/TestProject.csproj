@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\FlowerShopManagement.Application\FlowerShopManagement.Application.csproj" />
+    <ProjectReference Include="..\..\FlowerShopManagement.Infrustructure\FlowerShopManagement.Infrustructure.csproj" />
   </ItemGroup>
 
 </Project>

@@ -41,7 +41,7 @@ public class ImportController : Controller
 
         // Parse to view model
         var viewModel = new ImportIndexVM();
-        viewModel.LowOnStockProductModels = lowOnStockProducts;
+        //viewModel.LowOnStockProductModels = lowOnStockProducts;
         viewModel.Suppliers = suppliers;
 
         return viewModel;
@@ -60,9 +60,9 @@ public class ImportController : Controller
         if (selectedItems == null || selectedSuppliers == null) return null;
 
         // Fill in the form model
-        var supplyForm = new SupplyFormModel(selectedItems, selectedSuppliers);
+        //var supplyForm = new SupplyFormModel(selectedItems, selectedSuppliers);
 
-        return supplyForm;
+        return null;
                     
         //return View(supplyForm);
     }

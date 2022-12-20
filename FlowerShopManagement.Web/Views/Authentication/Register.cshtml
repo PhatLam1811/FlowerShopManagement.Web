@@ -7,19 +7,23 @@
 		<form class="h-auto" method="post" asp-action="Register" asp-controller="Authentication" style="width: 300px">
 			<div class="form-group">
 				<label class="form-label" for="exampleFormControlInput1">Email</label>
-				<input type="email" asp-for="Email" name="Email" class="form-control form-control-lg h5 py-3" placeholder="">
+				<input type="email" asp-for="Email" class="form-control form-control-lg h5 py-3" placeholder="">
+				<span asp-validation-for="Email"></span>
 			</div>
 			<div class="form-group">
 				<label class="form-label" for="exampleFormControlInput1">Phone Number</label>
-				<input type="tel" asp-for="PhoneNumber" name="Email" class="form-control form-control-lg h5 py-3" placeholder="">
+				<input type="tel" asp-for="PhoneNumber" class="form-control form-control-lg h5 py-3" placeholder="">
+				<span asp-validation-for="PhoneNumber"></span>
 			</div>
 			<div class="form-group">
 				<label class="form-label" for="exampleFormControlInput1">Password</label>
-				<input type="password" asp-for="Password" name="Password" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
+				<input type="password" asp-for="Password" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
+				<span asp-validation-for="Password"></span>
 			</div>
 			<div class="form-group">
 				<label class="form-label" for="exampleFormControlInput1">Confirm Password</label>
-				<input type="password" asp-for="ConfirmPassword" name="Password" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
+				<input type="password" asp-for="ConfirmPassword" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
+				<span asp-validation-for="ConfirmPassword"></span>
 			</div>
 
 			<button class="btn btn-primary mt-5 float-end">Submit</button>

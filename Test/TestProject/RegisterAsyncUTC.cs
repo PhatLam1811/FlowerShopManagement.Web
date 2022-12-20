@@ -1,14 +1,18 @@
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Application.Services;
 using FlowerShopManagement.Core.Entities;
-using Moq;
+using FlowerShopManagement.Infrustructure.MongoDB.Implements;
+using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
 
 namespace TestProject;
 
-public class Tests
+public class RegisterAsyncUTC
 {
-    private readonly Mock<IUserRepository> _userRepository = new Mock<IUserRepository>();
-    private readonly Mock<ICartRepository> _cartRepository = new Mock<ICartRepository>();
+    private IMongoDBSettings _mongoDbSettings;
+    private IMongoDBContext _mongoDBContext;
+
+    private IUserRepository _userRepository;
+    private ICartRepository _cartRepository;
     private AuthService _authService;
 
     private string? Email;
@@ -18,7 +22,16 @@ public class Tests
     [SetUp]
     public void Setup()
     {
-;       _authService = new AuthService(_userRepository.Object, _cartRepository.Object);
+        _mongoDbSettings = new MongoDBSettings();
+        _mongoDbSettings.ConnectionString = "mongodb+srv://phatlam1811:%21D212884553@ooad-se100-n11-sem1-202.uk4cshi.mongodb.net/?retryWrites=true&w=majority";
+        _mongoDbSettings.DatabaseName = "Test-DB";
+
+        _mongoDBContext = new MongoDBContext(_mongoDbSettings);
+
+        _userRepository = new UserRepository(_mongoDBContext);
+        _cartRepository = new CartRepository(_mongoDBContext);
+
+        _authService = new AuthService(_userRepository, _cartRepository);
     }
 
     [Test]
@@ -31,7 +44,7 @@ public class Tests
 
         var result = await _authService.RegisterAsync(Email, PhoneNumber, Password);
 
-        Assert.IsInstanceOf<User>(result);
+        Assert.IsInstanceOf<User?>(result);
     }
 
     [Test]

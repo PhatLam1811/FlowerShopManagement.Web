@@ -1,9 +1,9 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
-using FlowerShopManagement.Core.Entities;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using FlowerShopManagement.Core.Entities;
 using System.Runtime.InteropServices;
 using System.Security.Claims;
 using System.Text.RegularExpressions;
@@ -89,16 +89,7 @@ public class AuthService : IAuthService
     {
         try
         {
-            var user = await _userRepository.GetByEmailOrPhoneNb(emailOrPhoneNb);
-
-            // Wrong email or phone number
-            if (user == null) return false;
-
-            // Encrypt the input password using MD5
-            string encryptedPass = Validator.MD5Hash(password);
-
-            // Wrong password
-            if (!user.password.Equals(encryptedPass)) return false;
+            var user = await SignInAsync(emailOrPhoneNb, password);
 
             // HttpContext sign in
             await HttpSignIn(httpContext, user._id, user.role.ToString());
@@ -117,6 +108,24 @@ public class AuthService : IAuthService
         }
     }
 
+    public async Task<User?> SignInAsync(string? emailOrPhoneNb, string? password)
+    {
+        if (emailOrPhoneNb == null || password == null) return null;
+
+        var result = await _userRepository.GetByEmailOrPhoneNb(emailOrPhoneNb);
+
+        // Wrong email or phone number
+        if (result == null) return null;
+
+        // Encrypt the input password using MD5
+        string encryptedPass = Validator.MD5Hash(password);
+
+        if (result.password.Equals(encryptedPass)) 
+            return result; 
+        else
+            return null; // Wrong password
+    }
+ 
     public async Task<bool> SignOutAsync(HttpContext httpContext)
     {
         try
