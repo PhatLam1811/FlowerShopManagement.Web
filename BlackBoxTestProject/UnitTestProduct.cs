@@ -20,7 +20,6 @@ namespace BlackBoxTestProject
             account.SendKeys("jah@gmail.com");
             password.SendKeys("123123");
             webElement.Click();
-
         }
 
 		[Test]
@@ -44,6 +43,7 @@ namespace BlackBoxTestProject
             IWebElement webElement = driver.FindElement(By.Id("hihi"));
             Assert.That(webElement.Displayed, Is.True);
         }
+
         [Test]
         public void Test3Create()
         {

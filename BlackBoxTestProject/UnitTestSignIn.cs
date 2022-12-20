@@ -16,7 +16,7 @@ namespace BlackBoxTestProject
 		}
 
 		[Test]
-		public void Test1JUSTDOIT()
+		public void TestShowLoginInPage()
 		{
 			driver.Navigate().GoToUrl("https://localhost:7120/");
 
@@ -28,7 +28,7 @@ namespace BlackBoxTestProject
 
 
         [Test]
-        public void Test2DungTKMK()
+        public void Test2RightPassword()
         {
             driver.Navigate().GoToUrl("https://localhost:7120/");
 
@@ -43,7 +43,7 @@ namespace BlackBoxTestProject
         }
 
         [Test]
-        public void Test3SaiTKMK()
+        public void Test3WrongPassword()
         {
             driver.Navigate().GoToUrl("https://localhost:7120/");
             IWebElement account = driver.FindElement(By.Id("ip-account"));

@@ -5,7 +5,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace BlackBoxTestProject
 {
-	public class Test3s
+	public class TestUsers
 	{
 		IWebDriver driver;
 
@@ -37,7 +37,7 @@ namespace BlackBoxTestProject
 		}
 
         [Test]
-        public void Test3Create()
+        public void TestUserCreate()
         {
            
 			//open create order page
@@ -73,7 +73,7 @@ namespace BlackBoxTestProject
         }
 
 		[Test]
-		public void TestEdit()
+		public void TestUserEdit()
 		{
 			//Submit login
 			IWebElement webElement = driver.FindElement(By.Id("jahdkd@gmail.com"));
