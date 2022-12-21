@@ -39,7 +39,7 @@ public class AuthenticationController : ControllerBase
     {
         var currentUser = await _authServices.RegisterAsync(HttpContext, email, phoneNumber, password);
 
-        return currentUser;
+        return null;
 
         // return CustomerPageView(currentUser);
     }
@@ -50,7 +50,7 @@ public class AuthenticationController : ControllerBase
     {
         var currentUser = await _authServices.SignInAsync(HttpContext, emailOrPhoneNb, password);
 
-        return currentUser;
+        return null;
 
         //if (_authServices.GetUserRole == Role.Customer.Value)
         //    return CustomerPageView(userModel);

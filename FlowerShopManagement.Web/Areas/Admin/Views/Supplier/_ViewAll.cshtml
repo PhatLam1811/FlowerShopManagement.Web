@@ -34,7 +34,7 @@
 					<td>@Model[i-1].Description</td>
 					<td>@Model[i-1].Address</td>
 					<td>
-						<a asp-action="Edit" id="@Model[i-1]._id" asp-controller="Supplier" asp-area="Admin" class="border-1 link-info table-icon">
+						<a asp-action="Edit" asp-controller="Supplier" asp-area="Admin" asp-route-id="@Model[i-1]._id" class="border-1 link-info table-icon">
 							<i class="fas fa-edit"></i>
 						</a>
 					</td>
