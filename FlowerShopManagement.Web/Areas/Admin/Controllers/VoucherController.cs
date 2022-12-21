@@ -38,7 +38,10 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         {
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
             //Should get a new one because an admin updates data realtime
-            VoucherDetailModel editProduct = new VoucherDetailModel(await _voucherRepository.GetById(id));
+            var obj = await _voucherRepository.GetById(id);
+            if(obj == null) return NotFound();
+
+			VoucherDetailModel editProduct = new VoucherDetailModel(obj);
             if (editProduct != null)
             {
                 return View(editProduct);
@@ -60,6 +63,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             {
                 //If product != null => we will update this order by using directly orderModel.Id
                 //Check ProductModel for sure if losing some data
+                
                 var result = await _voucherRepository.UpdateById(voucherM.Code, voucherM.ToEntity());
                 if (result != false)
                 {
@@ -102,17 +106,11 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
         //Open an Create Dialog
         [HttpGet]
-        public async Task<IActionResult> Create()
+        public  IActionResult Create()
         {
             //Set up default values for OrderPage
 
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
-
-            /*Set up viewmodel
-			 
-
-
-			*/
             return View(new VoucherDetailModel());
         }
 

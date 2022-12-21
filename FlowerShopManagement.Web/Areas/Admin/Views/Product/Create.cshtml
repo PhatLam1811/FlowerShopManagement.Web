@@ -1,7 +1,6 @@
-﻿@using FlowerShopManagement.Core.Enums
-@model ProductDetailModel
+﻿@model ProductDetailModel
 @{
-	List<Categories>? categories = ViewData["Categories"] as List<Categories> ?? null;
+	List<string>? categories = ViewData["Categories"] as List<string> ?? null;
 }
 <p class="mt-4"></p>
 <span class="h1">Create new Product</span>
@@ -32,16 +31,16 @@
 		<div class="row">
 			<div class="col form-group">
 				<label class="form-label" for="exampleFormControlInput1">Price</label>
-				<input type="number" asp-for="UniPrice" class="form-control form-control-lg h5 py-3" id="ip-price" placeholder="">
+				<input type="number" asp-for="UniPrice" class="form-control form-control-lg h5 py-3" id="ip-price" value="" placeholder="0">
 			</div>
 
 			<div class="col form-group">
 				<label class="form-label" for="exampleFormControlInput1">Amount</label>
-				<input type="number" asp-for="Amount" class="form-control form-control-lg h5 py-3" id="ip-amount" placeholder="">
+				<input type="number" asp-for="Amount" class="form-control form-control-lg h5 py-3" id="ip-amount" value="" placeholder="0">
 			</div>
 			<div class="col form-group">
 				<label class="form-label" for="selectCategory">Category</label>
-				<select class="form-select form-select-lg h5 py-3" name="Categories" asp-items="@(new SelectList(categories))" id="selectCategory" aria-label="Floating label select example">
+				<select class="form-select form-select-lg h5 py-3" asp-for="Categories" asp-items="@(new SelectList(categories))" id="selectCategory" aria-label="Floating label select example">
 				</select>
 			</div>
 		</div>

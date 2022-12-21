@@ -7,14 +7,14 @@ namespace FlowerShopManagement.Application.Models;
 public class ProductModel
 
 {
-    public string? Id { get; set; }
-    public string Name { get; set; }
-    public string Picture { get; set; }
-    public int UniPrice { get; set; }
-    public int Amount { get; set; }
-    public Color Color { get; set; }
-    public float WholesaleDiscount { get; set; }
-    public List<Categories>? Categories { get; set; }
+    public string? Id { get; set; } = string.Empty;
+    public string Name { get; set; } = string.Empty;
+	public string Picture { get; set; } = string.Empty;
+    public int UniPrice { get; set; } = 0;
+	public int Amount { get; set; } = 0;
+    public Color Color { get; set; } = Color.Sample;
+    public float WholesaleDiscount { get; set; } = 0;
+    public Categories Categories { get; set; } = Core.Enums.Categories.Unknown;
     public ProductModel(Product entity)
     {
         Id = entity._id;
@@ -34,7 +34,7 @@ public class ProductModel
         Name = "";
         Amount = amount;
         WholesaleDiscount = 0;
-        Categories= new List<Categories>();
+        Categories= Core.Enums.Categories.Unknown;
     }
 
     public ProductModel()
@@ -54,7 +54,8 @@ public class ProductModel
     public Product ToEntity()
     {
         if (Id == null || Id == "00000000-0000-0000-0000-000000000000") Id = Guid.NewGuid().ToString();
-        return new Product(id: Id, name: Name, picture: Picture, uniPrice: UniPrice, amount: Amount, wholesaleDiscount: WholesaleDiscount, categories: Categories);
+        return new Product(id: Id, name: Name, picture: Picture, 
+            uniPrice: UniPrice, amount: Amount, wholesaleDiscount: WholesaleDiscount, categories: Categories);
 
     }
 }
@@ -62,7 +63,7 @@ public class ProductModel
 
 public class ProductDetailModel
 {
-    public string? Id { get; set; }
+    public string? Id { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string Picture { get; set; } = string.Empty;
     public int UniPrice { get; set; } = 0; 
@@ -73,7 +74,7 @@ public class ProductDetailModel
     public string Material { get; set; } = string.Empty;
     public string Size { get; set; } = string.Empty;
     public string Maintainment { get; set; } = string.Empty;
-    public List<Categories> Categories { get; set; } = new List<Categories>();
+    public Categories Categories { get; set; } =  Categories.Unknown;
     public IFormFile FormPicture { get; set; }
 
     public ProductDetailModel(Product entity)
@@ -82,6 +83,8 @@ public class ProductDetailModel
         Picture = entity._picture;
         Name = entity._name;
         Amount = entity._amount;
+        Categories = entity._categories;
+        UniPrice = entity._uniPrice;
         WholesaleDiscount = entity._wholesaleDiscount;
         Color = entity._color;
         Description = entity._description;

@@ -34,9 +34,9 @@ public class VoucherDetailModel
         Code = new Guid().ToString();
     }
 
-    public Voucher? ToEntity()
+    public Voucher ToEntity()
     {
-        if (Code == null) return null;
+        if (Code == null) return new Voucher();
         return new Voucher(id: Code, discount: Discount, valueType: ValueType, conditionValue: ConditionValue, amount: Amount, expiredDate: ExpiredDate,
             voucherStatus: State, createdDate: CreatedDate);
 

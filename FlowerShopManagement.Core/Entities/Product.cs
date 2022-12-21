@@ -7,7 +7,7 @@ public class Product
     public string? _id { get; set; }
     public string _name { get; set; }
     public string _picture { get; set; }
-    public List<Categories>? _categories { get; set; }
+    public Categories _categories { get; set; }
     public float _rating { get; set; }
     public int _uniPrice { get; set; }
     public int _amount { get; set; }
@@ -23,7 +23,7 @@ public class Product
 
     public Product( string? id = null,
         string name = "", string picture = "", 
-        List<Categories>? categories = null, int amount = 0,
+        Categories categories = Categories.Unknown, int amount = 0,
         int uniPrice = 0, float wholesaleDiscount = 0.0f, string description = "", 
         string maintainment  = "", string size = "0cm x 0cm x 0cm", string material = "", Color color = Color.Sample)
     {
