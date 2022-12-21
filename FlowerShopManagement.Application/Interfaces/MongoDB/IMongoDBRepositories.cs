@@ -7,11 +7,11 @@ public interface IBaseRepository<TEntity> : IDisposable where TEntity : class
 {
     public Task<bool> Add(TEntity entity);
 
-    public Task<List<TEntity>> GetAll();
+    public Task<List<TEntity>?> GetAll();
 
-    public Task<TEntity> GetById(string id);
+    public Task<TEntity?> GetById(string id);
 
-    public Task<TEntity> GetByField(string fieldName, IComparable value);
+    public Task<TEntity?> GetByField(string fieldName, IComparable value);
 
     public Task<bool> RemoveById(string id);
 
@@ -24,8 +24,8 @@ public interface IBaseRepository<TEntity> : IDisposable where TEntity : class
 
 public interface IUserRepository : IBaseRepository<User> 
 {
-    public Task<User> GetByEmailOrPhoneNb(string emailOrPhoneNb);
-    public Task<List<User>> GetByRole(Role role);
+    public Task<User?> GetByEmailOrPhoneNb(string emailOrPhoneNb);
+    public Task<List<User>?> GetByRole(Role role);
 }
 
 public interface ICartRepository : IBaseRepository<Cart> { }
@@ -36,7 +36,7 @@ public interface ISupplierRepository : IBaseRepository<Supplier> { }
 
 public interface IProductRepository : IBaseRepository<Product> 
 {
-    public Task<List<Product>> GetAllLowOnStock(int minimumAmount);
+    public Task<List<Product>?> GetAllLowOnStock(int minimumAmount);
 }
 
 public interface IVoucherRepository : IBaseRepository<Voucher> { }

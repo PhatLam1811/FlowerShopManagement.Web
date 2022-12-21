@@ -82,8 +82,6 @@ public class ProfileController : Controller
     [HttpPost]
     public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
     {
-        var user = await _userRepository.GetByEmailOrPhoneNb("jah@gmail.com");
-
         // Check old password
 
         if (ModelState.IsValid)

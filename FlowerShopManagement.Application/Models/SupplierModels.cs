@@ -4,8 +4,6 @@ namespace FlowerShopManagement.Application.Models;
 
 public class SupplierDetailModel : SupplierModel
 {
-    private string _id;
-
     public string Address { get; set; }
     public string Description { get; set; }
 
@@ -16,7 +14,6 @@ public class SupplierDetailModel : SupplierModel
 
     public SupplierDetailModel(Supplier supplier) : base(supplier)
     {
-        _id = supplier._id;
         Address = supplier.address;
         Description = supplier.description;
     }

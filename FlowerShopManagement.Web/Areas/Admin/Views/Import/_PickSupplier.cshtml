@@ -1,6 +1,5 @@
 ﻿@model List<SupplierModel>?
 
-<form method="post" action="@(Url.Action("PickedAnItem", "Import"))" onsubmit="return jQueryAjaxReloadPickingTable(this);">
 
 	<div class="row">
 		<div class="col p-0 mt-2">
@@ -34,7 +33,7 @@
 												{
 													id++;
 
-													<input name="ids" value="@i._id" hidden />
+@*													<input name="supplierIds" value="@i._id" hidden />*@
 													<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed w-100">
 
 														<td>
@@ -45,7 +44,7 @@
 														<td>@i.Email</td>
 														<td>
 															<div class="form-floating">
-																<input type="checkbox" class="form-check-input fs-4" name="supplierIds" />
+															<input type="checkbox" class="form-check-input fs-4" value="@i._id" name="supplierIds" />
 															</div>
 														</td>
 													</tr>
@@ -62,4 +61,3 @@
 		</div>
 	</div>
 
-</form>

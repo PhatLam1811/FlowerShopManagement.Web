@@ -41,11 +41,12 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
         catch (Exception e)
         {
-            throw new Exception(e.Message);
+            // throw new Exception(e.Message);
+            return false;
         }
     }
 
-    public virtual async Task<List<TEntity>> GetAll()
+    public virtual async Task<List<TEntity>?> GetAll()
     {
         try
         {
@@ -53,11 +54,12 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
         catch (Exception e)
         {
-            throw new Exception(e.Message);
+            // throw new Exception(e.Message);
+            return null;
         }
     }
 
-    public virtual async Task<TEntity> GetByField(string fieldName, IComparable value)
+    public virtual async Task<TEntity?> GetByField(string fieldName, IComparable value)
     {
         try
         {
@@ -65,11 +67,12 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
         catch (Exception e)
         {
-            throw new Exception(e.Message);
+            // throw new Exception(e.Message);
+            return null;
         }
     }
 
-    public virtual async Task<TEntity> GetById(string id)
+    public virtual async Task<TEntity?> GetById(string id)
     {
         try
         {
@@ -90,7 +93,8 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
         catch (Exception e)
         {
-            throw new Exception(e.Message);
+            // throw new Exception(e.Message);
+            return false;
         }
     }
 
@@ -103,7 +107,8 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
         catch (Exception e)
         {
-            throw new Exception(e.Message);
+            // throw new Exception(e.Message);
+            return false;
         }
     }
 
@@ -116,7 +121,8 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
         catch (Exception e)
         {
-            throw new Exception(e.Message);
+            // throw new Exception(e.Message);
+            return false;
         }
     }
 
@@ -129,7 +135,8 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
         catch (Exception e)
         {
-            throw new Exception(e.Message);
+            // throw new Exception(e.Message);
+            return false;
         }
     }
 
@@ -147,7 +154,7 @@ public class UserRepository : BaseRepository<User>, IUserRepository
         CreateUniqueIndex("phoneNumber");
     }
 
-    public async Task<User> GetByEmailOrPhoneNb(string emailOrPhoneNb)
+    public async Task<User?> GetByEmailOrPhoneNb(string emailOrPhoneNb)
     {
         var filter = Builders<User>.Filter.Eq("email", emailOrPhoneNb);
         filter |= Builders<User>.Filter.Eq("phoneNumber", emailOrPhoneNb);
@@ -155,7 +162,7 @@ public class UserRepository : BaseRepository<User>, IUserRepository
         return result.FirstOrDefault();
     }
 
-    public async Task<List<User>> GetByRole(Role role)
+    public async Task<List<User>?> GetByRole(Role role)
     {
         var filter = Builders<User>.Filter.Eq("role", role);
         var result = await _mongoDbCollection.FindAsync(filter);
@@ -185,7 +192,7 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
 {
     public ProductRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 
-    public async Task<List<Product>> GetAllLowOnStock(int minimumAmount)
+    public async Task<List<Product>?> GetAllLowOnStock(int minimumAmount)
     {
         var filter = Builders<Product>.Filter.Lte("_amount", minimumAmount);
         var result = await _mongoDbCollection.FindAsync(filter);
