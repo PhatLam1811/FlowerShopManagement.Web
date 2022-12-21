@@ -229,7 +229,7 @@ public class CreateRequestFormUTC
     public void F04UTCID010()
     {
         // Null product list
-        var productSize = 6;
+        var productSize = 5;
         var supplierSize = 1;
         SelectedProducts = _products.Take<ProductDetailModel>(productSize).ToList<ProductDetailModel>();
         SelectedSuppliers = _suppliers.Take<SupplierModel>(supplierSize).ToList<SupplierModel>();

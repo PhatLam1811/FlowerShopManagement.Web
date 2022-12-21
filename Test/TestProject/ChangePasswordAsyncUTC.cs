@@ -137,8 +137,8 @@ public class ChangePasswordAsyncUTC
     {
         // Safe input
         Id = "4b0a4c53-dc98-4209-bb2b-588fa0c9ee48";
-        OldPassword = "Asdhf1233";
-        NewPassword = "Dsgdfsg324235";
+        OldPassword = "Dsgdfsg324235";
+        NewPassword = "123123";
 
         Assert.IsTrue(await _userService.ChangePasswordAsync(Id, OldPassword, NewPassword));
     }

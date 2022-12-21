@@ -56,7 +56,7 @@ public class AuthService : IAuthService
 
         if (password == null || email == null || phoneNb == null || password == null) return null;
         if (password.Length < 6 || !emailRgx.IsMatch(email) || !phoneNbRgx.IsMatch(phoneNb) || !passRgx.IsMatch(password)) return null;
-
+        
         try
         {
             // Encrypt password
