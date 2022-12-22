@@ -13,366 +13,386 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 [Authorize]
 public class UserController : Controller
 {
-	private readonly IAuthService _authService;
-	private readonly IPersonalService _personalService;
-	private readonly IAdminService _adminService;
-	private readonly IStaffService _staffService;
+    private readonly IAuthService _authService;
+    private readonly IPersonalService _personalService;
+    private readonly IAdminService _adminService;
+    private readonly IStaffService _staffService;
 
-	public UserController(
-		IAuthService authService,
-		IAdminService adminService,
-		IStaffService staffService,
-		IPersonalService personalService)
-	{
-		_authService = authService;
-		_adminService = adminService;
-		_staffService = staffService;
-		_personalService = personalService;
-	}
+    public UserController(
+        IAuthService authService,
+        IAdminService adminService,
+        IStaffService staffService,
+        IPersonalService personalService)
+    {
+        _authService = authService;
+        _adminService = adminService;
+        _staffService = staffService;
+        _personalService = personalService;
+    }
 
-	[Route("Index")]
-	public async Task<IActionResult> Index(string filter = "")
-	{
-		ViewBag.User = true;
+    [Route("Index")]
+    public async Task<IActionResult> Index(string filter = "")
+    {
+        ViewBag.User = true;
 
-		try
-		{
-			var users = new List<UserDetailsModel>();
-
-
-			// Get all users registered (both customers & staffs)
-			users = await _staffService.GetUsersAsync();
-			if (users != null)
-			{
-				if (filter == "" || filter == "All")
-				{
-					users = users.OrderBy(i => i.CreatedDate).ToList();
-				}
-				else
-				{
-					users = users.Where(i => i.Role.ToString().Equals(filter)).ToList();
-				}
-			}
+        try
+        {
+            var users = new List<UserDetailsModel>();
 
 
-			return View(users); // return the List of Models or attach it to the view model
-		}
-		catch
-		{
-			return NotFound(); // Notify failed to retrieve the list of users for some reasons!
-		}
-	}
-
-	[Route("Create")]
-	[HttpGet]
-	public IActionResult Create()
-	{
-		return View(new UserDetailsModel());
-	}
-
-	[Route("Create")]
-	[HttpPost]
-	public async Task<IActionResult> Create(UserDetailsModel model)
-	{
-		// Create
-		bool result = false;
-		try
-		{
-			if (model.Role == Role.Customer)
-				result = await _adminService.AddCustomerAsync(model);
-			else if (model.Role == Role.Staff)
-			{
-				result = await _adminService.AddStaffAsync(model, Role.Staff);
-
-			}
-			return RedirectToAction("Index");
-		}
-		catch { return NotFound(); }
-	}
-
-	[Route("Edit")]
-	[HttpGet]
-	public async Task<IActionResult> Edit(string id)
-	{
-		// Get user
-		try
-		{
-			var user = await _adminService.GetUserByPhone(id);
-			return View(user);
-		}
-		catch { return NotFound(); }
-
-	}
-
-	[Route("Edit")]
-	[HttpPost]
-	public async Task<IActionResult> Edit(UserDetailsModel model)
-	{
-		try
-		{
-			if (ModelState.IsValid)
-			{
-				var result = await _adminService.EditUserAsync(model);
-				var users = new List<UserDetailsModel>();
-
-				return RedirectToAction("Index"); // return the List of Models or attach it to the view model
-			}
-			else
-			{
-				return NotFound();
-			}
-		}
-		catch
-		{
-			return NotFound(); // Notify failed to retrieve the list of users for some reasons!
-		}
-	}
+            // Get all users registered (both customers & staffs)
+            users = await _staffService.GetUsersAsync();
+            if (users != null)
+            {
+                if (filter == "" || filter == "All")
+                {
+                    users = users.OrderBy(i => i.CreatedDate).ToList();
+                }
+                else
+                {
+                    users = users.Where(i => i.Role.ToString().Equals(filter)).ToList();
+                }
+            }
 
 
+            return View(users); // return the List of Models or attach it to the view model
+        }
+        catch
+        {
+            return NotFound(); // Notify failed to retrieve the list of users for some reasons!
+        }
+    }
 
-	// ========================= ADMIN ========================= //
+    [Route("Create")]
+    [HttpGet]
+    public IActionResult Create()
+    {
+        return View(new UserDetailsModel());
+    }
 
-	public async Task AddStaffAsync(UserDetailsModel newStaffModel)
-	{
-		try
-		{
-			await _adminService.AddStaffAsync(newStaffModel, Role.Staff);
+    [Route("Create")]
+    [HttpPost]
+    public async Task<IActionResult> Create(UserDetailsModel model)
+    {
+        // Create
+        bool result = false;
+        try
+        {
+            if (model.Role == Role.Customer)
+                result = await _adminService.AddCustomerAsync(model);
+            else if (model.Role == Role.Staff)
+            {
+                result = await _adminService.AddStaffAsync(model, Role.Staff);
+            }
+            if (result == true)
+                return RedirectToAction("Index");
+            else
+                return NotFound();
+        }
+        catch
+        {
+            return NotFound();
+        }
+    }
 
-			return; // Notify successfully added a new staff
-		}
-		catch
-		{
-			return; // Notify failed to add a new staff for some reasons!
-		}
-	}
+    [Route("Edit")]
+    [HttpGet]
+    public async Task<IActionResult> Edit(string id)
+    {
+        // Get user
+        try
+        {
+            var user = await _adminService.GetUserByPhone(id);
+            return View(user);
+        }
+        catch { return NotFound(); }
 
-	public async Task AddSupplierAsync(SupplierDetailModel newSupplierModel)
-	{
-		try
-		{
-			await _adminService.AddSupplierAsync(newSupplierModel);
+    }
 
-			return; // Notify successfully added a new supplier!
-		}
-		catch
-		{
-			return; // Notify failed to add a new supplier for some reasons!
-		}
-	}
+    [Route("Edit")]
+    [HttpPost]
+    public async Task<IActionResult> Edit(UserDetailsModel model)
+    {
+        try
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await _adminService.EditUserAsync(model);
+                var users = new List<UserDetailsModel>();
 
-	public async Task EditSupplierAsync(SupplierDetailModel supplierModel)
-	{
-		try
-		{
-			await _adminService.EditSupplierAsync(supplierModel);
+                return RedirectToAction("Index"); // return the List of Models or attach it to the view model
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+        catch
+        {
+            return NotFound(); // Notify failed to retrieve the list of users for some reasons!
+        }
+    }
 
-			return; // Notify successfully editted a supplier!
-		}
-		catch
-		{
-			return; // Notify failed to add edit a supplier for some reasons!
-		}
-	}
+    [Route("Delete")]
+    [HttpPost]
+    public async Task<IActionResult> Delete(string id, string role)
+    {
+        try
+        {
+            var result = await _adminService.RemoveAccountAsync(id, role);
+            if (result == true) 
+                return RedirectToAction("Index");
+            return NotFound();
+        }
+        catch
+        {
+            return NotFound();
+        }
+    }
 
-	public async Task RemoveSupplierAsync(SupplierModel supplierModel)
-	{
-		try
-		{
-			await _adminService.RemoveSupplierAsync(supplierModel);
+    // ========================= ADMIN ========================= //
 
-			return; // Notify successfully removed a supplier!
-		}
-		catch
-		{
-			return; // Notify failed to add remove a supplier for some reasons!
-		}
-	}
+    public async Task AddStaffAsync(UserDetailsModel newStaffModel)
+    {
+        try
+        {
+            await _adminService.AddStaffAsync(newStaffModel, Role.Staff);
 
-	public async Task EditUserRoleAsync(UserDetailsModel userModel, Role newRole)
-	{
-		try
-		{
-			await _adminService.EditUserRoleAsync(userModel, newRole);
+            return; // Notify successfully added a new staff
+        }
+        catch
+        {
+            return; // Notify failed to add a new staff for some reasons!
+        }
+    }
 
-			return; // Notify successfully editted the role of a user!
-		}
-		catch
-		{
-			return; // Notify failed to editt the role of a user for some reasons!
-		}
-	}
+    public async Task AddSupplierAsync(SupplierDetailModel newSupplierModel)
+    {
+        try
+        {
+            await _adminService.AddSupplierAsync(newSupplierModel);
 
-	// ========================= STAFF ========================= //
+            return; // Notify successfully added a new supplier!
+        }
+        catch
+        {
+            return; // Notify failed to add a new supplier for some reasons!
+        }
+    }
 
-	public async Task ResetUserPassword(UserDetailsModel userModel)
-	{
-		try
-		{
-			await _staffService.ResetPasswordAsync(userModel);
+    public async Task EditSupplierAsync(SupplierDetailModel supplierModel)
+    {
+        try
+        {
+            await _adminService.EditSupplierAsync(supplierModel);
 
-			return; // Notify successfully reset password!
-		}
-		catch
-		{
-			return; // Notify failed to reset the password for some reasons!
-		}
-	}
+            return; // Notify successfully editted a supplier!
+        }
+        catch
+        {
+            return; // Notify failed to add edit a supplier for some reasons!
+        }
+    }
 
-	public async Task RemoveUserAccountAsync(UserDetailsModel userModel)
-	{
-		// Should a staff able to remove other staff accounts?
-		//if (userModel.Role == Role.Staff)
-		//    return;
+    public async Task RemoveSupplierAsync(SupplierModel supplierModel)
+    {
+        try
+        {
+            await _adminService.RemoveSupplierAsync(supplierModel);
 
-		try
-		{
-			await _staffService.RemoveUserAsync(userModel);
+            return; // Notify successfully removed a supplier!
+        }
+        catch
+        {
+            return; // Notify failed to add remove a supplier for some reasons!
+        }
+    }
 
-			return; // Notify successfully removed the selected user's account 
-		}
-		catch
-		{
-			return; // Notify failed to remove the account for some reasons!
-		}
-	}
+    public async Task EditUserRoleAsync(UserDetailsModel userModel, Role newRole)
+    {
+        try
+        {
+            await _adminService.EditUserRoleAsync(userModel, newRole);
 
-	public async Task AddCustomerAsync(UserDetailsModel newCustomerModel)
-	{
-		try
-		{
-			await _staffService.AddCustomerAsync(newCustomerModel);
+            return; // Notify successfully editted the role of a user!
+        }
+        catch
+        {
+            return; // Notify failed to editt the role of a user for some reasons!
+        }
+    }
 
-			return; // Notify successfully added a new customer
-		}
-		catch
-		{
-			return; // Notify failed to add a new customer for some reasons!
-		}
-	}
+    // ========================= STAFF ========================= //
 
-	public async Task GetAllSuppliersAsync()
-	{
-		try
-		{
-			var suppliers = new List<SupplierModel>();
+    public async Task ResetUserPassword(UserDetailsModel userModel)
+    {
+        try
+        {
+            await _staffService.ResetPasswordAsync(userModel);
 
-			suppliers = await _staffService.GetAllSuppliersAsync();
+            return; // Notify successfully reset password!
+        }
+        catch
+        {
+            return; // Notify failed to reset the password for some reasons!
+        }
+    }
 
-			return; // return the List of Models or attach it to the view model
-		}
-		catch
-		{
-			return; // Notify failed to retrieve the list of suppliers for some reasons!
-		}
-	}
+    public async Task RemoveUserAccountAsync(UserDetailsModel userModel)
+    {
+        // Should a staff able to remove other staff accounts?
+        //if (userModel.Role == Role.Staff)
+        //    return;
 
-	public async Task GetAllUsersAsync()
-	{
-		try
-		{
-			var users = new List<UserDetailsModel>();
+        try
+        {
+            await _staffService.RemoveUserAsync(userModel);
 
-			// Get all users registered (both customers & staffs)
-			users = await _staffService.GetUsersAsync();
+            return; // Notify successfully removed the selected user's account 
+        }
+        catch
+        {
+            return; // Notify failed to remove the account for some reasons!
+        }
+    }
 
-			return; // return the List of Models or attach it to the view model
-		}
-		catch
-		{
-			return; // Notify failed to retrieve the list of users for some reasons!
-		}
-	}
+    public async Task AddCustomerAsync(UserDetailsModel newCustomerModel)
+    {
+        try
+        {
+            await _staffService.AddCustomerAsync(newCustomerModel);
 
-	// ========================= PERSONAL ========================= //
+            return; // Notify successfully added a new customer
+        }
+        catch
+        {
+            return; // Notify failed to add a new customer for some reasons!
+        }
+    }
 
-	public async Task RemovePersonalAccountAsync()
-	{
-		// ====== Should have password, email or phone number verification here!!!!! ======
+    public async Task GetAllSuppliersAsync()
+    {
+        try
+        {
+            var suppliers = new List<SupplierModel>();
 
-		try
-		{
-			// Dont need to get the entire user
-			// Might need if want to do verification in earlier steps
-			var currentUserId = _authService.GetUserId(HttpContext);
-			var currentUserRole = _authService.GetUserRole(HttpContext);
+            suppliers = await _staffService.GetAllSuppliersAsync();
 
-			if (currentUserId == null || currentUserRole == null)
-				return; // Notify the current user not found!
+            return; // return the List of Models or attach it to the view model
+        }
+        catch
+        {
+            return; // Notify failed to retrieve the list of suppliers for some reasons!
+        }
+    }
 
-			await _personalService.RemoveAccountAsync(currentUserId, currentUserRole);
+    public async Task GetAllUsersAsync()
+    {
+        try
+        {
+            var users = new List<UserDetailsModel>();
 
-			// Notify successfully removed current user's account
-			// Might redirect to the homepage without signin
-			return;
-		}
-		catch
-		{
-			return; // Notify failed to remove the account for some reasons!
-		}
-	}
+            // Get all users registered (both customers & staffs)
+            users = await _staffService.GetUsersAsync();
 
-	public async Task EditPersonalInfoAsync(UserDetailsModel userModel)
-	{
-		try
-		{
-			// Change & save the editted info from front-end to database
-			await _personalService.EditInfoAsync(userModel);
+            return; // return the List of Models or attach it to the view model
+        }
+        catch
+        {
+            return; // Notify failed to retrieve the list of users for some reasons!
+        }
+    }
 
-			return; // Notify succesfully editted current user info
-		}
-		catch
-		{
-			return; // Notify failed to edit current user info for some reasons!
-		}
-	}
+    // ========================= PERSONAL ========================= //
 
-	public async Task ResetPersonalPasswordAsync()
-	{
-		// ====== Should have email or phone number verification here!!!!! ======
+    public async Task RemovePersonalAccountAsync()
+    {
+        // ====== Should have password, email or phone number verification here!!!!! ======
 
-		try
-		{
-			var currentUser = await GetCurrentUser();
+        try
+        {
+            // Dont need to get the entire user
+            // Might need if want to do verification in earlier steps
+            var currentUserId = _authService.GetUserId(HttpContext);
+            var currentUserRole = _authService.GetUserRole(HttpContext);
 
-			await _personalService.ResetPasswordAsync(currentUser);
+            if (currentUserId == null || currentUserRole == null)
+                return; // Notify the current user not found!
 
-			return; // Notify successfully reset password!
-		}
-		catch
-		{
-			return; // Notify failed to reset the password for some reasons!
-		}
-	}
+            await _personalService.RemoveAccountAsync(currentUserId, currentUserRole);
 
-	public async Task ChangePersonalPasswordAsync(string oldPassword, string newPassword, string confirmPassword)
-	{
-		if (newPassword != confirmPassword)
-			return; // Notify the passwords dont match!
+            // Notify successfully removed current user's account
+            // Might redirect to the homepage without signin
+            return;
+        }
+        catch
+        {
+            return; // Notify failed to remove the account for some reasons!
+        }
+    }
 
-		if (oldPassword == newPassword)
-			return; // Notify new password is the same as old password!
+    public async Task EditPersonalInfoAsync(UserDetailsModel userModel)
+    {
+        try
+        {
+            // Change & save the editted info from front-end to database
+            await _personalService.EditInfoAsync(userModel);
 
-		try
-		{
-			var currentUser = await GetCurrentUser();
+            return; // Notify succesfully editted current user info
+        }
+        catch
+        {
+            return; // Notify failed to edit current user info for some reasons!
+        }
+    }
 
-			// Verify old password
-			var encryptedPass = Validator.MD5Hash(oldPassword);
-			if (!currentUser.IsPasswordMatched(encryptedPass))
-				return; // Old password didnt match! 
+    public async Task ResetPersonalPasswordAsync()
+    {
+        // ====== Should have email or phone number verification here!!!!! ======
 
-			await _personalService.ChangePasswordAsync(currentUser, newPassword);
+        try
+        {
+            var currentUser = await GetCurrentUser();
 
-			return; // Notify successfully changed password!
-		}
-		catch
-		{
-			return; // Notify failed to change the password for some reasons!
-		}
-	}
+            await _personalService.ResetPasswordAsync(currentUser);
 
-	private async Task<UserDetailsModel> GetCurrentUser()
-	{
-		return await _authService.GetUserAsync(HttpContext);
-	}
+            return; // Notify successfully reset password!
+        }
+        catch
+        {
+            return; // Notify failed to reset the password for some reasons!
+        }
+    }
+
+    public async Task ChangePersonalPasswordAsync(string oldPassword, string newPassword, string confirmPassword)
+    {
+        if (newPassword != confirmPassword)
+            return; // Notify the passwords dont match!
+
+        if (oldPassword == newPassword)
+            return; // Notify new password is the same as old password!
+
+        try
+        {
+            var currentUser = await GetCurrentUser();
+
+            // Verify old password
+            var encryptedPass = Validator.MD5Hash(oldPassword);
+            if (!currentUser.IsPasswordMatched(encryptedPass))
+                return; // Old password didnt match! 
+
+            await _personalService.ChangePasswordAsync(currentUser, newPassword);
+
+            return; // Notify successfully changed password!
+        }
+        catch
+        {
+            return; // Notify failed to change the password for some reasons!
+        }
+    }
+
+    private async Task<UserDetailsModel> GetCurrentUser()
+    {
+        return await _authService.GetUserAsync(HttpContext);
+    }
 }

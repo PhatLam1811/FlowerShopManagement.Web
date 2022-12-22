@@ -115,10 +115,10 @@ public class UserService : IPersonalService
                 await _cartRepository.RemoveByField("customerId", userId);
 
             // Remove user from database
-            await _userRepository.RemoveById(userId);
+            var result= await _userRepository.RemoveById(userId);
 
             // Successfully removed user
-            return true;
+            return result;
         }
         catch
         {

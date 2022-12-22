@@ -150,11 +150,11 @@ public class StaffService : UserService, IStaffService
             var cart = new Cart(customer._id);
 
             // Add to database
-            await _userRepository.Add(customer);
-            await _cartRepository.Add(cart);
+            var result1 = await _userRepository.Add(customer);
+            var result2 = await _cartRepository.Add(cart);
 
             // Successfully added new customer account
-            return true;
+            return result1 && result2;
         }
         catch
         {
