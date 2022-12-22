@@ -180,7 +180,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             }
 
             orderVM.AllProductModels = productMs;
-           
+
             if (SetOrderModel(orderVM))
                 return PartialView("_PickItem", productMs); // This will be an view for dialog / modal
             else
@@ -276,10 +276,14 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             if (id == null) return NotFound();
             var updatingOrder = await _saleServices.GetADetailOrder(id, _orderRepository);
-            if (updatingOrder == null || updatingOrder.Id == null || updatingOrder.Status != Status.Delivering) return NotFound();
+            if (updatingOrder == null || updatingOrder.Id == null || (updatingOrder.Status != Status.Delivering && updatingOrder.Status != Status.Paying)) return NotFound();
 
-
-            updatingOrder.Status = Status.Delivered;
+            if (updatingOrder.Status == Status.Delivering)
+                updatingOrder.Status = Status.Delivered;
+            else if (updatingOrder.Status == Status.Paying)
+            {
+                updatingOrder.Status = Status.Purchased;
+            }
             var result = await _orderRepository.UpdateById(updatingOrder.Id, updatingOrder.ToEntity());
 
             if (result == true)
@@ -314,7 +318,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             if (id == null) return NotFound();
             var order = await _saleServices.GetADetailOrder(id, _orderRepository);
-            if (order == null || order.Id == null) return NotFound();
+            if (order == null || order.Id == null || (order.Status != Status.Purchased && order.Status != Status.Delivered)) return NotFound();
 
 
             order.Status = Status.Canceled;

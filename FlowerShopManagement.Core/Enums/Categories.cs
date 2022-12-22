@@ -7,5 +7,6 @@ public enum Categories
     ArtificialFlowers = 2,
     Furnitures = 3,
 	Accessories = 4,
+    PlantingTools = 5,
 }
 
