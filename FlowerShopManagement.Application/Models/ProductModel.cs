@@ -14,7 +14,7 @@ public class ProductModel
 	public int Amount { get; set; } = 0;
     public Color Color { get; set; } = Color.Sample;
     public float WholesaleDiscount { get; set; } = 0;
-    public Categories Categories { get; set; } = Core.Enums.Categories.Unknown;
+    public Categories Categories { get; set; } = Categories.Unknown;
     public ProductModel(Product entity)
     {
         Id = entity._id;
@@ -34,7 +34,7 @@ public class ProductModel
         Name = "";
         Amount = amount;
         WholesaleDiscount = 0;
-        Categories= Core.Enums.Categories.Unknown;
+        Categories= Categories.Unknown;
     }
 
     public ProductModel()

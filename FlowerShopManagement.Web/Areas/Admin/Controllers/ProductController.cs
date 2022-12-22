@@ -33,7 +33,7 @@ public class ProductController : Controller
 
 		ViewBag.Product = true;
 
-		ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
+		ViewData["Categories"] = Enum.GetNames(typeof(Categories)).Where(u => u != "Unknown").ToList();
 		List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
 		int pageSizes = 8;
 		return View(PaginatedList<ProductModel>.CreateAsync(productMs, 1, pageSizes));

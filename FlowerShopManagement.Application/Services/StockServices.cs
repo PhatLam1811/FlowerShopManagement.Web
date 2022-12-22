@@ -38,13 +38,12 @@ public class StockServices : IStockService
         return false;
     }
 
-	public async Task<ProductDetailModel> GetADetailProduct(string id,IProductRepository productRepository)
-	{
-		Product product = await productRepository.GetById(id);
-		ProductDetailModel productMs = new ProductDetailModel(product);
-
-		return productMs;
-	}
+    public async Task<ProductDetailModel> GetADetailProduct(string id, IProductRepository productRepository)
+    {
+        Product? product = await productRepository.GetById(id);
+        if (product == null) return new ProductDetailModel();
+        return new ProductDetailModel(product);
+    }
 
     public async Task<List<ProductModel>> GetLowOnStockProducts(IProductRepository productRepository)
     {
@@ -54,7 +53,7 @@ public class StockServices : IStockService
         List<ProductModel> lowOnStockProducts = new List<ProductModel>();
 
         var result = await productRepository.GetAllLowOnStock(minimumAmount);
-
+        if (result == null) return lowOnStockProducts;
         // Convert Product to SupplyItemModel
         foreach (var item in result)
         {
@@ -70,8 +69,10 @@ public class StockServices : IStockService
 
     public async Task<List<ProductModel>> GetUpdatedProducts(IProductRepository productRepository)
     {
-        List<Product> products = await productRepository.GetAll();
+        List<Product>? products = await productRepository.GetAll();
         List<ProductModel> productMs = new List<ProductModel>();
+
+        if (products == null) return productMs;
 
         foreach (var o in products)
         {
@@ -81,8 +82,10 @@ public class StockServices : IStockService
     }
     public async Task<List<VoucherDetailModel>> GetUpdatedVouchers(IVoucherRepository voucherRepository)
     {
-        List<Voucher> vouchers = await voucherRepository.GetAll();
+        List<Voucher>? vouchers = await voucherRepository.GetAll();
         List<VoucherDetailModel> voucherMs = new List<VoucherDetailModel>();
+        
+        if (vouchers == null) return voucherMs;
 
         foreach (var o in vouchers)
         {

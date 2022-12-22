@@ -1,12 +1,10 @@
 ﻿@using FlowerShopManagement.Web
 @using FlowerShopManagement.Application.Models
-@using FlowerShopManagement.Core.Enums
-@model PaginatedList<ProductModel>
 
 @{
-    List<Categories>? categories = ViewData["Categories"] as List<Categories> ?? null;
+    List<string>? categories = ViewData["Categories"] as List<string> ?? null;
     List<string> prices = new List<string> { "All","0 - 10", "11 - 50", ">50" };
-    Categories? currentCategory = ViewData["CurrentCategory"] as Categories? ?? Categories.All;
+    string? currentCategory = ViewData["CurrentCategory"] as string ?? "All";
     string currentPrice = ViewData["CurrentPrice"] as string ?? "All";
 
 }

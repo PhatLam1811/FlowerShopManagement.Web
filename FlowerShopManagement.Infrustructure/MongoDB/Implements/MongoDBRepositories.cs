@@ -2,7 +2,9 @@
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
+using Google.Apis.Gmail.v1.Data;
 using MongoDB.Driver;
+using SharpCompress.Common;
 
 namespace FlowerShopManagement.Infrustructure.MongoDB.Implements;
 
@@ -19,8 +21,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
     // Filters Configuration
     private static FilterDefinition<TEntity> idFilter(string id) => Builders<TEntity>.Filter.Eq("_id", id);
-    private static FilterDefinition<TEntity> customFilter(string fieldName, IComparable value)
-        => Builders<TEntity>.Filter.Eq(fieldName, value);
+    private static FilterDefinition<TEntity> customFilter(string fieldName, IComparable value) => Builders<TEntity>.Filter.Eq(fieldName, value);
 
     // Indexes Configuration
     protected string CreateUniqueIndex(FieldDefinition<TEntity, string> field)
@@ -198,6 +199,14 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
         var result = await _mongoDbCollection.FindAsync(filter);
         return result.ToList();
     }
+
+    public async Task<List<Product>?> GetProductsById(List<string?> ids)
+    {
+        var filter = Builders<Product>.Filter.Where(p => p._id != null && ids.Contains( p._id));
+        var result = await _mongoDbCollection.FindAsync(filter);
+        return result.ToList();
+    }
+
 }
 
 public class VoucherRepository : BaseRepository<Voucher>, IVoucherRepository

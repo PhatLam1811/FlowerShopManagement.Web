@@ -1,6 +1,6 @@
-﻿@model PaginatedList<ProductModel>?
+﻿@model List<ProductModel>?
 
-<form method="post" action="@(Url.Action("PickedAnItem", "Order"))" style="width:800px" onsubmit="return jQueryAjaxReloadPickingTable(this);">
+<form method="post" action="@(Url.Action("PickedItems", "Order"))" style="width:800px" onsubmit="return jQueryAjaxReloadPickingTable(this);">
     
     <div class="row">
         <div class="col p-0 mt-2">

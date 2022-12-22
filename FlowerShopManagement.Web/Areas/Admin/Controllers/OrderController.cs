@@ -53,9 +53,6 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             {
                 orderMs = orderMs.Where(o => o.Status.ToString() == filter).ToList();
             }
-            OrderVM orderVM = new OrderVM();
-            orderVM.orderMs = orderMs ?? new List<OrderModel>();
-            ViewData["Model"] = orderVM;
 
             return View(orderMs);
         }
@@ -64,7 +61,6 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
-            //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
             //Should get a new one because an admin updates data realtime
             if (id == null) return NotFound();
             var order = await _saleServices.GetADetailOrder(id, _orderRepository);
@@ -76,7 +72,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
         [Route("Update")]
-        [HttpPut]
+        [HttpPost]
         public async Task<IActionResult> Update(OrderModel orderModel)
         {
             //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
@@ -84,7 +80,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             //If order get null or Id null ( somehow ) => notfound
             if (orderModel == null || orderModel.Id == null) return NotFound();
             //Check if the order still exists
-                var order = await _orderRepository.GetById(orderModel.Id); // check exist might be implemented in sale services somehow....
+            var order = await _orderRepository.GetById(orderModel.Id); // check exist might be implemented in sale services somehow....
             if (order != null)
             {
                 //If order != null => we will update this order by using directly orderModel.Id
@@ -102,8 +98,9 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+        //no use currently
         [Route("Delete")]
-        [HttpDelete]
+        [HttpPost]
         public async Task<IActionResult> Detele(OrderModel orderModel)
         {
             //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
@@ -141,20 +138,16 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
             List<UserDetailsModel>? customerMs = await _staffService.GetUsersAsync();
-            /*
-                Set up viewmodel
-			    Need a current picked items
-                Need a current picked customer
-                PageList<>
-			*/
             if (productMs == null || customerMs == null) return NotFound();
 
-            OrderVM? orderVM = ViewData["Model"] as OrderVM ?? new OrderVM();
+            OrderVM orderVM = new OrderVM();
 
-            orderVM.AllProductModels = productMs;
-            orderVM.customerMs = customerMs;
-            TempData["orderVM"] = JsonConvert.SerializeObject(orderVM, Formatting.Indented);
-            return View(orderVM);
+            orderVM.AllProductModels = productMs; // List of products
+            orderVM.customerMs = customerMs;// List of customers
+            if (SetOrderModel(orderVM))
+                return View(orderVM); // This will be an view for dialog / modal
+            else
+                return NotFound();
         }
 
         // Confirm and create an Order
@@ -162,29 +155,12 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(UserModel userModel)
         {
-            OrderVM? orderVM = null;
-            if (TempData["orderVM"] != null)
+            OrderVM? orderVM = GetOrderModel();
+            if (orderVM == null || orderVM.CurrentProductModels == null) return NotFound();
+            orderVM.Order.Products = orderVM.CurrentProductModels;
+            var result = await _saleServices.CreateOfflineOrder(orderVM.Order, userModel, _orderRepository, _userRepository, _productRepository);
+            if (result == true)
             {
-                string s = TempData["orderVM"] as string ?? "";
-                if (s != "")
-                {
-                    orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
-                }
-            }
-            else if (TempData["orderVM1"] != null)
-            {
-                string s = TempData["orderVM1"] as string ?? "";
-                if (s != "")
-                {
-                    orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
-                }
-            }
-            if (orderVM == null || orderVM.Order == null) return NotFound();
-            orderVM.Order.Products = orderVM.ProductModels;
-            var result = _saleServices.CreateOfflineOrder(orderVM.Order, userModel, _orderRepository, _userRepository, _productRepository);
-            if (result != null)
-            {
-                List<OrderModel> orders = await _saleServices.GetUpdatedOrders(_orderRepository);
                 return RedirectToAction("Index"); // A updated _ViewAll table
             }
             return NotFound(); // Can be changed to Redirect
@@ -194,74 +170,41 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> PickItemDialog(string filter = "") // Also handle if there is a filter / search
         {
-            OrderVM? orderVM = null;
-            string s = TempData["orderVM1"] as string ?? TempData["orderVM"] as string ?? TempData["orderVM2"] as string ?? "";
-
-          
-            if (s != "")
-            {
-                orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
-            }
-            List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
-            if(filter != "")
+            OrderVM? orderVM = GetOrderModel();
+            if (orderVM == null || orderVM.Order == null) { return NotFound(); }
+            //List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
+            List<ProductModel> productMs = orderVM.AllProductModels ?? await _stockServices.GetUpdatedProducts(_productRepository);
+            if (filter != "")
             {
                 productMs = productMs.Where(i => i.Name.Contains(filter)).ToList();
             }
-            if (orderVM != null)
-            {
-                orderVM.AllProductModels = productMs;
-                TempData["orderVM1"] = JsonConvert.SerializeObject(orderVM, Formatting.Indented);
-            }
-            int pageSizes = 99;
-            return PartialView("_PickItem", PaginatedList<ProductModel>.CreateAsync(productMs, 1, pageSizes)); // This will be an view for dialog / modal
+
+            orderVM.AllProductModels = productMs;
+           
+            if (SetOrderModel(orderVM))
+                return PartialView("_PickItem", productMs); // This will be an view for dialog / modal
+            else
+                return NotFound();
         }
 
-        [Route("PickedAnItem")]
-        public IActionResult PickedAnItem(List<string> ids, List<int> amounts) // These 2 list should have the same size // need 1 more parameters like PickItemDialog viewmodel
+        [Route("PickedItems")]
+        public IActionResult PickedItems(List<string> ids, List<int> amounts) // These 2 list should have the same size // need 1 more parameters like PickItemDialog viewmodel
         {
-            OrderVM? orderVM = null;
-            string s = TempData["orderVM1"] as string ?? TempData["orderVM"] as string ?? TempData["orderVM2"] as string ?? "";
+            OrderVM? orderVM = GetOrderModel();
 
+            if (orderVM == null || orderVM.Order == null || ids == null || amounts == null
+                || orderVM.CurrentProductModels == null || orderVM.AllProductModels == null) return NotFound();
 
-            if (s != "")
+            _saleServices.PickItems(ids, amounts, orderVM.CurrentProductModels, orderVM.AllProductModels);
+
+            if (SetOrderModel(orderVM))
             {
-                orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
+                return PartialView("_PickedItemsTable", orderVM.CurrentProductModels);
             }
-
-            if (orderVM == null || orderVM.Order == null) return NotFound();
-
-            OrderModel orderModel = orderVM.Order;
-            if (ids != null && amounts != null && orderVM.ProductModels != null && orderVM.AllProductModels != null)
+            else
             {
-                var currentProducts = orderVM.ProductModels;
-                for (int i = 0; i < amounts.Count && i < ids.Count; i++)
-                {
-                    if (amounts[i] != 0 && ids[i] != "")
-                    {
-                        ProductModel? p = currentProducts.Find(o => o.Id != null && o.Id.Equals(ids[i]));
-                        if (p != null)
-                        {
-                            p.Amount += amounts[i];
-                        }
-                        else
-                        {
-                            ProductModel? product = orderVM.AllProductModels.FirstOrDefault(o => o.Id != null && o.Id.Equals(ids[i]));
-                            if (product != null)
-                            {
-                                product.Amount = amounts[i];
-                                currentProducts.Add(product);
-
-                            }
-                        }
-
-                    }
-                }
-
+                return NotFound();
             }
-            //CurrentOrder will be ready for the next request
-            TempData["orderVM"] = JsonConvert.SerializeObject(orderVM, Newtonsoft.Json.Formatting.Indented);
-
-            return PartialView("_PickedItemsTable", orderVM.ProductModels);
         }
 
         [Route("DeleteItem")]
@@ -277,18 +220,16 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
                 orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
             }
             //CurrentOrder will be ready for the next request
-           
-            if (orderVM != null && orderVM.ProductModels != null)
+
+            if (orderVM != null && orderVM.CurrentProductModels != null)
             {
-                
-                orderVM.ProductModels = orderVM.ProductModels.Where(p => p.Id != id).ToList();
+
+                orderVM.CurrentProductModels = orderVM.CurrentProductModels.Where(p => p.Id != id).ToList();
                 TempData["orderVM2"] = JsonConvert.SerializeObject(orderVM, Formatting.Indented);
-                return PartialView("_PickedItemsTable", orderVM.ProductModels??new List<ProductModel>());
+                return PartialView("_PickedItemsTable", orderVM.CurrentProductModels ?? new List<ProductModel>());
 
             }
-
             return NotFound();
-            //Should update Viewmodel for newest updates
 
         }
 
@@ -297,51 +238,36 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         public async Task<IActionResult> PickCustomerDialog(string filter = "") // Also handle if there is a filter / search
         {
 
-            OrderVM? orderVM = null;
-            string s = TempData["orderVM1"] as string ?? TempData["orderVM"] as string ?? TempData["orderVM2"] as string ?? "";
+            OrderVM? orderVM = GetOrderModel();
 
-
-            if (s != "")
-            {
-                orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
-            }
             List<UserDetailsModel>? userMS = await _staffService.GetUsersAsync();
-            if (orderVM != null)
-            {
-                orderVM.customerMs = userMS;
-                TempData["orderVM1"] = JsonConvert.SerializeObject(orderVM, Formatting.Indented);
-            }
-            if (userMS != null)
-            {
-                return PartialView("_PickCustomer", userMS); // This will be an view for dialog / modal
-            }
-            return NotFound();
+            if (orderVM == null || userMS == null) return NotFound();
+
+            orderVM.customerMs = userMS;
+            if (SetOrderModel(orderVM))
+                return PartialView("_PickCustomer", userMS);
+            else
+                return NotFound();
         }
 
 
-        [Route("PickedCustomer")]
+        [Route("PickedCustomers")]
         [HttpPost]
-        public async Task<IActionResult> PickedCustomer(string phone)
+        public async Task<IActionResult> PickedCustomers(string phone)
         {
-            OrderVM? orderVM = null;
-            if (TempData["orderVM1"] != null)
-            {
-                string s = TempData["orderVM1"] as string ?? "";
-                if (s != "")
-                {
-                    orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
-                }
-                var user = await _staffService.GetUserByPhone(phone);
-                if (user != null && orderVM != null)
-                {
-                    orderVM.Customer = user;
-                    TempData["orderVM"] = JsonConvert.SerializeObject(orderVM, Formatting.Indented);
-                    return PartialView("_PickedCustomerTable", user); // This will be an update view for current customer table
+            OrderVM? orderVM = GetOrderModel();
 
-                }
-            }
 
-            return NotFound();
+            var user = await _staffService.GetUserByPhone(phone);
+            if (user == null || orderVM == null) return NotFound();
+
+            orderVM.CurrentCustomer = user;
+
+            if (SetOrderModel(orderVM))
+                return PartialView("_PickedCustomerTable", user); // This will be an update view for current customer table
+            else
+                return NotFound();
+
         }
 
         [Route("CompletedCheck")]
@@ -349,12 +275,12 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         {
 
             if (id == null) return NotFound();
-            var orderList = await _saleServices.GetADetailOrder(id, _orderRepository);
-            if (orderList == null) return NotFound();
+            var updatingOrder = await _saleServices.GetADetailOrder(id, _orderRepository);
+            if (updatingOrder == null || updatingOrder.Id == null || updatingOrder.Status != Status.Delivering) return NotFound();
 
 
-            orderList.Status = Status.Delivered;
-            var result = await _orderRepository.UpdateById(orderList.Id, orderList.ToEntity());
+            updatingOrder.Status = Status.Delivered;
+            var result = await _orderRepository.UpdateById(updatingOrder.Id, updatingOrder.ToEntity());
 
             if (result == true)
                 return RedirectToAction("Index");
@@ -371,43 +297,15 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             if (id == null) return NotFound();
             var order = await _saleServices.GetADetailOrder(id, _orderRepository);
             var productList = await _stockServices.GetUpdatedProducts(_productRepository);
-            if (order == null || productList == null || order.Id == null || order.Status == Status.Purchased || order.Status == Status.Delivered || order.Status == Status.Canceled) return NotFound();
+            if (order == null || productList == null || order.Id == null || order.Status != Status.Waiting) return NotFound();
 
-            bool flag = true;
-
-            foreach (var product in order.Products)
-            {
-                if (product == null)
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    if (product.Amount > productList.Where(i => i.Id == product.Id).First().Amount)
-                    {
-                        flag = false;
-                        break;
-                    }
-                }
-            }
-            if (flag == false)
-            {
-
-                order.Status = Status.OutOfStock;
-            }
-            else
-            {
-                order.Status = Status.Delivering;
-
-            }
-            var result = await _orderRepository.UpdateById(order.Id, order.ToEntity());
+            var result = await _saleServices.VerifyOnlineOrder(order, _orderRepository, _productRepository);
 
             if (result == true)
                 return RedirectToAction("Index");
             else
-            {
                 return NotFound();
-            }
+
         }
 
         [Route("CanceledCheck")]
@@ -416,7 +314,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             if (id == null) return NotFound();
             var order = await _saleServices.GetADetailOrder(id, _orderRepository);
-            if (order == null) return NotFound();
+            if (order == null || order.Id == null) return NotFound();
 
 
             order.Status = Status.Canceled;
@@ -425,10 +323,31 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             if (result == true)
                 return RedirectToAction("Index");
             else
-            {
                 return NotFound();
-            }
+
         }
 
+        private OrderVM? GetOrderModel()
+        {
+            OrderVM? orderVM = null;
+            string s = TempData["orderVM1"] as string ?? TempData["orderVM"] as string ?? TempData["orderVM2"] as string ?? "";
+            if (String.IsNullOrEmpty(s)) return null;
+
+            orderVM = JsonConvert.DeserializeObject<OrderVM>(s);
+            return orderVM;
+        }
+        private bool SetOrderModel(OrderVM? orderVM = null)
+        {
+            if (orderVM == null) return false;
+            if (TempData["orderVM1"] == null)
+            {
+                TempData["orderVM1"] = JsonConvert.SerializeObject(orderVM, Formatting.Indented);
+            }
+            else
+            {
+                TempData["orderVM"] = JsonConvert.SerializeObject(orderVM, Formatting.Indented);
+            }
+            return true;
+        }
     }
 }
