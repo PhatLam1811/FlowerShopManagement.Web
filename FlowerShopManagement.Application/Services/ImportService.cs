@@ -28,8 +28,8 @@ public class ImportService : IImportService
         if (productList.Count == 0 || amounts.Count == 0 || supplier.Count == 0) return null;
 
         // 40 <= amount <= 100
-        foreach (var index in amounts)
-            if (index < 40 || index > 100) return null;
+        //foreach (var index in amounts)
+        //    if (index < 40 || index > 100) return null;
 
         // Successfully created a request supply form
         return new SupplyFormModel(productList, amounts, supplier);

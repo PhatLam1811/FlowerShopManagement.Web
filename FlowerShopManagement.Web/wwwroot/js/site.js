@@ -60,6 +60,39 @@ function OpenPostDialog(url, title) {
     }
    
 }
+function OpenFormDialog(form) {
+    var obj = new FormData(form);
+    console.log(obj);
+
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: obj,
+            contentType: false,
+            processData: false,
+            success: function (res) {
+
+                $('#picked-items').html(res);
+                $("#form-modal .modal-body").html(res.html);
+                $("#form-modal .modal-title").html('');
+                $("#form-modal").modal('show');
+            },
+            error: function (err) {
+                alert("some error happens! ");
+
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+
+    } catch (ex) {
+
+        alert(ex);
+        return false;
+    }
+}
 function OpenGetPage(url) {
     try {
         $.ajax({
@@ -74,6 +107,7 @@ function OpenGetPage(url) {
                 alert(err);
             }
         })
+        return false;
     }
 
     catch (e) {

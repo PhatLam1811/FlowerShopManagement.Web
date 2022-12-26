@@ -2,8 +2,9 @@
 
 public enum Role
 {
-    Customer = 0,
-    Staff = 1,
-    Admin = 2,
-    Passenger = 3
+    All = 0,
+    Customer = 1,
+    Staff = 2,
+    Admin = 3,
+    Passenger = 4
 }

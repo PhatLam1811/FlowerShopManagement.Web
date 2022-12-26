@@ -31,37 +31,86 @@ public class UserController : Controller
     }
 
     [Route("Index")]
-    public async Task<IActionResult> Index(string filter = "")
+    public async Task<IActionResult> Index()
     {
         ViewBag.User = true;
 
         try
         {
-            var users = new List<UserDetailsModel>();
+            ViewData["Role"] = Enum.GetNames(typeof(Role)).Where(s => s != "Admin" && s != "Passenger").ToList();
+            var users = await _staffService.GetUsersAsync() ?? new List<UserDetailsModel>();
+            int pagesize = 2;
+            return View(PaginatedList<UserDetailsModel>.CreateAsync(users ?? new List<UserDetailsModel>(), 1, pagesize));
 
-
-            // Get all users registered (both customers & staffs)
-            users = await _staffService.GetUsersAsync();
-            if (users != null)
-            {
-                if (filter == "" || filter == "All")
-                {
-                    users = users.OrderBy(i => i.CreatedDate).ToList();
-                }
-                else
-                {
-                    users = users.Where(i => i.Role.ToString().Equals(filter)).ToList();
-                }
-            }
-
-
-            return View(users); // return the List of Models or attach it to the view model
         }
         catch
         {
             return NotFound(); // Notify failed to retrieve the list of users for some reasons!
         }
     }
+
+    [Route("Sort")]
+    [HttpPost]
+    public async Task<IActionResult> Sort(string sortOrder, int? pageNumber, string? currentCategory)
+    {
+        ViewData["CurrentSort"] = sortOrder;
+        ViewData["CurrentCategory"] = currentCategory;
+        ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+        ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+        var users = await _staffService.GetUsersAsync() ?? new List<UserDetailsModel>();
+
+        if (users != null)
+        {
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    users = users.OrderByDescending(s => s.Name).ToList();
+                    break;
+                //case "Date":
+                //    productMs = (List<ProductModel>)productMs.OrderBy(s => s.);
+                //      break;
+                case "date_asc":
+                    users = users.OrderBy(s => s.CreatedDate).ToList();
+                    break;
+                default:
+                    //case filter
+
+                    break;
+            }
+
+            switch (currentCategory)
+            {
+                case "Customer":
+                    users = users.Where(s => s.Role == Role.Customer).ToList();
+                    break;
+                case "Staff":
+                    users = users.Where(s => s.Role == Role.Staff).ToList();
+                    break;
+               
+
+                default:
+                    //All
+                    break;
+            }
+
+
+            int pageSize = 2;
+            PaginatedList<UserDetailsModel> objs = PaginatedList<UserDetailsModel>.CreateAsync(users, pageNumber ?? 1, pageSize);
+            return Json(new
+            {
+                isValid = true,
+                htmlViewAll = Helper.RenderRazorViewToString(this, "_ViewAll", objs),
+                htmlPagination = Helper.RenderRazorViewToString(this, "_Pagination", objs)
+
+            });
+            //return PartialView("_ViewAll",PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize));
+        }
+        return NotFound();
+
+    }
+
 
     [Route("Create")]
     [HttpGet]
@@ -140,7 +189,7 @@ public class UserController : Controller
         try
         {
             var result = await _adminService.RemoveAccountAsync(id, role);
-            if (result == true) 
+            if (result == true)
                 return RedirectToAction("Index");
             return NotFound();
         }

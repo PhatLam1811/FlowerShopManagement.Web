@@ -1,6 +1,6 @@
 ﻿@using FlowerShopManagement.Core.Enums;
 
-@model List<UserDetailsModel>
+@model PaginatedList<UserDetailsModel>
 
 @{
 }
@@ -10,24 +10,22 @@
 		<p class="row-1 h4 mb-2 mt-3">Status</p>
 
 		<div class="tabCustom row-cols-6 w-100" style="max-height:260px; overflow-y:scroll; overflow-x:hidden">
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="All" type="button">All</a>
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Admin" type="button">Admin</a>
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Staff" type="button">Staff</a>
-			<a class="tabCustom" style="height:50px;" id="filter-cus" asp-action="Index" asp-route-filter="Customer">Customer</a>
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Passenger" type="button">Passenger</a>
+			<partial name="_Filter" model=@Model />
 		</div>
 	</div>
 
 
-	<div class="col-lg-10 col-12 mt-3 mt-lg-0" id="hihi">
-		<div class="d-flex justify-content-end d-lg-none">
-			<button class="filter-icon border-0 fs-3" data-bs-toggle="collapse" data-bs-target=".um" aria-controls="navbarSupportedContent"
-					aria-expanded="false" aria-label="Toggle navigation">
-				<span class="h5">Filter</span>
-			</button>
-		</div>
+	<div class="col-lg-10 col-12 mt-3 mt-lg-0">
 
-		<partial name="_ViewAll" model=@Model />
+
+		 <div class="row mt-3">
+            <div class="" id="hihi">
+                <partial name="_ViewAll" model=@Model view-data="ViewData" />
+            </div>
+        </div>
+        <nav class="container" id="pagination">
+            <partial name="_Pagination" model=@Model view-data="ViewData" />
+        </nav>
 
 	</div>
 

@@ -1,33 +1,33 @@
-﻿@model List<OrderModel>
+﻿@model PaginatedList<OrderModel>
 
 @{
+    var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+    var nextDisabled = !Model.HasNextPage ? "disabled" : "";
 }
 
 <div class="row">
-	<div class="col-lg-2 d-lg-block collapse borderCustom1 um">
-		<p class="row-1 h4 mb-2 mt-3">Status</p>
-
-		<div class="tabCustom row-cols-6 w-100" style="max-height:260px; overflow-y:scroll; overflow-x:hidden">
-			<a class="tabCustom" style="height:50px;" id="filter-all" asp-action="Index" asp-route-filter="All" type="button">All</a>
-			<a class="tabCustom" style="height:50px;" id="filter-waiting" asp-action="Index" asp-route-filter="Waiting" type="button">Waiting</a>
-			<a class="tabCustom" style="height:50px;" id="filter-delivering" asp-action="Index" asp-route-filter="Delivering" type="button">Delivering</a>
-			<a class="tabCustom" style="height:50px;" id="filter-delivered" asp-action="Index" asp-route-filter="Delivered" type="button">Delivered</a>
-			<a class="tabCustom" style="height:50px;" id="filter-canceled"asp-action="Index" asp-route-filter="Canceled" type="button">Canceled</a>
-		</div>
-	</div>
+    <div class="col-lg-2 d-lg-block collapse borderCustom1 um">
+        <partial name="_Filter" model=@Model />
+    </div>
 
 
-	<div class="col-lg-10 col-12 mt-3 mt-lg-0">
-		<div class="d-flex justify-content-end d-lg-none">
-			<button class="filter-icon border-0 fs-3" data-bs-toggle="collapse" data-bs-target=".um" aria-controls="navbarSupportedContent"
-					aria-expanded="false" aria-label="Toggle navigation">
-				<span class="h5">Filter</span>
-			</button>
-		</div>
-		
-		<partial name="_ViewAll" model=@Model />
+    <div class="col-lg-10 col-12 mt-3 mt-lg-0">
+        <div class="d-flex justify-content-end d-lg-none">
+            <button class="filter-icon border-0 fs-3" data-bs-toggle="collapse" data-bs-target=".um" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                <span class="h5">Filter</span>
+            </button>
+        </div>
 
-	</div>
+        <div class="row mt-3">
+            <div class="" id="hihi">
+                <partial name="_ViewAll" model=@Model view-data="ViewData" />
+            </div>
+        </div>
+        <nav class="container" id="pagination">
+            <partial name="_Pagination" model=@Model view-data="ViewData" />
+        </nav>
+    </div>
 
 </div>
 

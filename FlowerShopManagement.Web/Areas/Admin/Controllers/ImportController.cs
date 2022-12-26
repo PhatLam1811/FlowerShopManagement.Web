@@ -19,7 +19,7 @@ public class ImportController : Controller
     private readonly IProductRepository _productRepository;
 
     public ImportController(
-        IStaffService staffService, 
+        IStaffService staffService,
         IStockService stockService,
         IMailService mailService,
         IImportService importService,
@@ -44,7 +44,7 @@ public class ImportController : Controller
         var suppliers = await _staffService.GetAllSuppliersAsync();
 
         // Configure viewmodel
-        var viewmodel = new ImportViewModel(PaginatedList<ProductModel>.CreateAsync(lowOnStockProducts,1,10), suppliers);
+        var viewmodel = new ImportViewModel(PaginatedList<ProductModel>.CreateAsync(lowOnStockProducts, 1, 10), suppliers);
 
         return View(viewmodel);
     }
@@ -68,7 +68,7 @@ public class ImportController : Controller
         var suppilers = new List<SupplierModel>();
 
         // Get selected products detail
-        foreach(var id in ids)
+        foreach (var id in ids)
         {
             var result = await _stockService.GetADetailProduct(id, _productRepository);
             products.Add(result);
@@ -85,7 +85,11 @@ public class ImportController : Controller
         var requestForm = _importService.CreateSupplyForm(products, amounts, suppilers);
 
         if (requestForm != null)
-            return SupplyForm(requestForm); // Successfully created a new supply request form!
+            return Json(new
+            {
+                isValid = true,
+                html = Helper.RenderRazorViewToString(this, "SupplyForm", requestForm),
+            });
         else
             return NotFound(); // Failed to create a new supply request form!
     }
@@ -108,7 +112,7 @@ public class ImportViewModel
     public List<SupplierModel>? _suppliers { get; set; } = new List<SupplierModel>();
 
     public ImportViewModel(
-        PaginatedList<ProductModel>? lowOnStockProducts, 
+        PaginatedList<ProductModel>? lowOnStockProducts,
         List<SupplierModel>? suppliers)
     {
         _lowOnStockProducts = lowOnStockProducts;

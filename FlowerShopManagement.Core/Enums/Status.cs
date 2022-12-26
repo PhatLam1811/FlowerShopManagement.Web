@@ -2,12 +2,13 @@
 
 public enum Status
 {
-    sampleStatus = 0,
-    Waiting = 1,
-    Paying = 2,
-    Purchased = 3,
-    Delivering = 4,
-    Delivered = 5,
-    OutOfStock = 6,
-    Canceled = 7,
+    All = 0,
+    sampleStatus = 1,
+    Waiting = 2,
+    Paying = 3,
+    Purchased = 4,
+    Delivering = 5,
+    Delivered = 6,
+    OutOfStock = 7,
+    Canceled = 8,
 }
