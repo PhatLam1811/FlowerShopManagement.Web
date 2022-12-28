@@ -22,6 +22,10 @@
     height: 90% !important;
 }
 
+.h-fit {
+    height: fit-content !important;
+}
+
 p, span, h1, h2, h3, h4, h5, h6 {
     margin: 0;
 }
@@ -50,6 +54,13 @@ p, span, h1, h2, h3, h4, h5, h6 {
     .btn-no-min.focus {
         background-color: rgb(173, 161, 230) !important;
     }
+
+.btn-no-p {
+    padding: 0 10px;
+    border-radius: 2px;
+    min-width: auto !important;
+    cursor: pointer;
+}
 
 .btn-primary {
 }

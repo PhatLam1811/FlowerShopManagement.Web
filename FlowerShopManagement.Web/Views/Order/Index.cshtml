@@ -3,11 +3,11 @@
 @{
 	ViewData["Title"] = "Order Page";
 }
-<div class="row">
-	<div class="col-lg-3 d-lg-block collapse borderCustom1 um">
-		<p class="row-1 h4 mb-2 mt-3">Status</p>
+<div class="row mt-4">
+	<div class="col-lg-2 d-lg-block collapse borderCustom1 um">
+		<p class="row-1 h4 mb-2">Status</p>
 
-		<div class="tabCustom row-cols-6 w-100" style="max-height:260px; overflow-y:scroll; overflow-x:hidden">
+		<div class="tabCustom row-cols-6 w-100" style="max-height:260px;">
 			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="All" type="button">All</a>
 			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Waiting" type="button">Waiting</a>
 			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Delivering" type="button">Delivering</a>
@@ -16,7 +16,7 @@
 	</div>
 
 
-	<div class="col-lg-9 col-12 mt-3 mt-lg-0">
+	<div class="col-lg-7 col-12 mt-3 mt-lg-0">
 		<div class="d-flex justify-content-end d-lg-none">
 			<button class="filter-icon border-0 fs-3" data-bs-toggle="collapse" data-bs-target=".um" aria-controls="navbarSupportedContent"
 					aria-expanded="false" aria-label="Toggle navigation">
@@ -26,6 +26,32 @@
 
 		<partial name="_ViewAll" model=@Model />
 
+	</div>
+
+	<div class="col-lg-3">
+		<p class="h2">Report</p>
+		<div class="d-grid gap-3 h6 mt-3">
+			<div class="d-flex justify-content-between border-bottom">
+				<p class="">Total Order</p>
+				<p>hi</p>
+			</div>
+			<div class="d-flex justify-content-between border-bottom">
+				<p class="">Successfull Order</p>
+				<p>hi</p>
+			</div>
+			<div class="d-flex justify-content-between border-bottom">
+				<p class="">Waiting Order</p>
+				<p>hi</p>
+			</div>
+			<div class="d-flex justify-content-between border-bottom">
+				<p class="">Canceled Order</p>
+				<p>hi</p>
+			</div>
+			<div class="d-flex justify-content-between">
+				<p class="">Total Price</p>
+				<p>hi</p>
+			</div>
+		</div>
 	</div>
 
 </div>

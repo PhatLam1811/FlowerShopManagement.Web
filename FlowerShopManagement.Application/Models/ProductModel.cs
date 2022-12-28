@@ -15,6 +15,8 @@ public class ProductModel
     public Color Color { get; set; } = Color.Sample;
     public float WholesaleDiscount { get; set; } = 0;
     public Categories Categories { get; set; } = Categories.Unknown;
+    public bool IsLike { get; set; }
+
     public ProductModel(Product entity)
     {
         Id = entity._id;
@@ -25,6 +27,7 @@ public class ProductModel
         UniPrice = entity._uniPrice;
         //Color = entity.colors;
         Categories = entity._categories;
+        IsLike = entity._isLike;
     }
 
     public ProductModel(string id, int amount)
@@ -35,6 +38,7 @@ public class ProductModel
         Amount = amount;
         WholesaleDiscount = 0;
         Categories= Categories.Unknown;
+        IsLike = false;
     }
 
     public ProductModel()
@@ -42,6 +46,7 @@ public class ProductModel
         Id = new Guid().ToString();
         Picture = "";
         Name = "";
+        IsLike = false;
     }
 
     public bool IsEqualProduct(string id)
@@ -55,7 +60,7 @@ public class ProductModel
     {
         if (Id == null || Id == "00000000-0000-0000-0000-000000000000") Id = Guid.NewGuid().ToString();
         return new Product(id: Id, name: Name, picture: Picture, 
-            uniPrice: UniPrice, amount: Amount, wholesaleDiscount: WholesaleDiscount, categories: Categories);
+            uniPrice: UniPrice, amount: Amount, wholesaleDiscount: WholesaleDiscount, categories: Categories, isLike: IsLike);
 
     }
 }
@@ -76,6 +81,7 @@ public class ProductDetailModel
     public string Maintainment { get; set; } = string.Empty;
     public Categories Categories { get; set; } =  Categories.Unknown;
     public IFormFile FormPicture { get; set; }
+    public bool IsLike { get; set; }
 
     public ProductDetailModel(Product entity)
     {
@@ -91,6 +97,7 @@ public class ProductDetailModel
         Material = entity._material;
         Size = entity._size;
         Maintainment = entity._maintainment;
+        IsLike = entity._isLike;
     }
 	public ProductDetailModel(string id)
 	{
@@ -122,6 +129,6 @@ public class ProductDetailModel
         if (Id == null || Id == "00000000-0000-0000-0000-000000000000") Id = Guid.NewGuid().ToString();
         return new Product(id: Id, name: Name, picture: Picture, uniPrice: UniPrice, amount: Amount,
             wholesaleDiscount: WholesaleDiscount, categories: Categories, color: Color, 
-            description: Description, material: Material, size: Size, maintainment: Maintainment);
+            description: Description, material: Material, size: Size, maintainment: Maintainment, isLike: IsLike);
     }
 }

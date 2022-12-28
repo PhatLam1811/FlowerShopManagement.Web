@@ -21,11 +21,13 @@ public class Product
     public string _size { get; set; }
     public string _maintainment { get; set; }
 
+    public bool _isLike { get; set; }
+
     public Product( string? id = null,
         string name = "", string picture = "", 
         Categories categories = Categories.Unknown, int amount = 0,
         int uniPrice = 0, float wholesaleDiscount = 0.0f, string description = "", 
-        string maintainment  = "", string size = "0cm x 0cm x 0cm", string material = "", Color color = Color.Sample)
+        string maintainment  = "", string size = "0cm x 0cm x 0cm", string material = "", Color color = Color.Sample, bool isLike = false)
     {
         if (id != null)
             _id = id;
@@ -42,5 +44,6 @@ public class Product
         _maintainment = maintainment;
         _size = size;
         _material = material; 
+        _isLike = isLike;
     }
 }
