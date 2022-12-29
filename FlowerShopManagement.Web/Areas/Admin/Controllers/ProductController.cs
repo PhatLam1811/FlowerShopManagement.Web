@@ -57,7 +57,7 @@ public class ProductController : Controller
         ViewData["Materials"] = listMaterials.Where(i => i != "Unknown").ToList();
 
         List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
-        int pageSizes = 8;
+        int pageSizes = 2;
         ProductVM productVM = new ProductVM() { productModels = PaginatedList<ProductModel>.CreateAsync(productMs, 1, pageSizes), categories = listCategories };
         return View(productVM);
 
@@ -161,12 +161,13 @@ public class ProductController : Controller
 
     [Route("Sort")]
     [HttpPost]
-    public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString,
-        int? pageNumber, string? currentPrice, string? currentCategory)
+    public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString, 
+        int? pageNumber, string? currentPrice, string currentMaterial, string? currentCategory)
     {
         ViewData["CurrentSort"] = sortOrder;
         ViewData["CurrentPrice"] = currentPrice;
         ViewData["CurrentCategory"] = currentCategory;
+        ViewData["CurrentMaterial"] = currentMaterial;
         ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
@@ -187,7 +188,7 @@ public class ProductController : Controller
             {
                 productMs = productMs.Where(s => s.Name.Contains(searchString)).ToList();
             }
-
+            // sort order - feature incoming
             switch (sortOrder)
             {
                 case "name_desc":
@@ -220,11 +221,15 @@ public class ProductController : Controller
                     break;
             }
 
+            if (currentMaterial != null && currentMaterial != "All")
+            {
+                productMs = productMs.Where(s => s.Material.Equals(currentMaterial)).ToList();
+            }
             if (currentCategory != null && currentCategory != "All")
             {
                 productMs = productMs.Where(s => s.Category.Equals(currentCategory)).ToList();
             }
-            int pageSize = 8;
+            int pageSize = 2;
             PaginatedList<ProductModel> objs = PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize);
             return Json(new
             {
@@ -233,7 +238,6 @@ public class ProductController : Controller
                 htmlPagination = Helper.RenderRazorViewToString(this, "_Pagination", objs)
 
             });
-            //return PartialView("_ViewAll",PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize));
         }
         return NotFound();
 

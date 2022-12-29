@@ -15,6 +15,7 @@ public class ProductModel
     public Color Color { get; set; } = Color.Sample;
     public float WholesaleDiscount { get; set; } = 0;
     public string Category { get; set; } = "Unknown";
+    public string Material { get; set; } = "Unknown";
     public ProductModel(Product entity)
     {
         Id = entity._id;
@@ -25,6 +26,7 @@ public class ProductModel
         UniPrice = entity._uniPrice;
         //Color = entity.colors;
         Category = entity._category;
+        Material = entity._material;
     }
 
     public ProductModel(string id, int amount)
@@ -54,7 +56,8 @@ public class ProductModel
     {
         if (Id == null || Id == "00000000-0000-0000-0000-000000000000") Id = Guid.NewGuid().ToString();
         return new Product(id: Id, name: Name, picture: Picture, 
-            uniPrice: UniPrice, amount: Amount, wholesaleDiscount: WholesaleDiscount, category: Category);
+            uniPrice: UniPrice, amount: Amount, wholesaleDiscount: WholesaleDiscount,
+            category: Category, material: Material);
 
     }
 }
