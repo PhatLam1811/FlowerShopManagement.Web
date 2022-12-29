@@ -2,6 +2,12 @@
 using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Application.Models;
+using Microsoft.AspNetCore.Http;
+using static System.Net.Mime.MediaTypeNames;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Hosting;
+using System.Web.Helpers;
+using System.IO;
 
 // ************ THIS IS A SAMPLE INTERFACE FOR CUSTOMER SERVICES **************
 // - New adjustments could be made in future updates
@@ -14,18 +20,56 @@ public class StockServices : IStockService
     // APPLICATION SERVICES (USE CASES)
     ICategoryRepository _categoryRepository;
     IMaterialRepository _materialRepository;
-    public StockServices(ICategoryRepository categoryRepository, IMaterialRepository materialRepository)
+    IProductRepository _productRepository;
+
+    IWebHostEnvironment _webHostEnvironment;
+    public StockServices(ICategoryRepository categoryRepository, IMaterialRepository materialRepository,
+        IProductRepository productRepository, IWebHostEnvironment webHostEnvironment)
+
     {
-        _categoryRepository= categoryRepository;
-        _materialRepository= materialRepository;
+        _categoryRepository = categoryRepository;
+        _materialRepository = materialRepository;
+        _productRepository = productRepository;
+        _webHostEnvironment = webHostEnvironment;
     }
 
-    public async Task<bool> CreateProduct(ProductDetailModel productModel, IProductRepository productRepository)
+    public async Task<bool> CreateProduct(ProductDetailModel productModel)
     {
-        if (productModel != null && productRepository != null)
+       
+        if (productModel != null)
         {
+            if (productModel.FormPicture == null)
+            {
+                // no image case
+                //using (var stream = new MemoryStream())
+                //{
+                //    productModel.FormPicture = new FormFile(stream, 0, 0, "name", "fileName");
+                //}
+                return false;
+            }
+            
+
+            // Add image
+            if (productModel.FormPicture.Length > 0)
+            {
+                using (var img = new MemoryStream())
+                {
+
+                    await productModel.FormPicture.CopyToAsync(img);
+                    WebImage image = new WebImage(img);
+                    image.Resize(100, 100);
+                    
+                    // TODO: ResizeImage(img, 100, 100);
+
+                    byte[] imageBinary = image.GetBytes();
+                    string base64String = Convert.ToBase64String(imageBinary);
+                    productModel.Picture = base64String;
+                }
+
+            }
+
             var obj = productModel.ToEntity();
-            return await productRepository.Add(obj);
+            return await _productRepository.Add(obj);
         }
         return false;
     }
@@ -106,7 +150,7 @@ public class StockServices : IStockService
     {
         List<Voucher>? vouchers = await voucherRepository.GetAll();
         List<VoucherDetailModel> voucherMs = new List<VoucherDetailModel>();
-        
+
         if (vouchers == null) return voucherMs;
 
         foreach (var o in vouchers)

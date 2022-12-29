@@ -21,9 +21,9 @@ public class ProductController : Controller
     IProductRepository _productRepository;
 
     //static list
-    List<string> listCategories = new List<string>();
-    List<Material> listDetailCategories = new List<Material>();
-    List<string> listMaterials = new List<string>();
+    static List<string> listCategories = new List<string>();
+    static List<Material> listDetailCategories = new List<Material>();
+    static List<string> listMaterials = new List<string>();
 
     public ProductController(IProductRepository productRepository, IStockService stockServices)
     {
@@ -31,17 +31,20 @@ public class ProductController : Controller
         _stockServices = stockServices;
 
         //set up for the static list
-        var task = Task.Run(async () =>
+        if (listMaterials.Count <= 0 && listDetailCategories.Count <= 0 && listCategories.Count <= 0)
         {
-            listCategories = await _stockServices.GetCategories();
-            listDetailCategories = await _stockServices.GetDetailMaterials();
-            listMaterials = await _stockServices.GetMaterials();
+            var task = Task.Run(async () =>
+                    {
+                        listCategories = await _stockServices.GetCategories();
+                        listDetailCategories = await _stockServices.GetDetailMaterials();
+                        listMaterials = await _stockServices.GetMaterials();
 
-        });
-        task.Wait();
-
-        listCategories.Insert(0, "All");
-        listMaterials.Insert(0, "All");
+                    });
+            task.Wait();
+            listCategories.Insert(0, "All");
+            listMaterials.Insert(0, "All");
+        }
+        
     }
 
     [Route("Index")]
@@ -151,7 +154,7 @@ public class ProductController : Controller
         else
             productModel.Maintainment = maintainment._maintainment;
 
-        var result = await _stockServices.CreateProduct(productModel, _productRepository);
+        var result = await _stockServices.CreateProduct(productModel);
         if (result == true)
         {
             return RedirectToAction("Index"/*Coult be a ViewModel in here*/); // A updated _ViewAll
@@ -161,7 +164,7 @@ public class ProductController : Controller
 
     [Route("Sort")]
     [HttpPost]
-    public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString, 
+    public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString,
         int? pageNumber, string? currentPrice, string currentMaterial, string? currentCategory)
     {
         ViewData["CurrentSort"] = sortOrder;
