@@ -31,11 +31,22 @@ namespace FlowerShopManagement.Web.Controllers
             UserDetailsModel? user = await _authServices.GetUserAsync(this.HttpContext);
 
             // get product list like from this user
-            if (user != null)
+            if (user != null && user.FavProductIds != null && user.FavProductIds.Count > 0)
             {
-                productMs = new List<ProductModel>(); //////////////////////////////////////
+                productMs = new List<ProductModel>();
 
-                //productMs = productMs.OrderBy(i => i.Name).ToList();
+                var temp = await _stockServices.GetUpdatedProducts(_productRepository);
+
+                foreach (var item in temp)
+                {
+                    if (user.FavProductIds.Where(i => i == item.Id).Count() > 0)
+                    {
+                        item.IsLike = true;
+                        productMs.Add(item);
+                    }
+                }
+
+                productMs = productMs.OrderBy(i => i.Name).ToList();
             }
 
             productMs = new List<ProductModel>();
