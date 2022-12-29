@@ -2,6 +2,10 @@
     width: 30% !important;
 }
 
+.w-35 {
+    width: 35% !important;
+}
+
 .w-60 {
     width: 60% !important;
 }
@@ -22,8 +26,20 @@
     height: 90% !important;
 }
 
-p, span, h1, h2, h3, h4, h5, h6 {
+.h-fit {
+    height: fit-content !important;
+}
+
+p, span, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     margin: 0;
+}
+
+.top-10 {
+    top: 10%;
+}
+
+.top-20 {
+    top: 20%;
 }
 
 /*IMG*/
@@ -34,22 +50,29 @@ p, span, h1, h2, h3, h4, h5, h6 {
 
 /*BUTTON*/
 .btn {
-    padding: 12px 10px;
-    border-radius: 2px;
+    padding: 14px;
+    border-radius: 4px;
     min-width: 150px;
     cursor: pointer;
 }
 
 .btn-no-min {
-    padding: 12px 16px;
-    border-radius: 2px;
+    padding: 10px 20px;
+    border-radius: 4px;
     min-width: auto !important;
     cursor: pointer;
 }
 
     .btn-no-min.focus {
-        background-color: rgb(173, 161, 230) !important;
+        background-color: rgba(173, 161, 230, 0.3) !important;
     }
+
+.btn-no-p {
+    padding: 0 10px;
+    border-radius: 4px;
+    min-width: auto !important;
+    cursor: pointer;
+}
 
 .btn-primary {
 }
@@ -70,12 +93,13 @@ p, span, h1, h2, h3, h4, h5, h6 {
     border-color: var(--bs-dark);
     background-color: transparent;
     color: rgb(20, 33, 61);
-    font-weight: 700;
+    font-weight: 500;
 }
 
     .btn-secondary:hover {
-        background-color: rgba(20, 33, 61, 0.2);
+        background-color: rgba(20, 33, 61, 0.1);
         color: rgba(20, 33, 61, 0.8);
+        font-weight: inherit;
         transition-delay: 100ms;
         transition-duration: 100ms;
     }
@@ -83,7 +107,7 @@ p, span, h1, h2, h3, h4, h5, h6 {
     .btn-secondary:active {
         background-color: inherit;
         color: inherit;
-        font-weight: inherit;
+        font-weight: 700;
         box-shadow: 0 0 0 0.25rem rgb(49 132 253 / 50%);
         border: none;
     }
@@ -91,7 +115,7 @@ p, span, h1, h2, h3, h4, h5, h6 {
     .btn-secondary:focus {
         background-color: inherit;
         color: inherit;
-        font-weight: inherit;
+        font-weight: 700;
         box-shadow: 0 0 0 0.25rem rgb(49 132 253 / 50%);
         border: none;
     }

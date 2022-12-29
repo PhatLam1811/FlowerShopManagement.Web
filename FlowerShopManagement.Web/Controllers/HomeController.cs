@@ -15,10 +15,10 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly IAuthService _authServices;
     private readonly IStockService _stockServices;
-    private readonly MailKitService _mailServices;
+    private readonly IMailService _mailServices;
     private readonly IProductRepository _productRepository;
 
-    public HomeController(ILogger<HomeController> logger, IAuthService authServices, MailKitService mailServices,
+    public HomeController(ILogger<HomeController> logger, IAuthService authServices, IMailService mailServices,
         IProductRepository productRepository, IStockService stockServices)
     {
         _logger = logger;
@@ -74,7 +74,7 @@ public class HomeController : Controller
         //
         //
         productMs = productMs.OrderBy(i => i.Name).ToList();
-        return View(/*Viewmodel*/);
+        return View(productMs);
     }
 
     public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString, int? pageNumber)
@@ -161,5 +161,10 @@ public class HomeController : Controller
         {
             return false;
         }
+    }
+
+    public IActionResult Welcome()
+    {
+        return View();
     }
 }

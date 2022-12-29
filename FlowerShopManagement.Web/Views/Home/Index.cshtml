@@ -1,90 +1,42 @@
-﻿@using FlowerShopManagement.Web.Views.Shared.Components;
+﻿@model List<ProductModel>
 
 @{
 	ViewData["Title"] = "Home Page";
-	List<string> categories = new List<string> { "Fa ke flower", "cay canh" };
-	List<string> prices = new List<string> { "0 - 10", "11 - 50", ">50" };
-	List<ProductModel> products = new List<ProductModel>();
-
-	products.Add(new ProductModel("hihi", 100)
-			{
-				Name = "F hoa",
-				UniPrice = 20
-			});
-	products.Add(new ProductModel("hihi", 100)
-			{
-				Name = "H hoa",
-				UniPrice = 20
-			});
-	products.Add(new ProductModel("hihi", 100)
-			{
-				Name = "Q hoa",
-				UniPrice = 20
-			});
+	List<string> categories = new List<string> { "All", "Fa ke flower", "cay canh" };
+	List<string> prices = new List<string> { "All", "0 - 10", "11 - 50", ">50" };
 }
 
-<div class="row">
-	<div class="col-3 mt-3">
-		<span class="h4">Filter</span>
-		<div class="check-list mt-4">
-			<span class="">Categories</span>
-			<label class="check-list-item">
-				<input type="radio" class="form-check-input" value="" name="categoryRadio" checked />
-				All
-			</label>
-			@foreach (var i in categories)
-			{
-				<label class="check-list-item">
-					<input type="radio" class="form-check-input" value="" name="categoryRadio" />
-					@i
-				</label>
-			}
+<div class="d-flex align-items-end justify-content-between mt-5 mb-4">
+	<div class="d-flex gap-3">
+		<div class="form-group">
+			<label class="form-label h6" for="selectCategory">Category</label>
+			<select class="form-select" asp-items="@(new SelectList(categories))" id="selectCategory" aria-label="Floating label select example">
+			</select>
 		</div>
-		<div class="check-list">
-			<span class="">Prices</span>
-			<label class="check-list-item">
-				<input type="radio" class="form-check-input" value="" name="priceRadio" checked />
-				All
-			</label>
-			@foreach (var i in prices)
-			{
-				<label class="check-list-item">
-					<input type="radio" class="form-check-input" value="" name="priceRadio" />
-					@i
-				</label>
-			}
+		<div class="form-group">
+			<label class="form-label h6" for="selectCategory">Price</label>
+			<select class="form-select" asp-items="@(new SelectList(prices))" id="selectCategory" aria-label="Floating label select example">
+			</select>
 		</div>
 	</div>
-
-	<div class="col-9">
-		@*	<form asp-action="SignIn" method="SignIn()">
-		<button class="btn btn-default">Button</button>
-		</form>*@
-		<form asp-action="SignOutAsync" asp-controller="Authentication">
-		<button class="btn btn-default">Button</button>
-		</form>
-		<div class="d-flex w-100">
-			<div class="form-group flex-grow-1">
-				<input type="text" class="form-control form-control-lg h5 h-100 position-relative" style="z-index:99" id="floatingInput" placeholder="Abc">
+	<div class="">
+		<label class="form-label h6" for="selectCategory">Search</label>
+		<div class="d-flex align-items-stretch">
+			<div class="h-fit form-group flex-grow-1">
+				<input type="text" class="h-fit form-control position-relative" style="z-index:99" id="floatingInput" placeholder="Abc">
 			</div>
-			<button class="btn btn-icon border border-primary position-relative" style="z-index:999">
-				Search
+			<button class="btn btn-no-p border border-primary position-relative" style="z-index:999">
 				<i class="fa-solid fa-magnifying-glass"></i>
 			</button>
 		</div>
-
-		<div class="row mt-3">
-			@foreach (var i in products)
-			{
-				<div class="col-4">
-					<component type="typeof(ProductCard)" render-mode="ServerPrerendered" param-product=@i />
-				</div>
-			}
-
-		</div>
 	</div>
 </div>
-
-
+@*	<form asp-action="SignIn" method="SignIn()">
+		<button class="btn btn-default">Button</button>
+		</form>*@
+@*<form asp-action="SignOutAsync" asp-controller="Authentication">
+		<button class="btn btn-default">Button</button>
+		</form>*@
+<partial name="_ViewAll" model="@Model" />
 
 <div>Pagination</div>

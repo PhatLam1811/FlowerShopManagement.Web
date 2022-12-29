@@ -11,7 +11,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
 [Route("[area]/[controller]")]
-[Route("")]
+[Route("Admin")]
 [Authorize]
 public class ProductController : Controller
 {
