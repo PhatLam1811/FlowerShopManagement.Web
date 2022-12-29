@@ -1,0 +1,11 @@
+﻿@model List<ProductModel>
+
+<div class="row mt-3">
+	@foreach (var i in Model)
+	{
+		<div class="col-3">
+			<component type="typeof(ProductCard)" render-mode="ServerPrerendered" param-product=@i />
+		</div>
+	}
+
+</div>

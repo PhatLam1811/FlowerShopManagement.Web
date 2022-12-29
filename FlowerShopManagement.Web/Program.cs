@@ -90,6 +90,7 @@ builder.Services.AddScoped<IPersonalService, UserService>();
 builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<ICustomerfService, CustomerServices>();
 builder.Services.AddScoped<IMailService, MailKitService>();
 //builder.Services.AddScoped<MailKitService>();
 
@@ -138,7 +139,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Product}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
     endpoints.MapAreaControllerRoute(
     areaName: "Admin",

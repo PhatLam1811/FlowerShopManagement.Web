@@ -13,6 +13,7 @@ public class UserDetailsModel : UserModel
     public string[] Addresses { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime LastModified { get; set; }
+    public List<string>? FavProductIds { get; set; }
 
     public UserDetailsModel(User entity) : base(entity)
     {
@@ -24,6 +25,7 @@ public class UserDetailsModel : UserModel
         Addresses = entity.addresses;
         CreatedDate = entity.createdDate;
         LastModified = entity.lastModified;
+        FavProductIds = entity.favProductIds;
     }
 
     public UserDetailsModel() : base()
@@ -34,6 +36,7 @@ public class UserDetailsModel : UserModel
         Role = Role.Customer;
         Gender = Gender.Female;
         Addresses = new string[2];
+        FavProductIds = new List<string>();
     }
 
     public new void ToEntity(ref User entity)
@@ -49,6 +52,7 @@ public class UserDetailsModel : UserModel
         entity.addresses = Addresses;
         entity.createdDate = CreatedDate;
         entity.lastModified = LastModified;
+        entity.favProductIds = FavProductIds;
     }
 
     public User ToNewEntity()
@@ -63,6 +67,7 @@ public class UserDetailsModel : UserModel
         entity.gender = Gender;
         entity.birthYear = BirthYear;
         entity.addresses = Addresses;
+        entity.favProductIds = FavProductIds;
 
         return entity;
     }
