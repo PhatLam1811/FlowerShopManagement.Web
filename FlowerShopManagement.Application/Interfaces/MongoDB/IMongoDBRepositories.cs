@@ -31,6 +31,8 @@ public interface IUserRepository : IBaseRepository<User>
 public interface ICartRepository : IBaseRepository<Cart> { }
 
 public interface IOrderRepository : IBaseRepository<Order> { }
+public interface ICategoryRepository : IBaseRepository<Category> { }
+public interface IMaterialRepository : IBaseRepository<Material> { }
 
 public interface ISupplierRepository : IBaseRepository<Supplier> { }
 

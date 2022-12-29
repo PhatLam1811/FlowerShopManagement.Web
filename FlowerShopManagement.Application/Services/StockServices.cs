@@ -12,9 +12,12 @@ namespace FlowerShopManagement.Application.Services;
 public class StockServices : IStockService
 {
     // APPLICATION SERVICES (USE CASES)
-    public StockServices()
+    ICategoryRepository _categoryRepository;
+    IMaterialRepository _materialRepository;
+    public StockServices(ICategoryRepository categoryRepository, IMaterialRepository materialRepository)
     {
-
+        _categoryRepository= categoryRepository;
+        _materialRepository= materialRepository;
     }
 
     public async Task<bool> CreateProduct(ProductDetailModel productModel, IProductRepository productRepository)
@@ -45,6 +48,18 @@ public class StockServices : IStockService
         return new ProductDetailModel(product);
     }
 
+    public async Task<List<string>> GetCategories()
+    {
+        var list = await _categoryRepository.GetAll();
+        if (list == null) return new List<string>() { "All" };
+        return list.Select(x => x._name).ToList();
+    }
+    public async Task<List<Material>> GetDetailMaterials()
+    {
+        var list = await _materialRepository.GetAll();
+        if (list == null) return new List<Material>();
+        return list;
+    }
     public async Task<List<ProductModel>> GetLowOnStockProducts(IProductRepository productRepository)
     {
         // This is only a temporary value of the minimum amount
@@ -65,6 +80,13 @@ public class StockServices : IStockService
         }
 
         return lowOnStockProducts;
+    }
+
+    public async Task<List<string>> GetMaterials()
+    {
+        var list = await _materialRepository.GetAll();
+        if (list == null) return new List<string>() { "All" };
+        return list.Select(x => x._name).ToList();
     }
 
     public async Task<List<ProductModel>> GetUpdatedProducts(IProductRepository productRepository)

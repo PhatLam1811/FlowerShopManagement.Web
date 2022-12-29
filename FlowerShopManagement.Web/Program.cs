@@ -12,9 +12,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using FlowerShopManagement.Infrustructure.Mail;
 using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Services.UserServices;
-using Microsoft.AspNetCore.Builder;
-using MailKit;
 using IMailService = FlowerShopManagement.Application.Interfaces.IMailService;
+using FlowerShopManagement.Core.Enums;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -83,6 +82,8 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<IImportService, ImportService>();
 builder.Services.AddScoped<IStockService, StockServices>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IMaterialRepository, MaterialRepository>();
 builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IPersonalService, UserService>();

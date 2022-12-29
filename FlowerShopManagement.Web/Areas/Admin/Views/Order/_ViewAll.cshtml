@@ -66,6 +66,10 @@
                         {
                         <td class="text-info">@Model[i-1].Status.ToString()</td>
                         }
+                        else if (@Model[i - 1].Status.ToString() == "Purchased")
+                        {
+                        <td class="text-warning">@Model[i-1].Status.ToString()</td>
+                        }
                         else
                         {
                         <td class="text-success fst-italic">@Model[i-1].Status.ToString()</td>

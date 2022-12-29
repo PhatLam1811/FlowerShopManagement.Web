@@ -14,9 +14,8 @@ public class ProductModel
 	public int Amount { get; set; } = 0;
     public Color Color { get; set; } = Color.Sample;
     public float WholesaleDiscount { get; set; } = 0;
-    public Categories Categories { get; set; } = Categories.Unknown;
+    public string Category { get; set; } = "Unknown";
     public bool IsLike { get; set; }
-
     public ProductModel(Product entity)
     {
         Id = entity._id;
@@ -26,8 +25,8 @@ public class ProductModel
         WholesaleDiscount = entity._wholesaleDiscount;
         UniPrice = entity._uniPrice;
         //Color = entity.colors;
-        Categories = entity._categories;
         IsLike = entity._isLike;
+        Category = entity._category;
     }
 
     public ProductModel(string id, int amount)
@@ -37,7 +36,6 @@ public class ProductModel
         Name = "";
         Amount = amount;
         WholesaleDiscount = 0;
-        Categories= Categories.Unknown;
         IsLike = false;
     }
 
@@ -60,7 +58,7 @@ public class ProductModel
     {
         if (Id == null || Id == "00000000-0000-0000-0000-000000000000") Id = Guid.NewGuid().ToString();
         return new Product(id: Id, name: Name, picture: Picture, 
-            uniPrice: UniPrice, amount: Amount, wholesaleDiscount: WholesaleDiscount, categories: Categories, isLike: IsLike);
+            uniPrice: UniPrice, amount: Amount, wholesaleDiscount: WholesaleDiscount, category: Category, isLike: IsLike);
 
     }
 }
@@ -76,10 +74,13 @@ public class ProductDetailModel
     public float WholesaleDiscount { get; set; } = 0;
     public Color Color { get; set; } = Color.Sample;
     public string Description { get; set; } = string.Empty; 
-    public string Material { get; set; } = string.Empty;
+    //public Material Material { get; set; } = new Material();
+    public string Material { get; set; } = "Unknown";
+
     public string Size { get; set; } = string.Empty;
     public string Maintainment { get; set; } = string.Empty;
-    public Categories Categories { get; set; } =  Categories.Unknown;
+    //public Category Category { get; set; } =  new Category();
+    public string Category { get; set; } = "Unknown";
     public IFormFile FormPicture { get; set; }
     public bool IsLike { get; set; }
 
@@ -89,7 +90,7 @@ public class ProductDetailModel
         Picture = entity._picture;
         Name = entity._name;
         Amount = entity._amount;
-        Categories = entity._categories;
+        Category = entity._category;
         UniPrice = entity._uniPrice;
         WholesaleDiscount = entity._wholesaleDiscount;
         Color = entity._color;
@@ -128,7 +129,7 @@ public class ProductDetailModel
     {
         if (Id == null || Id == "00000000-0000-0000-0000-000000000000") Id = Guid.NewGuid().ToString();
         return new Product(id: Id, name: Name, picture: Picture, uniPrice: UniPrice, amount: Amount,
-            wholesaleDiscount: WholesaleDiscount, categories: Categories, color: Color, 
+            wholesaleDiscount: WholesaleDiscount, category: Category, color: Color, 
             description: Description, material: Material, size: Size, maintainment: Maintainment, isLike: IsLike);
     }
 }

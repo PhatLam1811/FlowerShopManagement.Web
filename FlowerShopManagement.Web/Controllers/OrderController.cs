@@ -38,7 +38,7 @@ namespace FlowerShopManagement.Web.Controllers
             ViewBag.Order = true;
             //Set up default values for OrderPage
 
-            ViewData["Categories"] = Enum.GetValues(typeof(Status)).Cast<Status>().ToList();
+            //ViewData["Categories"] = Enum.GetValues(typeof(Status)).Cast<Status>().ToList();
 
             List<OrderModel> orderMs = new List<OrderModel>();
 

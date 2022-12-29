@@ -65,7 +65,7 @@ public class HomeController : Controller
     public async Task<IActionResult> Index()
     {
         ViewBag.Home = true;
-        ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
+        ViewData["Categories"] = _stockServices.GetCategories();
 
         List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
 
