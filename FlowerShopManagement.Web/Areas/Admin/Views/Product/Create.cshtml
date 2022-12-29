@@ -1,11 +1,12 @@
 ﻿@model ProductDetailModel
 @{
 	List<string>? categories = ViewData["Categories"] as List<string> ?? null;
+	List<string>? materials = ViewData["Materials"] as List<string> ?? null;
 }
 <p class="mt-4"></p>
 <span class="h1">Create new Product</span>
 
-<form asp-action="Create" asp-area="Admin" asp-controller="Product" class="row mt-3">
+<form asp-action="Create" asp-area="Admin" asp-controller="Product" class="row mt-3" enctype="multipart/form-data">
 
 	<div class="col-6">
 		<div class="row">
@@ -23,9 +24,10 @@
 				<label class="form-label" for="exampleFormControlInput1">Size</label>
 				<input type="text" asp-for="Size" class="form-control form-control-lg h5 py-3" id="ip-size" placeholder="">
 			</div>
-			<div class="col-8 form-group">
-				<label class="form-label" for="exampleFormControlInput1">Material</label>
-				<input type="text" asp-for="Material" class="form-control form-control-lg h5 py-3" id="ip-material" placeholder="">
+			<div class="col form-group">
+				<label class="form-label" for="selectCategory">Materials</label>
+				<select class="form-select form-select-lg h5 py-3" asp-for="Material" asp-items="@(new SelectList(materials))" id="selectCategory" aria-label="Floating label select example">
+				</select>
 			</div>
 		</div>
 		<div class="row">
@@ -40,14 +42,14 @@
 			</div>
 			<div class="col form-group">
 				<label class="form-label" for="selectCategory">Category</label>
-				<select class="form-select form-select-lg h5 py-3" asp-for="Categories" asp-items="@(new SelectList(categories))" id="selectCategory" aria-label="Floating label select example">
+				<select class="form-select form-select-lg h5 py-3" asp-for="Category" asp-items="@(new SelectList(categories))" id="selectCategory" aria-label="Floating label select example">
 				</select>
 			</div>
 		</div>
-		<div class="form-group">
+		@*<div class="form-group">
 			<label class="form-label" for="exampleFormControlInput1">Maintainment</label>
 			<textarea type="text" asp-for="Maintainment" class="form-control form-control-lg h5 py-3" id="ip-maintainment" placeholder=""></textarea>
-		</div>
+		</div>*@
 		<div class="form-group">
 			<label class="form-label" for="exampleFormControlInput1">Description</label>
 			<textarea type="text" asp-for="Description" class="form-control form-control-lg h5 py-3" id="ip-description" placeholder=""></textarea>
@@ -65,8 +67,8 @@
 			 class="w-100 h-auto"
 			 asp-append-version="true" />
 		<div class="form-floating">
-			<input asp-for="FormPicture" accept="image/*" class="form-control" />
-			<label for="FormPicture">Image</label>
+			<input asp-for="FormPicture"  style="border-width:0px" accept="image/*" class="form-control" />
+			@*<label for="FormPicture">Image</label>*@
 		</div>
 	</div>
 </form>
