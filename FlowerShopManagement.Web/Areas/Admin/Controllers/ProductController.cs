@@ -21,11 +21,12 @@ public class ProductController : Controller
     IProductRepository _productRepository;
 
     //static list
+    IWebHostEnvironment _webHostEnvironment;
     static List<string> listCategories = new List<string>();
     static List<Material> listDetailCategories = new List<Material>();
     static List<string> listMaterials = new List<string>();
 
-    public ProductController(IProductRepository productRepository, IStockService stockServices)
+    public ProductController(IProductRepository productRepository, IStockService stockServices, IWebHostEnvironment webHostEnvironment)
     {
         _productRepository = productRepository;
         _stockServices = stockServices;
@@ -44,7 +45,7 @@ public class ProductController : Controller
             listCategories.Insert(0, "All");
             listMaterials.Insert(0, "All");
         }
-        
+        _webHostEnvironment = webHostEnvironment;
     }
 
     [Route("Index")]
@@ -78,7 +79,7 @@ public class ProductController : Controller
         {
 
             ViewData["Categories"] = listCategories.Where(i => i != editProduct.Category && i != "All" && i != "Unknown").ToList();
-
+            ViewData["Materials"] = listMaterials.Where(i => i != editProduct.Category && i != "All" && i != "Unknown").ToList();
 
             return View(editProduct);
         }
@@ -89,27 +90,23 @@ public class ProductController : Controller
     [HttpPost]
     public async Task<IActionResult> Update(ProductDetailModel productModel)
     {
-        //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
+        
 
         //If product get null or Id null ( somehow ) => notfound
         if (productModel == null || productModel.Id == null) return NotFound();
 
         //Check if the product still exists
-        var product = await _productRepository.GetById(productModel.Id); // this may be eleminated
-        if (product != null)
+
+        //If product != null => we will update this order by using directly orderModel.Id
+        //Check ProductModel for sure if losing some data
+        var obj = await productModel.ToEntityContainingImages(wwwRootPath: _webHostEnvironment.WebRootPath);
+        var result = await _productRepository.UpdateById(productModel.Id, obj);
+        if (result != false)
         {
-            //If product != null => we will update this order by using directly orderModel.Id
-            //Check ProductModel for sure if losing some data
-            var result = await _productRepository.UpdateById(productModel.Id, productModel.ToEntity());
-            if (result != false)
-            {
-                //Update successfully, we pull new list of products
-                List<ProductModel> proMs = await _stockServices.GetUpdatedProducts(_productRepository);
-
-                return RedirectToAction("Index"/*Coult be a ViewModel in here*/); // A updated _ViewAll
-
-            }
+            //Update successfully, we pull new list of products
+            List<ProductModel> proMs = await _stockServices.GetUpdatedProducts(_productRepository);
         }
+
         return RedirectToAction("Index");
     }
 

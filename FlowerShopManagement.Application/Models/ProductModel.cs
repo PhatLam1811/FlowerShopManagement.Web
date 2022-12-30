@@ -1,5 +1,6 @@
 ﻿using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Org.BouncyCastle.Utilities;
 using System.IO;
@@ -80,12 +81,9 @@ public class ProductDetailModel
     public float WholesaleDiscount { get; set; } = 0;
     public Color Color { get; set; } = Color.Sample;
     public string Description { get; set; } = string.Empty;
-    //public Material Material { get; set; } = new Material();
     public string Material { get; set; } = "Unknown";
-
     public string Size { get; set; } = string.Empty;
     public string Maintainment { get; set; } = string.Empty;
-    //public Category Category { get; set; } =  new Category();
     public string Category { get; set; } = "Unknown";
     public IFormFile FormPicture { get; set; }
     public bool IsLike { get; set; }
@@ -134,9 +132,32 @@ public class ProductDetailModel
 
     public Product ToEntity()
     {
+        
         if (Id == null || Id == "00000000-0000-0000-0000-000000000000") Id = Guid.NewGuid().ToString();
         return new Product(id: Id, name: Name, picture: Picture, uniPrice: UniPrice, amount: Amount,
             wholesaleDiscount: WholesaleDiscount, category: Category, color: Color, 
+            description: Description, material: Material, size: Size, maintainment: Maintainment, isLike: IsLike);
+    }
+    public async Task<Product> ToEntityContainingImages(string wwwRootPath)
+    {
+        if (this.FormPicture != null)
+
+            // Add image
+            if (this.FormPicture.Length > 0)
+            {
+               
+                string fileName = this.FormPicture.FileName;
+                string path = Path.Combine(wwwRootPath + "/Image/", fileName);
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    await this.FormPicture.CopyToAsync(fileStream);
+                    this.Picture = this.FormPicture.FileName;
+                }
+
+            }
+        if (Id == null || Id == "00000000-0000-0000-0000-000000000000") Id = Guid.NewGuid().ToString();
+        return new Product(id: Id, name: Name, picture: Picture, uniPrice: UniPrice, amount: Amount,
+            wholesaleDiscount: WholesaleDiscount, category: Category, color: Color,
             description: Description, material: Material, size: Size, maintainment: Maintainment, isLike: IsLike);
     }
 }

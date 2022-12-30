@@ -35,40 +35,13 @@ public class StockServices : IStockService
 
     public async Task<bool> CreateProduct(ProductDetailModel productModel)
     {
-       
+
         if (productModel != null)
         {
-            if (productModel.FormPicture == null)
-            {
-                // no image case
-                //using (var stream = new MemoryStream())
-                //{
-                //    productModel.FormPicture = new FormFile(stream, 0, 0, "name", "fileName");
-                //}
-                return false;
-            }
-            
-
-            // Add image
-            if (productModel.FormPicture.Length > 0)
-            {
-                using (var img = new MemoryStream())
-                {
-
-                    await productModel.FormPicture.CopyToAsync(img);
-                    WebImage image = new WebImage(img);
-                    image.Resize(100, 100);
-                    
-                    // TODO: ResizeImage(img, 100, 100);
-
-                    byte[] imageBinary = image.GetBytes();
-                    string base64String = Convert.ToBase64String(imageBinary);
-                    productModel.Picture = base64String;
-                }
-
-            }
-
-            var obj = productModel.ToEntity();
+            if (productModel.FormPicture == null) return false;
+            var obj = await productModel.ToEntityContainingImages(
+                wwwRootPath: _webHostEnvironment.WebRootPath
+                );
             return await _productRepository.Add(obj);
         }
         return false;
