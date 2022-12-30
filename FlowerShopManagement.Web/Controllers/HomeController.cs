@@ -122,20 +122,6 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    public async Task<bool> SignIn()
-    {
-        try
-        {
-            var currentUser = await _authServices.SignOutAsync(HttpContext);
-
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
     public IActionResult Welcome()
     {
         return View();

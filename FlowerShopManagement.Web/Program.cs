@@ -14,11 +14,16 @@ using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using IMailService = FlowerShopManagement.Application.Interfaces.IMailService;
 using FlowerShopManagement.Core.Enums;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("StaffOnly", policy => policy.RequireClaim(ClaimTypes.Role, "Staff", "Admin"));
+});
 
 #region //============= MongoDb Configurations =============//
 //-- Database Configurations --//

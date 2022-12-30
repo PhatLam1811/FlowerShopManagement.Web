@@ -10,7 +10,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
 [Route("[area]/[controller]")]
-[Authorize]
+[Authorize(Policy = "StaffOnly")]
 public class UserController : Controller
 {
     private readonly IAuthService _authService;
@@ -442,6 +442,7 @@ public class UserController : Controller
 
     private async Task<UserModel> GetCurrentUser()
     {
-        return await _authService.GetAuthenticatedUserAsync();
+        throw new NotImplementedException();
+        // return await _authService.GetAuthenticatedUserAsync();
     }
 }

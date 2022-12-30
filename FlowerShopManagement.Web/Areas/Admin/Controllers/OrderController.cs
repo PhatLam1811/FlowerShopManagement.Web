@@ -13,7 +13,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
     //--------------------------------------Admin Order Controller--------------------------------------------------
     [Area("Admin")]
     [Route("[area]/[controller]")]
-    [Authorize]
+    [Authorize(Policy = "StaffOnly")]
     public class OrderController : Controller
     {
         //Services

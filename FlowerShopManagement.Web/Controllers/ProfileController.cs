@@ -5,6 +5,7 @@ using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Application.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FlowerShopManagement.Web.Controllers;
 
@@ -28,8 +29,12 @@ public class ProfileController : Controller
     {
         ViewBag.Profile = true;
 
-        //var user = await _userRepository.GetByEmailOrPhoneNb("jah@gmail.com");
-        var user = await _authServices.GetAuthenticatedUserAsync();
+        var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        // Unauthenticated user
+        if (userId is null) return NotFound();
+
+        var user = await _authServices.GetAuthenticatedUserAsync(userId);
 
         // Create UserModel
         //UserDetailsModel user1 = new UserDetailsModel(user);
@@ -93,7 +98,12 @@ public class ProfileController : Controller
 
             try
             {
-                var currentUser = await _authServices.GetAuthenticatedUserAsync();
+                var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                // Unauthenticated user
+                if (userId is null) return NotFound();
+
+                var currentUser = await _authServices.GetAuthenticatedUserAsync(userId);
 
                 // Verify old password
                 var encryptedPass = Validator.MD5Hash(model.OldPassword);
