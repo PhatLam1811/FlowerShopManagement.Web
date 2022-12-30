@@ -21,13 +21,16 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         IStockService _stockServices;
         IUserService _userServices;
         IStaffService _staffService;
+        IMaterialRepository _materialRepository;
+        ICategoryRepository categoryRepository;
         //Repositories
         IOrderRepository _orderRepository;
         IProductRepository _productRepository;
         IUserRepository _userRepository;
 
         public OrderController(ISaleService saleServices, IOrderRepository orderRepository, IProductRepository productRepository,
-            IUserRepository userRepository, IStockService stockServices, IUserService userServices, IStaffService staffService)
+            IUserRepository userRepository, IStockService stockServices, IUserService userServices, IStaffService staffService,
+            IMaterialRepository materialRepository, ICategoryRepository categoryRepository)
         {
             _orderRepository = orderRepository;
             _saleServices = saleServices;
@@ -36,6 +39,8 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             _stockServices = stockServices;
             _userServices = userServices;
             _staffService = staffService;
+            _materialRepository = materialRepository;
+            this.categoryRepository = categoryRepository;
         }
 
         [HttpGet]
@@ -145,8 +150,6 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(OrderModel orderModel)
         {
-            //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
-
             //If order get null or Id null ( somehow ) => notfound
             if (orderModel == null || orderModel.Id == null) return NotFound();
             //Check if the order still exists
@@ -173,7 +176,6 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Detele(OrderModel orderModel)
         {
-            //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
 
             //If order get null or Id null ( somehow ) => notfound
             if (orderModel == null || orderModel.Id == null) return NotFound();
@@ -204,7 +206,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         {
             //Set up default values for OrderPage
 
-            ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
+            ViewData["Categories"] = _stockServices.GetCategories();
 
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
             List<UserModel>? customerMs = await _staffService.GetUsersAsync();

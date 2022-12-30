@@ -172,7 +172,15 @@ public class CartRepository : BaseRepository<Cart>, ICartRepository
         CreateUniqueIndex("customerId");
     }
 }
+public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
+{
+    public CategoryRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+}
 
+public class MaterialRepository : BaseRepository<Material>, IMaterialRepository
+{
+    public MaterialRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+}
 public class OrderRepository : BaseRepository<Order>, IOrderRepository
 {
     public OrderRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }

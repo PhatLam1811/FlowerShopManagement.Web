@@ -1,10 +1,14 @@
 ﻿@using FlowerShopManagement.Web
 
-@model PaginatedList<ProductModel>
+@model ProductVM
 
 @{
-	var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-	var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+	if(Model.productModels != null)
+	{
+		var prevDisabled = !Model.productModels.HasPreviousPage ? "disabled" : "";
+		var nextDisabled = !Model.productModels.HasNextPage ? "disabled" : "";
+	}
+	
 }
 
 
@@ -40,11 +44,12 @@
 		</div>
 		<div class="row mt-3">
 			<div class="" id="hihi">
-				<partial name="_ViewAll" model=@Model view-data="ViewData" />
+				<partial name="_ViewAll" model=@Model.productModels view-data="ViewData" />
 			</div>
 		</div>
 		<nav class="container" id="pagination">
-			<partial name="_Pagination" model=@Model view-data="ViewData" />
+			<partial name="_Pagination" model=@Model.productModels
+			view-data="ViewData" />
 		</nav>
 	</div>
 </div>

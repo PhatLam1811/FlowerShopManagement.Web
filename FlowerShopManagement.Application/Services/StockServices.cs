@@ -1,7 +1,13 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
-using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Application.Models;
+using Microsoft.AspNetCore.Http;
+using static System.Net.Mime.MediaTypeNames;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Hosting;
+using System.Web.Helpers;
+using System.IO;
 
 // ************ THIS IS A SAMPLE INTERFACE FOR CUSTOMER SERVICES **************
 // - New adjustments could be made in future updates
@@ -12,17 +18,31 @@ namespace FlowerShopManagement.Application.Services;
 public class StockServices : IStockService
 {
     // APPLICATION SERVICES (USE CASES)
-    public StockServices()
-    {
+    ICategoryRepository _categoryRepository;
+    IMaterialRepository _materialRepository;
+    IProductRepository _productRepository;
 
+    IWebHostEnvironment _webHostEnvironment;
+    public StockServices(ICategoryRepository categoryRepository, IMaterialRepository materialRepository,
+        IProductRepository productRepository, IWebHostEnvironment webHostEnvironment)
+
+    {
+        _categoryRepository = categoryRepository;
+        _materialRepository = materialRepository;
+        _productRepository = productRepository;
+        _webHostEnvironment = webHostEnvironment;
     }
 
-    public async Task<bool> CreateProduct(ProductDetailModel productModel, IProductRepository productRepository)
+    public async Task<bool> CreateProduct(ProductDetailModel productModel)
     {
-        if (productModel != null && productRepository != null)
+
+        if (productModel != null)
         {
-            var obj = productModel.ToEntity();
-            return await productRepository.Add(obj);
+            if (productModel.FormPicture == null) return false;
+            var obj = await productModel.ToEntityContainingImages(
+                wwwRootPath: _webHostEnvironment.WebRootPath
+                );
+            return await _productRepository.Add(obj);
         }
         return false;
     }
@@ -45,6 +65,18 @@ public class StockServices : IStockService
         return new ProductDetailModel(product);
     }
 
+    public async Task<List<string>> GetCategories()
+    {
+        var list = await _categoryRepository.GetAll();
+        if (list == null) return new List<string>() { "All" };
+        return list.Select(x => x._name).ToList();
+    }
+    public async Task<List<Material>> GetDetailMaterials()
+    {
+        var list = await _materialRepository.GetAll();
+        if (list == null) return new List<Material>();
+        return list;
+    }
     public async Task<List<ProductModel>> GetLowOnStockProducts(IProductRepository productRepository)
     {
         // This is only a temporary value of the minimum amount
@@ -65,6 +97,13 @@ public class StockServices : IStockService
         }
 
         return lowOnStockProducts;
+    }
+
+    public async Task<List<string>> GetMaterials()
+    {
+        var list = await _materialRepository.GetAll();
+        if (list == null) return new List<string>() { "All" };
+        return list.Select(x => x._name).ToList();
     }
 
     public async Task<List<ProductModel>> GetUpdatedProducts(IProductRepository productRepository)

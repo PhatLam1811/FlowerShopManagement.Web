@@ -1,7 +1,9 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
+using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
+using FlowerShopManagement.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,7 +11,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
 [Route("[area]/[controller]")]
-[Route("")]
+[Route("Admin")]
 [Authorize]
 public class ProductController : Controller
 {
@@ -17,10 +19,33 @@ public class ProductController : Controller
     IStockService _stockServices;
     //Repositories
     IProductRepository _productRepository;
-    public ProductController(IProductRepository productRepository, IStockService stockServices)
+
+    //static list
+    IWebHostEnvironment _webHostEnvironment;
+    static List<string> listCategories = new List<string>();
+    static List<Material> listDetailCategories = new List<Material>();
+    static List<string> listMaterials = new List<string>();
+
+    public ProductController(IProductRepository productRepository, IStockService stockServices, IWebHostEnvironment webHostEnvironment)
     {
         _productRepository = productRepository;
         _stockServices = stockServices;
+
+        //set up for the static list
+        if (listMaterials.Count <= 0 && listDetailCategories.Count <= 0 && listCategories.Count <= 0)
+        {
+            var task = Task.Run(async () =>
+                    {
+                        listCategories = await _stockServices.GetCategories();
+                        listDetailCategories = await _stockServices.GetDetailMaterials();
+                        listMaterials = await _stockServices.GetMaterials();
+
+                    });
+            task.Wait();
+            listCategories.Insert(0, "All");
+            listMaterials.Insert(0, "All");
+        }
+        _webHostEnvironment = webHostEnvironment;
     }
 
     [Route("Index")]
@@ -32,11 +57,13 @@ public class ProductController : Controller
         //Set up default values for ProductPage
 
         ViewBag.Product = true;
+        ViewData["Categories"] = listCategories.Where(i => i != "Unknown").ToList();
+        ViewData["Materials"] = listMaterials.Where(i => i != "Unknown").ToList();
 
-        ViewData["Categories"] = Enum.GetNames(typeof(Categories)).Where(u => u != "Unknown").ToList();
         List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
-        int pageSizes = 8;
-        return View(PaginatedList<ProductModel>.CreateAsync(productMs, 1, pageSizes));
+        int pageSizes = 2;
+        ProductVM productVM = new ProductVM() { productModels = PaginatedList<ProductModel>.CreateAsync(productMs, 1, pageSizes), categories = listCategories };
+        return View(productVM);
 
     }
 
@@ -50,7 +77,9 @@ public class ProductController : Controller
         ProductDetailModel editProduct = await _stockServices.GetADetailProduct(id, _productRepository);
         if (editProduct != null)
         {
-            ViewData["Categories"] = Enum.GetNames(typeof(Categories)).Where(i => i != editProduct.Categories.ToString() && i != "All" && i != "Unknown").ToList();
+
+            ViewData["Categories"] = listCategories.Where(i => i != editProduct.Category && i != "All" && i != "Unknown").ToList();
+            ViewData["Materials"] = listMaterials.Where(i => i != editProduct.Category && i != "All" && i != "Unknown").ToList();
 
             return View(editProduct);
         }
@@ -61,27 +90,23 @@ public class ProductController : Controller
     [HttpPost]
     public async Task<IActionResult> Update(ProductDetailModel productModel)
     {
-        //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
+        
 
         //If product get null or Id null ( somehow ) => notfound
         if (productModel == null || productModel.Id == null) return NotFound();
 
         //Check if the product still exists
-        var product = await _productRepository.GetById(productModel.Id); // this may be eleminated
-        if (product != null)
+
+        //If product != null => we will update this order by using directly orderModel.Id
+        //Check ProductModel for sure if losing some data
+        var obj = await productModel.ToEntityContainingImages(wwwRootPath: _webHostEnvironment.WebRootPath);
+        var result = await _productRepository.UpdateById(productModel.Id, obj);
+        if (result != false)
         {
-            //If product != null => we will update this order by using directly orderModel.Id
-            //Check ProductModel for sure if losing some data
-            var result = await _productRepository.UpdateById(productModel.Id, productModel.ToEntity());
-            if (result != false)
-            {
-                //Update successfully, we pull new list of products
-                List<ProductModel> proMs = await _stockServices.GetUpdatedProducts(_productRepository);
-
-                return RedirectToAction("Index"/*Coult be a ViewModel in here*/); // A updated _ViewAll
-
-            }
+            //Update successfully, we pull new list of products
+            List<ProductModel> proMs = await _stockServices.GetUpdatedProducts(_productRepository);
         }
+
         return RedirectToAction("Index");
     }
 
@@ -109,9 +134,8 @@ public class ProductController : Controller
     [HttpGet]
     public IActionResult Create()
     {
-        //Set up default values for OrderPage
-
-        ViewData["Categories"] = Enum.GetNames(typeof(Categories)).Where(i => i != "All" && i != "Unknown").ToList();
+        ViewData["Categories"] = listCategories.Where(i => i != "Unknown" && i != "All").ToList();
+        ViewData["Materials"] = listMaterials.Where(i => i != "Unknown" && i != "All").ToList();
 
         return View(new ProductDetailModel());
     }
@@ -121,7 +145,13 @@ public class ProductController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(ProductDetailModel productModel)
     {
-        var result = await _stockServices.CreateProduct(productModel, _productRepository);
+        var maintainment = listDetailCategories.FirstOrDefault(i => i._name == productModel.Category);
+        if (maintainment == null)
+            productModel.Maintainment = "blank";
+        else
+            productModel.Maintainment = maintainment._maintainment;
+
+        var result = await _stockServices.CreateProduct(productModel);
         if (result == true)
         {
             return RedirectToAction("Index"/*Coult be a ViewModel in here*/); // A updated _ViewAll
@@ -132,11 +162,12 @@ public class ProductController : Controller
     [Route("Sort")]
     [HttpPost]
     public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString,
-        int? pageNumber, string? currentPrice, string? currentCategory)
+        int? pageNumber, string? currentPrice, string currentMaterial, string? currentCategory)
     {
         ViewData["CurrentSort"] = sortOrder;
         ViewData["CurrentPrice"] = currentPrice;
         ViewData["CurrentCategory"] = currentCategory;
+        ViewData["CurrentMaterial"] = currentMaterial;
         ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
@@ -157,7 +188,7 @@ public class ProductController : Controller
             {
                 productMs = productMs.Where(s => s.Name.Contains(searchString)).ToList();
             }
-
+            // sort order - feature incoming
             switch (sortOrder)
             {
                 case "name_desc":
@@ -190,13 +221,15 @@ public class ProductController : Controller
                     break;
             }
 
+            if (currentMaterial != null && currentMaterial != "All")
+            {
+                productMs = productMs.Where(s => s.Material.Equals(currentMaterial)).ToList();
+            }
             if (currentCategory != null && currentCategory != "All")
             {
-                Categories MyStatus = (Categories)Enum.Parse(typeof(Categories), currentCategory, true);
-                productMs = productMs.Where(s => s.Categories.Equals(MyStatus)).ToList();
-
+                productMs = productMs.Where(s => s.Category.Equals(currentCategory)).ToList();
             }
-            int pageSize = 8;
+            int pageSize = 2;
             PaginatedList<ProductModel> objs = PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize);
             return Json(new
             {
@@ -205,7 +238,6 @@ public class ProductController : Controller
                 htmlPagination = Helper.RenderRazorViewToString(this, "_Pagination", objs)
 
             });
-            //return PartialView("_ViewAll",PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize));
         }
         return NotFound();
 

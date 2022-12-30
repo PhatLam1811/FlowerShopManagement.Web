@@ -11,8 +11,12 @@
     <EmbeddedResource Remove="SampleUsecases\**" />
     <None Remove="SampleUsecases\**" />
   </ItemGroup>
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.WebPages" Version="3.2.9" />
     <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="2.2.0" />
     <PackageReference Include="MimeKit" Version="3.4.3" />
   </ItemGroup>

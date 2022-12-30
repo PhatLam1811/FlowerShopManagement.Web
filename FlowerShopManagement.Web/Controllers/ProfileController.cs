@@ -117,19 +117,36 @@ public class ProfileController : Controller
     public IActionResult ManageAddress()
     {
         // load list infor
-        return PartialView("ManageAddress", new List<InforDeliveryModel>());
+        var infos = new List<InforDeliveryModel>
+        {
+            new InforDeliveryModel() { Name = "LHQ", Phone = "204829303", Address = "Viet Nam", IsDefault = true },
+            new InforDeliveryModel() { Name = "LTP", Phone = "204829303", Address = "Viet Nam", IsDefault = false }
+        };
+        //////////////////////////////////////
+
+        return PartialView("ManageAddress", infos);
     }
 
     [HttpGet]
     public IActionResult Voucher()
     {
+        var vouchers = new List<VoucherDetailModel>()
+        {
+            new VoucherDetailModel() { Code = "CHAOBANMOI", Amount = 200, Categories = Core.Enums.VoucherCategories.NewCustomer, ConditionValue = 20, CreatedDate = DateTime.Now, Discount = 2, State = Core.Enums.VoucherStatus.Using, ValueType = Core.Enums.ValueType.RealValue },
+        };
         // load list voucher
-        return PartialView("Voucher");
+        return PartialView("Voucher", vouchers);
     }
 
     [HttpGet]
     public IActionResult ManageAccount()
     {
         return PartialView("ManageAccount");
+    }
+
+    [HttpGet]
+    public IActionResult CreateInfoDelivery()
+    {
+        return View();
     }
 }

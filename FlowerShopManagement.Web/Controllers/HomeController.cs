@@ -38,7 +38,7 @@ public class HomeController : Controller
         var currentUserId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         ViewBag.Home = true;
-        ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
+        ViewData["Categories"] = _stockServices.GetCategories();
 
         List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
 
@@ -47,7 +47,7 @@ public class HomeController : Controller
         //
         //
         productMs = productMs.OrderBy(i => i.Name).ToList();
-        return View(/*Viewmodel*/);
+        return View(productMs);
     }
 
     public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString, int? pageNumber)
@@ -120,5 +120,24 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
+
+    public async Task<bool> SignIn()
+    {
+        try
+        {
+            var currentUser = await _authServices.SignOutAsync(HttpContext);
+
+            return true;
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    public IActionResult Welcome()
+    {
+        return View();
     }
 }

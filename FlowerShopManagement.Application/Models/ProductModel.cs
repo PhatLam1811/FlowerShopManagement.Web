@@ -1,6 +1,10 @@
 ﻿using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Org.BouncyCastle.Utilities;
+using System.IO;
+using System.Web.Helpers;
 
 namespace FlowerShopManagement.Application.Models;
 
@@ -14,7 +18,9 @@ public class ProductModel
     public int Amount { get; set; } = 0;
     public Color Color { get; set; } = Color.Sample;
     public float WholesaleDiscount { get; set; } = 0;
-    public Categories Categories { get; set; } = Categories.Unknown;
+    public string Category { get; set; } = "Unknown";
+    public string Material { get; set; } = "Unknown";
+    public bool IsLike { get; set; }
     public ProductModel(Product entity)
     {
         Id = entity._id;
@@ -24,7 +30,10 @@ public class ProductModel
         WholesaleDiscount = entity._wholesaleDiscount;
         UniPrice = entity._uniPrice;
         //Color = entity.colors;
-        Categories = entity._categories;
+        IsLike = entity._isLike;
+        Category = entity._category;
+        Material = entity._material;
+
     }
 
     public ProductModel(string id, int amount)
@@ -34,7 +43,7 @@ public class ProductModel
         Name = "";
         Amount = amount;
         WholesaleDiscount = 0;
-        Categories = Categories.Unknown;
+        IsLike = false;
     }
 
     public ProductModel()
@@ -42,6 +51,7 @@ public class ProductModel
         Id = new Guid().ToString();
         Picture = "";
         Name = "";
+        IsLike = false;
     }
 
     public bool IsEqualProduct(string id)
@@ -54,8 +64,8 @@ public class ProductModel
     public Product ToEntity()
     {
         if (Id == null || Id == "00000000-0000-0000-0000-000000000000") Id = Guid.NewGuid().ToString();
-        return new Product(id: Id, name: Name, picture: Picture,
-            uniPrice: UniPrice, amount: Amount, wholesaleDiscount: WholesaleDiscount, categories: Categories);
+        return new Product(id: Id, name: Name, picture: Picture, 
+            uniPrice: UniPrice, amount: Amount, wholesaleDiscount: WholesaleDiscount, category: Category, isLike: IsLike);
 
     }
 }
@@ -71,11 +81,12 @@ public class ProductDetailModel
     public float WholesaleDiscount { get; set; } = 0;
     public Color Color { get; set; } = Color.Sample;
     public string Description { get; set; } = string.Empty;
-    public string Material { get; set; } = string.Empty;
+    public string Material { get; set; } = "Unknown";
     public string Size { get; set; } = string.Empty;
     public string Maintainment { get; set; } = string.Empty;
-    public Categories Categories { get; set; } = Categories.Unknown;
+    public string Category { get; set; } = "Unknown";
     public IFormFile FormPicture { get; set; }
+    public bool IsLike { get; set; }
 
     public ProductDetailModel(Product entity)
     {
@@ -83,7 +94,7 @@ public class ProductDetailModel
         Picture = entity._picture;
         Name = entity._name;
         Amount = entity._amount;
-        Categories = entity._categories;
+        Category = entity._category;
         UniPrice = entity._uniPrice;
         WholesaleDiscount = entity._wholesaleDiscount;
         Color = entity._color;
@@ -91,6 +102,8 @@ public class ProductDetailModel
         Material = entity._material;
         Size = entity._size;
         Maintainment = entity._maintainment;
+        Picture = entity._picture;
+        IsLike = entity._isLike;
     }
     public ProductDetailModel(string id)
     {
@@ -119,9 +132,32 @@ public class ProductDetailModel
 
     public Product ToEntity()
     {
+        
         if (Id == null || Id == "00000000-0000-0000-0000-000000000000") Id = Guid.NewGuid().ToString();
         return new Product(id: Id, name: Name, picture: Picture, uniPrice: UniPrice, amount: Amount,
-            wholesaleDiscount: WholesaleDiscount, categories: Categories, color: Color,
-            description: Description, material: Material, size: Size, maintainment: Maintainment);
+            wholesaleDiscount: WholesaleDiscount, category: Category, color: Color, 
+            description: Description, material: Material, size: Size, maintainment: Maintainment, isLike: IsLike);
+    }
+    public async Task<Product> ToEntityContainingImages(string wwwRootPath)
+    {
+        if (this.FormPicture != null)
+
+            // Add image
+            if (this.FormPicture.Length > 0)
+            {
+               
+                string fileName = this.FormPicture.FileName;
+                string path = Path.Combine(wwwRootPath + "/Image/", fileName);
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    await this.FormPicture.CopyToAsync(fileStream);
+                    this.Picture = this.FormPicture.FileName;
+                }
+
+            }
+        if (Id == null || Id == "00000000-0000-0000-0000-000000000000") Id = Guid.NewGuid().ToString();
+        return new Product(id: Id, name: Name, picture: Picture, uniPrice: UniPrice, amount: Amount,
+            wholesaleDiscount: WholesaleDiscount, category: Category, color: Color,
+            description: Description, material: Material, size: Size, maintainment: Maintainment, isLike: IsLike);
     }
 }

@@ -1,14 +1,17 @@
 ﻿@model List<InforDeliveryModel>
 
 @{
-    ViewData["Title"] = "Manage Address";
+	ViewData["Title"] = "Manage Address";
 }
 
-<h3>@ViewData["Title"]</h3>
+<div class="w-75">
+	@if (Model != null && Model.Count > 0)
+	{
+		foreach (var item in Model)
+		{
+			<component type="typeof(AddressCard)" param-inforDelivery=@item render-mode="ServerPrerendered" />
+		}
+	}
+</div>
 
-@if (Model != null && Model.Count > 0) {
-    foreach(var item in Model) {
-        <component type="typeof(AddressCard)" param-inforDelivery=@item/>
-        <div class="mt-2"></div>
-    }
-}
+<button class="btn btn-primary position-fixed end-0 top-10" onclick="showContent2('@Url.Action("CreateInfoDelivery", "Profile")', 'Create new Info Delivery')">Add new +</button>

@@ -36,24 +36,33 @@ namespace FlowerShopManagement.Web.Controllers
             ViewBag.Order = true;
             //Set up default values for OrderPage
 
-            ViewData["Categories"] = Enum.GetValues(typeof(Status)).Cast<Status>().ToList();
+            //ViewData["Categories"] = Enum.GetValues(typeof(Status)).Cast<Status>().ToList();
 
-            //List<OrderModel> orderMs = new List<OrderModel>();
+            List<OrderModel> orderMs = new List<OrderModel>();
 
-            //List<ProductModel> products = new List<ProductModel>();
-            //products.Add(new ProductModel() { Name = "Fake Flower", Amount = 2, Color = Color.Blue, UniPrice = 20, Id = "hsksd" });
+            List<ProductModel> products = new List<ProductModel>();
+            products.Add(new ProductModel() { Name = "Fake Flower", Amount = 2, Color = Color.Blue, UniPrice = 20, Id = "hsksd" });
 
-            //orderMs.Add(new OrderModel() { AccountID = "23", Amount = 3, Date = DateTime.Now, FullName = "Quy ganh team", DeliveryMethod = DeliverryMethods.sampleMethod, DeliveryCharge = 2, PhoneNumber = "93803xxxx", Products = products, Status = Status.Waiting, Total = 200 });
+            orderMs.Add(new OrderModel() { AccountID = "23", Amount = 3, Date = DateTime.Now, FullName = "Quy ganh team", DeliveryMethod = DeliverryMethods.sampleMethod, DeliveryCharge = 2, PhoneNumber = "93803xxxx", Products = products, Status = Status.Waiting, Total = 200 });
+            orderMs.Add(new OrderModel() { AccountID = "23", Amount = 3, Date = DateTime.Now, FullName = "Quy ganh team", DeliveryMethod = DeliverryMethods.sampleMethod, DeliveryCharge = 2, PhoneNumber = "93803xxxx", Products = products, Status = Status.Waiting, Total = 200 });
+            orderMs.Add(new OrderModel() { AccountID = "23", Amount = 3, Date = DateTime.Now, FullName = "Quy ganh team", DeliveryMethod = DeliverryMethods.sampleMethod, DeliveryCharge = 2, PhoneNumber = "93803xxxx", Products = products, Status = Status.Waiting, Total = 200 });
+            orderMs.Add(new OrderModel() { AccountID = "23", Amount = 3, Date = DateTime.Now, FullName = "Quy ganh team", DeliveryMethod = DeliverryMethods.sampleMethod, DeliveryCharge = 2, PhoneNumber = "93803xxxx", Products = products, Status = Status.Waiting, Total = 200 });
+            orderMs.Add(new OrderModel() { AccountID = "23", Amount = 3, Date = DateTime.Now, FullName = "Quy ganh team", DeliveryMethod = DeliverryMethods.sampleMethod, DeliveryCharge = 2, PhoneNumber = "93803xxxx", Products = products, Status = Status.Waiting, Total = 200 });
+            orderMs.Add(new OrderModel() { AccountID = "23", Amount = 3, Date = DateTime.Now, FullName = "Quy ganh team", DeliveryMethod = DeliverryMethods.sampleMethod, DeliveryCharge = 2, PhoneNumber = "93803xxxx", Products = products, Status = Status.Waiting, Total = 200 });
 
-            string? userId = "";
-            List<OrderModel>? orderMs = new List<OrderModel>();
+            //string? userId;
+            //List<OrderModel>? orderMs = new List<OrderModel>();
 
-            if (this.HttpContext != null)
-            {
-                userId = _authService.GetUserId();
+            //if (this.HttpContext != null)
+            //{
+            //    userId = _authService.GetUserId(this.HttpContext);
 
-                orderMs = await _customerService.GetOrdersOfUserAsync(userId, _orderRepository);
-            }
+            //    if (userId != null)
+            //    {
+            //        orderMs = await _customerService.GetOrdersOfUserAsync(userId, _orderRepository);
+
+            //    }
+            //}
 
             return View(orderMs);
         }
@@ -74,7 +83,14 @@ namespace FlowerShopManagement.Web.Controllers
                 {
                     userId = _authService.GetUserId();
 
-                    orderMs = await _customerService.GetOrdersOfUserAsync(userId, _orderRepository);
+                    if (userId != null)
+                    {
+                        orderMs = await _customerService.GetOrdersOfUserAsync(userId, _orderRepository);
+                    }
+                    else
+                    {
+                        return NotFound("Not Found! This order can't show!");
+                    }
                 }
 
                 if (orderMs?.Count > 0)

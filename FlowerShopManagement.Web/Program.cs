@@ -13,6 +13,7 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using IMailService = FlowerShopManagement.Application.Interfaces.IMailService;
+using FlowerShopManagement.Core.Enums;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,12 +82,15 @@ builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<IImportService, ImportService>();
 builder.Services.AddScoped<IStockService, StockServices>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IMaterialRepository, MaterialRepository>();
 builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IPersonalService, UserService>();
 builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
+builder.Services.AddScoped<ICustomerfService, CustomerServices>();
 builder.Services.AddScoped<IMailService, MailKitService>();
 //builder.Services.AddScoped<MailKitService>();
 
@@ -137,7 +141,7 @@ app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Product}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
     endpoints.MapAreaControllerRoute(
     areaName: "Admin",

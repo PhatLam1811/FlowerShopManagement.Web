@@ -3,26 +3,51 @@
 		<li class="nav-item px-3">
 			<a class="nav-link @(ViewBag.Dashboard==true?"active":"")" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
 		</li>
-		<li class="nav-item px-3">
-			<a class="nav-link @(ViewBag.Product==true?"active":"")" asp-area="Admin" asp-controller="Product" asp-action="Index">Product</a>
+		<li class="nav-item px-3 dropdown">
+			<div class="" id="drop" data-bs-toggle="dropdown" aria-expanded="false">
+				<a class="nav-link @(ViewBag.Product==true?"active":"")">Stock<i class="fa-solid fa-caret-down ms-2"></i></a>
+			</div>
+			<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="drop">
+				<li class="nav-item px-3">
+					<a class="nav-link @(ViewBag.Product==true?"active":"")" asp-area="Admin" asp-controller="Product" asp-action="Index">Product</a>
+				</li>
+				<li class="nav-item px-3">
+					<a class="nav-link" asp-area="Admin" asp-controller="Product" asp-action="Index">Category</a>
+				</li>
+			</ul>
 		</li>
-		<li class="nav-item px-3">
-			<a class="nav-link @(ViewBag.Order==true?"active":"")" id="order-nav" asp-area="Admin" asp-controller="Order" asp-action="Index">Order</a>
+		<li class="nav-item px-3 dropdown">
+			<div class="" id="drop" data-bs-toggle="dropdown" aria-expanded="false">
+				<a class="nav-link @(ViewBag.Order==true?"active":"")">User<i class="fa-solid fa-caret-down ms-2"></i></a>
+			</div>
+			<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="drop">
+				<li class="nav-item px-3">
+					<a class="nav-link @(ViewBag.Order==true?"active":"")" id="order-nav" asp-area="Admin" asp-controller="Order" asp-action="Index">Order</a>
+				</li>
+				<li class="nav-item px-3">
+					<a class="nav-link @(ViewBag.Voucher==true?"active":"")" asp-area="Admin" asp-controller="Voucher" asp-action="Index">Voucher</a>
+				</li>
+				<li class="nav-item px-3">
+					<a class="nav-link @(ViewBag.User==true?"active":"")" id="user-nav" asp-area="Admin" asp-controller="User" asp-action="Index">User</a>
+				</li>
+			</ul>
 		</li>
-@*		<li class="nav-item px-3">
-			<a class="nav-link @(ViewBag.Voucher==true?"active":"")" asp-area="Admin" asp-controller="Voucher" asp-action="Index">Voucher</a>
-		</li>*@
-		<li class="nav-item px-3">
-			<a class="nav-link @(ViewBag.User==true?"active":"")" id="user-nav" asp-area="Admin" asp-controller="User" asp-action="Index">User</a>
+		<li class="nav-item px-3 dropdown">
+			<div class="" id="drop" data-bs-toggle="dropdown" aria-expanded="false">
+				<a class="nav-link @(ViewBag.Import==true?"active":"")">Import<i class="fa-solid fa-caret-down ms-2"></i></a>
+			</div>
+			<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="drop">
+				<li class="nav-item px-3">
+					<a class="nav-link @(ViewBag.Supplier==true?"active":"")" id="supplier-nav" asp-area="Admin" asp-controller="Supplier" asp-action="Index">Supplier</a>
+				</li>
+				<li class="nav-item px-3">
+					<a class="nav-link @(ViewBag.Report==true?"active":"")" id="import-nav" asp-area="Admin" asp-controller="Import" asp-action="Index">Import</a>
+				</li>
+			</ul>
 		</li>
+		
 		<li class="nav-item px-3">
-			<a class="nav-link @(ViewBag.Supplier==true?"active":"")" id="supplier-nav" asp-area="Admin" asp-controller="Supplier" asp-action="Index">Supplier</a>
-		</li>
-		@*<li class="nav-item px-3">
 			<a class="nav-link @(ViewBag.Report==true?"active":"")" id="report-nav" asp-area="Admin" asp-controller="Report" asp-action="Index">Report</a>
-		</li>*@
-		<li class="nav-item px-3">
-			<a class="nav-link @(ViewBag.Report==true?"active":"")" id="import-nav" asp-area="Admin" asp-controller="Import" asp-action="Index">Import</a>
 		</li>
 		@*<li class="nav-item px-3">
 		<a class="nav-link   @(ViewBag.WishList==true?"active":"")" asp-area="Admin" asp-controller="Home" asp-action="Wishes">Account</a>

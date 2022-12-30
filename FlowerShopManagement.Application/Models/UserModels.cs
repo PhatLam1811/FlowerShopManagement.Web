@@ -43,6 +43,7 @@ public class UserModel
 
         CreatedDate = entity.createdDate;
         LastModified = entity.lastModified;
+        FavProductIds = entity.favProductIds;
     }
 
     public UserModel()

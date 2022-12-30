@@ -19,7 +19,7 @@
 
     <button onclick="jQueryAjaxReloadViewAll('@(Url.Action("Sort", "User",new {sortOrder = ViewData["CurrentSort"],pageNumber=(Model.PageIndex - 1),
                    currentCategory = ViewData["CurrentCategory"]  }))')"
-            class="btn btn btn-no-min @prevDisabled">
+            class="btn btn-no-min @prevDisabled">
         Previous
     </button>
     @if ((Model.PageIndex - 1) > 0)
@@ -50,7 +50,7 @@
 
     <button onclick="jQueryAjaxReloadViewAll('@(Url.Action("Sort", "User",new {sortOrder = ViewData["CurrentSort"],pageNumber=(Model.PageIndex + 1),
                    currentCategory = ViewData["CurrentCategory"]}))')"
-            class="btn btn-default @nextDisabled">
+            class="btn btn-no-min @nextDisabled">
         Next
     </button>
     @*last page*@
