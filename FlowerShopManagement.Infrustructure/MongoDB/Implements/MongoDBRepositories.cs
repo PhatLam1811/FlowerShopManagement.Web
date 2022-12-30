@@ -2,9 +2,7 @@
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
-using Google.Apis.Gmail.v1.Data;
 using MongoDB.Driver;
-using SharpCompress.Common;
 
 namespace FlowerShopManagement.Infrustructure.MongoDB.Implements;
 
@@ -42,8 +40,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
         catch (Exception e)
         {
-            // throw new Exception(e.Message);
-            return false;
+            throw new Exception(e.Message);
         }
     }
 
@@ -55,8 +52,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
         catch (Exception e)
         {
-            // throw new Exception(e.Message);
-            return null;
+            throw new Exception(e.Message);
         }
     }
 
@@ -68,8 +64,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
         catch (Exception e)
         {
-            // throw new Exception(e.Message);
-            return null;
+            throw new Exception(e.Message);
         }
     }
 
@@ -94,8 +89,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
         catch (Exception e)
         {
-            // throw new Exception(e.Message);
-            return false;
+            throw new Exception(e.Message);
         }
     }
 
@@ -149,7 +143,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 // Specific repositories
 public class UserRepository : BaseRepository<User>, IUserRepository
 {
-    public UserRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) 
+    public UserRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
     {
         CreateUniqueIndex("email");
         CreateUniqueIndex("phoneNumber");
@@ -173,7 +167,7 @@ public class UserRepository : BaseRepository<User>, IUserRepository
 
 public class CartRepository : BaseRepository<Cart>, ICartRepository
 {
-    public CartRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) 
+    public CartRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
     {
         CreateUniqueIndex("customerId");
     }
@@ -202,7 +196,7 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
 
     public async Task<List<Product>?> GetProductsById(List<string?> ids)
     {
-        var filter = Builders<Product>.Filter.Where(p => p._id != null && ids.Contains( p._id));
+        var filter = Builders<Product>.Filter.Where(p => p._id != null && ids.Contains(p._id));
         var result = await _mongoDbCollection.FindAsync(filter);
         return result.ToList();
     }
@@ -211,5 +205,5 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
 
 public class VoucherRepository : BaseRepository<Voucher>, IVoucherRepository
 {
-	public VoucherRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+    public VoucherRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 }

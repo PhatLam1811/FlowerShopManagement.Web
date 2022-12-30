@@ -27,7 +27,7 @@ public class StaffService : UserService, IStaffService
         {
             // Get all users from database
             var result = await _userRepository.GetAll();
-            
+
             // Entities to Models
             foreach (var user in result)
             {

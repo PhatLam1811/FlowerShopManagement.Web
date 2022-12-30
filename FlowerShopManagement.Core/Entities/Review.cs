@@ -2,7 +2,7 @@
 
 namespace FlowerShopManagement.Core.Entities;
 
-public class Review 
+public class Review
 {
     public string? _id { get; private set; }
 
@@ -21,8 +21,8 @@ public class Review
     public DateTime lastModified { get; set; }
 
     public Review(
-        string productID, string authorID, string authorName, string authorAvatar, 
-        string? title, string body, 
+        string productID, string authorID, string authorName, string authorAvatar,
+        string? title, string body,
         DateTime createdDate, DateTime lastModified)
     {
         this.productID = productID;

@@ -2,14 +2,11 @@
 using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
-using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Web.ViewModels;
-using MailKit.Search;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using Org.BouncyCastle.Asn1.X509;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 {
@@ -49,88 +46,88 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             ViewData["Status"] = Enum.GetNames(typeof(Status)).Where(s => s != "sampleStatus").ToList();
             List<OrderModel> orderMs = await _saleServices.GetUpdatedOrders(_orderRepository);
-           
-			int pageSizes = 8;
-			return View(PaginatedList<OrderModel>.CreateAsync(orderMs ?? new List<OrderModel>(), 1, pageSizes));
+
+            int pageSizes = 8;
+            return View(PaginatedList<OrderModel>.CreateAsync(orderMs ?? new List<OrderModel>(), 1, pageSizes));
         }
 
         [Route("Sort")]
         [HttpGet]
         public async Task<IActionResult> Sort(string sortOrder, int? pageNumber, string? currentCategory)
-		{
-			ViewData["CurrentSort"] = sortOrder;
-			ViewData["CurrentCategory"] = currentCategory;
-			ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
-			ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+        {
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["CurrentCategory"] = currentCategory;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
-			
-			List<OrderModel> orderMs = await _saleServices.GetUpdatedOrders(_orderRepository);
-			if (orderMs != null)
-			{
-				
-				switch (sortOrder)
-				{
-					case "amount_desc":
-						orderMs = orderMs.OrderByDescending(s => s.Amount).ToList();
-						break;
-					//case "Date":
-					//    productMs = (List<ProductModel>)productMs.OrderBy(s => s.);
-					//      break;
-					case "date_asc":
-						orderMs = orderMs.OrderBy(s => s.Date).ToList();
-						break;
-					default:
-						//case filter
 
-						break;
-				}
-                
-				switch (currentCategory)
-				{
-					case "Waiting":
-						orderMs = orderMs.Where(s => s.Status == Status.Waiting).ToList();
-						break;
-					case "Paying":
-						orderMs = orderMs.Where(s => s.Status == Status.Paying).ToList();
-						break;
-					case "Purchased":
-						orderMs = orderMs.Where(s => s.Status == Status.Purchased).ToList();
-						break;
+            List<OrderModel> orderMs = await _saleServices.GetUpdatedOrders(_orderRepository);
+            if (orderMs != null)
+            {
+
+                switch (sortOrder)
+                {
+                    case "amount_desc":
+                        orderMs = orderMs.OrderByDescending(s => s.Amount).ToList();
+                        break;
+                    //case "Date":
+                    //    productMs = (List<ProductModel>)productMs.OrderBy(s => s.);
+                    //      break;
+                    case "date_asc":
+                        orderMs = orderMs.OrderBy(s => s.Date).ToList();
+                        break;
+                    default:
+                        //case filter
+
+                        break;
+                }
+
+                switch (currentCategory)
+                {
+                    case "Waiting":
+                        orderMs = orderMs.Where(s => s.Status == Status.Waiting).ToList();
+                        break;
+                    case "Paying":
+                        orderMs = orderMs.Where(s => s.Status == Status.Paying).ToList();
+                        break;
+                    case "Purchased":
+                        orderMs = orderMs.Where(s => s.Status == Status.Purchased).ToList();
+                        break;
                     case "Delivering":
-						orderMs = orderMs.Where(s => s.Status == Status.Delivering).ToList();
-						break;
+                        orderMs = orderMs.Where(s => s.Status == Status.Delivering).ToList();
+                        break;
                     case "Delivered":
-						orderMs = orderMs.Where(s => s.Status == Status.Delivered).ToList();
-						break;
-					case "OutOfStock":
-						orderMs = orderMs.Where(s => s.Status == Status.OutOfStock).ToList();
-						break;
+                        orderMs = orderMs.Where(s => s.Status == Status.Delivered).ToList();
+                        break;
+                    case "OutOfStock":
+                        orderMs = orderMs.Where(s => s.Status == Status.OutOfStock).ToList();
+                        break;
                     case "Canceled":
-						orderMs = orderMs.Where(s => s.Status == Status.Canceled).ToList();
-						break;
+                        orderMs = orderMs.Where(s => s.Status == Status.Canceled).ToList();
+                        break;
 
-					default:
+                    default:
                         //All
-						break;
-				}
+                        break;
+                }
 
-				
-				int pageSize = 8;
-				PaginatedList<OrderModel> objs = PaginatedList<OrderModel>.CreateAsync(orderMs, pageNumber ?? 1, pageSize);
-				return Json(new
-				{
-					isValid = true,
-					htmlViewAll = Helper.RenderRazorViewToString(this, "_ViewAll", objs),
-					htmlPagination = Helper.RenderRazorViewToString(this, "_Pagination", objs)
 
-				});
-				//return PartialView("_ViewAll",PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize));
-			}
-			return NotFound();
+                int pageSize = 8;
+                PaginatedList<OrderModel> objs = PaginatedList<OrderModel>.CreateAsync(orderMs, pageNumber ?? 1, pageSize);
+                return Json(new
+                {
+                    isValid = true,
+                    htmlViewAll = Helper.RenderRazorViewToString(this, "_ViewAll", objs),
+                    htmlPagination = Helper.RenderRazorViewToString(this, "_Pagination", objs)
 
-		}
+                });
+                //return PartialView("_ViewAll",PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize));
+            }
+            return NotFound();
 
-		[Route("Edit")]
+        }
+
+        [Route("Edit")]
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {

@@ -2,10 +2,8 @@
 using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
-using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
-using static FlowerShopManagement.Web.Helper;
 namespace FlowerShopManagement.Web.Controllers
 {
     //--------------------------------------Customer Order Controller--------------------------------------------------
@@ -52,7 +50,7 @@ namespace FlowerShopManagement.Web.Controllers
 
             if (this.HttpContext != null)
             {
-                userId = _authService.GetUserId(this.HttpContext);
+                userId = _authService.GetUserId();
 
                 orderMs = await _customerService.GetOrdersOfUserAsync(userId, _orderRepository);
             }
@@ -74,7 +72,7 @@ namespace FlowerShopManagement.Web.Controllers
 
                 if (this.HttpContext != null)
                 {
-                    userId = _authService.GetUserId(this.HttpContext);
+                    userId = _authService.GetUserId();
 
                     orderMs = await _customerService.GetOrdersOfUserAsync(userId, _orderRepository);
                 }

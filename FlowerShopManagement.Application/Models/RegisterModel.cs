@@ -9,7 +9,7 @@ public class RegisterModel
     public string Email { set; get; } = "";
 
     [Required]
-    [RegularExpression(@"^([\\+]?84[-]?|[0])?[1-9][0-9]{8}$", ErrorMessage ="Invalid phone number!")]
+    [RegularExpression(@"^([\\+]?84[-]?|[0])?[1-9][0-9]{8}$", ErrorMessage = "Invalid phone number!")]
     public string PhoneNumber { set; get; } = "";
 
     [Required]

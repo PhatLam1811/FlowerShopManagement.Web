@@ -1,5 +1,4 @@
 ﻿using FlowerShopManagement.Application.Models;
-using FlowerShopManagement.Core.Entities;
 
 namespace FlowerShopManagement.Application.Interfaces.UserSerivices;
 

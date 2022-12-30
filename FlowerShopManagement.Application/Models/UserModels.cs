@@ -58,7 +58,7 @@ public class UserModel
     public new void ToEntity(ref User entity)
     {
         //base.ToEntity(ref entity);
-        
+
         //entity._id = _id;
         //entity.password = _password;
         //entity.role = Role;

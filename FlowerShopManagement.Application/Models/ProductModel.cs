@@ -9,9 +9,9 @@ public class ProductModel
 {
     public string? Id { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
-	public string Picture { get; set; } = string.Empty;
+    public string Picture { get; set; } = string.Empty;
     public int UniPrice { get; set; } = 0;
-	public int Amount { get; set; } = 0;
+    public int Amount { get; set; } = 0;
     public Color Color { get; set; } = Color.Sample;
     public float WholesaleDiscount { get; set; } = 0;
     public Categories Categories { get; set; } = Categories.Unknown;
@@ -34,7 +34,7 @@ public class ProductModel
         Name = "";
         Amount = amount;
         WholesaleDiscount = 0;
-        Categories= Categories.Unknown;
+        Categories = Categories.Unknown;
     }
 
     public ProductModel()
@@ -46,7 +46,7 @@ public class ProductModel
 
     public bool IsEqualProduct(string id)
     {
-        if (id == Id) 
+        if (id == Id)
             return true;
         return false;
     }
@@ -54,7 +54,7 @@ public class ProductModel
     public Product ToEntity()
     {
         if (Id == null || Id == "00000000-0000-0000-0000-000000000000") Id = Guid.NewGuid().ToString();
-        return new Product(id: Id, name: Name, picture: Picture, 
+        return new Product(id: Id, name: Name, picture: Picture,
             uniPrice: UniPrice, amount: Amount, wholesaleDiscount: WholesaleDiscount, categories: Categories);
 
     }
@@ -66,15 +66,15 @@ public class ProductDetailModel
     public string? Id { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     public string Picture { get; set; } = string.Empty;
-    public int UniPrice { get; set; } = 0; 
+    public int UniPrice { get; set; } = 0;
     public int Amount { get; set; } = 0;
     public float WholesaleDiscount { get; set; } = 0;
     public Color Color { get; set; } = Color.Sample;
-    public string Description { get; set; } = string.Empty; 
+    public string Description { get; set; } = string.Empty;
     public string Material { get; set; } = string.Empty;
     public string Size { get; set; } = string.Empty;
     public string Maintainment { get; set; } = string.Empty;
-    public Categories Categories { get; set; } =  Categories.Unknown;
+    public Categories Categories { get; set; } = Categories.Unknown;
     public IFormFile FormPicture { get; set; }
 
     public ProductDetailModel(Product entity)
@@ -92,12 +92,12 @@ public class ProductDetailModel
         Size = entity._size;
         Maintainment = entity._maintainment;
     }
-	public ProductDetailModel(string id)
-	{
-		Id = id;
-	}
+    public ProductDetailModel(string id)
+    {
+        Id = id;
+    }
 
-	public ProductDetailModel()
+    public ProductDetailModel()
     {
         Id = new Guid().ToString();
         Picture = "";
@@ -121,7 +121,7 @@ public class ProductDetailModel
     {
         if (Id == null || Id == "00000000-0000-0000-0000-000000000000") Id = Guid.NewGuid().ToString();
         return new Product(id: Id, name: Name, picture: Picture, uniPrice: UniPrice, amount: Amount,
-            wholesaleDiscount: WholesaleDiscount, categories: Categories, color: Color, 
+            wholesaleDiscount: WholesaleDiscount, categories: Categories, color: Color,
             description: Description, material: Material, size: Size, maintainment: Maintainment);
     }
 }

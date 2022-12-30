@@ -1,9 +1,8 @@
-﻿using FlowerShopManagement.Application.Interfaces.UserSerivices;
-using FlowerShopManagement.Application.Interfaces;
+﻿using FlowerShopManagement.Application.Interfaces;
+using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
-using FlowerShopManagement.Core.Enums;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 {
@@ -48,7 +47,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             try
             {
                 result = await _adminService.AddSupplierAsync(model);
-                if(result)
+                if (result)
                 {
                     return RedirectToAction("Index");
 

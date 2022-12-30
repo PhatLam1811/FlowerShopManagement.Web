@@ -1,8 +1,8 @@
-﻿using MailKit.Security;
-using MimeKit;
-using MailKit.Net.Smtp;
+﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
-using FlowerShopManagement.Application.Interfaces;
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using MimeKit;
 using System.Text;
 
 namespace FlowerShopManagement.Infrustructure.Mail;
@@ -28,7 +28,7 @@ public class MailKitService : IMailService
 
             // Successfully sent the mail
             return true;
-        } 
+        }
         catch
         {
             // Failed to send the mail
@@ -46,7 +46,7 @@ public class MailKitService : IMailService
         mimeMessage.Subject = supplyForm.Subject;
 
         // Set message's bcc
-        foreach (string address in supplyForm.To) 
+        foreach (string address in supplyForm.To)
             mimeMessage.Bcc.Add(MailboxAddress.Parse(address));
 
         // Read html template

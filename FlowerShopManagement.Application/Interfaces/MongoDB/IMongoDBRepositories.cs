@@ -22,7 +22,7 @@ public interface IBaseRepository<TEntity> : IDisposable where TEntity : class
     public Task<bool> UpdateByField(string fieldName, IComparable value, TEntity entity);
 }
 
-public interface IUserRepository : IBaseRepository<User> 
+public interface IUserRepository : IBaseRepository<User>
 {
     public Task<User?> GetByEmailOrPhoneNb(string emailOrPhoneNb);
     public Task<List<User>?> GetByRole(Role role);
@@ -34,7 +34,7 @@ public interface IOrderRepository : IBaseRepository<Order> { }
 
 public interface ISupplierRepository : IBaseRepository<Supplier> { }
 
-public interface IProductRepository : IBaseRepository<Product> 
+public interface IProductRepository : IBaseRepository<Product>
 {
     public Task<List<Product>?> GetAllLowOnStock(int minimumAmount);
     public Task<List<Product>?> GetProductsById(List<string?> ids);

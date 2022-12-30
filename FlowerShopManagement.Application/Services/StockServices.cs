@@ -1,7 +1,7 @@
-﻿using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Application.Interfaces;
-using FlowerShopManagement.Application.MongoDB.Interfaces;
+﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
+using FlowerShopManagement.Application.MongoDB.Interfaces;
+using FlowerShopManagement.Core.Entities;
 
 // ************ THIS IS A SAMPLE INTERFACE FOR CUSTOMER SERVICES **************
 // - New adjustments could be made in future updates
@@ -84,7 +84,7 @@ public class StockServices : IStockService
     {
         List<Voucher>? vouchers = await voucherRepository.GetAll();
         List<VoucherDetailModel> voucherMs = new List<VoucherDetailModel>();
-        
+
         if (vouchers == null) return voucherMs;
 
         foreach (var o in vouchers)

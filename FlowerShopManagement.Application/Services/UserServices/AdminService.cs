@@ -3,7 +3,6 @@ using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
-using System.Data;
 
 namespace FlowerShopManagement.Application.Services.UserServices;
 
@@ -14,9 +13,9 @@ public class AdminService : StaffService, IAdminService
     private readonly ISupplierRepository _supplierRepository;
 
     public AdminService(
-        IUserRepository userRepository, 
-        ICartRepository cartRepository, 
-        ISupplierRepository supplierRepository) 
+        IUserRepository userRepository,
+        ICartRepository cartRepository,
+        ISupplierRepository supplierRepository)
         : base(userRepository, cartRepository, supplierRepository)
     {
         _userRepository = userRepository;
@@ -35,7 +34,7 @@ public class AdminService : StaffService, IAdminService
             staff.password = defaultPassword;
 
             // Set role
-            if (role == Role.Customer) return false; 
+            if (role == Role.Customer) return false;
             staff.role = role;
 
             return await _userRepository.Add(staff);

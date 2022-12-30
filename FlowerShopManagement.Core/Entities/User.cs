@@ -23,7 +23,7 @@ public class User
     // Extra
     public DateTime createdDate;
     public DateTime lastModified;
-    
+
     public User()
     {
         _id = Guid.NewGuid().ToString();
@@ -36,7 +36,7 @@ public class User
         name = string.Empty;
         avatar = string.Empty;
         gender = Gender.Male;
-        birthYear = new DateTime(2000,01,01);
+        birthYear = new DateTime(2000, 01, 01);
         addresses = new string[0];
         favProductIds = new List<string>();
 

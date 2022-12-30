@@ -5,7 +5,7 @@ public class SupplyFormModel
     public string From { get; set; }
     public List<string> To { get; set; }
     public string Subject { get; set; }
-    public string Content { get; set; } 
+    public string Content { get; set; }
     public List<ProductDetailModel> Products { get; set; }
     public List<int> Amounts { get; set; }
     public List<SupplierModel> Suppliers { get; set; }

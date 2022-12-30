@@ -88,7 +88,7 @@ public class UserController : Controller
                 case "Staff":
                     users = users.Where(s => s.Role == Role.Staff).ToList();
                     break;
-               
+
 
                 default:
                     //All
@@ -362,8 +362,8 @@ public class UserController : Controller
         {
             // Dont need to get the entire user
             // Might need if want to do verification in earlier steps
-            var currentUserId = _authService.GetUserId(HttpContext);
-            var currentUserRole = _authService.GetUserRole(HttpContext);
+            var currentUserId = _authService.GetUserId();
+            var currentUserRole = _authService.GetUserRole();
 
             if (currentUserId == null || currentUserRole == null)
                 return; // Notify the current user not found!
@@ -442,6 +442,6 @@ public class UserController : Controller
 
     private async Task<UserModel> GetCurrentUser()
     {
-        return await _authService.GetUserAsync(HttpContext);
+        return await _authService.GetAuthenticatedUserAsync();
     }
 }
