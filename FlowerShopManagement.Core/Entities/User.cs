@@ -33,7 +33,7 @@ public class User
         password = string.Empty;
         role = Role.Customer;
 
-        name = string.Empty;
+        name = "Unnamed";
         avatar = string.Empty;
         gender = Gender.Male;
         birthYear = new DateTime(2000, 01, 01);

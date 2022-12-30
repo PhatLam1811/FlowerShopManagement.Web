@@ -4,6 +4,8 @@ using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
+
 namespace FlowerShopManagement.Web.Controllers
 {
     //--------------------------------------Customer Order Controller--------------------------------------------------
@@ -55,7 +57,7 @@ namespace FlowerShopManagement.Web.Controllers
 
             //if (this.HttpContext != null)
             //{
-            //    userId = _authService.GetUserId(this.HttpContext);
+            //    userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             //    if (userId != null)
             //    {
@@ -81,7 +83,7 @@ namespace FlowerShopManagement.Web.Controllers
 
                 if (this.HttpContext != null)
                 {
-                    userId = _authService.GetUserId();
+                    userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
                     if (userId != null)
                     {

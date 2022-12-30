@@ -116,9 +116,13 @@ public class AuthenticationController : Controller
         var authScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 
         // Create user's claims
-        var claims = new List<Claim>{
-                new Claim(ClaimTypes.NameIdentifier, user._id),
-                new Claim(ClaimTypes.Role, user.Role.ToString())};
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, user._id),
+            new Claim(ClaimTypes.Role, user.Role.ToString()),
+            new Claim("Username", user.Name),
+            new Claim("Avatar", user.Avatar)
+        };
 
         var claimsIdentity = new ClaimsIdentity(claims, authScheme);
         var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);

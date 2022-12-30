@@ -39,6 +39,8 @@ public class HomeController : Controller
 
         ViewBag.Home = true;
         ViewData["Categories"] = _stockServices.GetCategories();
+        ViewData["Username"] = HttpContext.User.FindFirst("Username")?.Value;
+
 
         List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
 

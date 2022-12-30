@@ -97,7 +97,6 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<ICustomerfService, CustomerServices>();
 builder.Services.AddScoped<IMailService, MailKitService>();
-//builder.Services.AddScoped<MailKitService>();
 
 // HttpContextAccessor
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

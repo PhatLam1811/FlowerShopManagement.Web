@@ -5,6 +5,7 @@ using FlowerShopManagement.Application.Services;
 using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 
@@ -362,8 +363,8 @@ public class UserController : Controller
         {
             // Dont need to get the entire user
             // Might need if want to do verification in earlier steps
-            var currentUserId = _authService.GetUserId();
-            var currentUserRole = _authService.GetUserRole();
+            var currentUserId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var currentUserRole = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
 
             if (currentUserId == null || currentUserRole == null)
                 return; // Notify the current user not found!
