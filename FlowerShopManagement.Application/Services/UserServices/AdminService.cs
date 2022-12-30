@@ -24,7 +24,7 @@ public class AdminService : StaffService, IAdminService
         _supplierRepository = supplierRepository;
     }
 
-    public async Task<bool> AddStaffAsync(UserDetailsModel newStaffModel, Role role)
+    public async Task<bool> AddStaffAsync(UserModel newStaffModel, Role role)
     {
         try
         {
@@ -96,7 +96,7 @@ public class AdminService : StaffService, IAdminService
         }
     }
 
-    public async Task<bool> EditUserRoleAsync(UserDetailsModel userModel, Role role)
+    public async Task<bool> EditUserRoleAsync(UserModel userModel, Role role)
     {
         var staff = new User();
 
@@ -121,7 +121,7 @@ public class AdminService : StaffService, IAdminService
         }
     }
 
-    public async Task<bool> EditUserAsync(UserDetailsModel userModel)
+    public async Task<bool> EditUserAsync(UserModel userModel)
     {
         var user = new User();
 

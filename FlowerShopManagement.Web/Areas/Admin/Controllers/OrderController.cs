@@ -210,7 +210,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
 
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
-            List<UserDetailsModel>? customerMs = await _staffService.GetUsersAsync();
+            List<UserModel>? customerMs = await _staffService.GetUsersAsync();
             if (productMs == null || customerMs == null) return NotFound();
 
             OrderVM orderVM = new OrderVM();
@@ -313,7 +313,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             OrderVM? orderVM = GetOrderModel();
 
-            List<UserDetailsModel>? userMS = await _staffService.GetUsersAsync();
+            List<UserModel>? userMS = await _staffService.GetUsersAsync();
             if (orderVM == null || userMS == null) return NotFound();
 
             orderVM.customerMs = userMS;

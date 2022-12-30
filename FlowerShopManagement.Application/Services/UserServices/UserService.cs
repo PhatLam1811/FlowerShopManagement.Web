@@ -18,7 +18,7 @@ public class UserService : IPersonalService
         _cartRepository = cartRepository;
     }
 
-    public async Task<bool> EditInfoAsync(UserDetailsModel userModel)
+    public async Task<bool> EditInfoAsync(UserModel userModel)
     {
         var user = new User();
 
@@ -40,7 +40,7 @@ public class UserService : IPersonalService
         }
     }
 
-    public async Task<bool> ChangePasswordAsync(UserDetailsModel userModel, string newPassword)
+    public async Task<bool> ChangePasswordAsync(UserModel userModel, string newPassword)
     {
         var user = new User();
         try
@@ -99,7 +99,7 @@ public class UserService : IPersonalService
         }
     }
 
-    public async Task<bool> ResetPasswordAsync(UserDetailsModel user)
+    public async Task<bool> ResetPasswordAsync(UserModel user)
     {
         // Should have the email verification over here...
 

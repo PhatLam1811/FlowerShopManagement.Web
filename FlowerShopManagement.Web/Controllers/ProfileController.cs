@@ -44,13 +44,13 @@ public class ProfileController : Controller
         var user = await _userRepository.GetByEmailOrPhoneNb("jah@gmail.com");
 
         // Create UserModel
-        UserDetailsModel user1 = new UserDetailsModel(user);
+        UserModel user1 = new UserModel(user);
 
         return PartialView("PersonalInformation", user1);
     }
 
     [HttpPost]
-    public async Task<IActionResult> PersonalInformation(UserDetailsModel model)
+    public async Task<IActionResult> PersonalInformation(UserModel model)
     {
         var user = await _userRepository.GetByEmailOrPhoneNb("jah@gmail.com");
 
