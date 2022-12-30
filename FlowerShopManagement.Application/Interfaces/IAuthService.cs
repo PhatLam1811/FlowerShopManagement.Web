@@ -8,6 +8,4 @@ public interface IAuthService
     public Task<UserModel> CreateNewUserAsync(string email, string phoneNb, string password, Role role = Role.Customer);
     public Task<UserModel?> ValidateSignInAsync(string emailOrPhoneNb, string password);
     public Task<UserModel?> GetAuthenticatedUserAsync(string id);
-    public string? GetUserId();
-    public string? GetUserRole();
 }
