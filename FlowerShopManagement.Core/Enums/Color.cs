@@ -2,7 +2,7 @@
 
 public enum Color
 {
-    Sample = 0, 
+    Sample = 0,
     Green = 1,
     Blue = 2,
     Yellow = 3,

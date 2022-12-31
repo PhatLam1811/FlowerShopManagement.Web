@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace FlowerShopManagement.Web
+﻿namespace FlowerShopManagement.Web
 {
     public class PaginatedList<T> : List<T>
     {
@@ -23,11 +18,11 @@ namespace FlowerShopManagement.Web
         public bool HasNextPage => PageIndex < TotalPages;
 
         public static PaginatedList<T> CreateAsync(IEnumerable<T> source, int pageIndex, int pageSize)
-        
+
         {
             var count = source.Count();
             var items = source.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToList();
-            
+
             return new PaginatedList<T>(items, count, pageIndex, pageSize);
         }
     }

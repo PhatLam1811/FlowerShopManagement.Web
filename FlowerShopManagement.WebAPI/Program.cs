@@ -18,9 +18,11 @@ builder.Services.AddControllers();
 
 #region //============= MongoDb Configurations =============//
 //-- Database Configurations --//
-builder.Services.Configure<MongoDBSettings>(mongoDBSettings => {
+builder.Services.Configure<MongoDBSettings>(mongoDBSettings =>
+{
     mongoDBSettings.ConnectionString = builder.Configuration.GetSection("DatabaseSettings:ConnectionString").Value;
-    mongoDBSettings.DatabaseName = builder.Configuration.GetSection("DatabaseSettings:DatabaseName").Value;});
+    mongoDBSettings.DatabaseName = builder.Configuration.GetSection("DatabaseSettings:DatabaseName").Value;
+});
 
 builder.Services.AddSingleton<IMongoDBSettings>(_ => _.GetRequiredService<IOptions<MongoDBSettings>>().Value);
 

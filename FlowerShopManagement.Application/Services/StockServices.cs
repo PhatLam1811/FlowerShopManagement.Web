@@ -1,13 +1,13 @@
-﻿using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Application.Interfaces;
-using FlowerShopManagement.Application.MongoDB.Interfaces;
+﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
+using FlowerShopManagement.Application.MongoDB.Interfaces;
 using Microsoft.AspNetCore.Http;
 using static System.Net.Mime.MediaTypeNames;
 using Microsoft.Extensions.Hosting;
 using Microsoft.AspNetCore.Hosting;
 using System.Web.Helpers;
 using System.IO;
+using FlowerShopManagement.Core.Entities;
 
 // ************ THIS IS A SAMPLE INTERFACE FOR CUSTOMER SERVICES **************
 // - New adjustments could be made in future updates

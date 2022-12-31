@@ -9,7 +9,7 @@ public class SupplierDetailModel : SupplierModel
 
     public SupplierDetailModel() : base()
     {
-       
+
     }
 
     public SupplierDetailModel(Supplier supplier) : base(supplier)

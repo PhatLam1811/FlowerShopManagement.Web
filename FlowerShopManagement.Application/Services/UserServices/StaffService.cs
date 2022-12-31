@@ -19,19 +19,19 @@ public class StaffService : UserService, IStaffService
         _supplierRepository = supplierRepository;
     }
 
-    public async Task<List<UserDetailsModel>?> GetUsersAsync()
+    public async Task<List<UserModel>?> GetUsersAsync()
     {
-        var users = new List<UserDetailsModel>();
+        var users = new List<UserModel>();
 
         try
         {
             // Get all users from database
             var result = await _userRepository.GetAll();
-            
+
             // Entities to Models
             foreach (var user in result)
             {
-                var model = new UserDetailsModel(user);
+                var model = new UserModel(user);
                 users.Add(model);
             }
 
@@ -135,7 +135,7 @@ public class StaffService : UserService, IStaffService
         }
     }
 
-    public async Task<bool> AddCustomerAsync(UserDetailsModel newCustomerModel)
+    public async Task<bool> AddCustomerAsync(UserModel newCustomerModel)
     {
         try
         {
@@ -163,7 +163,7 @@ public class StaffService : UserService, IStaffService
         }
     }
 
-    public async Task<bool> RemoveUserAsync(UserDetailsModel userModel)
+    public async Task<bool> RemoveUserAsync(UserModel userModel)
     {
         var user = new User();
 
@@ -185,7 +185,7 @@ public class StaffService : UserService, IStaffService
         }
     }
 
-    public async Task<UserDetailsModel?> GetUserByPhone(string phoneNb)
+    public async Task<UserModel?> GetUserByPhone(string phoneNb)
     {
 
         try
@@ -195,7 +195,7 @@ public class StaffService : UserService, IStaffService
 
             // Entities to Models
             if (result == null) return null; ;
-            var users = new UserDetailsModel(result);
+            var users = new UserModel(result);
 
             // Successfully got staffs list
             return users;

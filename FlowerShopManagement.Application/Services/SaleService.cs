@@ -1,8 +1,8 @@
-﻿using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Application.Interfaces;
-using FlowerShopManagement.Core.Enums;
-using FlowerShopManagement.Application.MongoDB.Interfaces;
+﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
+using FlowerShopManagement.Application.MongoDB.Interfaces;
+using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Core.Enums;
 
 // ************ THIS IS A SAMPLE INTERFACE FOR CUSTOMER SERVICES **************
 // - New adjustments could be made in future updates

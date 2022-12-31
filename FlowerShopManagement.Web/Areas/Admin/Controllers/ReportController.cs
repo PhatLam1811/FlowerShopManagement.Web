@@ -1,14 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace FlowerShopManagement.Web.Areas.Admin.Controllers
+namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
+
+[Area("Admin")]
+[Authorize(Policy = "StaffOnly")]
+public class ReportController : Controller
 {
-    [Area("Admin")]
-    public class ReportController : Controller
+    public IActionResult Index()
     {
-        public IActionResult Index()
-        {
-            ViewBag.Report = true;
-            return View();
-        }
+        ViewBag.Report = true;
+        return View();
     }
 }
