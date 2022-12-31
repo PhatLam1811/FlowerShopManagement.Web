@@ -1,11 +1,11 @@
 ﻿@using FlowerShopManagement.Core.Enums;
 
-@model UserDetailsModel
+@model UserModel
 
 @{
     var roles = Enum.GetValues(typeof(FlowerShopManagement.Core.Enums.Role)).Cast<FlowerShopManagement.Core.Enums.Role>().Where(i => i.ToString() != "Passenger" && i.ToString() != "Admin").ToList();
     var genders = Enum.GetValues(typeof(FlowerShopManagement.Core.Enums.Gender)).Cast<FlowerShopManagement.Core.Enums.Gender>().ToList();
-    Model.BirthYear = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+    //Model.BirthYear = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 }
 
 <p class="mt-4"></p>

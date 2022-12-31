@@ -1,10 +1,8 @@
-﻿using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Application.Interfaces;
-using FlowerShopManagement.Core.Enums;
-using System.Collections.Generic;
+﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
-using System;
+using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Core.Enums;
 
 // ************ THIS IS A SAMPLE INTERFACE FOR CUSTOMER SERVICES **************
 // - New adjustments could be made in future updates
@@ -89,5 +87,5 @@ public class OrderServices : IOrderServices
         //bullshit
     }
 
-   
+
 }

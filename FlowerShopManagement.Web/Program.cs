@@ -1,24 +1,29 @@
-using FlowerShopManagement.Core.Entities;
-using MongoDB.Bson.Serialization;
+using FlowerShopManagement.Application.Interfaces;
+using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
+using FlowerShopManagement.Application.Services;
+using FlowerShopManagement.Application.Services.UserServices;
+using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Infrustructure.Mail;
 using FlowerShopManagement.Infrustructure.MongoDB.Implements;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
-using Microsoft.Extensions.Options;
-using MongoDB.Bson.Serialization.Serializers;
-using MongoDB.Bson;
-using FlowerShopManagement.Application.Interfaces;
-using FlowerShopManagement.Application.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using FlowerShopManagement.Infrustructure.Mail;
-using FlowerShopManagement.Application.Interfaces.UserSerivices;
-using FlowerShopManagement.Application.Services.UserServices;
+using Microsoft.Extensions.Options;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using IMailService = FlowerShopManagement.Application.Interfaces.IMailService;
 using FlowerShopManagement.Core.Enums;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("StaffOnly", policy => policy.RequireClaim(ClaimTypes.Role, "Staff", "Admin"));
+});
 
 #region //============= MongoDb Configurations =============//
 //-- Database Configurations --//
@@ -92,7 +97,6 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<ICustomerfService, CustomerServices>();
 builder.Services.AddScoped<IMailService, MailKitService>();
-//builder.Services.AddScoped<MailKitService>();
 
 // HttpContextAccessor
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -101,7 +105,9 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
+        options.ExpireTimeSpan = TimeSpan.FromHours(24);
         options.LoginPath = "/Authentication/SignIn";
+        options.SlidingExpiration = true;
     });
 
 

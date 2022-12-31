@@ -1,9 +1,6 @@
-﻿using FlowerShopManagement.Application.Interfaces;
-using FlowerShopManagement.Application.Models;
-using FlowerShopManagement.Application.MongoDB.Interfaces;
+﻿using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 
@@ -19,7 +16,7 @@ public class NewMongoTestController : ControllerBase
     private string test;
 
     public NewMongoTestController(
-        IUserRepository userRepository, 
+        IUserRepository userRepository,
         IHttpContextAccessor httpContextAccessor)
     {
         _userRepository = userRepository;

@@ -18,8 +18,8 @@ public class CustomerServices : UserService, ICustomerfService
 
     public async Task<CartModel?> GetCartOfUserAsync(string id)
     {
-        var cart = await _cartRepository.GetById(id); 
-        if(cart != null)
+        var cart = await _cartRepository.GetById(id);
+        if (cart != null)
         {
             CartModel cartModel = new CartModel(cart);
             return cartModel;

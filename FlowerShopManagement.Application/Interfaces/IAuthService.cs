@@ -1,14 +1,11 @@
 ﻿using FlowerShopManagement.Application.Models;
-using Microsoft.AspNetCore.Http;
+using FlowerShopManagement.Core.Enums;
 
 namespace FlowerShopManagement.Application.Interfaces;
 
 public interface IAuthService
 {
-    public Task<bool> RegisterAsync(HttpContext httpContext, string email, string phoneNb, string password);
-    public Task<bool> SignInAsync(HttpContext httpContext, string emailOrPhoneNb, string password);
-    public Task<bool> SignOutAsync(HttpContext httpContext);
-    public Task<UserDetailsModel> GetUserAsync(HttpContext httpContext);
-    public string? GetUserId(HttpContext httpContext);
-    public string? GetUserRole(HttpContext httpContext);
+    public Task<UserModel> CreateNewUserAsync(string email, string phoneNb, string password, Role role = Role.Customer);
+    public Task<UserModel?> ValidateSignInAsync(string emailOrPhoneNb, string password);
+    public Task<UserModel?> GetAuthenticatedUserAsync(string id);
 }

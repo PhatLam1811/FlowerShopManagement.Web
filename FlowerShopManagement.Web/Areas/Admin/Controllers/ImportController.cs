@@ -9,7 +9,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
 [Route("[controller]")]
-[Authorize]
+[Authorize(Policy = "StaffOnly")]
 public class ImportController : Controller
 {
     private readonly IStaffService _staffService;

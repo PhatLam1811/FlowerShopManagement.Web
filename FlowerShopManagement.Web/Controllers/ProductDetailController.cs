@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using FlowerShopManagement.Application.Models;
+﻿using FlowerShopManagement.Application.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FlowerShopManagement.Web.Controllers;
 

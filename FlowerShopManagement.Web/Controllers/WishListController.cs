@@ -3,6 +3,7 @@ using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FlowerShopManagement.Web.Controllers
 {
@@ -27,8 +28,13 @@ namespace FlowerShopManagement.Web.Controllers
 
             List<ProductModel> productMs;
 
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            // Unauthenticated user
+            if (userId is null) return NotFound();
+
             // get user
-            UserDetailsModel? user = await _authServices.GetUserAsync(this.HttpContext);
+            UserModel? user = await _authServices.GetAuthenticatedUserAsync(userId);
 
             // get product list like from this user
             if (user != null && user.FavProductIds != null && user.FavProductIds.Count > 0)

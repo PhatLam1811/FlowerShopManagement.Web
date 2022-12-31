@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 
 namespace FlowerShopManagement.Application.MyRegex
@@ -14,7 +12,8 @@ namespace FlowerShopManagement.Application.MyRegex
                 return false;
             }
 
-            if (Regex.IsMatch(value.ToString(), @"^([\+]?84[-]?|[0])?[1-9][0-9]{8}$")) {
+            if (Regex.IsMatch(value.ToString(), @"^([\+]?84[-]?|[0])?[1-9][0-9]{8}$"))
+            {
                 return true;
             }
 
