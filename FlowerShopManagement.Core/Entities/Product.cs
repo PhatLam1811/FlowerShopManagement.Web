@@ -6,7 +6,9 @@ public class Product
 {
     public string? _id { get; set; }
     public string _name { get; set; }
-    public string _picture { get; set; }
+    //public string _picture { get; set; }
+    public List<string> _pictures { get; set; } 
+
     //public Category _category { get; set; } 
     public string _category { get; set; } 
     public float _rating { get; set; }
@@ -26,7 +28,7 @@ public class Product
     public bool _isLike { get; set; }
 
     public Product( string? id = null,
-        string name = "", string picture = "", 
+        string name = "", List<string>? picture = null, 
         string category = "Unknown", int amount = 0,
         int uniPrice = 0, float wholesaleDiscount = 0.0f, string description = "", 
         string maintainment  = "", string size = "0cm x 0cm x 0cm", string material = "Unknown", Color color = Color.Sample, bool isLike = false)
@@ -34,7 +36,7 @@ public class Product
         if (id != null)
             _id = id;
         _name = name;
-        _picture = picture;
+        _pictures = picture ?? new List<string>(); 
         _category = category ;
         _amount = amount;
         _rating = 0.0f;

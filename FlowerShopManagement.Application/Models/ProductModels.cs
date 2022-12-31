@@ -16,14 +16,15 @@ public class ProductModelP
 {
     protected string _id { get; set; }
     public string Name { get; set; }
-    public string Picture { get; set; }
+    public List<string> Pictures { get; set; } = new List<string>();
+
     public int UnitPrice { get; set; }
 
     public ProductModelP(Product entity)
     {
         _id = entity._id;
         Name = entity._name;
-        Picture = entity._picture;
+        Pictures = entity._pictures;
         UnitPrice = entity._uniPrice;
     }
 }
