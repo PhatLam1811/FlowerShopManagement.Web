@@ -9,14 +9,12 @@ public class StaffService : UserService, IStaffService
 {
     private readonly IUserRepository _userRepository;
     private readonly ICartRepository _cartRepository;
-    private readonly ISupplierRepository _supplierRepository;
 
-    public StaffService(IUserRepository userRepository, ICartRepository cartRepository, ISupplierRepository supplierRepository)
+    public StaffService(IUserRepository userRepository, ICartRepository cartRepository)
         : base(userRepository, cartRepository)
     {
         _userRepository = userRepository;
         _cartRepository = cartRepository;
-        _supplierRepository = supplierRepository;
     }
 
     public async Task<List<UserModel>?> GetUsersAsync()
@@ -41,96 +39,6 @@ public class StaffService : UserService, IStaffService
         catch
         {
             // Failed to get staffs list
-            return null;
-        }
-    }
-
-    public async Task<List<SupplierModel>?> GetAllSuppliersAsync()
-    {
-        var suppliers = new List<SupplierModel>();
-
-        try
-        {
-            // Get all users with the role of "Customer" from database
-            var result = await _supplierRepository.GetAll();
-
-            // Entities to Models
-            foreach (var supplier in result)
-            {
-                var model = new SupplierModel(supplier);
-                suppliers.Add(model);
-            }
-
-            // Successfully got customers list
-            return suppliers;
-        }
-        catch
-        {
-            // Failed to get customers list
-            return null;
-        }
-    }
-
-    public async Task<List<SupplierDetailModel>?> GetAllSupplierDetailsAsync()
-    {
-        var suppliers = new List<SupplierDetailModel>();
-
-        try
-        {
-            // Get all users with the role of "Customer" from database
-            var result = await _supplierRepository.GetAll();
-
-            // Entities to Models
-            foreach (var supplier in result)
-            {
-                var model = new SupplierDetailModel(supplier);
-                suppliers.Add(model);
-            }
-
-            // Successfully got customers list
-            return suppliers;
-        }
-        catch
-        {
-            // Failed to get customers list
-            return null;
-        }
-    }
-
-    public async Task<SupplierModel?> GetSupplierAsync(string id)
-    {
-        try
-        {
-            var supplier = await _supplierRepository.GetById(id);
-
-            // Entity to model
-            var supplierModel = new SupplierModel(supplier);
-
-            // Successfully got the supplier
-            return supplierModel;
-        }
-        catch
-        {
-            // Failed to get the supplier
-            return null;
-        }
-    }
-
-    public async Task<SupplierDetailModel?> GetSupplierDetailAsync(string id)
-    {
-        try
-        {
-            var supplier = await _supplierRepository.GetById(id);
-
-            // Entity to model
-            var supplierModel = new SupplierDetailModel(supplier);
-
-            // Successfully got the supplier
-            return supplierModel;
-        }
-        catch
-        {
-            // Failed to get the supplier
             return null;
         }
     }

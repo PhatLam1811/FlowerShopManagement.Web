@@ -5,11 +5,11 @@ using FlowerShopManagement.Core.Entities;
 
 namespace FlowerShopManagement.Application.Services.UserServices;
 
-public class CustomerServices : UserService, ICustomerfService
+public class CustomerService : UserService, ICustomerfService
 {
     IUserRepository _userRepository;
     ICartRepository _cartRepository;
-    public CustomerServices(IUserRepository userRepository, ICartRepository cartRepository)
+    public CustomerService(IUserRepository userRepository, ICartRepository cartRepository)
         : base(userRepository, cartRepository)
     {
         _userRepository = userRepository;

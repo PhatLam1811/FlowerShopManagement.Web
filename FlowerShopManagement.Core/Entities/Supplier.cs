@@ -2,20 +2,28 @@
 
 public class Supplier
 {
-    public string _id { get; set; }
-    public string name { get; set; }
-    public string address { get; set; }
-    public string email { get; set; }
-    public string phoneNumber { get; set; }
-    public string description { get; set; }
+    public string _id;
+
+    public string name;
+    public string address;
+    public string email;
+    public string phoneNumber;
+    public string description;
+
+    public DateTime createdDate;
+    public DateTime lastModified;
 
     public Supplier()
     {
         _id = Guid.NewGuid().ToString();
+
         name = string.Empty;
         address = string.Empty;
         email = string.Empty;
         phoneNumber = string.Empty;
         description = string.Empty;
+
+        createdDate = DateTime.Now;
+        lastModified = DateTime.Now;
     }
 }

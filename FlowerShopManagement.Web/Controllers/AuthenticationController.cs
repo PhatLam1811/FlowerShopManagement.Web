@@ -22,7 +22,7 @@ public class AuthenticationController : Controller
 
     // Register
     [AllowAnonymous]
-    [Route("Register")]
+    [HttpGet("Register")]
     public IActionResult Register()
     {
         return View();
@@ -52,7 +52,7 @@ public class AuthenticationController : Controller
             HttpContext.Session.SetString("Username", newUser.Name);
             HttpContext.Session.SetString("Avatar", newUser.Avatar);
 
-            return RedirectToAction("Index", "Home");
+            return Redirect("~/Home");
         }
         catch (Exception e)
         {
@@ -66,7 +66,7 @@ public class AuthenticationController : Controller
 
     // Sign in
     [AllowAnonymous]
-    [Route("SignIn")]
+    [HttpGet("SignIn")]
     public IActionResult SignIn()
     {
         return View();
@@ -92,15 +92,11 @@ public class AuthenticationController : Controller
             // Http authentication
             await HttpSignInAsync(user);
 
-            // Session configuration
-            HttpContext.Session.SetString("Username", user.Name);
-            HttpContext.Session.SetString("Avatar", user.Avatar);
-
             // Seperated routing depending on user's role
             if (user.Role == Role.Customer)
-                return RedirectToAction("Index", "Home");
+                return Redirect("~/Home");
             else
-                return RedirectToAction("Index", "Admin/Product");
+                return Redirect("~/Admin/Product");
         }
         catch (Exception e)
         {
@@ -155,7 +151,7 @@ public class AuthenticationController : Controller
             await HttpContext.SignOutAsync(authScheme);
 
             // Success
-            return RedirectToAction("Index", "Home");
+            return Redirect("~/Home");
         }
         catch (Exception e)
         {

@@ -216,48 +216,6 @@ public class UserController : Controller
         }
     }
 
-    public async Task AddSupplierAsync(SupplierDetailModel newSupplierModel)
-    {
-        try
-        {
-            await _adminService.AddSupplierAsync(newSupplierModel);
-
-            return; // Notify successfully added a new supplier!
-        }
-        catch
-        {
-            return; // Notify failed to add a new supplier for some reasons!
-        }
-    }
-
-    public async Task EditSupplierAsync(SupplierDetailModel supplierModel)
-    {
-        try
-        {
-            await _adminService.EditSupplierAsync(supplierModel);
-
-            return; // Notify successfully editted a supplier!
-        }
-        catch
-        {
-            return; // Notify failed to add edit a supplier for some reasons!
-        }
-    }
-
-    public async Task RemoveSupplierAsync(SupplierModel supplierModel)
-    {
-        try
-        {
-            await _adminService.RemoveSupplierAsync(supplierModel);
-
-            return; // Notify successfully removed a supplier!
-        }
-        catch
-        {
-            return; // Notify failed to add remove a supplier for some reasons!
-        }
-    }
-
     public async Task EditUserRoleAsync(UserModel userModel, Role newRole)
     {
         try
@@ -317,22 +275,6 @@ public class UserController : Controller
         catch
         {
             return; // Notify failed to add a new customer for some reasons!
-        }
-    }
-
-    public async Task GetAllSuppliersAsync()
-    {
-        try
-        {
-            var suppliers = new List<SupplierModel>();
-
-            suppliers = await _staffService.GetAllSuppliersAsync();
-
-            return; // return the List of Models or attach it to the view model
-        }
-        catch
-        {
-            return; // Notify failed to retrieve the list of suppliers for some reasons!
         }
     }
 

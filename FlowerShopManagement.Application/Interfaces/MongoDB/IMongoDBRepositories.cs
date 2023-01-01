@@ -7,8 +7,8 @@ public interface IBaseRepository<TEntity> : IDisposable where TEntity : class
 {
     public Task<bool> Add(TEntity entity);
 
-    public Task<List<TEntity>?> GetAll();
-
+    public Task<List<TEntity>?> GetAll(int skip = 0, int? limit = null);
+    
     public Task<TEntity?> GetById(string id);
 
     public Task<TEntity?> GetByField(string fieldName, IComparable value);
