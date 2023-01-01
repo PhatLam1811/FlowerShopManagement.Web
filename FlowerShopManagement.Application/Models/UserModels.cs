@@ -8,22 +8,22 @@ public class UserModel
     public string _id { get; set; }
 
     // Account
-    public string Email { get; }
-    public string PhoneNumber { get; }
-    public string Password { get; }
-    public Role Role { get; }
+    public string Email { get; set; }
+    public string PhoneNumber { get; set; }
+    public string Password { get; set; }
+    public Role Role { get; set; } = Role.Customer;
 
     // Profile
-    public string Name { get; }
+    public string Name { get; set; }
     public string Avatar { get; set; }
-    public Gender Gender { get; }
-    public DateTime BirthYear { get; }
-    public string[] Addresses { get; }
-    public List<string> FavProductIds { get; }
+    public Gender Gender { get; set; }
+    public DateTime BirthYear { get; set; }
+    public string[] Addresses { get; set; }
+    public List<string> FavProductIds { get; set; }
 
     // Extra
-    public DateTime CreatedDate { get; }
-    public DateTime LastModified { get; }
+    public DateTime CreatedDate { get; set; }
+    public DateTime LastModified { get; set; }
 
     public UserModel(User entity)
     {
@@ -75,14 +75,14 @@ public class UserModel
     {
         var entity = new User();
 
-        //entity.password = _password;
-        //entity.name = Name;
-        //entity.avatar = Avatar;
-        //entity.email = Email;
-        //entity.phoneNumber = PhoneNumber;
-        //entity.gender = Gender;
-        //entity.birthYear = BirthYear;
-        //entity.addresses = Addresses;
+        entity.password = Password;
+        entity.name = Name;
+        entity.avatar = Avatar;
+        entity.email = Email;
+        entity.phoneNumber = PhoneNumber;
+        entity.gender = Gender;
+        entity.birthYear = BirthYear;
+        entity.addresses = Addresses;
 
         return entity;
     }

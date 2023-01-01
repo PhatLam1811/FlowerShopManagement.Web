@@ -29,7 +29,14 @@
                 <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
 
                     <th scope="row">@i</th>
-                    <td>@Model[i-1].Id.Substring(0,5)</td>
+                        @if (@Model[i - 1].Id != "")
+                        {
+                        <td>@Model[i-1].Id.Substring(0,5)</td>
+                        }
+                        else
+                        {
+                        <td>Unknown</td>
+                        }
                     <td>@Model[i-1].FullName</td>
                     <td>$@Model[i-1].Total</td>
                     <td>

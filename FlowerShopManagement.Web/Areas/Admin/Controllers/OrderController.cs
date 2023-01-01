@@ -57,7 +57,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         }
 
         [Route("Sort")]
-        [HttpGet]
+        [HttpPost]
         public async Task<IActionResult> Sort(string sortOrder, int? pageNumber, string? currentCategory)
         {
             ViewData["CurrentSort"] = sortOrder;
@@ -225,12 +225,12 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         // Confirm and create an Order
         [Route("Create")]
         [HttpPost]
-        public async Task<IActionResult> Create(UserModel userModel)
+        public async Task<IActionResult> Create(UserModel? userModel )
         {
             OrderVM? orderVM = GetOrderModel();
             if (orderVM == null || orderVM.CurrentProductModels == null) return NotFound();
             orderVM.Order.Products = orderVM.CurrentProductModels;
-            var result = await _saleServices.CreateOfflineOrder(orderVM.Order, userModel, _orderRepository, _userRepository, _productRepository);
+            var result = await _saleServices.CreateOfflineOrder(orderVM.Order, userModel??new UserModel(), _orderRepository, _userRepository, _productRepository);
             if (result == true)
             {
                 return RedirectToAction("Index"); // A updated _ViewAll table

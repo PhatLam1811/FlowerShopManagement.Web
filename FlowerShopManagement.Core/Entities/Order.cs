@@ -5,7 +5,7 @@ namespace FlowerShopManagement.Core.Entities;
 
 public class Order
 {
-    public string? _id { get; private set; }
+    public string _id { get; private set; } = string.Empty;
 
     [Required]
     public string? _accountID { get; set; }
