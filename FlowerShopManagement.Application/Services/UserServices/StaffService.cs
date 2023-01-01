@@ -2,6 +2,7 @@
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
+using Microsoft.AspNetCore.Hosting;
 
 namespace FlowerShopManagement.Application.Services.UserServices;
 
@@ -10,13 +11,15 @@ public class StaffService : UserService, IStaffService
     private readonly IUserRepository _userRepository;
     private readonly ICartRepository _cartRepository;
     private readonly ISupplierRepository _supplierRepository;
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
-    public StaffService(IUserRepository userRepository, ICartRepository cartRepository, ISupplierRepository supplierRepository)
+    public StaffService(IUserRepository userRepository, ICartRepository cartRepository, ISupplierRepository supplierRepository, IWebHostEnvironment webHostEnvironment)
         : base(userRepository, cartRepository)
     {
         _userRepository = userRepository;
         _cartRepository = cartRepository;
         _supplierRepository = supplierRepository;
+        _webHostEnvironment = webHostEnvironment;
     }
 
     public async Task<List<UserModel>?> GetUsersAsync()
@@ -139,8 +142,13 @@ public class StaffService : UserService, IStaffService
     {
         try
         {
+            
+            if (newCustomerModel.FormFile == null) return false;
+            var customer = await newCustomerModel.ToNewEntity(
+                wwwRootPath: _webHostEnvironment.WebRootPath
+                );
             // Model to entity
-            var customer = newCustomerModel.ToNewEntity();
+            //var customer = newCustomerModel.ToNewEntity();
 
             // Set default password - "1"
             var defaultPassword = Validator.MD5Hash("1");
