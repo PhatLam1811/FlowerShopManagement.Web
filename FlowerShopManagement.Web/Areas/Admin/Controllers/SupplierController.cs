@@ -1,5 +1,4 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
-using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,80 +6,105 @@ using Microsoft.AspNetCore.Mvc;
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[Route("[area]/[controller]")]
 [Authorize(Policy = "StaffOnly")]
 public class SupplierController : Controller
 {
-    private readonly IAuthService _authService;
-    private readonly IPersonalService _personalService;
-    private readonly IAdminService _adminService;
-    private readonly IStaffService _staffService;
-    public SupplierController(
-    IAuthService authService,
-    IAdminService adminService,
-    IStaffService staffService,
-    IPersonalService personalService)
+    private readonly ISupplierService _supplierService;
+
+    public SupplierController(ISupplierService supplierService)
     {
-        _authService = authService;
-        _adminService = adminService;
-        _staffService = staffService;
-        _personalService = personalService;
+        _supplierService = supplierService;
     }
+
+    [HttpGet]
     public async Task<IActionResult> Index()
     {
-        ViewBag.Supplier = true;
-        var supplier = await _staffService.GetAllSupplierDetailsAsync();
+        List<SupplierModel>? supplier = await _supplierService.GetAllAsync(0, 10);
         return View(supplier);
     }
 
-    [HttpGet]
+    // CREATE
+    [HttpGet("Create")]
     public IActionResult Create()
     {
-        return View(new SupplierDetailModel());
+        return View();
     }
 
-
-    [HttpPost]
-    public async Task<IActionResult> Create(SupplierDetailModel model)
+    [HttpPost("Create")]
+    [ActionName("CreateAsync")]
+    public async Task<IActionResult> CreateAsync(SupplierModel model)
     {
-        // Create
-        bool result = false;
         try
         {
-            result = await _adminService.AddSupplierAsync(model);
-            if (result)
-            {
-                return RedirectToAction("Index");
+            var isSuccess = await _supplierService.AddOneAsync(model);
 
-            }
+            if (isSuccess)
+                return Redirect("~/Admin/Supplier");
             else
-            {
                 return NotFound();
-            }
-
         }
-        catch { return NotFound(); }
+        catch (Exception e)
+        { 
+            throw new Exception(e.Message); 
+        }
     }
 
-    [HttpGet]
+    // EDIT
+    [HttpGet("Edit")]
     public async Task<IActionResult> Edit(string id)
     {
-        var supplier = await _staffService.GetSupplierDetailAsync(id);
-        return View(supplier);
+        try
+        {
+            SupplierModel? model = await _supplierService.GetOneAsync(id);
+
+            // Supplier not found
+            if (model is null) return NotFound();
+
+            return View(model);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
-    [HttpPost]
-    public async Task<IActionResult> Edit(SupplierDetailModel supplier)
+    [HttpPost("Edit")]
+    [ActionName("EditAsync")]
+    public async Task<IActionResult> EditAsync(SupplierModel supplier)
     {
-        var isSuccess = await _adminService.EditSupplierAsync(supplier);
+        try
+        {
+            var isSuccess = await _supplierService.UpdateOneAsync(supplier);
 
-        if (isSuccess)
-            return RedirectToAction("Index", "Supplier");
-        else
-            return RedirectToAction("Edit", "Supplier");
+            if (isSuccess)
+                return Redirect("~/Admin/Supplier");
+            else
+                return NotFound();
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
-    public IActionResult Back()
+    // DELETE
+    [HttpPost("Remove")]
+    [ActionName("RemoveAsync")]
+    public async Task<IActionResult> RemoveAsync(string id)
     {
-        return Redirect(Request.Headers["Referer"].ToString());
+        try
+        {
+            var isSuccess = await _supplierService.RemoveOneAsync(id);
+
+            if (isSuccess)
+                return Redirect("~/Admin/Supplier");
+            else
+                return NotFound();
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 }

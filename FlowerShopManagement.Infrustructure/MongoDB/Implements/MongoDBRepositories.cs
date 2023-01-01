@@ -44,11 +44,11 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
     }
 
-    public virtual async Task<List<TEntity>?> GetAll()
+    public virtual async Task<List<TEntity>?> GetAll(int skip = 0, int? limit = null)
     {
         try
         {
-            return await _mongoDbCollection.Find(Builders<TEntity>.Filter.Empty).ToListAsync();
+            return await _mongoDbCollection.Find(Builders<TEntity>.Filter.Empty).Skip(skip).Limit(limit).ToListAsync();
         }
         catch (Exception e)
         {
@@ -135,6 +135,21 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
     }
 
+    //public async Task<bool> UpdateField(string id, string fieldName, string value)
+    //{
+    //    var filter = idFilter(id);
+    //    var update = Builders<TEntity>.Update.Set(fieldName, value);
+
+    //    try
+    //    {
+    //        var result = await _mongoDbCollection.UpdateOneAsync(filter, update);
+    //        return result.IsAcknowledged;
+    //    } 
+    //    catch (Exception e)
+    //    {
+    //        throw new Exception(e.Message);
+    //    }
+    //}
 
     // Override disposable function
     public void Dispose() => GC.SuppressFinalize(this);

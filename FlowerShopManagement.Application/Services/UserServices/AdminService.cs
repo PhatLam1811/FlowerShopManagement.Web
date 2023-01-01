@@ -11,19 +11,16 @@ public class AdminService : StaffService, IAdminService
 {
     private readonly IUserRepository _userRepository;
     private readonly ICartRepository _cartRepository;
-    private readonly ISupplierRepository _supplierRepository;
     private readonly IWebHostEnvironment _webHostEnvironment;
 
     public AdminService(
         IUserRepository userRepository,
         ICartRepository cartRepository,
-        ISupplierRepository supplierRepository,
         IWebHostEnvironment webHostEnvironment)
-        : base(userRepository, cartRepository, supplierRepository, webHostEnvironment)
+        : base(userRepository, cartRepository, webHostEnvironment)
     {
         _userRepository = userRepository;
         _cartRepository = cartRepository;
-        _supplierRepository = supplierRepository;
         _webHostEnvironment= webHostEnvironment;
     }
 
@@ -50,55 +47,6 @@ public class AdminService : StaffService, IAdminService
         catch
         {
             // Failed to add new staff account
-            return false;
-        }
-    }
-
-    public async Task<bool> AddSupplierAsync(SupplierDetailModel newSupplierModel)
-    {
-        try
-        {
-            var supplier = newSupplierModel.ToNewEntity();
-
-            return await _supplierRepository.Add(supplier);
-        }
-        catch
-        {
-            // Failed to add new supplier
-            return false;
-        }
-    }
-
-    public async Task<bool> EditSupplierAsync(SupplierDetailModel supplierModel)
-    {
-        var supplier = new Supplier();
-
-        try
-        {
-            supplierModel.ToEntity(ref supplier);
-
-            return await _supplierRepository.UpdateById(supplier._id, supplier);
-        }
-        catch
-        {
-            // Failed to update the selected supplier
-            return false;
-        }
-    }
-
-    public async Task<bool> RemoveSupplierAsync(SupplierModel supplierModel)
-    {
-        var supplier = new Supplier();
-
-        try
-        {
-            supplierModel.ToEntity(ref supplier);
-
-            return await _supplierRepository.RemoveById(supplier._id);
-        }
-        catch
-        {
-            // Failed to remove the selected supplier
             return false;
         }
     }

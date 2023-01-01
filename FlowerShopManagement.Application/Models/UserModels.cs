@@ -27,7 +27,7 @@ public class UserModel
     public DateTime CreatedDate { get; set; }
     public DateTime LastModified { get; set; }
 
-    // Mỏre Extra
+    // More Extra
 
     public IFormFile? FormFile { get; set; } // help to generate user avatar, no need to store on dB nha 
 
@@ -49,7 +49,6 @@ public class UserModel
 
         CreatedDate = entity.createdDate;
         LastModified = entity.lastModified;
-        FavProductIds = entity.favProductIds;
     }
 
     public UserModel()
