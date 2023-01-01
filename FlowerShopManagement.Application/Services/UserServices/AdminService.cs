@@ -3,6 +3,7 @@ using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
+using Microsoft.AspNetCore.Hosting;
 
 namespace FlowerShopManagement.Application.Services.UserServices;
 
@@ -10,21 +11,31 @@ public class AdminService : StaffService, IAdminService
 {
     private readonly IUserRepository _userRepository;
     private readonly ICartRepository _cartRepository;
+    private readonly ISupplierRepository _supplierRepository;
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
     public AdminService(
         IUserRepository userRepository,
-        ICartRepository cartRepository)
-        : base(userRepository, cartRepository)
+        ICartRepository cartRepository,
+        ISupplierRepository supplierRepository,
+        IWebHostEnvironment webHostEnvironment)
+        : base(userRepository, cartRepository, supplierRepository, webHostEnvironment)
     {
         _userRepository = userRepository;
         _cartRepository = cartRepository;
+        _supplierRepository = supplierRepository;
+        _webHostEnvironment= webHostEnvironment;
     }
 
     public async Task<bool> AddStaffAsync(UserModel newStaffModel, Role role)
     {
         try
         {
-            var staff = newStaffModel.ToNewEntity();
+            if (newStaffModel.FormFile == null) return false;
+            var staff = await newStaffModel.ToNewEntity(
+                wwwRootPath: _webHostEnvironment.WebRootPath
+                );
+           // var staff = newStaffModel.ToNewEntity();
 
             // Set default password - "1"
             var defaultPassword = Validator.MD5Hash("1");

@@ -1,5 +1,7 @@
 ﻿using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
+using Microsoft.AspNetCore.Http;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace FlowerShopManagement.Application.Models;
 
@@ -11,7 +13,7 @@ public class UserModel
     public string Email { get; set; }
     public string PhoneNumber { get; set; }
     public string Password { get; set; }
-    public Role Role { get; set; }
+    public Role Role { get; set; } = Role.Customer;
 
     // Profile
     public string Name { get; set; }
@@ -22,8 +24,12 @@ public class UserModel
     public List<string> FavProductIds { get; set; }
 
     // Extra
-    public DateTime CreatedDate { get; private set; }
+    public DateTime CreatedDate { get; set; }
     public DateTime LastModified { get; set; }
+
+    // More Extra
+
+    public IFormFile? FormFile { get; set; } // help to generate user avatar, no need to store on dB nha 
 
     public UserModel(User entity)
     {
@@ -74,14 +80,38 @@ public class UserModel
     {
         var entity = new User();
 
-        //entity.password = _password;
-        //entity.name = Name;
-        //entity.avatar = Avatar;
-        //entity.email = Email;
-        //entity.phoneNumber = PhoneNumber;
-        //entity.gender = Gender;
-        //entity.birthYear = BirthYear;
-        //entity.addresses = Addresses;
+        entity.password = Password;
+        entity.name = Name;
+        entity.avatar = Avatar;
+        entity.email = Email;
+        entity.phoneNumber = PhoneNumber;
+        entity.gender = Gender;
+        entity.birthYear = BirthYear;
+        entity.addresses = Addresses;
+
+        return entity;
+    }
+    public async Task<User> ToNewEntity(string wwwRootPath)
+    {
+        var entity = new User();
+
+        if (this.FormFile != null && this.FormFile.Length > 0)
+        {
+            string fileName = this.FormFile.FileName;
+            string path = Path.Combine(wwwRootPath + "/avatar/", fileName);
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                await this.FormFile.CopyToAsync(fileStream);
+                entity.avatar = this.FormFile.FileName;
+            }
+        }
+        entity.name = Name;
+        entity.password = Password;
+        entity.email = Email;
+        entity.phoneNumber = PhoneNumber;
+        entity.gender = Gender;
+        entity.birthYear = BirthYear;
+        entity.addresses = Addresses;
 
         return entity;
     }

@@ -25,16 +25,18 @@ public class UserController : Controller
         IStaffService staffService,
         IPersonalService personalService)
     {
+        ViewBag.User = true;
+
         _authService = authService;
         _adminService = adminService;
         _staffService = staffService;
         _personalService = personalService;
     }
 
+    [HttpGet]
     [Route("Index")]
     public async Task<IActionResult> Index()
     {
-        ViewBag.User = true;
 
         try
         {
@@ -117,6 +119,13 @@ public class UserController : Controller
     [HttpGet]
     public IActionResult Create()
     {
+        ViewData["Roles"] = Enum.GetValues(typeof(Role))
+            .Cast<Role>()
+            .Where(i => i.ToString() != "Passenger" && i.ToString() != "Admin" && i.ToString() != "All")
+            .ToList();
+        ViewData["Genders"] = Enum.GetValues(typeof(Gender))
+            .Cast<Gender>()
+            .ToList();
         return View(new UserModel());
     }
 

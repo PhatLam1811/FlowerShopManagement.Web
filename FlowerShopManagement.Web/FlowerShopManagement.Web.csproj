@@ -18,8 +18,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FlowerShopManagement.Application\FlowerShopManagement.Application.csproj" />
-    <ProjectReference Include="..\FlowerShopManagement.Infrustructure\FlowerShopManagement.Infrustructure.csproj" />
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\Admin\Models\" />
+    <Folder Include="wwwroot\avatar\" />
   </ItemGroup>
 
   <ItemGroup>
