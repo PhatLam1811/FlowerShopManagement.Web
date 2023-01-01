@@ -1,5 +1,4 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
-using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -12,7 +11,6 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 [Authorize(Policy = "StaffOnly")]
 public class ImportController : Controller
 {
-    private readonly IStaffService _staffService;
     private readonly IStockService _stockService;
     private readonly IMailService _mailService;
     private readonly IImportService _importService;
@@ -20,14 +18,12 @@ public class ImportController : Controller
     private readonly ISupplierService _supplierService;
 
     public ImportController(
-        IStaffService staffService,
         IStockService stockService,
         IMailService mailService,
         IImportService importService,
         IProductRepository productRepository,
         ISupplierService supplierService)
     {
-        _staffService = staffService;
         _stockService = stockService;
         _mailService = mailService;
         _importService = importService;

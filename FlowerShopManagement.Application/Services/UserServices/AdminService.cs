@@ -11,19 +11,16 @@ public class AdminService : StaffService, IAdminService
 {
     private readonly IUserRepository _userRepository;
     private readonly ICartRepository _cartRepository;
-    private readonly ISupplierRepository _supplierRepository;
     private readonly IWebHostEnvironment _webHostEnvironment;
 
     public AdminService(
         IUserRepository userRepository,
         ICartRepository cartRepository,
-        ISupplierRepository supplierRepository,
         IWebHostEnvironment webHostEnvironment)
-        : base(userRepository, cartRepository, supplierRepository, webHostEnvironment)
+        : base(userRepository, cartRepository, webHostEnvironment)
     {
         _userRepository = userRepository;
         _cartRepository = cartRepository;
-        _supplierRepository = supplierRepository;
         _webHostEnvironment= webHostEnvironment;
     }
 

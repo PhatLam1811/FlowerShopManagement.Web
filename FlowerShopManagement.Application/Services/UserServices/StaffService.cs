@@ -10,10 +10,12 @@ public class StaffService : UserService, IStaffService
 {
     private readonly IUserRepository _userRepository;
     private readonly ICartRepository _cartRepository;
-    private readonly ISupplierRepository _supplierRepository;
     private readonly IWebHostEnvironment _webHostEnvironment;
 
-    public StaffService(IUserRepository userRepository, ICartRepository cartRepository, IWebHostEnvironment webHostEnvironment)
+    public StaffService(
+        IUserRepository userRepository, 
+        ICartRepository cartRepository, 
+        IWebHostEnvironment webHostEnvironment)
         : base(userRepository, cartRepository)
     {
         _userRepository = userRepository;
