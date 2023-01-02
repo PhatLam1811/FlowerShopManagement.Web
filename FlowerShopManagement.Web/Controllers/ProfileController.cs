@@ -3,9 +3,9 @@ using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Application.Services;
-using FlowerShopManagement.Application.Services.UserServices;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FlowerShopManagement.Web.Controllers;
 
@@ -29,8 +29,12 @@ public class ProfileController : Controller
     {
         ViewBag.Profile = true;
 
-        //var user = await _userRepository.GetByEmailOrPhoneNb("jah@gmail.com");
-        var user = await _authServices.GetUserAsync(HttpContext);
+        var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        // Unauthenticated user
+        if (userId is null) return NotFound();
+
+        var user = await _authServices.GetAuthenticatedUserAsync(userId);
 
         // Create UserModel
         //UserDetailsModel user1 = new UserDetailsModel(user);
@@ -44,13 +48,13 @@ public class ProfileController : Controller
         var user = await _userRepository.GetByEmailOrPhoneNb("jah@gmail.com");
 
         // Create UserModel
-        UserDetailsModel user1 = new UserDetailsModel(user);
+        UserModel user1 = new UserModel(user);
 
         return PartialView("PersonalInformation", user1);
     }
 
     [HttpPost]
-    public async Task<IActionResult> PersonalInformation(UserDetailsModel model)
+    public async Task<IActionResult> PersonalInformation(UserModel model)
     {
         var user = await _userRepository.GetByEmailOrPhoneNb("jah@gmail.com");
 
@@ -94,7 +98,12 @@ public class ProfileController : Controller
 
             try
             {
-                var currentUser = await _authServices.GetUserAsync(this.HttpContext);
+                var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                // Unauthenticated user
+                if (userId is null) return NotFound();
+
+                var currentUser = await _authServices.GetAuthenticatedUserAsync(userId);
 
                 // Verify old password
                 var encryptedPass = Validator.MD5Hash(model.OldPassword);

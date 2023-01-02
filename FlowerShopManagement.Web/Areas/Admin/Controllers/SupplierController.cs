@@ -1,88 +1,110 @@
-﻿using FlowerShopManagement.Application.Interfaces.UserSerivices;
-using FlowerShopManagement.Application.Interfaces;
+﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
-using FlowerShopManagement.Core.Enums;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace FlowerShopManagement.Web.Areas.Admin.Controllers
+namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
+
+[Area("Admin")]
+[Route("[area]/[controller]")]
+[Authorize(Policy = "StaffOnly")]
+public class SupplierController : Controller
 {
-    [Area("Admin")]
-    [Authorize]
-    public class SupplierController : Controller
+    private readonly ISupplierService _supplierService;
+
+    public SupplierController(ISupplierService supplierService)
     {
-        private readonly IAuthService _authService;
-        private readonly IPersonalService _personalService;
-        private readonly IAdminService _adminService;
-        private readonly IStaffService _staffService;
-        public SupplierController(
-        IAuthService authService,
-        IAdminService adminService,
-        IStaffService staffService,
-        IPersonalService personalService)
+        _supplierService = supplierService;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Index()
+    {
+        List<SupplierModel>? supplier = await _supplierService.GetAllAsync(0, 10);
+        return View(supplier);
+    }
+
+    // CREATE
+    [HttpGet("Create")]
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    [HttpPost("Create")]
+    [ActionName("CreateAsync")]
+    public async Task<IActionResult> CreateAsync(SupplierModel model)
+    {
+        try
         {
-            _authService = authService;
-            _adminService = adminService;
-            _staffService = staffService;
-            _personalService = personalService;
-        }
-        public async Task<IActionResult> Index()
-        {
-            ViewBag.Supplier = true;
-            var supplier = await _staffService.GetAllSupplierDetailsAsync();
-            return View(supplier);
-        }
-
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View(new SupplierDetailModel());
-        }
-
-
-        [HttpPost]
-        public async Task<IActionResult> Create(SupplierDetailModel model)
-        {
-            // Create
-            bool result = false;
-            try
-            {
-                result = await _adminService.AddSupplierAsync(model);
-                if(result)
-                {
-                    return RedirectToAction("Index");
-
-                }
-                else
-                {
-                    return NotFound();
-                }
-
-            }
-            catch { return NotFound(); }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Edit(string id)
-        {
-            var supplier = await _staffService.GetSupplierDetailAsync(id);
-            return View(supplier);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> Edit(SupplierDetailModel supplier)
-        {
-            var isSuccess = await _adminService.EditSupplierAsync(supplier);
+            var isSuccess = await _supplierService.AddOneAsync(model);
 
             if (isSuccess)
-                return RedirectToAction("Index", "Supplier");
+                return Redirect("~/Admin/Supplier");
             else
-                return RedirectToAction("Edit", "Supplier");
+                return NotFound();
         }
+        catch (Exception e)
+        { 
+            throw new Exception(e.Message); 
+        }
+    }
 
-        public IActionResult Back()
+    // EDIT
+    [HttpGet("Edit")]
+    public async Task<IActionResult> Edit(string id)
+    {
+        try
         {
-            return Redirect(Request.Headers["Referer"].ToString());
+            SupplierModel? model = await _supplierService.GetOneAsync(id);
+
+            // Supplier not found
+            if (model is null) return NotFound();
+
+            return View(model);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    [HttpPost("Edit")]
+    [ActionName("EditAsync")]
+    public async Task<IActionResult> EditAsync(SupplierModel supplier)
+    {
+        try
+        {
+            var isSuccess = await _supplierService.UpdateOneAsync(supplier);
+
+            if (isSuccess)
+                return Redirect("~/Admin/Supplier");
+            else
+                return NotFound();
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    // DELETE
+    [HttpPost("Remove")]
+    [ActionName("RemoveAsync")]
+    public async Task<IActionResult> RemoveAsync(string id)
+    {
+        try
+        {
+            var isSuccess = await _supplierService.RemoveOneAsync(id);
+
+            if (isSuccess)
+                return Redirect("~/Admin/Supplier");
+            else
+                return NotFound();
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
         }
     }
 }

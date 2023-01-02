@@ -1,4 +1,5 @@
-﻿using ChartJSCore.Helpers;
+﻿using Microsoft.AspNetCore.Authorization;
+using ChartJSCore.Helpers;
 using ChartJSCore.Models;
 using ChartJSCore.Models.ChartJSCore.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Authorize(Policy = "StaffOnly")]
     public class ReportController : Controller
     {
         public IActionResult Index()

@@ -1,29 +1,36 @@
 ﻿@*Kiem tra xem da dang nhap hay chua?*@
 
-@*Chua dang nhap*@
-@if (this.Context.Session.GetString("NameIdentifier") == null)
+@{ ViewBag.IsAuthenticated = false; }
+	 
+@if (Context.User.Identity is not null)
 {
-	<h2>null roi ne hihi</h2>
+	ViewBag.IsAuthenticated = Context.User.Identity.IsAuthenticated;
+	
+	if (ViewBag.IsAuthenticated)
+	{
+		ViewData["Username"] = Context.User.FindFirst("Username")?.Value;
+		ViewData["Avatar"] = Context.User.FindFirst("Avatar")?.Value;
+	}
+}
+
+@if (!ViewBag.IsAuthenticated)
+{
+	@*Chua dang nhap*@
 	<li class="nav-item dropdown-item">
 		<a class="nav-link" id="login" asp-action="SignIn" asp-controller="Authentication">Login</a>
 	</li>
 	<li class="nav-item dropdown-item">
 		<a class="nav-link" id="register" asp-action="Register" asp-controller="Authentication">Register</a>
 	</li>
-	<li class="nav-item dropdown-item">
-		<form asp-action="SignOutAsync" asp-controller="Authentication">
-			<button class="btn btn-active-none-style nav-link w-100" type="submit" value="Sign Out" />
-		</form>
-	</li>
 }
 else
 {
 	@*Da dang nhap*@
 	<li class="nav-item dropdown-item">
-		<a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @this.Context.Session.GetString("NameIdentifier")</a>
+		<a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @ViewData["Username"]</a>
 	</li>
 	<li class="nav-item dropdown-item">
-		<form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+		<form id="logoutForm" class="form-inline" asp-action="SignOutAsync" asp-controller="Authentication">
 			<button id="logout" type="submit" class="btn btn-active-none-style nav-link w-100">Logout</button>
 		</form>
 	</li>

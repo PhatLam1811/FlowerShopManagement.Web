@@ -1,5 +1,4 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
-using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -9,27 +8,27 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
 [Route("[controller]")]
-[Authorize]
+[Authorize(Policy = "StaffOnly")]
 public class ImportController : Controller
 {
-    private readonly IStaffService _staffService;
     private readonly IStockService _stockService;
     private readonly IMailService _mailService;
     private readonly IImportService _importService;
     private readonly IProductRepository _productRepository;
+    private readonly ISupplierService _supplierService;
 
     public ImportController(
-        IStaffService staffService,
         IStockService stockService,
         IMailService mailService,
         IImportService importService,
-        IProductRepository productRepository)
+        IProductRepository productRepository,
+        ISupplierService supplierService)
     {
-        _staffService = staffService;
         _stockService = stockService;
         _mailService = mailService;
         _importService = importService;
         _productRepository = productRepository;
+        _supplierService = supplierService;
     }
 
     // ========================== VIEWS ========================== //
@@ -41,7 +40,7 @@ public class ImportController : Controller
     {
         // Load data
         var lowOnStockProducts = await _stockService.GetLowOnStockProducts(_productRepository);
-        var suppliers = await _staffService.GetAllSuppliersAsync();
+        var suppliers = await _supplierService.GetAllAsync();
 
         // Configure viewmodel
         var viewmodel = new ImportViewModel(PaginatedList<ProductModel>.CreateAsync(lowOnStockProducts, 1, 10), suppliers);
@@ -77,7 +76,7 @@ public class ImportController : Controller
         // Get selected suppliers detail
         foreach (var id in supplierIds)
         {
-            var result = await _staffService.GetSupplierAsync(id);
+            var result = await _supplierService.GetOneAsync(id);
             if (result != null) suppilers.Add(result);
         }
 

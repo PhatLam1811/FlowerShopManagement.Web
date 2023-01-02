@@ -1,6 +1,5 @@
 ﻿using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
-using System.Xml.Linq;
 using ValueType = FlowerShopManagement.Core.Enums.ValueType;
 
 namespace FlowerShopManagement.Application.Models;
@@ -23,11 +22,11 @@ public class VoucherDetailModel
         Categories = entity._categories;
         Discount = entity._discount;
         ValueType = entity._valueType;
-        ConditionValue= entity._conditionValue;
+        ConditionValue = entity._conditionValue;
         Amount = entity._amount;
         ExpiredDate = entity._expiredDate;
         State = entity._state;
-        CreatedDate = entity._createdDate;  
+        CreatedDate = entity._createdDate;
     }
     public VoucherDetailModel()
     {

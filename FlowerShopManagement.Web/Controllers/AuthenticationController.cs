@@ -1,11 +1,15 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
+using FlowerShopManagement.Core.Enums;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FlowerShopManagement.Web.Controllers;
 
-[AllowAnonymous]
+[Authorize]
 [Route("[controller]")]
 public class AuthenticationController : Controller
 {
@@ -16,35 +20,19 @@ public class AuthenticationController : Controller
         _authServices = authServices;
     }
 
-    // ========================== VIEWS ========================== //
-
-    #region Views
-    [Route("Register")]
-    [HttpGet]
+    // Register
+    [AllowAnonymous]
+    [HttpGet("Register")]
     public IActionResult Register()
     {
         return View();
     }
 
-    [Route("SignIn")]
-    [HttpGet]
-
-    public IActionResult SignIn()
-    {
-        return View();
-    }
-
-
-    #endregion
-
-    // ========================== ACTIONS ========================== //
-
-    #region Actions
-    [Route("RegisterAsync")]
     [HttpPost]
+    [AllowAnonymous]
+    [Route("RegisterAsync")]
     public async Task<IActionResult> RegisterAsync(RegisterModel model)
     {
-        // Model validation
         if (!ModelState.IsValid) return Register();
 
         string email = model.Email;
@@ -53,47 +41,121 @@ public class AuthenticationController : Controller
 
         // Email verification?
 
-        // Register new user
-        var isSuccess = await _authServices.RegisterAsync(HttpContext, email, phoneNb, password);
+        try
+        {
+            var newUser = await _authServices.CreateNewUserAsync(email, phoneNb, password);
 
-        // Redirect
-        if (isSuccess)
-            return RedirectToAction("Index", "Home"); // Successfully registered!
-        else
-            return Register(); // Failed to register!
+            // Http authentication
+            await HttpSignInAsync(newUser);
+
+            // Session configuration
+            HttpContext.Session.SetString("Username", newUser.Name);
+            HttpContext.Session.SetString("Avatar", newUser.Avatar);
+
+            return Redirect("~/Home");
+        }
+        catch (Exception e)
+        {
+            if (e.Message.Contains("DuplicateKey"))
+                return NotFound(); // Notify existed user
+
+            // Unknown error
+            throw new Exception(e.Message);
+        }
     }
 
-    [Route("SignInAsync")]
+    // Sign in
+    [AllowAnonymous]
+    [HttpGet("SignIn")]
+    public IActionResult SignIn()
+    {
+        return View();
+    }
+
     [HttpPost]
+    [AllowAnonymous]
+    [Route("SignInAsync")]
     public async Task<IActionResult> SignInAsync(SignInModel model)
     {
-        // Model validation
         if (!ModelState.IsValid) return SignIn();
 
         string emailOrPhoneNb = model.EmailorPhone;
         string password = model.Password;
 
-        // Sign in to system
-        var isSuccess = await _authServices.SignInAsync(HttpContext, emailOrPhoneNb, password);
+        try
+        {
+            var user = await _authServices.ValidateSignInAsync(emailOrPhoneNb, password);
 
-        // Redirect
-        if (isSuccess)
-            return RedirectToAction("Index", "Product", new { action = "Index", area ="Admin"}); // Successfully signed in!
-        else
-            return SignIn(); // Failed to sign in!
+            // Unregistered user (should notify)
+            if (user is null) return SignIn();
+
+            // Http authentication
+            await HttpSignInAsync(user);
+
+            // Seperated routing depending on user's role
+            if (user.Role == Role.Customer)
+                return Redirect("~/Home");
+            else
+                return Redirect("~/Admin/Product");
+        }
+        catch (Exception e)
+        {
+            // Unknown error
+            throw new Exception(e.Message);
+        }
     }
 
-    [HttpPost]
-	[Route("SignOutAsync")]
-	public async Task<IActionResult> SignOutAsync()
+    [AllowAnonymous]
+    private async Task HttpSignInAsync(UserModel user)
     {
-        var isSuccess = await _authServices.SignOutAsync(HttpContext);
+        // Using cookie authentication scheme
+        var authScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 
-        if (isSuccess)
-            return RedirectToAction("SignIn", "Authentication"); // Signed out successfully!
-        else
-            return NotFound(); // Failed to sign out!
+        // Create user's claims
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, user._id),
+            new Claim(ClaimTypes.Role, user.Role.ToString()),
+            new Claim("Username", user.Name),
+            new Claim("Avatar", user.Avatar)
+        };
+
+        var claimsIdentity = new ClaimsIdentity(claims, authScheme);
+        var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+        var authProperties = new AuthenticationProperties 
+        {
+            IsPersistent = true,
+            AllowRefresh = true
+        };
+
+        try
+        {
+            await HttpContext.SignInAsync(authScheme, claimsPrincipal, authProperties);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
-    #endregion
+    // Sign out
+    [HttpPost]
+    [Route("SignOutAsync")]
+    public async Task<IActionResult> SignOutAsync()
+    {
+        // Using cookie authentication scheme
+        var authScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+        
+        try
+        {
+            await HttpContext.SignOutAsync(authScheme);
+
+            // Success
+            return Redirect("~/Home");
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
 }

@@ -6,7 +6,7 @@ namespace FlowerShopManagement.Application.Interfaces;
 
 public interface IStockService
 {
-	public Task<bool> CreateProduct(ProductDetailModel productModel, IProductRepository productRepository);
+	public Task<bool> CreateProduct(ProductDetailModel productModel);
 	public Task<bool> CreateVoucher(VoucherDetailModel voucherDetailModel, IVoucherRepository voucherRepository);
 	public Task<List<ProductModel>> GetUpdatedProducts(IProductRepository productRepository);
 	public Task<ProductDetailModel> GetADetailProduct(string id, IProductRepository productRepository);

@@ -2,6 +2,7 @@
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
+using Microsoft.AspNetCore.Hosting;
 
 namespace FlowerShopManagement.Application.Services.UserServices;
 
@@ -9,29 +10,32 @@ public class StaffService : UserService, IStaffService
 {
     private readonly IUserRepository _userRepository;
     private readonly ICartRepository _cartRepository;
-    private readonly ISupplierRepository _supplierRepository;
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
-    public StaffService(IUserRepository userRepository, ICartRepository cartRepository, ISupplierRepository supplierRepository)
+    public StaffService(
+        IUserRepository userRepository, 
+        ICartRepository cartRepository, 
+        IWebHostEnvironment webHostEnvironment)
         : base(userRepository, cartRepository)
     {
         _userRepository = userRepository;
         _cartRepository = cartRepository;
-        _supplierRepository = supplierRepository;
+        _webHostEnvironment = webHostEnvironment;
     }
 
-    public async Task<List<UserDetailsModel>?> GetUsersAsync()
+    public async Task<List<UserModel>?> GetUsersAsync()
     {
-        var users = new List<UserDetailsModel>();
+        var users = new List<UserModel>();
 
         try
         {
             // Get all users from database
             var result = await _userRepository.GetAll();
-            
+
             // Entities to Models
             foreach (var user in result)
             {
-                var model = new UserDetailsModel(user);
+                var model = new UserModel(user);
                 users.Add(model);
             }
 
@@ -45,102 +49,17 @@ public class StaffService : UserService, IStaffService
         }
     }
 
-    public async Task<List<SupplierModel>?> GetAllSuppliersAsync()
-    {
-        var suppliers = new List<SupplierModel>();
-
-        try
-        {
-            // Get all users with the role of "Customer" from database
-            var result = await _supplierRepository.GetAll();
-
-            // Entities to Models
-            foreach (var supplier in result)
-            {
-                var model = new SupplierModel(supplier);
-                suppliers.Add(model);
-            }
-
-            // Successfully got customers list
-            return suppliers;
-        }
-        catch
-        {
-            // Failed to get customers list
-            return null;
-        }
-    }
-
-    public async Task<List<SupplierDetailModel>?> GetAllSupplierDetailsAsync()
-    {
-        var suppliers = new List<SupplierDetailModel>();
-
-        try
-        {
-            // Get all users with the role of "Customer" from database
-            var result = await _supplierRepository.GetAll();
-
-            // Entities to Models
-            foreach (var supplier in result)
-            {
-                var model = new SupplierDetailModel(supplier);
-                suppliers.Add(model);
-            }
-
-            // Successfully got customers list
-            return suppliers;
-        }
-        catch
-        {
-            // Failed to get customers list
-            return null;
-        }
-    }
-
-    public async Task<SupplierModel?> GetSupplierAsync(string id)
+    public async Task<bool> AddCustomerAsync(UserModel newCustomerModel)
     {
         try
         {
-            var supplier = await _supplierRepository.GetById(id);
-
-            // Entity to model
-            var supplierModel = new SupplierModel(supplier);
-
-            // Successfully got the supplier
-            return supplierModel;
-        }
-        catch
-        {
-            // Failed to get the supplier
-            return null;
-        }
-    }
-
-    public async Task<SupplierDetailModel?> GetSupplierDetailAsync(string id)
-    {
-        try
-        {
-            var supplier = await _supplierRepository.GetById(id);
-
-            // Entity to model
-            var supplierModel = new SupplierDetailModel(supplier);
-
-            // Successfully got the supplier
-            return supplierModel;
-        }
-        catch
-        {
-            // Failed to get the supplier
-            return null;
-        }
-    }
-
-    public async Task<bool> AddCustomerAsync(UserDetailsModel newCustomerModel)
-    {
-        try
-        {
+            
+            if (newCustomerModel.FormFile == null) return false;
+            var customer = await newCustomerModel.ToNewEntity(
+                wwwRootPath: _webHostEnvironment.WebRootPath
+                );
             // Model to entity
-            var customer = newCustomerModel.ToNewEntity();
+            //var customer = newCustomerModel.ToNewEntity();
 
             // Set default password - "1"
             var defaultPassword = Validator.MD5Hash("1");
@@ -163,7 +82,7 @@ public class StaffService : UserService, IStaffService
         }
     }
 
-    public async Task<bool> RemoveUserAsync(UserDetailsModel userModel)
+    public async Task<bool> RemoveUserAsync(UserModel userModel)
     {
         var user = new User();
 
@@ -185,7 +104,7 @@ public class StaffService : UserService, IStaffService
         }
     }
 
-    public async Task<UserDetailsModel?> GetUserByPhone(string phoneNb)
+    public async Task<UserModel?> GetUserByPhone(string phoneNb)
     {
 
         try
@@ -195,7 +114,7 @@ public class StaffService : UserService, IStaffService
 
             // Entities to Models
             if (result == null) return null; ;
-            var users = new UserDetailsModel(result);
+            var users = new UserModel(result);
 
             // Successfully got staffs list
             return users;

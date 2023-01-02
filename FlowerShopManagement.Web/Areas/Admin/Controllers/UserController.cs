@@ -5,12 +5,13 @@ using FlowerShopManagement.Application.Services;
 using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
 [Route("[area]/[controller]")]
-[Authorize]
+[Authorize(Policy = "StaffOnly")]
 public class UserController : Controller
 {
     private readonly IAuthService _authService;
@@ -24,23 +25,25 @@ public class UserController : Controller
         IStaffService staffService,
         IPersonalService personalService)
     {
+        ViewBag.User = true;
+
         _authService = authService;
         _adminService = adminService;
         _staffService = staffService;
         _personalService = personalService;
     }
 
+    [HttpGet]
     [Route("Index")]
     public async Task<IActionResult> Index()
     {
-        ViewBag.User = true;
 
         try
         {
             ViewData["Role"] = Enum.GetNames(typeof(Role)).Where(s => s != "Admin" && s != "Passenger").ToList();
-            var users = await _staffService.GetUsersAsync() ?? new List<UserDetailsModel>();
+            var users = await _staffService.GetUsersAsync() ?? new List<UserModel>();
             int pagesize = 2;
-            return View(PaginatedList<UserDetailsModel>.CreateAsync(users ?? new List<UserDetailsModel>(), 1, pagesize));
+            return View(PaginatedList<UserModel>.CreateAsync(users ?? new List<UserModel>(), 1, pagesize));
 
         }
         catch
@@ -58,7 +61,7 @@ public class UserController : Controller
         ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
-        var users = await _staffService.GetUsersAsync() ?? new List<UserDetailsModel>();
+        var users = await _staffService.GetUsersAsync() ?? new List<UserModel>();
 
         if (users != null)
         {
@@ -88,7 +91,7 @@ public class UserController : Controller
                 case "Staff":
                     users = users.Where(s => s.Role == Role.Staff).ToList();
                     break;
-               
+
 
                 default:
                     //All
@@ -97,7 +100,7 @@ public class UserController : Controller
 
 
             int pageSize = 2;
-            PaginatedList<UserDetailsModel> objs = PaginatedList<UserDetailsModel>.CreateAsync(users, pageNumber ?? 1, pageSize);
+            PaginatedList<UserModel> objs = PaginatedList<UserModel>.CreateAsync(users, pageNumber ?? 1, pageSize);
             return Json(new
             {
                 isValid = true,
@@ -116,12 +119,19 @@ public class UserController : Controller
     [HttpGet]
     public IActionResult Create()
     {
-        return View(new UserDetailsModel());
+        ViewData["Roles"] = Enum.GetValues(typeof(Role))
+            .Cast<Role>()
+            .Where(i => i.ToString() != "Passenger" && i.ToString() != "Admin" && i.ToString() != "All")
+            .ToList();
+        ViewData["Genders"] = Enum.GetValues(typeof(Gender))
+            .Cast<Gender>()
+            .ToList();
+        return View(new UserModel());
     }
 
     [Route("Create")]
     [HttpPost]
-    public async Task<IActionResult> Create(UserDetailsModel model)
+    public async Task<IActionResult> Create(UserModel model)
     {
         // Create
         bool result = false;
@@ -160,14 +170,14 @@ public class UserController : Controller
 
     [Route("Edit")]
     [HttpPost]
-    public async Task<IActionResult> Edit(UserDetailsModel model)
+    public async Task<IActionResult> Edit(UserModel model)
     {
         try
         {
             if (ModelState.IsValid)
             {
                 var result = await _adminService.EditUserAsync(model);
-                var users = new List<UserDetailsModel>();
+                var users = new List<UserModel>();
 
                 return RedirectToAction("Index"); // return the List of Models or attach it to the view model
             }
@@ -201,7 +211,7 @@ public class UserController : Controller
 
     // ========================= ADMIN ========================= //
 
-    public async Task AddStaffAsync(UserDetailsModel newStaffModel)
+    public async Task AddStaffAsync(UserModel newStaffModel)
     {
         try
         {
@@ -215,49 +225,7 @@ public class UserController : Controller
         }
     }
 
-    public async Task AddSupplierAsync(SupplierDetailModel newSupplierModel)
-    {
-        try
-        {
-            await _adminService.AddSupplierAsync(newSupplierModel);
-
-            return; // Notify successfully added a new supplier!
-        }
-        catch
-        {
-            return; // Notify failed to add a new supplier for some reasons!
-        }
-    }
-
-    public async Task EditSupplierAsync(SupplierDetailModel supplierModel)
-    {
-        try
-        {
-            await _adminService.EditSupplierAsync(supplierModel);
-
-            return; // Notify successfully editted a supplier!
-        }
-        catch
-        {
-            return; // Notify failed to add edit a supplier for some reasons!
-        }
-    }
-
-    public async Task RemoveSupplierAsync(SupplierModel supplierModel)
-    {
-        try
-        {
-            await _adminService.RemoveSupplierAsync(supplierModel);
-
-            return; // Notify successfully removed a supplier!
-        }
-        catch
-        {
-            return; // Notify failed to add remove a supplier for some reasons!
-        }
-    }
-
-    public async Task EditUserRoleAsync(UserDetailsModel userModel, Role newRole)
+    public async Task EditUserRoleAsync(UserModel userModel, Role newRole)
     {
         try
         {
@@ -273,7 +241,7 @@ public class UserController : Controller
 
     // ========================= STAFF ========================= //
 
-    public async Task ResetUserPassword(UserDetailsModel userModel)
+    public async Task ResetUserPassword(UserModel userModel)
     {
         try
         {
@@ -287,7 +255,7 @@ public class UserController : Controller
         }
     }
 
-    public async Task RemoveUserAccountAsync(UserDetailsModel userModel)
+    public async Task RemoveUserAccountAsync(UserModel userModel)
     {
         // Should a staff able to remove other staff accounts?
         //if (userModel.Role == Role.Staff)
@@ -305,7 +273,7 @@ public class UserController : Controller
         }
     }
 
-    public async Task AddCustomerAsync(UserDetailsModel newCustomerModel)
+    public async Task AddCustomerAsync(UserModel newCustomerModel)
     {
         try
         {
@@ -319,27 +287,11 @@ public class UserController : Controller
         }
     }
 
-    public async Task GetAllSuppliersAsync()
-    {
-        try
-        {
-            var suppliers = new List<SupplierModel>();
-
-            suppliers = await _staffService.GetAllSuppliersAsync();
-
-            return; // return the List of Models or attach it to the view model
-        }
-        catch
-        {
-            return; // Notify failed to retrieve the list of suppliers for some reasons!
-        }
-    }
-
     public async Task GetAllUsersAsync()
     {
         try
         {
-            var users = new List<UserDetailsModel>();
+            var users = new List<UserModel>();
 
             // Get all users registered (both customers & staffs)
             users = await _staffService.GetUsersAsync();
@@ -362,8 +314,8 @@ public class UserController : Controller
         {
             // Dont need to get the entire user
             // Might need if want to do verification in earlier steps
-            var currentUserId = _authService.GetUserId(HttpContext);
-            var currentUserRole = _authService.GetUserRole(HttpContext);
+            var currentUserId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var currentUserRole = HttpContext.User.FindFirst(ClaimTypes.Role)?.Value;
 
             if (currentUserId == null || currentUserRole == null)
                 return; // Notify the current user not found!
@@ -380,7 +332,7 @@ public class UserController : Controller
         }
     }
 
-    public async Task EditPersonalInfoAsync(UserDetailsModel userModel)
+    public async Task EditPersonalInfoAsync(UserModel userModel)
     {
         try
         {
@@ -440,8 +392,9 @@ public class UserController : Controller
         }
     }
 
-    private async Task<UserDetailsModel> GetCurrentUser()
+    private async Task<UserModel> GetCurrentUser()
     {
-        return await _authService.GetUserAsync(HttpContext);
+        throw new NotImplementedException();
+        // return await _authService.GetAuthenticatedUserAsync();
     }
 }

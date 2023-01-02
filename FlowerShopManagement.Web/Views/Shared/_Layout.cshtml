@@ -13,9 +13,6 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins">
 	<link rel="stylesheet" href="~/FlowerShopManagement.Web.styles.css" asp-append-version="true" />
 </head>
-@*@if(this.Context.Session.GetString("NameIdentifier") == null) {
-	<h2>null roi ne hihi</h2>
-}*@
 <body>
 	<header class="mx-5">
 		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
@@ -42,7 +39,7 @@
 						<button class="nav-icon-link fa-regular fa-circle-user nav-icon border-0 p-0 m-0" type="button" id="drop" data-bs-toggle="dropdown" aria-expanded="false">
 						</button>
 						<div class="dropdown-menu dropdown-menu-end" aria-labelledby="drop">
-							<partial name="_LoginPartial" />
+							<partial name="_LoginPartial"/>
 						</div>
 					</div>
 				</div>

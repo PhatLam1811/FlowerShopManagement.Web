@@ -1,15 +1,11 @@
 ﻿@using FlowerShopManagement.Core.Enums;
 
-@model SupplierDetailModel
-
-@{
-
-}
+@model SupplierModel
 
 <p class="mt-4"></p>
 <span class="h1">Supplier Info</span>
 
-<form asp-action="Edit" asp-area="Admin" asp-controller="Supplier" method="post" class="row mt-3">
+<form asp-action="EditAsync" asp-area="Admin" asp-controller="Supplier" method="post" class="row mt-3">
 	<input asp-for="_id" hidden/>
 	<div class="col-6">
 		<div class="row mt-3">
@@ -44,10 +40,10 @@
 		</div>
 
 		<div class="mt-5 d-flex gap-3">
-			<a class="btn btn-secondary" href="##" onclick="history.go(-1); return false;">Back to List</a>
+			<button class="btn btn-secondary" href="##" onclick="history.go(-1); return false;">Back to List</button>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</div>
-		<a class="btn btn-remove mt-3">Remove</a>
+		<button class="btn btn-remove mt-3" asp-action="RemoveAsync" asp-area="Admin" asp-controller="Supplier" asp-route-id="@Model._id">Remove</button>
 	</div>
 
 	<div class="col-6">

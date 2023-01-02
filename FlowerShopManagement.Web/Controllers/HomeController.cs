@@ -1,14 +1,17 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
-using FlowerShopManagement.Web.ViewModels;
-using FlowerShopManagement.Infrustructure.Mail;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Enums;
+using FlowerShopManagement.Infrustructure.Mail;
+using FlowerShopManagement.Web.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Security.Claims;
 
 namespace FlowerShopManagement.Web.Controllers;
 
+[AllowAnonymous]
 public class HomeController : Controller
 {
     //Services
@@ -28,42 +31,12 @@ public class HomeController : Controller
         _stockServices = stockServices;
     }
 
-    // =======================================================================================================
-    // THESE FUNCTIONS BELOW IN THE SAMPLE REGION ARE ONLY USED FOR TESTING & UNDERSTANDING CLEAN ARCHITECTURE
-    // - Change the function names in index.cshtml file for testing multiple functions (button onlick event)
-    // - Can code some new functions to test (please keep it down to only 1 or 2 more...)
-    // =======================================================================================================
-    #region Sample function
-    public IActionResult AddItemtoCart()
-    {
-        return View();
-    }
-
-    public Task<bool> AddNewCustomer()
-    {
-        // Hardcode a Customer object for simpleness
-        //CustomerModel customer = new Customer();
-        //customer.password = "1"; // this should be encrypted later
-        //customer.profile.fullName = "Lam Tan Phat";
-
-        //return _customerServices.AddNewCustomer(customer);
-        throw new NotImplementedException();
-    }
-
-    public bool RemoveCustomerById()
-    {
-        // Hardcode for simpleness
-        //string removedId = "1e69fd8b-ec24-4754-bee5-1151e8c78876";
-        //return _customerServices.RemoveCustomerById(removedId);
-        throw new NotImplementedException();
-    }
-    
-   
-    #endregion
-
     [HttpGet]
     public async Task<IActionResult> Index()
     {
+        // Get current user Id
+        var currentUserId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
         ViewBag.Home = true;
         ViewData["Categories"] = _stockServices.GetCategories();
 
@@ -147,20 +120,6 @@ public class HomeController : Controller
     public IActionResult Error()
     {
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-    }
-
-    public async Task<bool> SignIn()
-    {
-        try
-        {
-            var currentUser = await _authServices.SignOutAsync(HttpContext);
-
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
     }
 
     public IActionResult Welcome()

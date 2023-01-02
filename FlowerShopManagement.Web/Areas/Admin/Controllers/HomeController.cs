@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using FlowerShopManagement.Application.Models;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace FlowerShopManagement.Web.Areas.Admin.Controllers
+namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
+
+[Area("Admin")]
+[Authorize(Policy = "StaffOnly")]
+public class HomeController : Controller
 {
-    [Area("Admin")]
-    public class HomeController : Controller
+    public IActionResult Index()
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+        return View();
     }
 }

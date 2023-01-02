@@ -2,9 +2,7 @@
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
-using Google.Apis.Gmail.v1.Data;
 using MongoDB.Driver;
-using SharpCompress.Common;
 
 namespace FlowerShopManagement.Infrustructure.MongoDB.Implements;
 
@@ -42,21 +40,19 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
         catch (Exception e)
         {
-            // throw new Exception(e.Message);
-            return false;
+            throw new Exception(e.Message);
         }
     }
 
-    public virtual async Task<List<TEntity>?> GetAll()
+    public virtual async Task<List<TEntity>?> GetAll(int skip = 0, int? limit = null)
     {
         try
         {
-            return await _mongoDbCollection.Find(Builders<TEntity>.Filter.Empty).ToListAsync();
+            return await _mongoDbCollection.Find(Builders<TEntity>.Filter.Empty).Skip(skip).Limit(limit).ToListAsync();
         }
         catch (Exception e)
         {
-            // throw new Exception(e.Message);
-            return null;
+            throw new Exception(e.Message);
         }
     }
 
@@ -68,8 +64,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
         catch (Exception e)
         {
-            // throw new Exception(e.Message);
-            return null;
+            throw new Exception(e.Message);
         }
     }
 
@@ -94,8 +89,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
         catch (Exception e)
         {
-            // throw new Exception(e.Message);
-            return false;
+            throw new Exception(e.Message);
         }
     }
 
@@ -141,6 +135,21 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
     }
 
+    //public async Task<bool> UpdateField(string id, string fieldName, string value)
+    //{
+    //    var filter = idFilter(id);
+    //    var update = Builders<TEntity>.Update.Set(fieldName, value);
+
+    //    try
+    //    {
+    //        var result = await _mongoDbCollection.UpdateOneAsync(filter, update);
+    //        return result.IsAcknowledged;
+    //    } 
+    //    catch (Exception e)
+    //    {
+    //        throw new Exception(e.Message);
+    //    }
+    //}
 
     // Override disposable function
     public void Dispose() => GC.SuppressFinalize(this);
@@ -149,7 +158,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 // Specific repositories
 public class UserRepository : BaseRepository<User>, IUserRepository
 {
-    public UserRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) 
+    public UserRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
     {
         CreateUniqueIndex("email");
         CreateUniqueIndex("phoneNumber");
@@ -173,7 +182,7 @@ public class UserRepository : BaseRepository<User>, IUserRepository
 
 public class CartRepository : BaseRepository<Cart>, ICartRepository
 {
-    public CartRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) 
+    public CartRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
     {
         CreateUniqueIndex("customerId");
     }
@@ -210,7 +219,7 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
 
     public async Task<List<Product>?> GetProductsById(List<string?> ids)
     {
-        var filter = Builders<Product>.Filter.Where(p => p._id != null && ids.Contains( p._id));
+        var filter = Builders<Product>.Filter.Where(p => p._id != null && ids.Contains(p._id));
         var result = await _mongoDbCollection.FindAsync(filter);
         return result.ToList();
     }
@@ -219,5 +228,5 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
 
 public class VoucherRepository : BaseRepository<Voucher>, IVoucherRepository
 {
-	public VoucherRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+    public VoucherRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 }

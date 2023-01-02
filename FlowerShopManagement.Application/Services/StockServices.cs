@@ -1,7 +1,13 @@
-﻿using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Application.Interfaces;
-using FlowerShopManagement.Application.MongoDB.Interfaces;
+﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
+using FlowerShopManagement.Application.MongoDB.Interfaces;
+using Microsoft.AspNetCore.Http;
+using static System.Net.Mime.MediaTypeNames;
+using Microsoft.Extensions.Hosting;
+using Microsoft.AspNetCore.Hosting;
+using System.Web.Helpers;
+using System.IO;
+using FlowerShopManagement.Core.Entities;
 
 // ************ THIS IS A SAMPLE INTERFACE FOR CUSTOMER SERVICES **************
 // - New adjustments could be made in future updates
@@ -14,18 +20,29 @@ public class StockServices : IStockService
     // APPLICATION SERVICES (USE CASES)
     ICategoryRepository _categoryRepository;
     IMaterialRepository _materialRepository;
-    public StockServices(ICategoryRepository categoryRepository, IMaterialRepository materialRepository)
+    IProductRepository _productRepository;
+
+    IWebHostEnvironment _webHostEnvironment;
+    public StockServices(ICategoryRepository categoryRepository, IMaterialRepository materialRepository,
+        IProductRepository productRepository, IWebHostEnvironment webHostEnvironment)
+
     {
-        _categoryRepository= categoryRepository;
-        _materialRepository= materialRepository;
+        _categoryRepository = categoryRepository;
+        _materialRepository = materialRepository;
+        _productRepository = productRepository;
+        _webHostEnvironment = webHostEnvironment;
     }
 
-    public async Task<bool> CreateProduct(ProductDetailModel productModel, IProductRepository productRepository)
+    public async Task<bool> CreateProduct(ProductDetailModel productModel)
     {
-        if (productModel != null && productRepository != null)
+
+        if (productModel != null)
         {
-            var obj = productModel.ToEntity();
-            return await productRepository.Add(obj);
+            if (productModel.FormPicture == null) return false;
+            var obj = await productModel.ToEntityContainingImages(
+                wwwRootPath: _webHostEnvironment.WebRootPath
+                );
+            return await _productRepository.Add(obj);
         }
         return false;
     }
@@ -106,7 +123,7 @@ public class StockServices : IStockService
     {
         List<Voucher>? vouchers = await voucherRepository.GetAll();
         List<VoucherDetailModel> voucherMs = new List<VoucherDetailModel>();
-        
+
         if (vouchers == null) return voucherMs;
 
         foreach (var o in vouchers)

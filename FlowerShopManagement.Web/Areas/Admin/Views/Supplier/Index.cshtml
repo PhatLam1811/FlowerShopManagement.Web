@@ -1,6 +1,6 @@
 ﻿@using FlowerShopManagement.Core.Enums;
 
-@model List<SupplierDetailModel>
+@model List<SupplierModel>?
 
 <div class="row">
 	<div class="col-12 mt-3 mt-lg-0" id="hihi">
@@ -35,7 +35,6 @@
 
 </div>
 
-<button class="btn btn-primary icon-plus rounded position-fixed" style="right:0; bottom:60px;" onclick="location.href = '@(Url.Action("Create", "Supplier"))'">Create new Supplier</button>
-
+<button class="btn btn-primary icon-plus rounded position-fixed" style="right:0; bottom:60px;" onclick="location.href = '@(Url.Action("Create", "Supplier"))'">Add</button>
 
 <div c></div>

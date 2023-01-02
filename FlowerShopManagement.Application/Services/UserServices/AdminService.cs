@@ -3,7 +3,7 @@ using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
-using System.Data;
+using Microsoft.AspNetCore.Hosting;
 
 namespace FlowerShopManagement.Application.Services.UserServices;
 
@@ -11,31 +11,35 @@ public class AdminService : StaffService, IAdminService
 {
     private readonly IUserRepository _userRepository;
     private readonly ICartRepository _cartRepository;
-    private readonly ISupplierRepository _supplierRepository;
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
     public AdminService(
-        IUserRepository userRepository, 
-        ICartRepository cartRepository, 
-        ISupplierRepository supplierRepository) 
-        : base(userRepository, cartRepository, supplierRepository)
+        IUserRepository userRepository,
+        ICartRepository cartRepository,
+        IWebHostEnvironment webHostEnvironment)
+        : base(userRepository, cartRepository, webHostEnvironment)
     {
         _userRepository = userRepository;
         _cartRepository = cartRepository;
-        _supplierRepository = supplierRepository;
+        _webHostEnvironment= webHostEnvironment;
     }
 
-    public async Task<bool> AddStaffAsync(UserDetailsModel newStaffModel, Role role)
+    public async Task<bool> AddStaffAsync(UserModel newStaffModel, Role role)
     {
         try
         {
-            var staff = newStaffModel.ToNewEntity();
+            if (newStaffModel.FormFile == null) return false;
+            var staff = await newStaffModel.ToNewEntity(
+                wwwRootPath: _webHostEnvironment.WebRootPath
+                );
+           // var staff = newStaffModel.ToNewEntity();
 
             // Set default password - "1"
             var defaultPassword = Validator.MD5Hash("1");
             staff.password = defaultPassword;
 
             // Set role
-            if (role == Role.Customer) return false; 
+            if (role == Role.Customer) return false;
             staff.role = role;
 
             return await _userRepository.Add(staff);
@@ -47,56 +51,7 @@ public class AdminService : StaffService, IAdminService
         }
     }
 
-    public async Task<bool> AddSupplierAsync(SupplierDetailModel newSupplierModel)
-    {
-        try
-        {
-            var supplier = newSupplierModel.ToNewEntity();
-
-            return await _supplierRepository.Add(supplier);
-        }
-        catch
-        {
-            // Failed to add new supplier
-            return false;
-        }
-    }
-
-    public async Task<bool> EditSupplierAsync(SupplierDetailModel supplierModel)
-    {
-        var supplier = new Supplier();
-
-        try
-        {
-            supplierModel.ToEntity(ref supplier);
-
-            return await _supplierRepository.UpdateById(supplier._id, supplier);
-        }
-        catch
-        {
-            // Failed to update the selected supplier
-            return false;
-        }
-    }
-
-    public async Task<bool> RemoveSupplierAsync(SupplierModel supplierModel)
-    {
-        var supplier = new Supplier();
-
-        try
-        {
-            supplierModel.ToEntity(ref supplier);
-
-            return await _supplierRepository.RemoveById(supplier._id);
-        }
-        catch
-        {
-            // Failed to remove the selected supplier
-            return false;
-        }
-    }
-
-    public async Task<bool> EditUserRoleAsync(UserDetailsModel userModel, Role role)
+    public async Task<bool> EditUserRoleAsync(UserModel userModel, Role role)
     {
         var staff = new User();
 
@@ -121,7 +76,7 @@ public class AdminService : StaffService, IAdminService
         }
     }
 
-    public async Task<bool> EditUserAsync(UserDetailsModel userModel)
+    public async Task<bool> EditUserAsync(UserModel userModel)
     {
         var user = new User();
 

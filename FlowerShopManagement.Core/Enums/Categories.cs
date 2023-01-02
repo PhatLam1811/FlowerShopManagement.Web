@@ -6,7 +6,7 @@ public enum Categories
     Unknown = 1,
     ArtificialFlowers = 2,
     Furnitures = 3,
-	Accessories = 4,
+    Accessories = 4,
     PlantingTools = 5,
 }
 

@@ -2,11 +2,12 @@
 @model ProductDetailModel
 @{
     List<string>? categories = ViewData["Categories"] as List<string> ?? null;
+    List<string>? materials = ViewData["Materials"] as List<string> ?? null;
 }
 <p class="mt-4"></p>
-<span class="h1">Edit new Product</span>
+<span class="h1">Edit @Model.Name</span>
 
-<form method="post" asp-action="Update" asp-area="Admin" asp-controller="Product" class="row mt-3">
+<form method="post" asp-action="EditAsync" asp-area="Admin" asp-controller="Product" class="row mt-3" enctype="multipart/form-data">
     <input asp-for="Id" hidden />
     <div class="col-6">
         <div class="row">
@@ -25,12 +26,17 @@
                 <input type="text" asp-for="@Model.Size" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
             </div>
             <div class="col-4 form-group">
-                <label class="form-label" for="exampleFormControlInput1">Material</label>
-                <input type="text" asp-for="@Model.Material" class="form-control form-control-lg h5 py-3" id="exampleFormControlInput1" placeholder="">
+                <label class="form-label" for="selectCategory">Material</label>
+                <select class="form-select form-select-lg h5 py-3" name="Material" asp-items="@(new SelectList(materials))" id="selectCategory" aria-label="Floating label select example">
+                    <option selected>
+                        @Model.Material
+                    </option>
+                </select>
             </div>
+
             <div class="col-4 form-group">
                 <label class="form-label" for="selectCategory">Category</label>
-                <select class="form-select form-select-lg h5 py-3" name="Categories" asp-items="@(new SelectList(categories))" id="selectCategory" aria-label="Floating label select example">
+                <select class="form-select form-select-lg h5 py-3" name="Category" asp-items="@(new SelectList(categories))" id="selectCategory" aria-label="Floating label select example">
                     <option selected>
                         @Model.Category
                     </option>
@@ -66,12 +72,15 @@
 
     <div class="col-4">
         @*add image*@
-        <img src="~/image/flower1.png"
-             class="w-100 h-auto"
+        @foreach (var i in @Model.Pictures)
+        {
+            <img src="~/image/@i" style="width:300; height:300px"
              asp-append-version="true" />
+        }
+
         <div class="form-floating">
-            <input asp-for="FormPicture" accept="image/*" class="form-control" />
-            <label for="FormPicture">Image</label>
+            <input asp-for="FormPicture" style="border-width:0px" accept="image/*" class="form-control" />
+
         </div>
     </div>
 </form>

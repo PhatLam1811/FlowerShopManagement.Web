@@ -17,8 +17,8 @@
     }
 
 .nav-icon-link:hover {
-    font-size: 23px;
-    transition-delay: 0.2s;
+    transform: scale(1.2);
+    transition-delay: 0.15s;
     transition-duration: 0.2s;
 }
 

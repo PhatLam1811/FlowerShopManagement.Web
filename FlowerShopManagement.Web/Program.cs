@@ -1,24 +1,29 @@
-using FlowerShopManagement.Core.Entities;
-using MongoDB.Bson.Serialization;
+using FlowerShopManagement.Application.Interfaces;
+using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
+using FlowerShopManagement.Application.Services;
+using FlowerShopManagement.Application.Services.UserServices;
+using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Infrustructure.Mail;
 using FlowerShopManagement.Infrustructure.MongoDB.Implements;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
-using Microsoft.Extensions.Options;
-using MongoDB.Bson.Serialization.Serializers;
-using MongoDB.Bson;
-using FlowerShopManagement.Application.Interfaces;
-using FlowerShopManagement.Application.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using FlowerShopManagement.Infrustructure.Mail;
-using FlowerShopManagement.Application.Interfaces.UserSerivices;
-using FlowerShopManagement.Application.Services.UserServices;
+using Microsoft.Extensions.Options;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using IMailService = FlowerShopManagement.Application.Interfaces.IMailService;
 using FlowerShopManagement.Core.Enums;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("StaffOnly", policy => policy.RequireClaim(ClaimTypes.Role, "Staff", "Admin"));
+});
 
 #region //============= MongoDb Configurations =============//
 //-- Database Configurations --//
@@ -34,6 +39,9 @@ builder.Services.AddSingleton<IMongoDBSettings>(_ => _.GetRequiredService<IOptio
 builder.Services.AddScoped<IMongoDBContext, MongoDBContext>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ICartRepository, CartRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IMaterialRepository, MaterialRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
@@ -78,21 +86,15 @@ BsonClassMap.RegisterClassMap<Order>(cm =>
 // Add application logic services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISaleService, SaleService>();
-builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<IImportService, ImportService>();
 builder.Services.AddScoped<IStockService, StockServices>();
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
-builder.Services.AddScoped<IMaterialRepository, MaterialRepository>();
 builder.Services.AddScoped<IStaffService, StaffService>();
-builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<IPersonalService, UserService>();
-builder.Services.AddScoped<IStaffService, StaffService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
-builder.Services.AddScoped<ICustomerfService, CustomerServices>();
+builder.Services.AddScoped<ICustomerfService, CustomerService>();
+builder.Services.AddScoped<ISupplierService, SupplierService>();
 builder.Services.AddScoped<IMailService, MailKitService>();
-//builder.Services.AddScoped<MailKitService>();
 
 // HttpContextAccessor
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -101,7 +103,9 @@ builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>
     {
+        options.ExpireTimeSpan = TimeSpan.FromHours(24);
         options.LoginPath = "/Authentication/SignIn";
+        options.SlidingExpiration = true;
     });
 
 
@@ -144,9 +148,7 @@ app.UseEndpoints(endpoints =>
     endpoints.MapAreaControllerRoute(
     areaName: "Admin",
     name: "admin",
-    pattern: "{controller=Product}/{action=Index}/{id?}");
-
-    //app.MapRazorPages();
+    pattern: "{area=Admin}/{controller=Product}/{action=Index}/{id?}");
 });
 
 app.Run();

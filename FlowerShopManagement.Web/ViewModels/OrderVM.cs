@@ -6,10 +6,10 @@ namespace FlowerShopManagement.Web.ViewModels
     {
         public List<OrderModel> orderMs = new List<OrderModel>();
         public OrderModel Order = new OrderModel();
-        public UserDetailsModel? CurrentCustomer = null;
+        public UserModel? CurrentCustomer = null;
         public List<ProductModel>? CurrentProductModels = new List<ProductModel>();
         public List<ProductModel>? AllProductModels = new List<ProductModel>();
-        public List<UserDetailsModel>? customerMs= new List<UserDetailsModel>();
+        public List<UserModel>? customerMs = new List<UserModel>();
 
         public bool isOkay = false;
 

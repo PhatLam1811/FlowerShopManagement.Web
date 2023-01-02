@@ -5,11 +5,11 @@ using FlowerShopManagement.Core.Entities;
 
 namespace FlowerShopManagement.Application.Services.UserServices;
 
-public class CustomerServices : UserService, ICustomerfService
+public class CustomerService : UserService, ICustomerfService
 {
     IUserRepository _userRepository;
     ICartRepository _cartRepository;
-    public CustomerServices(IUserRepository userRepository, ICartRepository cartRepository)
+    public CustomerService(IUserRepository userRepository, ICartRepository cartRepository)
         : base(userRepository, cartRepository)
     {
         _userRepository = userRepository;
@@ -18,8 +18,8 @@ public class CustomerServices : UserService, ICustomerfService
 
     public async Task<CartModel?> GetCartOfUserAsync(string id)
     {
-        var cart = await _cartRepository.GetById(id); 
-        if(cart != null)
+        var cart = await _cartRepository.GetById(id);
+        if (cart != null)
         {
             CartModel cartModel = new CartModel(cart);
             return cartModel;

@@ -24,7 +24,7 @@ public class Validator
 
         // Convert byte array to hex string
         StringBuilder sb = new StringBuilder();
-        
+
         for (int i = 0; i < hashBytes.Length; i++)
         {
             sb.Append(hashBytes[i].ToString("X2"));
