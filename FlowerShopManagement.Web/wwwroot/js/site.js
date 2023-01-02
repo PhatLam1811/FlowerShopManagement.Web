@@ -268,3 +268,21 @@ function jQueryAjaxSearch(form) {
 
 
 }
+
+function callWithId(url, id) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: { id: id },
+        success: function (res) {
+            if (res.isValid) {
+                //$('#hihi').html(res.html);
+                //$.notify("Added to your wishlist", "success", { position: "right" });
+            }
+            else {
+                //$.notify("Error", "warn", { position: "right" });
+            }
+
+        }
+    })
+}

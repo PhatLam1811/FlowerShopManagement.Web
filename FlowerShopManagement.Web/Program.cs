@@ -19,7 +19,11 @@ using System.Security.Claims;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddServerSideBlazor();
+builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
+
+builder.Services.AddControllersWithViews().AddJsonOptions(opt => opt.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
+
 builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("StaffOnly", policy => policy.RequireClaim(ClaimTypes.Role, "Staff", "Admin"));
@@ -141,6 +145,8 @@ app.UseSession();
 
 app.UseEndpoints(endpoints =>
 {
+    endpoints.MapBlazorHub();
+
     endpoints.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
@@ -149,6 +155,8 @@ app.UseEndpoints(endpoints =>
     areaName: "Admin",
     name: "admin",
     pattern: "{area=Admin}/{controller=Product}/{action=Index}/{id?}");
+
+    //endpoints.MapRazorPages();
 });
 
 app.Run();

@@ -1,4 +1,5 @@
-﻿using FlowerShopManagement.Application.Interfaces.UserSerivices;
+﻿using FlowerShopManagement.Application.Interfaces;
+using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
@@ -14,6 +15,76 @@ public class CustomerService : UserService, ICustomerfService
     {
         _userRepository = userRepository;
         _cartRepository = cartRepository;
+    }
+
+    public async Task<List<ProductModel>?> GetFavProductsAsync(string id, IAuthService authService, IProductRepository productRepository)
+    {
+        List<ProductModel> productModels = new List<ProductModel>();
+
+        var user = await authService.GetAuthenticatedUserAsync(id);
+
+        if (user != null)
+        {
+            var favProductIds = user.FavProductIds;
+            for (int i = 0; i < favProductIds.Count; i++)
+            {
+                var product = await productRepository.GetById(favProductIds[i]);
+                if (product != null)
+                {
+                    productModels.Add(new ProductModel(product) { IsLike = true });
+                }
+            }
+        }
+
+        return null;
+    }
+
+    public async Task<bool> AddFavProduct(string userId, string productId, IAuthService authService, IPersonalService personalService)
+    {
+        var user = await authService.GetAuthenticatedUserAsync(userId);
+
+        if (user != null)
+        {
+            var favProductIds = user.FavProductIds;
+
+            if (favProductIds.Contains(productId))
+            {
+                return false;
+            }
+            else
+            {
+                user.FavProductIds.Add(productId);
+                await personalService.EditInfoAsync(user);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public async Task<bool> RemoveFavProduct(string userId, string productId, IAuthService authService, IPersonalService personalService)
+    {
+        var user = await authService.GetAuthenticatedUserAsync(userId);
+
+        if (user != null)
+        {
+            var favProductIds = user.FavProductIds;
+
+            if (favProductIds.Contains(productId))
+            {
+                user.FavProductIds.Remove(productId);
+                await personalService.EditInfoAsync(user);
+
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        return false;
     }
 
     public async Task<CartModel?> GetCartOfUserAsync(string id)
