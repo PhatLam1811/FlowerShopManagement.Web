@@ -61,19 +61,24 @@ public class UserModel
         //Addresses = new string[2];
     }
 
-    public new void ToEntity(ref User entity)
+    public void ToEntity(ref User entity)
     {
-        //base.ToEntity(ref entity);
+        entity._id = _id;
 
-        //entity._id = _id;
-        //entity.password = _password;
-        //entity.role = Role;
-        //entity.phoneNumber = PhoneNumber;
-        //entity.gender = Gender;
-        //entity.birthYear = BirthYear;
-        //entity.addresses = Addresses;
-        //entity.createdDate = CreatedDate;
-        //entity.lastModified = LastModified;
+        entity.email = Email;
+        entity.phoneNumber = PhoneNumber;
+        entity.password = Password;
+        entity.role = Role;
+        
+        entity.name = Name;
+        entity.avatar = Avatar;
+        entity.gender = Gender;
+        entity.birthYear = BirthYear;
+        entity.addresses = Addresses;
+        entity.favProductIds = FavProductIds;
+
+        entity.createdDate = CreatedDate;
+        entity.lastModified = LastModified;
     }
 
     public User ToNewEntity()
