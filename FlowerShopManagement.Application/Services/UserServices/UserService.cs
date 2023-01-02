@@ -20,7 +20,7 @@ public class UserService : IPersonalService
 
     public async Task<bool> EditInfoAsync(UserModel userModel)
     {
-        var user = new User() { _id = userModel._id };
+        var user = new User();
 
         try
         {
