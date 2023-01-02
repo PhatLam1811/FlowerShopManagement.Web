@@ -17,8 +17,8 @@
     }
 
 .nav-icon-link:hover {
-    font-size: 23px;
-    transition-delay: 0.2s;
+    transform: scale(1.2);
+    transition-delay: 0.15s;
     transition-duration: 0.2s;
 }
 
@@ -265,4 +265,28 @@
     background: url(../image/test.jpg) center/cover no-repeat;
     position: relative;
     height: 500px;
+}
+
+/* AVATAR */
+.avatar {
+    width: 100px;
+    height: 100px;
+    background: black;
+    border-radius: 50%;
+}
+
+.avatar-lg {
+    width: 200px;
+    height: 200px;
+    background: black;
+    border-radius: 50%;
+}
+
+/* SHADOW */
+.my-shadow {
+    box-shadow: 0 8px 30px rgb(0 0 0 / 25%);
+}
+
+.my-shadow-2 {
+    box-shadow: 0 0 20px rgb(0 0 0 / 20%);
 }

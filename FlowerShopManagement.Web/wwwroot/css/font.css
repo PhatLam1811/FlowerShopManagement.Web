@@ -32,6 +32,11 @@
     font-weight: 700;
 }
 
+.caption-lg {
+    font-size: 13px;
+    font-weight: bold;
+}
+
 .caption {
     font-size: 12px;
 }

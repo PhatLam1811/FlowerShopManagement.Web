@@ -1,5 +1,201 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@{
+	var times = new List<string>() { "week", "month", "year" };
+	//var times = new List<string>() { "day, month, year" };
+}
+
+<div class="row mt-3">
+	@*fiter*@
+	<div class="d-flex align-items-end justify-content-between mt-3 mb-4">
+		<div class="d-flex gap-3">
+			<div class="form-group">
+				<label class="form-label h6" for="selectCategory">By</label>
+				<select class="form-select" asp-items="@(new SelectList(times))" id="selectCategory" aria-label="Floating label select example">
+				</select>
+			</div>
+			<div class="form-group">
+				<label class="form-label h6" for="selectCategory">From</label>
+				<input type="date" class="form-control">
+			</div>
+			<div class="form-group">
+				<label class="form-label h6" for="selectCategory">To</label>
+				<input type="date" class="form-control">
+			</div>
+		</div>
+		<button class="btn btn-primary">Preview and Print Report</button>
+	</div>
+</div>
+
+<div class="row mt-2">
+	<div class="col-lg-7 col-12">
+		<p class="h6 text-color-secondary">Numbers of Order in this week</p>
+		<div class="">
+			<canvas id="barChart" class="h-auto"></canvas>
+		</div>
+	</div>
+	<div class="col-lg-5 row h-fit gy-3">
+		<div class="col-6 position-relative">
+			<div class="d-flex flex-column gap-2 align-items-center border border-2 border-app radius-2 p-3 my-shadow-2">
+				<p class="h2 text-secondary">29</p>
+				<p class="h5">Waiting Orders</p>
+			</div>
+			<div class="position-absolute top-10 end-10">
+				<i class="fa-solid fa-arrow-up-short-wide fs-4 text-info"></i>
+				<p class="small-caption">2.5%</p>
+			</div>
+		</div>
+		<div class="col-6 position-relative">
+			<div class="d-flex flex-column gap-2 align-items-center border border-2 border-app radius-2 p-3 my-shadow-2">
+				<p class="h2 text-secondary">76</p>
+				<p class="h5">Low-stock Products</p>
+			</div>
+			<div class="position-absolute top-10 end-10">
+				<i class="fa-solid fa-arrow-down-wide-short fs-4 text-danger"></i>
+				<p class="small-caption">2.5%</p>
+			</div>
+		</div>
+		<div class="col-6 position-relative">
+			<div class="d-flex flex-column gap-2 align-items-center border border-2 border-app radius-2 p-3 my-shadow-2">
+				<p class="h2 text-secondary">4</p>
+				<p class="h5">Waiting Orders</p>
+			</div>
+			<div class="position-absolute top-10 end-10">
+				<i class="fa-solid fa-arrow-up-short-wide fs-4 text-info"></i>
+				<p class="small-caption">2.5%</p>
+			</div>
+		</div>
+		<div class="col-6 position-relative">
+			<div class="d-flex flex-column gap-2 align-items-center border border-2 border-app radius-2 p-3 my-shadow-2">
+				<p class="h2 text-secondary">76</p>
+				<p class="h5">Low-stock Products</p>
+			</div>
+			<div class="position-absolute top-10 end-10">
+				<i class="fa-solid fa-arrow-down-wide-short fs-4 text-danger"></i>
+				<p class="small-caption">2.5%</p>
+			</div>
+		</div>
+		<div class="col-6 position-relative">
+			<div class="d-flex flex-column gap-2 align-items-center border border-2 border-app radius-2 p-3 my-shadow-2">
+				<p class="h2 text-secondary">76</p>
+				<p class="h5">Low-stock Products</p>
+			</div>
+			<div class="position-absolute top-10 end-10">
+				<i class="fa-solid fa-arrow-down-wide-short fs-4 text-danger"></i>
+				<p class="small-caption">2.5%</p>
+			</div>
+		</div>
+		<div class="col-6 position-relative">
+			<div class="d-flex flex-column gap-2 align-items-center border border-2 border-app radius-2 p-3 my-shadow-2">
+				<p class="h2 text-secondary">29</p>
+				<p class="h5">Waiting Orders</p>
+			</div>
+			<div class="position-absolute top-10 end-10">
+				<i class="fa-solid fa-arrow-up-short-wide fs-4 text-info"></i>
+				<p class="small-caption">2.5%</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row mt-5">
+	<div class="col-lg-4">
+		<p class="h6 text-color-secondary">Top customer in this week</p>
+		<table class="table myaccordion table-hover">
+			<thead>
+				<tr class="">
+					<th>#</th>
+					<th>Name</th>
+					<th>Orders</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="align-middle">
+					<td>1</td>
+					<td>Lam Tan Phat</td>
+					<td class="">24</td>
+				</tr>
+				<tr class="align-middle">
+					<td>2</td>
+					<td>Ho Minh Tue</td>
+					<td class="">22</td>
+				</tr>
+				<tr class="align-middle">
+					<td>3</td>
+					<td>Ho Minh Tu</td>
+					<td class="">20</td>
+				</tr>
+				<tr class="align-middle">
+					<td>4</td>
+					<td>Ho Minh Te</td>
+					<td class="">20</td>
+				</tr>
+				<tr class="align-middle">
+					<td>5</td>
+					<td>Ho Minh</td>
+					<td class="">18</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="col-lg-4">
+		<p class="h6 text-color-secondary">Top products in this week</p>
+		<table class="table myaccordion table-hover">
+			<thead>
+				<tr class="">
+					<th>#</th>
+					<th>Name</th>
+					<th>Sold</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="align-middle">
+					<td>1</td>
+					<td>Flower 1</td>
+					<td class="">124</td>
+				</tr>
+				<tr class="align-middle">
+					<td>2</td>
+					<td>Flower 2</td>
+					<td class="">122</td>
+				</tr>
+				<tr class="align-middle">
+					<td>3</td>
+					<td>Flower 3</td>
+					<td class="">120</td>
+				</tr>
+				<tr class="align-middle">
+					<td>4</td>
+					<td>Flower 4</td>
+					<td class="">120</td>
+				</tr>
+				<tr class="align-middle">
+					<td>5</td>
+					<td>Flower 5</td>
+					<td class="">118</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="col-lg-4">
+		<p class="h6 text-color-secondary">Categories</p>
+		<canvas id="donutChart" class="h-auto"></canvas>
+	</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+
 @{
+
+
+	ChartJSCore.Models.Chart chart = (ChartJSCore.Models.Chart)ViewData["VerticalBarChart"];
+	ChartJSCore.Models.Chart chart1 = (ChartJSCore.Models.Chart)ViewData["DonutChart"];
+}
+
+@section Scripts {
+	<script src="~/lib/Chart.js/dist/Chart.js"></script>
+	<script>
+		@Html.Raw(chart.CreateChartCode("barChart"));
+		@Html.Raw(chart1.CreateChartCode("donutChart"));
+	</script>
 }
