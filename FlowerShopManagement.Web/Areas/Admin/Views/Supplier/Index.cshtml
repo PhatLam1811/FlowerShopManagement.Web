@@ -3,19 +3,7 @@
 @model List<SupplierModel>?
 
 <div class="row">
-	<div class="col-lg-2 d-lg-block collapse borderCustom1 um">
-		<p class="row-1 h4 mb-2 mt-3">Status</p>
-
-		@*<div class="tabCustom row-cols-6 w-100" style="max-height:260px; overflow-y:scroll; overflow-x:hidden">
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="All" type="button">All</a>
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Admin" type="button">Admin</a>
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Staff" type="button">Staff</a>
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Customer" type="button">Customer</a>
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Passenger" type="button">Passenger</a>
-		</div>*@
-	</div>
-
-	<div class="col-lg-10 col-12 mt-3 mt-lg-0" id="hihi">
+	<div class="col-12 mt-3 mt-lg-0" id="hihi">
 		<div class="d-flex justify-content-end d-lg-none">
 			<button class="filter-icon border-0 fs-3" data-bs-toggle="collapse" data-bs-target=".um" aria-controls="navbarSupportedContent"
 					aria-expanded="false" aria-label="Toggle navigation">
@@ -23,6 +11,24 @@
 			</button>
 		</div>
 
+		<form method="post" action="@(Url.Action("Sort", "Product"))" onsubmit="return jQueryAjaxSearch(this)">
+			<div class="d-flex w-100">
+				<input type="text" name="pageNumber" value="1"
+					   class="form-control form-control-lg h5 h-100 position-relative" style="z-index:99"
+					   placeholder="Abc" hidden>
+
+				<input type="text" name="searchString" id="ip-search" value="@ViewData["CurrentFilter"]"
+					   class="form-control form-control-lg h5 h-auto position-relative m-0" style="z-index:99"
+					   placeholder="Name">
+
+				<button class="btn btn-icon border border-primary position-relative d-flex gap-2 align-items-center" id="btn-search" style="z-index:999"
+						type="submit">
+					Search
+					<i class="fa-solid fa-magnifying-glass"></i>
+				</button>
+			</div>
+
+		</form>
 		<partial name="_ViewAll" model=@Model />
 
 	</div>
