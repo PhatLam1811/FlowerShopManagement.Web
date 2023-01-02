@@ -75,7 +75,52 @@ public class UserModel
         //entity.createdDate = CreatedDate;
         //entity.lastModified = LastModified;
     }
+    public User ToEntity()
+    {
+        var entity = new User();
 
+        entity._id = _id;
+        entity.password = Password;
+        entity.role = Role;
+        entity.phoneNumber = PhoneNumber;
+        entity.gender = Gender;
+        entity.birthYear = BirthYear;
+        entity.addresses = Addresses;
+        entity.createdDate = CreatedDate;
+        entity.lastModified = LastModified;
+        entity.name = Name;
+        entity.email = Email;
+        entity.avatar = Avatar;
+
+        return entity;
+    }
+    public async Task ChangesChecking(UserModel editUser, string wwwRootPath)
+    {
+        _id = editUser._id;
+
+        editUser.Email = Email;
+
+        editUser.PhoneNumber = PhoneNumber;
+
+        editUser.Role = Role;
+
+        editUser.Name = Name;
+        //change avatar
+        if (this.FormFile != null && this.FormFile.Length > 0)
+        {
+            string fileName = this.FormFile.FileName;
+            string path = Path.Combine(wwwRootPath + "/avatar/", fileName);
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                await this.FormFile.CopyToAsync(fileStream);
+                editUser.Avatar = this.FormFile.FileName;
+            }
+        }
+        //editUser.Avatar = Avatar;
+        editUser.Gender = Gender;
+        editUser.BirthYear = BirthYear;
+        //editUser.Addresses = Addresses;
+    }
     public User ToNewEntity()
     {
         var entity = new User();
