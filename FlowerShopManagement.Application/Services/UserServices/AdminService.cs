@@ -78,12 +78,12 @@ public class AdminService : StaffService, IAdminService
 
     public async Task<bool> EditUserAsync(UserModel userModel)
     {
-        var user = new User();
+         
 
         try
         {
             // Model to entity
-            userModel.ToEntity(ref user);
+            var user = userModel.ToEntity();
             // Set modified date
             user.lastModified = DateTime.Now;
 

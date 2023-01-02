@@ -3,8 +3,10 @@ using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.Services;
 using FlowerShopManagement.Core.Enums;
+using FlowerShopManagement.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System.Security.Claims;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
@@ -18,12 +20,13 @@ public class UserController : Controller
     private readonly IPersonalService _personalService;
     private readonly IAdminService _adminService;
     private readonly IStaffService _staffService;
-
+    private readonly IWebHostEnvironment _webHostEnvironment;
     public UserController(
         IAuthService authService,
         IAdminService adminService,
         IStaffService staffService,
-        IPersonalService personalService)
+        IPersonalService personalService,
+        IWebHostEnvironment webHostEnvironment)
     {
         ViewBag.User = true;
 
@@ -31,6 +34,7 @@ public class UserController : Controller
         _adminService = adminService;
         _staffService = staffService;
         _personalService = personalService;
+        _webHostEnvironment = webHostEnvironment;
     }
 
     [HttpGet]
@@ -162,6 +166,7 @@ public class UserController : Controller
         try
         {
             var user = await _adminService.GetUserByPhone(id);
+            TempData["editUser"] = JsonConvert.SerializeObject(user, Formatting.Indented);
             return View(user);
         }
         catch { return NotFound(); }
@@ -172,19 +177,17 @@ public class UserController : Controller
     [HttpPost]
     public async Task<IActionResult> Edit(UserModel model)
     {
+        string s = TempData["editUser"] as string ?? "";
+        if (string.IsNullOrEmpty(s)) return NoContent();
+        var editUser = JsonConvert.DeserializeObject<UserModel>(s);
+        if (editUser == null) return NoContent();
+        await model.ChangesChecking(editUser,_webHostEnvironment.WebRootPath);
         try
         {
-            if (ModelState.IsValid)
-            {
-                var result = await _adminService.EditUserAsync(model);
-                var users = new List<UserModel>();
+            var result = await _adminService.EditUserAsync(editUser);
+            if (result == false) return NotFound();
+            return RedirectToAction("Index"); // return the List of Models or attach it to the view model
 
-                return RedirectToAction("Index"); // return the List of Models or attach it to the view model
-            }
-            else
-            {
-                return NotFound();
-            }
         }
         catch
         {
