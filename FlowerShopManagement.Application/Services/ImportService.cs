@@ -5,9 +5,9 @@ namespace FlowerShopManagement.Application.Services;
 
 public class ImportService : IImportService
 {
-    private readonly IMailService _mailService;
+    private readonly IEmailService _mailService;
 
-    public ImportService(IMailService mailService)
+    public ImportService(IEmailService mailService)
     {
         _mailService = mailService;
     }

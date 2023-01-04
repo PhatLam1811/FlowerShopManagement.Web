@@ -12,14 +12,14 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 public class ImportController : Controller
 {
     private readonly IStockService _stockService;
-    private readonly IMailService _mailService;
+    private readonly IEmailService _mailService;
     private readonly IImportService _importService;
     private readonly IProductRepository _productRepository;
     private readonly ISupplierService _supplierService;
 
     public ImportController(
         IStockService stockService,
-        IMailService mailService,
+        IEmailService mailService,
         IImportService importService,
         IProductRepository productRepository,
         ISupplierService supplierService)

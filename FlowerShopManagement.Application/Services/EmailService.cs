@@ -5,9 +5,9 @@ using MailKit.Security;
 using MimeKit;
 using System.Text;
 
-namespace FlowerShopManagement.Infrustructure.Mail;
+namespace FlowerShopManagement.Application.Services;
 
-public class MailKitService : IMailService
+public class EmailService : IEmailService
 {
     public async Task<bool> Send(MimeMessage mimeMessage)
     {

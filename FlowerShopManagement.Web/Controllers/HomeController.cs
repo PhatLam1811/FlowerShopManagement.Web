@@ -1,8 +1,6 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
-using FlowerShopManagement.Core.Enums;
-using FlowerShopManagement.Infrustructure.Mail;
 using FlowerShopManagement.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -18,10 +16,10 @@ public class HomeController : Controller
     private readonly ILogger<HomeController> _logger;
     private readonly IAuthService _authServices;
     private readonly IStockService _stockServices;
-    private readonly IMailService _mailServices;
+    private readonly IEmailService _mailServices;
     private readonly IProductRepository _productRepository;
 
-    public HomeController(ILogger<HomeController> logger, IAuthService authServices, IMailService mailServices,
+    public HomeController(ILogger<HomeController> logger, IAuthService authServices, IEmailService mailServices,
         IProductRepository productRepository, IStockService stockServices)
     {
         _logger = logger;
