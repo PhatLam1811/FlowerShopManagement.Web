@@ -94,9 +94,9 @@ public class UserModel
 
         return entity;
     }
-    public async Task ChangesChecking(UserModel editUser, string wwwRootPath)
+    public async Task ChangesTracking(UserModel editUser, string wwwRootPath)
     {
-        _id = editUser._id;
+        //_id = editUser._id;
 
         editUser.Email = Email;
 
@@ -160,7 +160,6 @@ public class UserModel
 
         return entity;
     }
-
     public bool IsPasswordMatched(string encryptedPassword)
     {
         //return Password == encryptedPassword;

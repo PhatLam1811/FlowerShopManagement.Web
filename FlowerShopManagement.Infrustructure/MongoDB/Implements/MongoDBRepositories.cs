@@ -230,3 +230,7 @@ public class VoucherRepository : BaseRepository<Voucher>, IVoucherRepository
 {
     public VoucherRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 }
+public class AddressRepository : BaseRepository<Address>, IAddressRepository
+{
+    public AddressRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+}

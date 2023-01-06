@@ -58,7 +58,7 @@ function OpenPostDialog(url, title) {
         console.log(e);
         alert(e);
     }
-   
+
 }
 function OpenFormDialog(form) {
     var obj = new FormData(form);
@@ -73,7 +73,7 @@ function OpenFormDialog(form) {
             processData: false,
             success: function (res) {
 
-                $('#picked-items').html(res);
+                //$('#picked-items').html(res);
                 $("#form-modal .modal-body").html(res.html);
                 $("#form-modal .modal-title").html('');
                 $("#form-modal").modal('show');
@@ -154,12 +154,12 @@ function jQueryAjaxReloadViewAll(url) {
     }
 }
 
-function jQueryAjaxPickCustomer(url,id) {
+function jQueryAjaxPickCustomer(url, id) {
     try {
         $.ajax({
             type: 'POST',
             url: url,
-            data: {phone: id},
+            data: { phone: id },
             success: function (res) {
                 $("#form-modal .modal-body").html('');
                 $("#form-modal .modal-title").html('');
@@ -214,13 +214,13 @@ function jQueryAjaxReloadPickingTable(form) {
         return false;
     }
 }
-function jQueryAjaxReloadPickingTableWithId(url,id) {
+function jQueryAjaxReloadPickingTableWithId(url, id) {
 
     try {
         $.ajax({
             type: 'POST',
             url: url,
-            data: {id:id},
+            data: { id: id },
             success: function (res) {
                 $('#picked-items').html(res);
             },
@@ -267,4 +267,70 @@ function jQueryAjaxSearch(form) {
     //to prevent default form submit event
 
 
+}
+
+function FindDistricts(selectTag, url) {
+    debugger;
+    try {
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { city: selectTag.options[selectTag.selectedIndex].value },
+            success: function (res) {
+                debugger;
+                $('#district').empty();
+                $('#ward').empty();
+                $.each(res, function (index, key) {
+                    $('#district').append($('<option>', {
+                        value: index,
+                        text: key
+                    }));
+                });
+                $('#district').removeClass("disabled");
+                debugger;
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        return false;
+    } catch (ex) {
+        console.log(ex)
+        return false;
+
+    }
+    //to prevent default form submit event
+}
+
+function FindWards(selectTag, url) {
+    debugger;
+    try {
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { city: $('#city').find(":selected").text(),district: selectTag.options[selectTag.selectedIndex].text },
+            success: function (res) {
+                debugger;
+                $('#ward').empty();
+
+                $.each(res, function (index, key) {
+                    $('#ward').append($('<option>', {
+                        value: index,
+                        text: key
+                    }));
+                });
+                $('#ward').removeClass("disabled");
+                debugger;
+            },
+            error: function (err) {
+                console.log(err)
+            }
+        })
+        return false;
+    } catch (ex) {
+        console.log(ex)
+        return false;
+
+    }
+    //to prevent default form submit event
 }

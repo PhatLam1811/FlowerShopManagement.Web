@@ -45,6 +45,7 @@ builder.Services.AddScoped<IMaterialRepository, MaterialRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 
 //-- Entities Mapping --//
 BsonClassMap.RegisterClassMap<User>(cm =>

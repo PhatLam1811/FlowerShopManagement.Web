@@ -13,15 +13,20 @@ public class AdminService : StaffService, IAdminService
     private readonly ICartRepository _cartRepository;
     private readonly IWebHostEnvironment _webHostEnvironment;
 
+    private readonly IAddressRepository _addressRepository;
+
+
     public AdminService(
         IUserRepository userRepository,
         ICartRepository cartRepository,
-        IWebHostEnvironment webHostEnvironment)
+        IWebHostEnvironment webHostEnvironment,
+        IAddressRepository addressRepository)
         : base(userRepository, cartRepository, webHostEnvironment)
     {
         _userRepository = userRepository;
         _cartRepository = cartRepository;
-        _webHostEnvironment= webHostEnvironment;
+        _webHostEnvironment = webHostEnvironment;
+        _addressRepository = addressRepository;
     }
 
     public async Task<bool> AddStaffAsync(UserModel newStaffModel, Role role)
@@ -78,8 +83,6 @@ public class AdminService : StaffService, IAdminService
 
     public async Task<bool> EditUserAsync(UserModel userModel)
     {
-         
-
         try
         {
             // Model to entity
@@ -95,5 +98,19 @@ public class AdminService : StaffService, IAdminService
             // Failed to edit user's role
             return false;
         }
+    }
+
+    public async Task<List<AddressModel>> GetAddresses()
+    {
+        var singleton = AddressSingleTon.IsNullOrNot();
+        if (singleton == null)
+        {
+            var result = await _addressRepository.GetAll();
+            if (result == null) return new List<AddressModel>();
+
+            singleton = AddressSingleTon.GetInstance(result);
+        }
+
+        return singleton.addressModels;
     }
 }
