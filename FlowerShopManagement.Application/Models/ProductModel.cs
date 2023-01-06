@@ -1,10 +1,6 @@
 ﻿using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Org.BouncyCastle.Utilities;
-using System.IO;
-using System.Web.Helpers;
 
 namespace FlowerShopManagement.Application.Models;
 

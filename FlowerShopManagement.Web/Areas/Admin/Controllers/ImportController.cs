@@ -1,45 +1,39 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
-using FlowerShopManagement.Application.MongoDB.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
-[Route("[controller]")]
+[Route("[area]/[controller]")]
 [Authorize(Policy = "StaffOnly")]
 public class ImportController : Controller
 {
     private readonly IStockService _stockService;
-    private readonly IMailService _mailService;
-    private readonly IImportService _importService;
-    private readonly IProductRepository _productRepository;
     private readonly ISupplierService _supplierService;
+    private readonly IImportService _importService;
+    private readonly IWebHostEnvironment _webHostEnv;
+
+    private const string _reqTemplatePath = "/template/SupplyFormTemplate.html";
 
     public ImportController(
         IStockService stockService,
-        IMailService mailService,
         IImportService importService,
-        IProductRepository productRepository,
-        ISupplierService supplierService)
+        ISupplierService supplierService,
+        IWebHostEnvironment webHostEnv)
     {
         _stockService = stockService;
-        _mailService = mailService;
         _importService = importService;
-        _productRepository = productRepository;
         _supplierService = supplierService;
+        _webHostEnv = webHostEnv;
     }
 
-    // ========================== VIEWS ========================== //
-
-    #region Views
     [HttpGet]
-    [Route("Index")]
     public async Task<IActionResult> Index()
     {
         // Load data
-        var lowOnStockProducts = await _stockService.GetLowOnStockProducts(_productRepository);
+        var lowOnStockProducts = await _stockService.GetLowOnStockProducts();
         var suppliers = await _supplierService.GetAllAsync();
 
         // Configure viewmodel
@@ -48,62 +42,66 @@ public class ImportController : Controller
         return View(viewmodel);
     }
 
-    [HttpGet]
-    [Route("SupplyForm")]
+    // SUPPLY FORM
+    [HttpGet("SupplyForm")]
     public IActionResult SupplyForm(SupplyFormModel model)
     {
-        return View(model);
-    }
-    #endregion
-
-    // ========================== ACTIONS ========================== //
-
-    #region Actions
-    [HttpPost]
-    [Route("CreateSupplyRequestFormAsync")]
-    public async Task<IActionResult> CreateSupplyRequestFormAsync(List<string> ids, List<int> amounts, List<string> supplierIds)
-    {
-        var products = new List<ProductDetailModel>();
-        var suppilers = new List<SupplierModel>();
-
-        // Get selected products detail
-        foreach (var id in ids)
+        try
         {
-            var result = await _stockService.GetADetailProduct(id, _productRepository);
-            products.Add(result);
+            return View(model);
         }
-
-        // Get selected suppliers detail
-        foreach (var id in supplierIds)
+        catch (Exception e)
         {
-            var result = await _supplierService.GetOneAsync(id);
-            if (result != null) suppilers.Add(result);
+            throw new Exception(e.Message);
         }
-
-        // Create supply request form model
-        var requestForm = _importService.CreateSupplyForm(products, amounts, suppilers);
-
-        if (requestForm != null)
-            return Json(new
-            {
-                isValid = true,
-                html = Helper.RenderRazorViewToString(this, "SupplyForm", requestForm),
-            });
-        else
-            return NotFound(); // Failed to create a new supply request form!
     }
 
     [HttpPost]
-    [Route("RequestSupply")]
-    public async Task<IActionResult> RequestSupply()
+    [ActionName("CreateRequestForm")]
+    public async Task<IActionResult> CreateRequestForm(List<string> productIds, List<int> reqAmounts, List<string> supplierIds)
     {
+        var products = await _stockService.GetByIdsAsync(productIds);
+        var suppliers = await _supplierService.GetByIdsAsync(supplierIds);
+        var htmlPath = _webHostEnv.WebRootPath + _reqTemplatePath;
 
+        if (products.Count <= 0 || suppliers.Count <= 0 || reqAmounts.Count <= 0 )
+        {
+            throw new NullReferenceException("Insufficient Values!");
+        }
 
-        return await Index();
+        var reqForm = _importService.CreateReqSupplyForm(products, suppliers, reqAmounts, htmlPath);
+        try
+        {
+            _importService.SendRequest(reqForm);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+
+        return PartialView("SupplyForm1", reqForm);
+
+        //var message = _mailService.CreateMimeMessage(reqForm);
+
+        //try
+        //{
+        //    await _mailService.SendAsync(message);
+        //}
+        //catch (Exception e)
+        //{
+        //    throw new Exception(e.Message);
+        //}
+
+        //if (requestForm != null)
+        //    return Json(new
+        //    {
+        //        isValid = true,
+        //        html = Helper.RenderRazorViewToString(this, "SupplyForm", requestForm),
+        //    });
+        //else
+        //    return NotFound(); // Failed to create a new supply request form!
     }
-    #endregion
 }
-
 
 public class ImportViewModel
 {
