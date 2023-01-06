@@ -1,5 +1,6 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
+using System.Text;
 
 namespace FlowerShopManagement.Application.Services;
 
@@ -12,26 +13,68 @@ public class ImportService : IImportService
         _mailService = mailService;
     }
 
-    public void Request(SupplyFormModel supplyForm)
+    public bool SendRequest(SupplyFormModel form)
     {
-        var mimeMessage = _mailService.CreateMimeMessage(supplyForm);
+        var mimeMessage = _mailService.CreateMimeMessage(form);
 
-        _mailService.SendAsync(mimeMessage);
+        try
+        {
+            return _mailService.Send(mimeMessage);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
-    public SupplyFormModel? CreateSupplyForm(List<ProductDetailModel> productList, List<int> amounts, List<SupplierModel> supplier)
+    public SupplyFormModel CreateReqSupplyForm(
+        List<ProductModel> products,  
+        List<SupplierModel> suppliers, 
+        List<int> reqAmounts,
+        string htmlPath)
     {
-        // All parameters must not be null
-        if (productList == null || amounts == null || supplier == null) return null;
+        var form = new SupplyFormModel();
 
-        // All lists must have at least one element
-        if (productList.Count == 0 || amounts.Count == 0 || supplier.Count == 0) return null;
+        // Set receivers addresses
+        foreach (var supplier in suppliers) form.To.Add(supplier.Email);
 
-        // 40 <= amount <= 100
-        //foreach (var index in amounts)
-        //    if (index < 40 || index > 100) return null;
+        form.Products = products;
 
-        // Successfully created a request supply form
-        return new SupplyFormModel();
+        // Set html part
+        var builder = new StringBuilder();
+
+        using (var reader = new StreamReader(htmlPath))
+        {
+            while (!reader.EndOfStream)
+            {
+                var text = reader.ReadLine();
+
+                builder.AppendLine(text);
+
+                if (text != null && text.Contains("req-items-tab"))
+                {
+                    // Table header
+                    builder.AppendLine("        <tr>");
+                    builder.AppendLine("          <th>#</th>");
+                    builder.AppendLine("          <th>Product Name</th>");
+                    builder.AppendLine("          <th>Amount</th>");
+                    builder.AppendLine("        <tr>");
+
+                    // Pass data to template
+                    for (int i = 0; i < products.Count; i++)
+                    {
+                        builder.AppendLine("        <tr>");
+                        builder.AppendLine("          <td class=\"product-index\">" + (i + 1).ToString() + "</td>");
+                        builder.AppendLine("          <td>" + products[i].Name + "</td>");
+                        builder.AppendLine("          <td>" + reqAmounts[i] + "</td>");
+                        builder.AppendLine("        <tr>");
+                    }
+                }
+            }
+        }
+
+        form.HtmlPart = builder.ToString();
+
+        return form;
     }
 }

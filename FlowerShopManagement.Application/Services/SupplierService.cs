@@ -14,16 +14,13 @@ public class SupplierService : ISupplierService
         _supplierRepository = supplierRepository;
     }
 
-    public async Task<List<SupplierModel>?> GetAllAsync(int skip = 0, int? limit = null)
+    public async Task<List<SupplierModel>> GetAllAsync(int skip = 0, int? limit = null)
     {
         var suppliers = new List<SupplierModel>();
 
         try
         {
-            List<Supplier>? result = await _supplierRepository.GetAll(skip, limit);
-            
-            // There's no supplier
-            if (result is null) return null;
+            var result = await _supplierRepository.GetAll(skip, limit);
 
             foreach (Supplier supplier in result)
             {
@@ -39,16 +36,13 @@ public class SupplierService : ISupplierService
         }
     }
 
-    public async Task<List<SupplierModel>?> GetByIdsAsync(List<string> ids)
+    public async Task<List<SupplierModel>> GetByIdsAsync(List<string> ids)
     {
         var suppliers = new List<SupplierModel>();
 
         try
         {
-            List<Supplier>? result = await _supplierRepository.GetByIds(ids);
-
-            // There's no supplier
-            if (result is null) return null;
+            var result = await _supplierRepository.GetByIds(ids);
 
             foreach (Supplier supplier in result)
             {

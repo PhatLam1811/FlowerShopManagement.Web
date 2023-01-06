@@ -353,9 +353,9 @@ public class UserController : Controller
 
         try
         {
-            var currentUser = await GetCurrentUser();
+            //var currentUser = await GetCurrentUser();
 
-            await _personalService.ResetPasswordAsync(currentUser);
+            //await _personalService.ResetPasswordAsync(currentUser);
 
             return; // Notify successfully reset password!
         }
@@ -375,14 +375,15 @@ public class UserController : Controller
 
         try
         {
-            var currentUser = await GetCurrentUser();
+            var currentId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var currentUser = _authService.GetAuthenticatedUserAsync(currentId);
 
             // Verify old password
             var encryptedPass = Validator.MD5Hash(oldPassword);
-            if (!currentUser.IsPasswordMatched(encryptedPass))
-                return; // Old password didnt match! 
+            //if (!currentUser.IsPasswordMatched(encryptedPass))
+            //    return; // Old password didnt match! 
 
-            await _personalService.ChangePasswordAsync(currentUser, newPassword);
+            //await _personalService.ChangePasswordAsync(currentUser, newPassword);
 
             return; // Notify successfully changed password!
         }
@@ -390,11 +391,5 @@ public class UserController : Controller
         {
             return; // Notify failed to change the password for some reasons!
         }
-    }
-
-    private async Task<UserModel> GetCurrentUser()
-    {
-        throw new NotImplementedException();
-        // return await _authService.GetAuthenticatedUserAsync();
     }
 }

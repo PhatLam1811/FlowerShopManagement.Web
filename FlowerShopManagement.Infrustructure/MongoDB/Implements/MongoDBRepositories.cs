@@ -44,7 +44,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
     }
 
-    public virtual async Task<List<TEntity>?> GetAll(int skip = 0, int? limit = null)
+    public virtual async Task<List<TEntity>> GetAll(int skip = 0, int? limit = null)
     {
         try
         {
@@ -80,7 +80,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
     }
 
-    public virtual async Task<List<TEntity>?> GetByIds(List<string> ids)
+    public virtual async Task<List<TEntity>> GetByIds(List<string> ids)
     {
         try
         {

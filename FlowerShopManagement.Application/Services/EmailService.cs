@@ -12,18 +12,34 @@ public class EmailService : IEmailService
     {
         try
         {
-            // Establish & authorize a connection to gmail smtp server
             using var smtp = new SmtpClient();
             smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
             smtp.Authenticate("phatlam1811@gmail.com", "xhbstfiflmipyjfq");
 
-            // Asynchronous mime message send
             await smtp.SendAsync(mimeMessage);
 
-            // Disconnect the service
             smtp.Disconnect(true);
 
-            // Successfully sent the mail
+            return true;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public bool Send(MimeMessage mimeMessage)
+    {
+        try
+        {
+            using var smtp = new SmtpClient();
+            smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
+            smtp.Authenticate("phatlam1811@gmail.com", "xhbstfiflmipyjfq");
+
+            smtp.Send(mimeMessage);
+
+            smtp.Disconnect(true);
+
             return true;
         }
         catch (Exception e)
@@ -34,10 +50,11 @@ public class EmailService : IEmailService
 
     public MimeMessage CreateMimeMessage(SupplyFormModel supplyForm)
     {
-        MimeMessage mimeMessage = new MimeMessage();
+        var mimeMessage = new MimeMessage();
 
         // Configure header
         mimeMessage.From.Add(MailboxAddress.Parse(supplyForm.From));
+        mimeMessage.Sender = MailboxAddress.Parse(supplyForm.From);
         mimeMessage.Subject = supplyForm.Subject;
 
         // Set message's bcc

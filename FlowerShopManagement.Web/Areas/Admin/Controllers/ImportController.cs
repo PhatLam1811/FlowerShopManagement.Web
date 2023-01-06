@@ -11,20 +11,19 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 public class ImportController : Controller
 {
     private readonly IStockService _stockService;
-    private readonly IEmailService _mailService;
-    private readonly IImportService _importService;
     private readonly ISupplierService _supplierService;
+    private readonly IImportService _importService;
     private readonly IWebHostEnvironment _webHostEnv;
+
+    private const string _reqTemplatePath = "/template/SupplyFormTemplate.html";
 
     public ImportController(
         IStockService stockService,
-        IEmailService mailService,
         IImportService importService,
         ISupplierService supplierService,
         IWebHostEnvironment webHostEnv)
     {
         _stockService = stockService;
-        _mailService = mailService;
         _importService = importService;
         _supplierService = supplierService;
         _webHostEnv = webHostEnv;
@@ -58,17 +57,27 @@ public class ImportController : Controller
     }
 
     [HttpPost]
-    [ActionName("CreateSupplyRequestFormAsync")]
-    public async Task<IActionResult> CreateSupplyRequestFormAsync(List<string> productIds, List<int> reqAmounts, List<string> supplierIds)
+    [ActionName("CreateRequestForm")]
+    public async Task<IActionResult> CreateRequestForm(List<string> productIds, List<int> reqAmounts, List<string> supplierIds)
     {
-        SupplyFormModel reqForm = new SupplyFormModel();
         var products = await _stockService.GetByIdsAsync(productIds);
-        var suppilers = await _supplierService.GetByIdsAsync(supplierIds);
-        var htmlPath = _webHostEnv.WebRootPath + reqForm.Template;
+        var suppliers = await _supplierService.GetByIdsAsync(supplierIds);
+        var htmlPath = _webHostEnv.WebRootPath + _reqTemplatePath;
 
-        if (products == null || suppilers == null || reqAmounts == null) return NotFound();
+        if (products.Count <= 0 || suppliers.Count <= 0 || reqAmounts.Count <= 0 )
+        {
+            throw new NullReferenceException("Insufficient Values!");
+        }
 
-        reqForm.Configurate(suppilers, products, reqAmounts, htmlPath);
+        var reqForm = _importService.CreateReqSupplyForm(products, suppliers, reqAmounts, htmlPath);
+        try
+        {
+            _importService.SendRequest(reqForm);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
 
         return PartialView("SupplyForm1", reqForm);
 

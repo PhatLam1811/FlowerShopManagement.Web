@@ -59,16 +59,13 @@ public class StockServices : IStockService
         return new ProductDetailModel(product);
     }
 
-    public async Task<List<ProductModel>?> GetByIdsAsync(List<string> ids)
+    public async Task<List<ProductModel>> GetByIdsAsync(List<string> ids)
     {
-        List<ProductModel> products = new List<ProductModel>();
+        var products = new List<ProductModel>();
 
         try
         {
-            List<Product>? result = await _productRepository.GetByIds(ids);
-
-            // There's no supplier
-            if (result is null) return null;
+            var result = await _productRepository.GetByIds(ids);
 
             foreach (var supplier in result)
             {
