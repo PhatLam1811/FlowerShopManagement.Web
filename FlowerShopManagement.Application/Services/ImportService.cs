@@ -16,7 +16,7 @@ public class ImportService : IImportService
     {
         var mimeMessage = _mailService.CreateMimeMessage(supplyForm);
 
-        _mailService.Send(mimeMessage);
+        _mailService.SendAsync(mimeMessage);
     }
 
     public SupplyFormModel? CreateSupplyForm(List<ProductDetailModel> productList, List<int> amounts, List<SupplierModel> supplier)
@@ -32,6 +32,6 @@ public class ImportService : IImportService
         //    if (index < 40 || index > 100) return null;
 
         // Successfully created a request supply form
-        return new SupplyFormModel(productList, amounts, supplier);
+        return new SupplyFormModel();
     }
 }

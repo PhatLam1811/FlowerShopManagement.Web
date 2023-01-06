@@ -5,7 +5,6 @@
 }
 
 <form method="post" asp-action="CreateSupplyRequestFormAsync" asp-controller="Import" asp-area="Admin" onsubmit="return OpenFormDialog(this);">
-
 	<div class="row">
 		<div class="col-7" id="pick_item">
 			<partial name="_PickItem" model=@Model._lowOnStockProducts />

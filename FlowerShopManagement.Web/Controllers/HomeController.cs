@@ -38,7 +38,7 @@ public class HomeController : Controller
         ViewBag.Home = true;
         ViewData["Categories"] = _stockServices.GetCategories();
 
-        List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
+        List<ProductModel> productMs = await _stockServices.GetUpdatedProducts();
 
         //Get wishlist
         //
@@ -64,7 +64,7 @@ public class HomeController : Controller
         }
 
         ViewData["CurrentFilter"] = searchString;
-        List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
+        List<ProductModel> productMs = await _stockServices.GetUpdatedProducts();
         if (productMs != null)
         {
             if (!String.IsNullOrEmpty(searchString))

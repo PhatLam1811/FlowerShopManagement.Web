@@ -2,7 +2,6 @@
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
-using Org.BouncyCastle.Asn1.X509;
 
 namespace FlowerShopManagement.Application.Services;
 
@@ -23,6 +22,31 @@ public class SupplierService : ISupplierService
         {
             List<Supplier>? result = await _supplierRepository.GetAll(skip, limit);
             
+            // There's no supplier
+            if (result is null) return null;
+
+            foreach (Supplier supplier in result)
+            {
+                var model = new SupplierModel(supplier);
+                suppliers.Add(model);
+            }
+
+            return suppliers;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public async Task<List<SupplierModel>?> GetByIdsAsync(List<string> ids)
+    {
+        var suppliers = new List<SupplierModel>();
+
+        try
+        {
+            List<Supplier>? result = await _supplierRepository.GetByIds(ids);
+
             // There's no supplier
             if (result is null) return null;
 

@@ -60,7 +60,7 @@ public class ProductController : Controller
         ViewData["Categories"] = listCategories.Where(i => i != "Unknown").ToList();
         ViewData["Materials"] = listMaterials.Where(i => i != "Unknown").ToList();
 
-        List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
+        List<ProductModel> productMs = await _stockServices.GetUpdatedProducts();
         int pageSizes = 2;
         ProductVM productVM = new ProductVM() { productModels = PaginatedList<ProductModel>.CreateAsync(productMs, 1, pageSizes), categories = listCategories };
         return View(productVM);
@@ -74,7 +74,7 @@ public class ProductController : Controller
     {
         //Should get a new one because an admin updates data realtime
 
-        ProductDetailModel editProduct = await _stockServices.GetADetailProduct(id, _productRepository);
+        ProductDetailModel editProduct = await _stockServices.GetADetailProduct(id);
         if (editProduct != null)
         {
 
@@ -104,7 +104,7 @@ public class ProductController : Controller
         if (result != false)
         {
             //Update successfully, we pull new list of products
-            List<ProductModel> proMs = await _stockServices.GetUpdatedProducts(_productRepository);
+            List<ProductModel> proMs = await _stockServices.GetUpdatedProducts();
         }
 
         return RedirectToAction("Index");
@@ -181,7 +181,7 @@ public class ProductController : Controller
         }
 
         ViewData["CurrentFilter"] = searchString;
-        List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
+        List<ProductModel> productMs = await _stockServices.GetUpdatedProducts();
         if (productMs != null)
         {
             if (!String.IsNullOrEmpty(searchString))

@@ -74,7 +74,7 @@ public class ImportController : Controller
         var mimeMessage = _mailService.CreateMimeMessage(supplyForm);
 
         // Send the request message to suppliers
-        await _mailService.Send(mimeMessage);
+        await _mailService.SendAsync(mimeMessage);
 
         return View();
     }

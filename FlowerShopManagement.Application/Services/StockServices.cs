@@ -16,11 +16,10 @@ public class StockServices : IStockService
     ICategoryRepository _categoryRepository;
     IMaterialRepository _materialRepository;
     IProductRepository _productRepository;
-
     IWebHostEnvironment _webHostEnvironment;
+
     public StockServices(ICategoryRepository categoryRepository, IMaterialRepository materialRepository,
         IProductRepository productRepository, IWebHostEnvironment webHostEnvironment)
-
     {
         _categoryRepository = categoryRepository;
         _materialRepository = materialRepository;
@@ -53,11 +52,36 @@ public class StockServices : IStockService
         return false;
     }
 
-    public async Task<ProductDetailModel> GetADetailProduct(string id, IProductRepository productRepository)
+    public async Task<ProductDetailModel> GetADetailProduct(string id)
     {
-        Product? product = await productRepository.GetById(id);
+        Product? product = await _productRepository.GetById(id);
         if (product == null) return new ProductDetailModel();
         return new ProductDetailModel(product);
+    }
+
+    public async Task<List<ProductModel>?> GetByIdsAsync(List<string> ids)
+    {
+        List<ProductModel> products = new List<ProductModel>();
+
+        try
+        {
+            List<Product>? result = await _productRepository.GetByIds(ids);
+
+            // There's no supplier
+            if (result is null) return null;
+
+            foreach (var supplier in result)
+            {
+                var model = new ProductModel(supplier);
+                products.Add(model);
+            }
+
+            return products;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     public async Task<List<string>> GetCategories()
@@ -72,14 +96,14 @@ public class StockServices : IStockService
         if (list == null) return new List<Material>();
         return list;
     }
-    public async Task<List<ProductModel>> GetLowOnStockProducts(IProductRepository productRepository)
+    public async Task<List<ProductModel>> GetLowOnStockProducts()
     {
         // This is only a temporary value of the minimum amount
         // needed for supply request
         int minimumAmount = 20;
         List<ProductModel> lowOnStockProducts = new List<ProductModel>();
 
-        var result = await productRepository.GetAllLowOnStock(minimumAmount);
+        var result = await _productRepository.GetAllLowOnStock(minimumAmount);
         if (result == null) return lowOnStockProducts;
         // Convert Product to SupplyItemModel
         foreach (var item in result)
@@ -101,9 +125,9 @@ public class StockServices : IStockService
         return list.Select(x => x._name).ToList();
     }
 
-    public async Task<List<ProductModel>> GetUpdatedProducts(IProductRepository productRepository)
+    public async Task<List<ProductModel>> GetUpdatedProducts()
     {
-        List<Product>? products = await productRepository.GetAll();
+        List<Product>? products = await _productRepository.GetAll();
         List<ProductModel> productMs = new List<ProductModel>();
 
         if (products == null) return productMs;

@@ -11,6 +11,8 @@ public interface IBaseRepository<TEntity> : IDisposable where TEntity : class
     
     public Task<TEntity?> GetById(string id);
 
+    public Task<List<TEntity>?> GetByIds(List<string> ids);
+
     public Task<TEntity?> GetByField(string fieldName, IComparable value);
 
     public Task<bool> RemoveById(string id);
@@ -31,7 +33,9 @@ public interface IUserRepository : IBaseRepository<User>
 public interface ICartRepository : IBaseRepository<Cart> { }
 
 public interface IOrderRepository : IBaseRepository<Order> { }
+
 public interface ICategoryRepository : IBaseRepository<Category> { }
+
 public interface IMaterialRepository : IBaseRepository<Material> { }
 
 public interface ISupplierRepository : IBaseRepository<Supplier> { }
