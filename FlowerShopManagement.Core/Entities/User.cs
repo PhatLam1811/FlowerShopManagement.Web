@@ -17,7 +17,7 @@ public class User
     public string avatar;
     public Gender gender;
     public DateTime birthYear;
-    public string[] addresses;
+    public Dictionary<string, string> shippingAddresses = new Dictionary<string, string>();
     public List<string> favProductIds;
 
     // Extra
@@ -37,7 +37,6 @@ public class User
         avatar = string.Empty;
         gender = Gender.Male;
         birthYear = new DateTime(2000, 01, 01);
-        addresses = new string[0];
         favProductIds = new List<string>();
 
         createdDate = DateTime.Now;

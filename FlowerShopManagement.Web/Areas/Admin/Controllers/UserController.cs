@@ -169,10 +169,13 @@ public class UserController : Controller
     }
     [Route("Create")]
 	[HttpPost]
-	public async Task<IActionResult> Create(UserModel model)
+	public async Task<IActionResult> Create(UserModel model, string city, string district, string ward, string detailAddress)
 	{
 		// Create
 		bool result = false;
+		if (city == null && district == null && ward == null && detailAddress == null) return NotFound();
+		
+		model.ShippingAddresses.Add(model.PhoneNumber, detailAddress + "," + ward + "," + district + "," + city);
 		try
 		{
 			if (model.Role == Role.Customer)

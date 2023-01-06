@@ -20,7 +20,7 @@ public class UserModel
     public string Avatar { get; set; }
     public Gender Gender { get; set; }
     public DateTime BirthYear { get; set; }
-    public string[] Addresses { get; set; }
+    public Dictionary<string, string> ShippingAddresses { get; set; } = new Dictionary<string, string>();
     public List<string> FavProductIds { get; set; }
 
     // Extra
@@ -44,7 +44,7 @@ public class UserModel
         Avatar = entity.avatar;
         Gender = entity.gender;
         BirthYear = entity.birthYear;
-        Addresses = entity.addresses;
+        ShippingAddresses = entity.shippingAddresses;
         FavProductIds = entity.favProductIds;
 
         CreatedDate = entity.createdDate;
@@ -69,12 +69,12 @@ public class UserModel
         entity.phoneNumber = PhoneNumber;
         entity.password = Password;
         entity.role = Role;
-        
+
         entity.name = Name;
         entity.avatar = Avatar;
         entity.gender = Gender;
         entity.birthYear = BirthYear;
-        entity.addresses = Addresses;
+        entity.shippingAddresses = ShippingAddresses;
         entity.favProductIds = FavProductIds;
 
         entity.createdDate = CreatedDate;
@@ -90,7 +90,7 @@ public class UserModel
         entity.phoneNumber = PhoneNumber;
         entity.gender = Gender;
         entity.birthYear = BirthYear;
-        entity.addresses = Addresses;
+        entity.shippingAddresses = ShippingAddresses;
         entity.createdDate = CreatedDate;
         entity.lastModified = LastModified;
         entity.name = Name;
@@ -137,7 +137,7 @@ public class UserModel
         entity.phoneNumber = PhoneNumber;
         entity.gender = Gender;
         entity.birthYear = BirthYear;
-        entity.addresses = Addresses;
+        entity.shippingAddresses = ShippingAddresses;
 
         return entity;
     }
@@ -161,7 +161,7 @@ public class UserModel
         entity.phoneNumber = PhoneNumber;
         entity.gender = Gender;
         entity.birthYear = BirthYear;
-        entity.addresses = Addresses;
+        entity.shippingAddresses = ShippingAddresses;
 
         return entity;
     }
