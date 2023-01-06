@@ -74,7 +74,7 @@ function OpenFormDialog(form) {
             success: function (res) {
 
                 //$('#picked-items').html(res);
-                $("#form-modal .modal-body").html(res.html);
+                $("#form-modal .modal-body").html(res);
                 $("#form-modal .modal-title").html('');
                 $("#form-modal").modal('show');
             },
