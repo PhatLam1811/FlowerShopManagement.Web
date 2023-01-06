@@ -16,13 +16,13 @@ public class ImportController : Controller
     private readonly IStaffService _staffService;
     private readonly IStockService _stockService;
     private readonly IProductRepository _productRepository;
-    private readonly IMailService _mailService;
+    private readonly IEmailService _mailService;
 
     public ImportController(
         IStaffService staffService,
         IStockService stockService,
         IProductRepository productRepository,
-        IMailService mailService)
+        IEmailService mailService)
     {
         _staffService = staffService;
         _stockService = stockService;
@@ -74,7 +74,7 @@ public class ImportController : Controller
         var mimeMessage = _mailService.CreateMimeMessage(supplyForm);
 
         // Send the request message to suppliers
-        await _mailService.Send(mimeMessage);
+        await _mailService.SendAsync(mimeMessage);
 
         return View();
     }

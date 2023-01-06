@@ -41,7 +41,7 @@ namespace FlowerShopManagement.Web.Controllers
             {
                 productMs = new List<ProductModel>();
 
-                var temp = await _stockServices.GetUpdatedProducts(_productRepository);
+                var temp = await _stockServices.GetUpdatedProducts();
 
                 foreach (var item in temp)
                 {
