@@ -20,6 +20,7 @@ namespace FlowerShopManagement.Core.Entities
 		public string _communeId { get; set; } = string.Empty;
 		public string _communeLevel { get; set; } = string.Empty;
 		public string _englishName { get; set; } = string.Empty;
+		public string _detail { get; set; } = string.Empty;
 		
 
 	}

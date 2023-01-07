@@ -282,7 +282,7 @@ function FindDistricts(selectTag, url) {
                 $('#ward').empty();
                 $.each(res, function (index, key) {
                     $('#district').append($('<option>', {
-                        value: index,
+                        
                         text: key
                     }));
                 });
@@ -315,7 +315,7 @@ function FindWards(selectTag, url) {
 
                 $.each(res, function (index, key) {
                     $('#ward').append($('<option>', {
-                        value: index,
+                        
                         text: key
                     }));
                 });

@@ -37,7 +37,13 @@ namespace FlowerShopManagement.Application.Models
         {
             
         }
-
+        public Address ToEntity()
+        {
+			return new Address { _city = this._city, _district = this._district,
+				_cityId = this._cityId, _commune = this._commune, _communeId = this._communeId ,
+				_communeLevel = this._communeLevel, _districtID = this._districtID, _id = this._id
+			};
+        }
         public string _id { get; set; } = string.Empty;
 		public string _city { get; set; } = string.Empty;
 		public string _cityId { get; set; } = string.Empty;

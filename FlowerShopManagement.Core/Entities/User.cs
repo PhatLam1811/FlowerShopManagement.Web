@@ -17,7 +17,7 @@ public class User
     public string avatar;
     public Gender gender;
     public DateTime birthYear;
-    public Dictionary<string, string> shippingAddresses = new Dictionary<string, string>();
+    public List<InforDelivery> inforDelivery;
     public List<string> favProductIds;
 
     // Extra
@@ -32,7 +32,7 @@ public class User
         phoneNumber = string.Empty;
         password = string.Empty;
         role = Role.Customer;
-
+        inforDelivery = new List<InforDelivery>();
         name = "Unnamed";
         avatar = string.Empty;
         gender = Gender.Male;

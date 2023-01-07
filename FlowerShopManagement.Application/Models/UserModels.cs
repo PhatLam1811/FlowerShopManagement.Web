@@ -20,7 +20,8 @@ public class UserModel
     public string Avatar { get; set; }
     public Gender Gender { get; set; }
     public DateTime BirthYear { get; set; }
-    public Dictionary<string, string> ShippingAddresses { get; set; } = new Dictionary<string, string>();
+    public List<InforDeliveryModel> InforDelivery = new List<InforDeliveryModel>();
+
     public List<string> FavProductIds { get; set; }
 
     // Extra
@@ -44,7 +45,11 @@ public class UserModel
         Avatar = entity.avatar;
         Gender = entity.gender;
         BirthYear = entity.birthYear;
-        ShippingAddresses = entity.shippingAddresses;
+        foreach(var i in InforDelivery)
+        {
+            entity.inforDelivery.Add(i.ToEntity());
+
+        }
         FavProductIds = entity.favProductIds;
 
         CreatedDate = entity.createdDate;
@@ -74,7 +79,12 @@ public class UserModel
         entity.avatar = Avatar;
         entity.gender = Gender;
         entity.birthYear = BirthYear;
-        entity.shippingAddresses = ShippingAddresses;
+        foreach (var i in InforDelivery)
+        {
+            entity.inforDelivery.Add(i.ToEntity());
+
+        }
+       
         entity.favProductIds = FavProductIds;
 
         entity.createdDate = CreatedDate;
@@ -90,7 +100,12 @@ public class UserModel
         entity.phoneNumber = PhoneNumber;
         entity.gender = Gender;
         entity.birthYear = BirthYear;
-        entity.shippingAddresses = ShippingAddresses;
+        foreach (var i in InforDelivery)
+        {
+            entity.inforDelivery.Add(i.ToEntity());
+
+        }
+
         entity.createdDate = CreatedDate;
         entity.lastModified = LastModified;
         entity.name = Name;
@@ -137,7 +152,12 @@ public class UserModel
         entity.phoneNumber = PhoneNumber;
         entity.gender = Gender;
         entity.birthYear = BirthYear;
-        entity.shippingAddresses = ShippingAddresses;
+        foreach (var i in InforDelivery)
+        {
+            entity.inforDelivery.Add(i.ToEntity());
+
+        }
+
 
         return entity;
     }
@@ -161,7 +181,12 @@ public class UserModel
         entity.phoneNumber = PhoneNumber;
         entity.gender = Gender;
         entity.birthYear = BirthYear;
-        entity.shippingAddresses = ShippingAddresses;
+        foreach (var i in InforDelivery)
+        {
+            entity.inforDelivery.Add(i.ToEntity());
+
+        }
+
 
         return entity;
     }
