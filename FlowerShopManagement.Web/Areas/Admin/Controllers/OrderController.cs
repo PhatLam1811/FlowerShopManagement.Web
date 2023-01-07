@@ -390,7 +390,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             if (id == null) return NotFound();
             var order = await _saleServices.GetADetailOrder(id, _orderRepository);
-            if (order == null || order.Id == null || (order.Status != Status.Purchased && order.Status != Status.Delivered)) return NotFound();
+            if (order == null || order.Id == null || !(order.Status != Status.Purchased && order.Status != Status.Delivered)) return NotFound();
 
 
             order.Status = Status.Canceled;

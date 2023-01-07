@@ -12,15 +12,19 @@ public class StaffService : UserService, IStaffService
     private readonly ICartRepository _cartRepository;
     private readonly IWebHostEnvironment _webHostEnvironment;
 
+
     public StaffService(
-        IUserRepository userRepository, 
-        ICartRepository cartRepository, 
-        IWebHostEnvironment webHostEnvironment)
+        IUserRepository userRepository,
+        ICartRepository cartRepository,
+
+
+    IWebHostEnvironment webHostEnvironment)
         : base(userRepository, cartRepository)
     {
         _userRepository = userRepository;
         _cartRepository = cartRepository;
         _webHostEnvironment = webHostEnvironment;
+
     }
 
     public async Task<List<UserModel>?> GetUsersAsync()
@@ -53,7 +57,7 @@ public class StaffService : UserService, IStaffService
     {
         try
         {
-            
+
             if (newCustomerModel.FormFile == null) return false;
             var customer = await newCustomerModel.ToNewEntity(
                 wwwRootPath: _webHostEnvironment.WebRootPath
@@ -106,7 +110,6 @@ public class StaffService : UserService, IStaffService
 
     public async Task<UserModel?> GetUserByPhone(string phoneNb)
     {
-
         try
         {
             // Get all users from database
@@ -125,4 +128,6 @@ public class StaffService : UserService, IStaffService
             return null;
         }
     }
+
+
 }

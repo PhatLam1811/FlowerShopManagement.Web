@@ -17,7 +17,7 @@ public class User
     public string avatar;
     public Gender gender;
     public DateTime birthYear;
-    public string[] addresses;
+    public List<InforDelivery> inforDelivery;
     public List<string> favProductIds;
 
     // Extra
@@ -32,12 +32,11 @@ public class User
         phoneNumber = string.Empty;
         password = string.Empty;
         role = Role.Customer;
-
+        inforDelivery = new List<InforDelivery>();
         name = "Unnamed";
         avatar = string.Empty;
         gender = Gender.Male;
         birthYear = new DateTime(2000, 01, 01);
-        addresses = new string[0];
         favProductIds = new List<string>();
 
         createdDate = DateTime.Now;

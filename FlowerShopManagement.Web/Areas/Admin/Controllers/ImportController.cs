@@ -64,7 +64,7 @@ public class ImportController : Controller
         var suppliers = await _supplierService.GetByIdsAsync(supplierIds);
         var htmlPath = _webHostEnv.WebRootPath + _reqTemplatePath;
 
-        if (products.Count <= 0 || suppliers.Count <= 0 || reqAmounts.Count <= 0 )
+        if (products.Count <= 0  || reqAmounts.Count <= 0 )
         {
             throw new NullReferenceException("Insufficient Values!");
         }

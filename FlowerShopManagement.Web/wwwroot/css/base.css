@@ -42,6 +42,22 @@ p, span, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     top: 20%;
 }
 
+.bottom-30 {
+    bottom: 30%;
+}
+
+.bottom-20 {
+    bottom: 20%;
+}
+
+.end-5 {
+    right: 5%;
+}
+
+.end-10 {
+    right: 10%;
+}
+
 /*IMG*/
 .img {
     width: 100%
@@ -89,8 +105,8 @@ p, span, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 .btn-secondary {
     border: solid;
-    border-width: 1px;
-    border-color: var(--bs-dark);
+    border-width: 2px;
+    border-color: var(--bs-primary);
     background-color: transparent;
     color: rgb(20, 33, 61);
     font-weight: 500;
@@ -140,7 +156,7 @@ p, span, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     width: fit-content;
     height: auto;
     min-width: auto !important;
-    padding: 12px 16px;
+    padding: 0 14px;
 }
 
 .btn-icon-primary {

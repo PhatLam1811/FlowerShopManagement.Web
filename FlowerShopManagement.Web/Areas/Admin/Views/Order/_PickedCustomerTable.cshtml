@@ -43,13 +43,13 @@ else
             <input type="email" name="Email" class="form-control form-control-lg h5 py-3" value="@Model.Email" id="exampleFormControlInput1" placeholder="">
         </div>
     </div>
-    @if (Model.Addresses != null && Model.Addresses.Count() > 0)
+   @* @if (Model.ShippingAddresses != null && Model.ShippingAddresses.Count() > 0)
     {
         <div class="form-group">
             <label class="form-label" for="exampleFormControlInput1">Addresses</label>
-            <input type="text" class="form-control form-control-lg h5 py-3" value="@Model.Addresses[0]" id="exampleFormControlInput1" placeholder="">
+            <input type="text" class="form-control form-control-lg h5 py-3" value="@Model.ShippingAddresses.FirstOrDefault()" id="exampleFormControlInput1" placeholder="">
         </div>
-    }
+    }*@
     
 
 }

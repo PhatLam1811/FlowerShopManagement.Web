@@ -20,7 +20,8 @@ public class UserModel
     public string Avatar { get; set; }
     public Gender Gender { get; set; }
     public DateTime BirthYear { get; set; }
-    public string[] Addresses { get; set; }
+    public List<InforDeliveryModel> InforDelivery = new List<InforDeliveryModel>();
+
     public List<string> FavProductIds { get; set; }
 
     // Extra
@@ -44,7 +45,11 @@ public class UserModel
         Avatar = entity.avatar;
         Gender = entity.gender;
         BirthYear = entity.birthYear;
-        Addresses = entity.addresses;
+        foreach(var i in InforDelivery)
+        {
+            entity.inforDelivery.Add(i.ToEntity());
+
+        }
         FavProductIds = entity.favProductIds;
 
         CreatedDate = entity.createdDate;
@@ -69,18 +74,73 @@ public class UserModel
         entity.phoneNumber = PhoneNumber;
         entity.password = Password;
         entity.role = Role;
-        
+
         entity.name = Name;
         entity.avatar = Avatar;
         entity.gender = Gender;
         entity.birthYear = BirthYear;
-        entity.addresses = Addresses;
+        foreach (var i in InforDelivery)
+        {
+            entity.inforDelivery.Add(i.ToEntity());
+
+        }
+       
         entity.favProductIds = FavProductIds;
 
         entity.createdDate = CreatedDate;
         entity.lastModified = LastModified;
     }
+    public User ToEntity()
+    {
+        var entity = new User();
 
+        entity._id = _id;
+        entity.password = Password;
+        entity.role = Role;
+        entity.phoneNumber = PhoneNumber;
+        entity.gender = Gender;
+        entity.birthYear = BirthYear;
+        foreach (var i in InforDelivery)
+        {
+            entity.inforDelivery.Add(i.ToEntity());
+
+        }
+
+        entity.createdDate = CreatedDate;
+        entity.lastModified = LastModified;
+        entity.name = Name;
+        entity.email = Email;
+        entity.avatar = Avatar;
+
+        return entity;
+    }
+    public async Task ChangesTracking(UserModel editUser, string wwwRootPath)
+    {
+        //_id = editUser._id;
+
+        editUser.Email = Email;
+
+        editUser.PhoneNumber = PhoneNumber;
+
+        editUser.Role = Role;
+
+        editUser.Name = Name;
+        //change avatar
+        if (this.FormFile != null && this.FormFile.Length > 0)
+        {
+            string fileName = this.FormFile.FileName;
+            string path = Path.Combine(wwwRootPath + "/avatar/", fileName);
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                await this.FormFile.CopyToAsync(fileStream);
+                editUser.Avatar = this.FormFile.FileName;
+            }
+        }
+        //editUser.Avatar = Avatar;
+        editUser.Gender = Gender;
+        editUser.BirthYear = BirthYear;
+        //editUser.Addresses = Addresses;
+    }
     public User ToNewEntity()
     {
         var entity = new User();
@@ -92,7 +152,12 @@ public class UserModel
         entity.phoneNumber = PhoneNumber;
         entity.gender = Gender;
         entity.birthYear = BirthYear;
-        entity.addresses = Addresses;
+        foreach (var i in InforDelivery)
+        {
+            entity.inforDelivery.Add(i.ToEntity());
+
+        }
+
 
         return entity;
     }
@@ -116,11 +181,15 @@ public class UserModel
         entity.phoneNumber = PhoneNumber;
         entity.gender = Gender;
         entity.birthYear = BirthYear;
-        entity.addresses = Addresses;
+        foreach (var i in InforDelivery)
+        {
+            entity.inforDelivery.Add(i.ToEntity());
+
+        }
+
 
         return entity;
     }
-
     public bool IsPasswordMatched(string encryptedPassword)
     {
         //return Password == encryptedPassword;

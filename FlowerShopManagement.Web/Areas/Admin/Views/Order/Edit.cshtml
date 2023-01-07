@@ -67,12 +67,13 @@
 			</div>
 		</div>
 	</div>
-	<div class="fixed-bottom bottom-50 start-50">
-		<div class="d-flex gap-2">
-			<button type="submit" class="btn btn-outline-info" asp-action="CompletedCheck" asp-controller="Order" asp-route-id=@Model.Id>Completed</button>
-			<button type="submit" class="btn btn-primary" asp-action="ConfirmCheck" asp-controller="Order" asp-route-id=@Model.Id>Confirm</button>
-		</div>
-		<button type="submit" class="btn btn-outline-secondary icon-delete" asp-action="CanceledCheck" asp-controller="Order" asp-route-id=@Model.Id>Cancel</button>
-	</div>
+	
 	@Html.AntiForgeryToken()
 </form>
+<div class="fixed-bottom bottom-50 start-50">
+    <div class="d-flex gap-2">
+        <a class="btn btn-outline-info" asp-action="CompletedCheck" asp-controller="Order" asp-route-id=@Model.Id>Completed</a>
+		<a  class="btn btn-primary" asp-action="ConfirmCheck" asp-controller="Order" asp-route-id=@Model.Id>Confirm</a>
+    </div>
+	<a  class="btn btn-outline-secondary icon-delete" asp-action="CanceledCheck" asp-controller="Order" asp-route-id=@Model.Id>Cancel</a>
+</div>

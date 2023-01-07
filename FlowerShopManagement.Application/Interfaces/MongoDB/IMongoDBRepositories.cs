@@ -50,3 +50,4 @@ public interface IProductRepository : IBaseRepository<Product>
 }
 
 public interface IVoucherRepository : IBaseRepository<Voucher> { }
+public interface IAddressRepository : IBaseRepository<Address> { }

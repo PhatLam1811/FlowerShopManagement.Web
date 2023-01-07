@@ -11,3 +11,7 @@
     --bs-text-opacity: 1;
     color: rgb(173, 161, 230) !important;
 }
+
+.bg-color-fade {
+    background-color: rgba(173, 161, 230, 0.3) !important;
+}
