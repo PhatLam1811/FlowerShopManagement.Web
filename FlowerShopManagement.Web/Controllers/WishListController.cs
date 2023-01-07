@@ -53,6 +53,8 @@ namespace FlowerShopManagement.Web.Controllers
                 }
 
                 productMs = productMs.OrderBy(i => i.Name).ToList();
+
+                return View(productMs);
             }
 
             productMs = new List<ProductModel>();

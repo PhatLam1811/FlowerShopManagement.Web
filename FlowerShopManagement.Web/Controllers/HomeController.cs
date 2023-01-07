@@ -68,6 +68,31 @@ public class HomeController : Controller
 
         List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
 
+        // get user's id
+        var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        // Unauthenticated user
+        if (userId != null)
+        {
+            
+                productMs = new List<ProductModel>();
+
+                var temp = await _stockServices.GetUpdatedProducts(_productRepository);
+
+                foreach (var item in temp)
+                {
+                    if (user.FavProductIds.Where(i => i == item.Id).Count() > 0)
+                    {
+                        item.IsLike = true;
+                        productMs.Add(item);
+                    }
+                }
+
+                productMs = productMs.OrderBy(i => i.Name).ToList();
+
+                return View(productMs);
+        } 
+
         productMs = productMs.OrderBy(i => i.Name).ToList();
         return View(productMs);
     }
