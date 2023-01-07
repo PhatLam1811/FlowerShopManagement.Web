@@ -2,6 +2,7 @@
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace FlowerShopManagement.Infrustructure.MongoDB.Implements;
@@ -212,6 +213,23 @@ public class MaterialRepository : BaseRepository<Material>, IMaterialRepository
 public class OrderRepository : BaseRepository<Order>, IOrderRepository
 {
     public OrderRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+
+    public void TotalSale()
+    {
+        try
+        {
+            PipelineDefinition<Order, BsonDocument> pipeline = new BsonDocument[]
+            {
+                new BsonDocument("Total sale", new BsonDocument("$sum", "$_total"))
+            };
+
+            _mongoDbCollection.Aggregate(pipeline);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
 }
 
 public class SupplierRepository : BaseRepository<Supplier>, ISupplierRepository
