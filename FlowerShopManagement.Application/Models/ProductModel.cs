@@ -122,24 +122,7 @@ public class ProductDetailModel
         Amount = amount;
     }
 
-    public async Task ChangesTracking(Product editProduct, string wwwRootPath)
-    {
-        //_id = editUser._id;
 
-
-        //change avatar
-        if (this.FormPicture == null)
-        {
-
-            foreach (var i in editProduct._pictures)
-            {
-                this.Pictures.Add(i);
-
-            }
-
-        }
-
-    }
     public bool IsEqualProduct(string id)
     {
         if (id == Id)
