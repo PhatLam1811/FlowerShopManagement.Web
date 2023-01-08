@@ -27,6 +27,24 @@ public class StockServices : IStockService
         _webHostEnvironment = webHostEnvironment;
     }
 
+    public async Task<bool> CreateCategory(string name)
+    {
+        if (name == null || name == "") return false;
+
+        Category category = new Category() { _id = Guid.NewGuid().ToString(), _name = name };
+        var result = await _categoryRepository.Add(category);
+        return result;
+    }
+
+    public async Task<bool> CreateMaterial(string name, string description)
+    {
+        if (name == null || name == "" || description == null || description == "") return false;
+
+        Material meterial = new Material() { _id = Guid.NewGuid().ToString(), _name = name , _maintainment = description};
+        var result = await _materialRepository.Add(meterial);
+        return result;
+    }
+
     public async Task<bool> CreateProduct(ProductDetailModel productModel)
     {
 

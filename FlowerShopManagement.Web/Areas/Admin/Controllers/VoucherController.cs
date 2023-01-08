@@ -9,6 +9,7 @@ using ValueType = FlowerShopManagement.Core.Enums.ValueType;
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 
 [Area("Admin")]
+[Route("[area]/[controller]")]
 [Authorize(Policy = "StaffOnly")]
 public class VoucherController : Controller
 {
@@ -22,8 +23,9 @@ public class VoucherController : Controller
         _voucherRepository = voucherRepository;
     }
 
+    [Route("Index")]
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string filter = "All")
     {
         //Set up default values for ProductPage
 
@@ -31,11 +33,17 @@ public class VoucherController : Controller
         ViewData["ValueType"] = Enum.GetValues(typeof(ValueType)).Cast<ValueType>().ToList();
         ViewData["VoucherStatus"] = Enum.GetValues(typeof(VoucherStatus)).Cast<VoucherStatus>().ToList();
         List<VoucherDetailModel> productMs = await _stockServices.GetUpdatedVouchers(_voucherRepository);
+        if(filter != "All")
+        {
+            productMs = productMs.Where(i => i.State.ToString() == filter).ToList();
+        }
         return View(productMs);
     }
 
     //Open edit dialog / modal
     [HttpGet]
+    [Route("Edit")]
+
     public async Task<IActionResult> Edit(string id)
     {
         ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
@@ -51,7 +59,9 @@ public class VoucherController : Controller
         return RedirectToAction("Index");
     }
 
-    [HttpPut]
+    [Route("Update")]
+
+    [HttpPost]
     public async Task<IActionResult> Update(VoucherDetailModel voucherM)
     {
         //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
@@ -70,7 +80,7 @@ public class VoucherController : Controller
             if (result != false)
             {
                 //Update successfully, we pull new list of products
-                List<VoucherDetailModel> proMs = await _stockServices.GetUpdatedVouchers(_voucherRepository);
+                
 
                 return RedirectToAction("Index"/*Coult be a ViewModel in here*/); // A updated _ViewAll
 
@@ -78,8 +88,8 @@ public class VoucherController : Controller
         }
         return RedirectToAction("Index");
     }
-
-    [HttpDelete]
+    [Route("Detele")]
+    [HttpPost]
     public async Task<IActionResult> Detele(VoucherDetailModel voucherDetailModel)
     {
         //ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
@@ -108,6 +118,8 @@ public class VoucherController : Controller
 
     //Open an Create Dialog
     [HttpGet]
+    [Route("Create")]
+
     public IActionResult Create()
     {
         //Set up default values for OrderPage
@@ -118,6 +130,8 @@ public class VoucherController : Controller
 
     // Confirm and create an Order
     [HttpPost]
+    [Route("Create")]
+
     public async Task<IActionResult> Create(VoucherDetailModel voucherDetailModel)
     {
         var result = await _stockServices.CreateVoucher(voucherDetailModel, _voucherRepository);
