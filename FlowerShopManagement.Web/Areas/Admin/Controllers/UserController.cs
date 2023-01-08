@@ -223,10 +223,9 @@ public class UserController : Controller
         if (string.IsNullOrEmpty(s)) return NoContent();
         var editUser = JsonConvert.DeserializeObject<UserModel>(s);
         if (editUser == null) return NoContent();
-        await model.ChangesTracking(editUser, _webHostEnvironment.WebRootPath);
         try
         {
-            var result = await _adminService.EditUserAsync(editUser);
+            var result = await _adminService.EditUserAsync(model);
             if (result == false) return NotFound();
             return RedirectToAction("Index"); // return the List of Models or attach it to the view model
 

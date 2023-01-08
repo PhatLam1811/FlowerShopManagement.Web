@@ -166,4 +166,22 @@ public class StockServices : IStockService
         }
         return voucherMs;
     }
+
+    public async Task<bool> UpdateProduct(ProductDetailModel productModel)
+    {
+        if (productModel == null || productModel.Id == null) return false;
+
+        var oldObj = await _productRepository.GetById(productModel.Id);
+        var obj = await productModel.ToEntityContainingImages(wwwRootPath: _webHostEnvironment.WebRootPath);
+        if(obj == null || obj._id == null || oldObj == null) return false;
+        if(oldObj._material != obj._material)
+        {
+            var list = await _materialRepository.GetAll();
+            var material = list.FirstOrDefault(i => i._name == obj._material);
+            if (material == null) { return false; }
+            obj._maintainment = material._maintainment;
+        }
+        
+        return await _productRepository.UpdateById(obj._id,obj);
+    }
 }

@@ -18,4 +18,5 @@ public interface IStockService
 	public Task<List<Material>> GetDetailMaterials();
 	public Task<List<string>> GetMaterials();
     public Task<List<ProductModel>> GetLowOnStockProducts();
+    public Task<bool> UpdateProduct(ProductDetailModel productModel);
 }

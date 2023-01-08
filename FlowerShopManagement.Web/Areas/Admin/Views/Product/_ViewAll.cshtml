@@ -37,7 +37,7 @@
                         <th scope="row">@i</th>
                         <td>
                             <div class="d-flex align-items-center gap-2">
-                                @if (String.IsNullOrEmpty(item.Pictures[0]))
+                                @if (item.Pictures.Count <= 0 || String.IsNullOrEmpty(item.Pictures[0]))
                                 {
 
                                     <img src="~/image/flower1.png"
@@ -45,11 +45,14 @@
                              height="40" width="40"
                              asp-append-version="true" />
                                 }
-
-                                <img src="~/image/@item.Pictures[0]"
+                                else
+                                {
+                                    <img src="~/image/@item.Pictures[0]"
                              class="rounded-circle"
                              height="40" width="40"
                              asp-append-version="true" />
+                                }
+
                                 <span class="limit-line">@item.Name</span>
                             </div>
                         </td>
