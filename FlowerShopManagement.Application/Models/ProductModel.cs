@@ -1,6 +1,7 @@
 ﻿using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Http;
+using System.Web.Helpers;
 
 namespace FlowerShopManagement.Application.Models;
 
@@ -120,6 +121,7 @@ public class ProductDetailModel
         Id = id;
         Amount = amount;
     }
+
 
     public bool IsEqualProduct(string id)
     {

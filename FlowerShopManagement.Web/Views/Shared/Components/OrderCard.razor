@@ -1,4 +1,5 @@
-﻿<div class="row mb-5 p-0 gx-0" @onclick="NavigateToDetail">
+﻿
+<div class="row mb-5 p-0 gx-0" @onclick="NavigateToDetail">
 	<div class="col-12 col-md-7 p-0">
 		@if (order.Products.Count > 0)
 		{
@@ -22,7 +23,8 @@
 		</div>
 	</div>
 	<div class="d-flex justify-content-end">
-		<a class="btn-no-p btn-secondary text-decoration-none h6 fw-normal p-2">View Detail ></a>
+		<a class="btn-no-p btn-secondary text-decoration-none h6 fw-normal p-2" @onclick="NavigateToDetail">View Detail ></a>
+		<button class="btn-no-p btn-secondary text-decoration-none h6 fw-normal p-2" @onclick="NavigateToDetail">View Detail ></button>
 	</div>
 </div>
 
@@ -37,7 +39,7 @@
 	[Parameter]
 	public int totalAmount { get; set; } = 0;
 
-	void NavigateToDetail()
+	private void NavigateToDetail()
 	{
 		UriHelper.NavigateTo("Order/OrderDetail/" + orderId, true);
 	}

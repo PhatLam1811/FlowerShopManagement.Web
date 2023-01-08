@@ -34,8 +34,10 @@
 						<div class="d-none d-lg-block">
 								@Model[i-1].ConditionValue
 						</div>
+						
 					</td>
 					<td>@Model[i-1].ConditionValue</td>
+					
 					<td>@Model[i-1].CreatedDate.Value.ToString("dd MMM y HH:mm")</td>
 					<td>
 						<div class="d-none d-lg-block">
@@ -57,7 +59,7 @@
 							}
 					</td>
 					<td>
-						<a asp-action="Edit" asp-controller="Voucher" asp-area="Admin" class="border-1 link-info table-icon">
+						<a asp-action="Edit" asp-controller="Voucher" asp-area="Admin" asp-route-id="@Model[i-1].Code" class="border-1 link-info table-icon">
 							<i class="fas fa-edit"></i>
 						</a>
 					</td>

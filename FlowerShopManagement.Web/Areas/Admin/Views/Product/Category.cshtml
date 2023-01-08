@@ -1,0 +1,36 @@
+﻿@model List<string>;
+
+<div class="col">
+    <p class="h6 mb-2">Edit old</p>
+    <div class="gap-3">
+        @foreach (var i in Model)
+        {
+            <div class="d-flex mb-3">
+                <div class="form-floating m-0">
+                    <input class="form-control" id="input-@i" value="@i" placeholder="-" />
+                    <label class="form-label">Name</label>
+                </div>
+                <a class="btn btn-secondary h-auto border-app border table-icon" onclick="EditCategory('@(Url.Action("EditCategory", "Product"))','@i','@i')">
+                    <i class="fa-solid fa-check ps-2 pe-2 link-info"></i>
+                </a>
+            </div>
+        }
+    </div>
+
+</div>
+
+<form asp-action="AddCategory" method="post" asp-controller="Product" asp-area="Admin">
+    <div class="">
+        <p class="h6 mb-2">Add new</p>
+        <input type="text" placeholder="New category ( u wont be able to adjust, so be careful)"
+               name="name" id="input-addCategories" class="form-control-lg border-primary" />
+    </div>
+
+    <div class="d-flex justify-content-center mt-4">
+        <button type="submit" class="btn btn-primary">
+            Add
+            <i class="fa-solid fa-check ms-2 fs-5"></i>
+        </button>
+    </div>
+</form>
+

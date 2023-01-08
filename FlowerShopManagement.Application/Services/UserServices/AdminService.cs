@@ -89,7 +89,17 @@ public class AdminService : StaffService, IAdminService
             var user = userModel.ToEntity();
             // Set modified date
             user.lastModified = DateTime.Now;
-
+            var wwwRootPath = _webHostEnvironment.WebRootPath;
+            if (userModel.FormFile != null && userModel.FormFile.Length > 0)
+            {
+                string fileName = userModel.FormFile.FileName;
+                string path = Path.Combine(wwwRootPath + "/avatar/", fileName);
+                using (var fileStream = new FileStream(path, FileMode.Create))
+                {
+                    await userModel.FormFile.CopyToAsync(fileStream);
+                    user.avatar = userModel.FormFile.FileName;
+                }
+            }
             // Update database
             return await _userRepository.UpdateById(user._id, user);
         }

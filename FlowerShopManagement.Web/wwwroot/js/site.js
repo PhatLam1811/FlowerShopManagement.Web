@@ -270,14 +270,12 @@ function jQueryAjaxSearch(form) {
 }
 
 function FindDistricts(selectTag, url) {
-    debugger;
     try {
         $.ajax({
             type: 'POST',
             url: url,
             data: { city: selectTag.options[selectTag.selectedIndex].value },
             success: function (res) {
-                debugger;
                 $('#district').empty();
                 $('#ward').empty();
                 $.each(res, function (index, key) {
@@ -287,7 +285,6 @@ function FindDistricts(selectTag, url) {
                     }));
                 });
                 $('#district').removeClass("disabled");
-                debugger;
             },
             error: function (err) {
                 console.log(err)
@@ -303,14 +300,14 @@ function FindDistricts(selectTag, url) {
 }
 
 function FindWards(selectTag, url) {
-    debugger;
+    
     try {
         $.ajax({
             type: 'POST',
             url: url,
             data: { city: $('#city').find(":selected").text(),district: selectTag.options[selectTag.selectedIndex].text },
             success: function (res) {
-                debugger;
+                
                 $('#ward').empty();
 
                 $.each(res, function (index, key) {
@@ -320,7 +317,7 @@ function FindWards(selectTag, url) {
                     }));
                 });
                 $('#ward').removeClass("disabled");
-                debugger;
+                
             },
             error: function (err) {
                 console.log(err)
@@ -333,4 +330,22 @@ function FindWards(selectTag, url) {
 
     }
     //to prevent default form submit event
+}
+
+function callWithId(url, id) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: { id: id },
+        success: function (res) {
+            if (res.isValid) {
+                //$('#hihi').html(res.html);
+                //$.notify("Added to your wishlist", "success", { position: "right" });
+            }
+            else {
+                //$.notify("Error", "warn", { position: "right" });
+            }
+
+        }
+    })
 }

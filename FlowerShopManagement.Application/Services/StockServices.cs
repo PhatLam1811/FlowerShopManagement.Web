@@ -27,6 +27,24 @@ public class StockServices : IStockService
         _webHostEnvironment = webHostEnvironment;
     }
 
+    public async Task<bool> CreateCategory(string name)
+    {
+        if (name == null || name == "") return false;
+
+        Category category = new Category() { _id = Guid.NewGuid().ToString(), _name = name };
+        var result = await _categoryRepository.Add(category);
+        return result;
+    }
+
+    public async Task<bool> CreateMaterial(string name, string description)
+    {
+        if (name == null || name == "" || description == null || description == "") return false;
+
+        Material meterial = new Material() { _id = Guid.NewGuid().ToString(), _name = name , _maintainment = description};
+        var result = await _materialRepository.Add(meterial);
+        return result;
+    }
+
     public async Task<bool> CreateProduct(ProductDetailModel productModel)
     {
 
@@ -147,5 +165,23 @@ public class StockServices : IStockService
             voucherMs.Add(new VoucherDetailModel(o));
         }
         return voucherMs;
+    }
+
+    public async Task<bool> UpdateProduct(ProductDetailModel productModel)
+    {
+        if (productModel == null || productModel.Id == null) return false;
+
+        var oldObj = await _productRepository.GetById(productModel.Id);
+        var obj = await productModel.ToEntityContainingImages(wwwRootPath: _webHostEnvironment.WebRootPath);
+        if(obj == null || obj._id == null || oldObj == null) return false;
+        if(oldObj._material != obj._material)
+        {
+            var list = await _materialRepository.GetAll();
+            var material = list.FirstOrDefault(i => i._name == obj._material);
+            if (material == null) { return false; }
+            obj._maintainment = material._maintainment;
+        }
+        
+        return await _productRepository.UpdateById(obj._id,obj);
     }
 }

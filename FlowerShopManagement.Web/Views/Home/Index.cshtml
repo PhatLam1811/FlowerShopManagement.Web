@@ -2,7 +2,8 @@
 
 @{
 	ViewData["Title"] = "Home Page";
-	List<string> categories = new List<string> { "All", "Fa ke flower", "cay canh" };
+	List<string>? categories = ViewData["Categories"] as List<string> ?? null;
+    List<string>? materials = ViewData["Materials"] as List<string> ?? null;
 	List<string> prices = new List<string> { "All", "0 - 10", "11 - 50", ">50" };
 }
 
@@ -11,6 +12,11 @@
 		<div class="form-group">
 			<label class="form-label h6" for="selectCategory">Category</label>
 			<select class="form-select" asp-items="@(new SelectList(categories))" id="selectCategory" aria-label="Floating label select example">
+			</select>
+		</div>
+		<div class="form-group">
+			<label class="form-label h6" for="selectCategory">Material</label>
+			<select class="form-select" asp-items="@(new SelectList(materials))" id="selectCategory" aria-label="Floating label select example">
 			</select>
 		</div>
 		<div class="form-group">

@@ -12,7 +12,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 [Area("Admin")]
 [Route("[area]/[controller]")]
 [Route("Admin")]
-[Authorize(Policy="StaffOnly")]
+[Authorize(Policy = "StaffOnly")]
 public class ProductController : Controller
 {
     //Services
@@ -23,7 +23,7 @@ public class ProductController : Controller
     //static list
     IWebHostEnvironment _webHostEnvironment;
     static List<string> listCategories = new List<string>();
-    static List<Material> listDetailCategories = new List<Material>();
+    static List<Material> listDetailMaterial = new List<Material>();
     static List<string> listMaterials = new List<string>();
 
     public ProductController(IProductRepository productRepository, IStockService stockServices, IWebHostEnvironment webHostEnvironment)
@@ -32,12 +32,12 @@ public class ProductController : Controller
         _stockServices = stockServices;
 
         //set up for the static list
-        if (listMaterials.Count <= 0 && listDetailCategories.Count <= 0 && listCategories.Count <= 0)
+        if (listMaterials.Count <= 0 && listDetailMaterial.Count <= 0 && listCategories.Count <= 0)
         {
             var task = Task.Run(async () =>
                     {
                         listCategories = await _stockServices.GetCategories();
-                        listDetailCategories = await _stockServices.GetDetailMaterials();
+                        listDetailMaterial = await _stockServices.GetDetailMaterials();
                         listMaterials = await _stockServices.GetMaterials();
 
                     });
@@ -62,7 +62,12 @@ public class ProductController : Controller
 
         List<ProductModel> productMs = await _stockServices.GetUpdatedProducts();
         int pageSizes = 2;
-        ProductVM productVM = new ProductVM() { productModels = PaginatedList<ProductModel>.CreateAsync(productMs, 1, pageSizes), categories = listCategories };
+        ProductVM productVM = new ProductVM()
+        {
+            productModels = PaginatedList<ProductModel>
+            .CreateAsync(productMs.OrderBy(i => i.Name).ToList(), 1, pageSizes),
+            categories = listCategories
+        };
         return View(productVM);
 
     }
@@ -90,24 +95,17 @@ public class ProductController : Controller
     [HttpPost]
     public async Task<IActionResult> Update(ProductDetailModel productModel)
     {
-        
+
 
         //If product get null or Id null ( somehow ) => notfound
         if (productModel == null || productModel.Id == null) return NotFound();
 
-        //Check if the product still exists
 
-        //If product != null => we will update this order by using directly orderModel.Id
-        //Check ProductModel for sure if losing some data
-        var obj = await productModel.ToEntityContainingImages(wwwRootPath: _webHostEnvironment.WebRootPath);
-        var result = await _productRepository.UpdateById(productModel.Id, obj);
-        if (result != false)
-        {
-            //Update successfully, we pull new list of products
-            List<ProductModel> proMs = await _stockServices.GetUpdatedProducts();
-        }
 
-        return RedirectToAction("Index");
+
+        if (await _stockServices.UpdateProduct(productModel) == true)
+            return RedirectToAction("Index");
+        return NotFound();
     }
 
     [Route("Detele")]
@@ -145,7 +143,7 @@ public class ProductController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(ProductDetailModel productModel)
     {
-        var maintainment = listDetailCategories.FirstOrDefault(i => i._name == productModel.Category);
+        var maintainment = listDetailMaterial.FirstOrDefault(i => i._name == productModel.Material);
         if (maintainment == null)
             productModel.Maintainment = "blank";
         else
@@ -164,6 +162,8 @@ public class ProductController : Controller
     public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString,
         int? pageNumber, string? currentPrice, string currentMaterial, string? currentCategory)
     {
+        int pageSize = 2;
+
         ViewData["CurrentSort"] = sortOrder;
         ViewData["CurrentPrice"] = currentPrice;
         ViewData["CurrentCategory"] = currentCategory;
@@ -229,8 +229,8 @@ public class ProductController : Controller
             {
                 productMs = productMs.Where(s => s.Category.Equals(currentCategory)).ToList();
             }
-            int pageSize = 2;
-            PaginatedList<ProductModel> objs = PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize);
+            PaginatedList<ProductModel> objs = PaginatedList<ProductModel>
+                .CreateAsync(productMs, pageNumber ?? 1, pageSize);
             return Json(new
             {
                 isValid = true,
@@ -243,4 +243,26 @@ public class ProductController : Controller
 
     }
 
+
+    [Route("Category")]
+    [HttpGet]
+    public IActionResult Category()
+    {
+        var list = listCategories.Where(i => i != "Unknown" && i != "All").ToList();
+        ViewData["Categories"] = list;
+
+        return View(list);
+    }
+
+    [Route("AddCategory")]
+    [HttpPost]
+    public async Task<IActionResult> AddCategory(string name)
+    {
+        var list = listCategories.Where(i => i != "Unknown" && i != "All").ToList();
+
+        if (list.Any(i => i == name) == true) return BadRequest();
+        var result = _stockServices.CreateCategory(name);
+        listCategories = await _stockServices.GetCategories();
+        return RedirectToAction("Category");
+    }
 }
