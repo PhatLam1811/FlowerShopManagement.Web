@@ -111,6 +111,7 @@ public class UserModel
         entity.name = Name;
         entity.email = Email;
         entity.avatar = Avatar;
+        entity.favProductIds = FavProductIds;
 
         return entity;
     }

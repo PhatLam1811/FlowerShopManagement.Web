@@ -1,11 +1,11 @@
 ﻿@model OrderModel
 
-<div class="w-100 d-flex flex-column align-items-center mb-5">
-	<div class="col-12 col-md-10 col-lg-9 bg-dark shadow" style="padding: 36px 24px 36px 24px;">
-		<div class="d-flex justify-content-between text-light">
+<div class="w-100 d-flex flex-column align-items-center mb-5 mt-3">
+	<div class="col-12 col-md-10 col-lg-9 shadow-color bg-color-fade radius20" style="padding: 36px 24px 36px 24px;">
+		<div class="d-flex justify-content-between text-dark">
 			<div class="">
 				<p class="h4">Status</p>
-				<p class="h5 text-primary">@Model.Status</p>
+				<p class="h5 text-secondary">@Model.Status</p>
 			</div>
 			<div class="">
 				<p class="caption">Ordered By @Model.Date</p>
@@ -13,7 +13,7 @@
 		</div>
 
 		<div class="row mt-5">
-			<div class="col-12 col-lg-7">
+			<div class="col-12 col-lg-5">
 				@if (Model.Products.Count > 0)
 				{
 					@foreach (var item in Model.Products)
@@ -22,25 +22,32 @@
 					}
 				}
 			</div>
-			<div class="col-12 col-lg-5 mt-4 mt-lg-0 text-light">
-				<div class="d-grid gap-2">
+			<div class="col-12 col-lg-5 mt-4 mt-lg-0 text-dark">
+				<div class="d-flex flex-column gap-2">
 					<p class="h4">Customer</p>
-					<p class="h5">@Model.FullName</p>
+					<div class="d-flex align-items-end gap-2">
+						<p class="caption-lg">Name:</p>
+						<p class="h5">@Model.FullName</p>
+					</div>
+					
 					<p class="h5">@Model.PhoneNumber</p>
 					<p class="h5">@Model.Address</p>
 				</div>
-				<div class="d-grid gap-2 col-7">
-					<p class="h4">Payment</p>
-					<p class="h5">Cash</p>
-				</div>
-				<div class="d-grid gap-2 col-5">
-					<p class="h4">Delivery</p>
-					<p class="h5">@Model.DeliveryMethod</p>
+				<div class="row mt-4 text-dark">
+					<div class="col d-flex flex-column gap-2">
+						<p class="h4">Payment</p>
+						<p class="h5">Cash</p>
+					</div>
+					<div class="col d-flex flex-column gap-2">
+						<p class="h4">Delivery</p>
+						<p class="h5">@Model.DeliveryMethod</p>
+					</div>
 				</div>
 			</div>
+
 		</div>
 
-		<div class="w-100 mt-5 text-light">
+		<div class="w-100 mt-5">
 			<div class="d-flex flex-column justify-content-between w-100">
 				<div class="">
 					<div class="d-flex justify-content-between">
@@ -55,7 +62,7 @@
 						<span class="caption">Delivery Fee</span>
 						<span class="caption">$@Model.DeliveryCharge</span>
 					</div>
-					<div class="d-flex justify-content-between h2 mt-2 text-primary">
+					<div class="d-flex justify-content-between h1 mt-2 text-primary">
 						<span>Total</span>
 						<span>$@Model.Total</span>
 					</div>

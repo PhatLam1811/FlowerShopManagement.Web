@@ -11,16 +11,18 @@
 					<p class="h4">@product.Name</p>
 					<p class="h3 text-secondary mt-3">$@product.UniPrice</p>
 				</div>
-				@if (product.IsLike == false) {
-					<a class="fa-solid fa-heart icon-normal text-color-fade hover-icon text-decoration-none h-fit"></a>
+				@if (product.IsLike == false)
+				{
+					<a class="fa-solid fa-heart icon-normal text-color-fade hover-icon text-decoration-none h-fit" @onclick="AddToWishList"></a>
 				}
-				else {
-					<a class="fa-solid fa-heart icon-normal text-secondary hover-dark-icon text-decoration-none h-fit"></a>
+				else
+				{
+					<a class="fa-solid fa-heart icon-normal text-secondary hover-dark-icon text-decoration-none h-fit" @onclick="RemoveOutOfWishList"></a>
 				}
 			</div>
 		</div>
 
-		<button class="btn btn-primary mt-2 w-100 button" asp-action="SignIn" @onclick="AddToCart">Add to Cart</button>
+		<button class="btn btn-primary mt-2 w-100 button" @onclick="AddToCart">Add to Cart</button>
 	</div>
 }
 
@@ -32,9 +34,53 @@
 	[Parameter]
 	public string url { get; set; } = "";
 
-	private void AddToCart()
+	[Parameter]
+	public string url1 { get; set; } = "";
+
+	[Parameter]
+	public string url2 { get; set; } = "";
+
+	[Parameter]
+	public bool isAuthenticated { get; set; }
+
+	private async void AddToCart()
 	{
-		// code xu li
+		
+	}
+
+	private async void AddToWishList()
+	{
+		if (isAuthenticated)
+		{
+			if (product.Id != null ) {
+				await js.InvokeVoidAsync("callWithId", new object[] { url1, product.Id });
+				product.IsLike = true;
+
+				StateHasChanged();
+			}
+		}
+		else
+		{
+			UriHelper.NavigateTo("Authentication/SignIn", true);
+		}
+	}
+
+	private async void RemoveOutOfWishList()
+	{
+		if (isAuthenticated)
+		{
+			if (product.Id != null)
+			{
+				await js.InvokeVoidAsync("callWithId", new object[] { url2, product.Id });
+				product.IsLike = false;
+
+				StateHasChanged();
+			}
+		}
+		else
+		{
+			UriHelper.NavigateTo("Authentication/SignIn", true);
+		}
 	}
 
 	//public async Task SignIn()

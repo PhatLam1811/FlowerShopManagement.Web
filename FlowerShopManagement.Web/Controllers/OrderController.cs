@@ -36,35 +36,24 @@ namespace FlowerShopManagement.Web.Controllers
         public async Task<IActionResult> Index()
         {
             ViewBag.Order = true;
+
             //Set up default values for OrderPage
 
             //ViewData["Categories"] = Enum.GetValues(typeof(Status)).Cast<Status>().ToList();
 
-            List<OrderModel> orderMs = new List<OrderModel>();
+            string? userId;
+            List<OrderModel>? orderMs = new List<OrderModel>();
 
-            List<ProductModel> products = new List<ProductModel>();
-            products.Add(new ProductModel() { Name = "Fake Flower", Amount = 2, Color = Color.Blue, UniPrice = 20, Id = "hsksd" });
+            if (this.HttpContext != null)
+            {
+                userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            orderMs.Add(new OrderModel() { AccountID = "23", Amount = 3, Date = DateTime.Now, FullName = "Quy ganh team", DeliveryMethod = DeliverryMethods.sampleMethod, DeliveryCharge = 2, PhoneNumber = "93803xxxx", Products = products, Status = Status.Waiting, Total = 200 });
-            orderMs.Add(new OrderModel() { AccountID = "23", Amount = 3, Date = DateTime.Now, FullName = "Quy ganh team", DeliveryMethod = DeliverryMethods.sampleMethod, DeliveryCharge = 2, PhoneNumber = "93803xxxx", Products = products, Status = Status.Waiting, Total = 200 });
-            orderMs.Add(new OrderModel() { AccountID = "23", Amount = 3, Date = DateTime.Now, FullName = "Quy ganh team", DeliveryMethod = DeliverryMethods.sampleMethod, DeliveryCharge = 2, PhoneNumber = "93803xxxx", Products = products, Status = Status.Waiting, Total = 200 });
-            orderMs.Add(new OrderModel() { AccountID = "23", Amount = 3, Date = DateTime.Now, FullName = "Quy ganh team", DeliveryMethod = DeliverryMethods.sampleMethod, DeliveryCharge = 2, PhoneNumber = "93803xxxx", Products = products, Status = Status.Waiting, Total = 200 });
-            orderMs.Add(new OrderModel() { AccountID = "23", Amount = 3, Date = DateTime.Now, FullName = "Quy ganh team", DeliveryMethod = DeliverryMethods.sampleMethod, DeliveryCharge = 2, PhoneNumber = "93803xxxx", Products = products, Status = Status.Waiting, Total = 200 });
-            orderMs.Add(new OrderModel() { AccountID = "23", Amount = 3, Date = DateTime.Now, FullName = "Quy ganh team", DeliveryMethod = DeliverryMethods.sampleMethod, DeliveryCharge = 2, PhoneNumber = "93803xxxx", Products = products, Status = Status.Waiting, Total = 200 });
+                if (userId != null)
+                {
+                    orderMs = await _customerService.GetOrdersOfUserAsync(userId, _orderRepository);
 
-            //string? userId;
-            //List<OrderModel>? orderMs = new List<OrderModel>();
-
-            //if (this.HttpContext != null)
-            //{
-            //    userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            //    if (userId != null)
-            //    {
-            //        orderMs = await _customerService.GetOrdersOfUserAsync(userId, _orderRepository);
-
-            //    }
-            //}
+                }
+            }
 
             return View(orderMs);
         }
