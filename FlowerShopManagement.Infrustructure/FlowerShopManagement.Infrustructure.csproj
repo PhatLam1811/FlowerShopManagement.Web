@@ -27,8 +27,4 @@
     <ProjectReference Include="..\FlowerShopManagement.Core\FlowerShopManagement.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="MailKit\" />
-  </ItemGroup>
-
 </Project>
