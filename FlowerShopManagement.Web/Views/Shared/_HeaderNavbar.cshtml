@@ -7,12 +7,6 @@
 @if (Context.User.Identity is not null)
 {
 	ViewBag.IsAuthenticated = Context.User.Identity.IsAuthenticated;
-
-	if (ViewBag.IsAuthenticated)
-	{
-		ViewData["Username"] = Context.User.FindFirst("Username")?.Value;
-		ViewData["Avatar"] = Context.User.FindFirst("Avatar")?.Value;
-	}
 }
 
 @if (!ViewBag.IsAuthenticated)

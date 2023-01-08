@@ -15,3 +15,7 @@
 .bg-color-fade {
     background-color: rgba(173, 161, 230, 0.3) !important;
 }
+
+.bg-color-secondary {
+    background: rgb(173, 161, 230) !important;
+}
