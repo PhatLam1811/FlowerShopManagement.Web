@@ -13,6 +13,8 @@ public interface IStockService
 	public Task<ProductDetailModel> GetADetailProduct(string id);
 	public Task<List<VoucherDetailModel>> GetUpdatedVouchers(IVoucherRepository voucherRepository);
 	public Task<List<string>> GetCategories();
+	public Task<bool> CreateCategory(string name);
+	public Task<bool> CreateMaterial(string name, string description);
 	public Task<List<Material>> GetDetailMaterials();
 	public Task<List<string>> GetMaterials();
     public Task<List<ProductModel>> GetLowOnStockProducts();

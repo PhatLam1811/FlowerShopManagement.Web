@@ -243,4 +243,26 @@ public class ProductController : Controller
 
     }
 
+
+	[Route("Category")]
+	[HttpGet]
+	public IActionResult Category()
+	{
+        var list = listCategories.Where(i => i != "Unknown" && i != "All").ToList();
+        ViewData["Categories"] = list;
+
+		return View(list);
+	}
+
+	[Route("AddCategory")]
+	[HttpPost]
+	public async Task<IActionResult> AddCategory(string name)
+	{
+        var list = listCategories.Where(i => i != "Unknown" && i != "All").ToList();
+
+        if (list.Any(i => i == name) == true) return BadRequest();
+        var result = _stockServices.CreateCategory(name);
+        listCategories = await _stockServices.GetCategories();
+        return RedirectToAction("Category");
+	}
 }
