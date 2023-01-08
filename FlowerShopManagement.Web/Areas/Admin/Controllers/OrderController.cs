@@ -208,7 +208,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             ViewData["Categories"] = _stockServices.GetCategories();
 
-            List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
+            List<ProductModel> productMs = await _stockServices.GetUpdatedProducts();
             List<UserModel>? customerMs = await _staffService.GetUsersAsync();
             if (productMs == null || customerMs == null) return NotFound();
 
@@ -245,7 +245,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             OrderVM? orderVM = GetOrderModel();
             if (orderVM == null || orderVM.Order == null) { return NotFound(); }
             //List<ProductModel> productMs = await _stockServices.GetUpdatedProducts(_productRepository);
-            List<ProductModel> productMs = orderVM.AllProductModels ?? await _stockServices.GetUpdatedProducts(_productRepository);
+            List<ProductModel> productMs = orderVM.AllProductModels ?? await _stockServices.GetUpdatedProducts();
             if (filter != "")
             {
                 productMs = productMs.Where(i => i.Name.Contains(filter)).ToList();
@@ -372,7 +372,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         {
             if (id == null) return NotFound();
             var order = await _saleServices.GetADetailOrder(id, _orderRepository);
-            var productList = await _stockServices.GetUpdatedProducts(_productRepository);
+            var productList = await _stockServices.GetUpdatedProducts();
             if (order == null || productList == null || order.Id == null || order.Status != Status.Waiting) return NotFound();
 
             var result = await _saleServices.VerifyOnlineOrder(order, _orderRepository, _productRepository);
@@ -390,7 +390,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             if (id == null) return NotFound();
             var order = await _saleServices.GetADetailOrder(id, _orderRepository);
-            if (order == null || order.Id == null || (order.Status != Status.Purchased && order.Status != Status.Delivered)) return NotFound();
+            if (order == null || order.Id == null || !(order.Status != Status.Purchased && order.Status != Status.Delivered)) return NotFound();
 
 
             order.Status = Status.Canceled;

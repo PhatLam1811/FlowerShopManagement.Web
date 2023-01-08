@@ -44,7 +44,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
     }
 
-    public virtual async Task<List<TEntity>?> GetAll(int skip = 0, int? limit = null)
+    public virtual async Task<List<TEntity>> GetAll(int skip = 0, int? limit = null)
     {
         try
         {
@@ -73,6 +73,19 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         try
         {
             return await _mongoDbCollection.Find(idFilter(id)).SingleOrDefaultAsync();
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public virtual async Task<List<TEntity>> GetByIds(List<string> ids)
+    {
+        try
+        {
+            var filter = Builders<TEntity>.Filter.In("_id", ids.ToArray());
+            return await _mongoDbCollection.Find(filter).ToListAsync();
         }
         catch (Exception e)
         {
@@ -229,4 +242,8 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
 public class VoucherRepository : BaseRepository<Voucher>, IVoucherRepository
 {
     public VoucherRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+}
+public class AddressRepository : BaseRepository<Address>, IAddressRepository
+{
+    public AddressRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 }

@@ -4,7 +4,6 @@ using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Application.Services;
 using FlowerShopManagement.Application.Services.UserServices;
 using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Infrustructure.Mail;
 using FlowerShopManagement.Infrustructure.MongoDB.Implements;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -12,7 +11,7 @@ using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
-using IMailService = FlowerShopManagement.Application.Interfaces.IMailService;
+using IEmailService = FlowerShopManagement.Application.Interfaces.IEmailService;
 using FlowerShopManagement.Core.Enums;
 using System.Security.Claims;
 
@@ -49,6 +48,7 @@ builder.Services.AddScoped<IMaterialRepository, MaterialRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
+builder.Services.AddScoped<IAddressRepository, AddressRepository>();
 
 //-- Entities Mapping --//
 BsonClassMap.RegisterClassMap<User>(cm =>
@@ -98,7 +98,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAdminService, AdminService>();
 builder.Services.AddScoped<ICustomerfService, CustomerService>();
 builder.Services.AddScoped<ISupplierService, SupplierService>();
-builder.Services.AddScoped<IMailService, MailKitService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 // HttpContextAccessor
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();

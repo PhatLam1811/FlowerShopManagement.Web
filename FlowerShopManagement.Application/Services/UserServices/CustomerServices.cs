@@ -10,11 +10,14 @@ public class CustomerService : UserService, ICustomerfService
 {
     IUserRepository _userRepository;
     ICartRepository _cartRepository;
-    public CustomerService(IUserRepository userRepository, ICartRepository cartRepository)
+    private readonly IAddressRepository _addressRepository;
+
+    public CustomerService(IUserRepository userRepository, ICartRepository cartRepository, IAddressRepository addressRepository)
         : base(userRepository, cartRepository)
     {
         _userRepository = userRepository;
         _cartRepository = cartRepository;
+        _addressRepository = addressRepository;
     }
 
     public async Task<List<ProductModel>?> GetFavProductsAsync(string id, IAuthService authService, IProductRepository productRepository)

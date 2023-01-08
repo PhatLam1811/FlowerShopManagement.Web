@@ -20,7 +20,7 @@ public class AuthenticationController : Controller
         _authServices = authServices;
     }
 
-    // Register
+    // REGISTER
     [AllowAnonymous]
     [HttpGet("Register")]
     public IActionResult Register()
@@ -64,7 +64,7 @@ public class AuthenticationController : Controller
         }
     }
 
-    // Sign in
+    // SIGN IN
     [AllowAnonymous]
     [HttpGet("SignIn")]
     public IActionResult SignIn()
@@ -138,7 +138,7 @@ public class AuthenticationController : Controller
         }
     }
 
-    // Sign out
+    // SIGN OUT
     [HttpPost]
     [Route("SignOutAsync")]
     public async Task<IActionResult> SignOutAsync()

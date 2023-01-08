@@ -17,7 +17,7 @@
 				}
 				else
 				{
-					<a class="fa-solid fa-heart icon-normal text-secondary hover-dark-icon text-decoration-none h-fit"></a>
+					<a class="fa-solid fa-heart icon-normal text-secondary hover-dark-icon text-decoration-none h-fit" @onclick="RemoveOutOfWishList"></a>
 				}
 			</div>
 		</div>
@@ -45,9 +45,13 @@
 
 	private async void AddToCart()
 	{
+		
+	}
+
+	private async void AddToWishList()
+	{
 		if (isAuthenticated)
 		{
-			// add to cart
 			if (product.Id != null ) {
 				await js.InvokeVoidAsync("callWithId", new object[] { url1, product.Id });
 				product.IsLike = true;
@@ -61,9 +65,22 @@
 		}
 	}
 
-	private void AddToWishList()
+	private async void RemoveOutOfWishList()
 	{
+		if (isAuthenticated)
+		{
+			if (product.Id != null)
+			{
+				await js.InvokeVoidAsync("callWithId", new object[] { url2, product.Id });
+				product.IsLike = false;
 
+				StateHasChanged();
+			}
+		}
+		else
+		{
+			UriHelper.NavigateTo("Authentication/SignIn", true);
+		}
 	}
 
 	//public async Task SignIn()

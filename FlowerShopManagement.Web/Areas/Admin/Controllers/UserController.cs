@@ -1,6 +1,7 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
+using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Application.Services;
 using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Web.ViewModels;
@@ -21,6 +22,7 @@ public class UserController : Controller
     private readonly IAdminService _adminService;
     private readonly IStaffService _staffService;
     private readonly IWebHostEnvironment _webHostEnvironment;
+
     public UserController(
         IAuthService authService,
         IAdminService adminService,
@@ -41,7 +43,6 @@ public class UserController : Controller
     [Route("Index")]
     public async Task<IActionResult> Index()
     {
-
         try
         {
             ViewData["Role"] = Enum.GetNames(typeof(Role)).Where(s => s != "Admin" && s != "Passenger").ToList();
@@ -58,10 +59,14 @@ public class UserController : Controller
 
     [Route("Sort")]
     [HttpPost]
-    public async Task<IActionResult> Sort(string sortOrder, int? pageNumber, string? currentCategory)
+    public async Task<IActionResult> Sort(string sortOrder, int? pageNumber, string? currentCategory, string? searchString)
     {
         ViewData["CurrentSort"] = sortOrder;
         ViewData["CurrentCategory"] = currentCategory;
+
+
+
+
         ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
@@ -83,7 +88,6 @@ public class UserController : Controller
                     break;
                 default:
                     //case filter
-
                     break;
             }
 
@@ -96,12 +100,16 @@ public class UserController : Controller
                     users = users.Where(s => s.Role == Role.Staff).ToList();
                     break;
 
-
                 default:
                     //All
                     break;
             }
 
+            if (searchString != null && searchString != "")
+            {
+                users = users.Where(i => i.Name.ToUpper().Contains(searchString.ToUpper())).ToList();
+                ViewData["CurrentFilter"] = searchString;
+            }
 
             int pageSize = 2;
             PaginatedList<UserModel> objs = PaginatedList<UserModel>.CreateAsync(users, pageNumber ?? 1, pageSize);
@@ -118,10 +126,9 @@ public class UserController : Controller
 
     }
 
-
     [Route("Create")]
     [HttpGet]
-    public IActionResult Create()
+    public async Task<IActionResult> Create()
     {
         ViewData["Roles"] = Enum.GetValues(typeof(Role))
             .Cast<Role>()
@@ -130,22 +137,57 @@ public class UserController : Controller
         ViewData["Genders"] = Enum.GetValues(typeof(Gender))
             .Cast<Gender>()
             .ToList();
-        return View(new UserModel());
+        var list = await _adminService.GetAddresses();
+        ViewData["Addresses"] = JsonConvert.SerializeObject(list, Formatting.Indented);
+
+        return View(new UserCreateVM());
     }
 
+    [Route("FindDistrict")]
+    [HttpPost]
+    public async Task<List<string>> FindDistricts(string city)
+    {
+
+        var list = await _adminService.GetAddresses();
+        List<string> districts = list.AsParallel().Where(i => i._city == city).GroupBy(i => i._district).Select(i => i.Key).ToList();
+        ViewData["Districts"] = districts;
+
+        return districts;
+    }
+    [Route("FindWards")]
+    [HttpPost]
+    public async Task<List<string>> FindWards(string city, string district)
+    {
+
+        var list = await _adminService.GetAddresses();
+        List<string> wards = list.Where(i => i._city == city && i._district == district).GroupBy(i => i._commune).Select(i => i.Key).ToList();
+        ViewData["Wards"] = wards;
+
+        return wards;
+    }
     [Route("Create")]
     [HttpPost]
-    public async Task<IActionResult> Create(UserModel model)
+    public async Task<IActionResult> Create(UserCreateVM userCreateVM)
     {
         // Create
         bool result = false;
+        if (userCreateVM.city == null && userCreateVM.district == null 
+            && userCreateVM.ward == null && userCreateVM.detailAddress == null) return NotFound();
+        var infoAddress = new InforDeliveryModel()
+        {
+            Name = userCreateVM.userModel.Name,
+            IsDefault = true,
+            Phone = userCreateVM.userModel.PhoneNumber,
+            Address = userCreateVM.detailAddress + ", " + userCreateVM.ward + ", " + userCreateVM.district + ", " + userCreateVM.city
+        };
+        userCreateVM.userModel.InforDelivery.Add(infoAddress);
         try
         {
-            if (model.Role == Role.Customer)
-                result = await _adminService.AddCustomerAsync(model);
-            else if (model.Role == Role.Staff)
+            if (userCreateVM.userModel.Role == Role.Customer)
+                result = await _adminService.AddCustomerAsync(userCreateVM.userModel);
+            else if (userCreateVM.userModel.Role == Role.Staff)
             {
-                result = await _adminService.AddStaffAsync(model, Role.Staff);
+                result = await _adminService.AddStaffAsync(userCreateVM.userModel, Role.Staff);
             }
             if (result == true)
                 return RedirectToAction("Index");
@@ -181,7 +223,7 @@ public class UserController : Controller
         if (string.IsNullOrEmpty(s)) return NoContent();
         var editUser = JsonConvert.DeserializeObject<UserModel>(s);
         if (editUser == null) return NoContent();
-        await model.ChangesChecking(editUser,_webHostEnvironment.WebRootPath);
+        await model.ChangesTracking(editUser, _webHostEnvironment.WebRootPath);
         try
         {
             var result = await _adminService.EditUserAsync(editUser);
@@ -356,9 +398,9 @@ public class UserController : Controller
 
         try
         {
-            var currentUser = await GetCurrentUser();
+            //var currentUser = await GetCurrentUser();
 
-            await _personalService.ResetPasswordAsync(currentUser);
+            //await _personalService.ResetPasswordAsync(currentUser);
 
             return; // Notify successfully reset password!
         }
@@ -378,14 +420,15 @@ public class UserController : Controller
 
         try
         {
-            var currentUser = await GetCurrentUser();
+            var currentId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var currentUser = _authService.GetAuthenticatedUserAsync(currentId);
 
             // Verify old password
             var encryptedPass = Validator.MD5Hash(oldPassword);
-            if (!currentUser.IsPasswordMatched(encryptedPass))
-                return; // Old password didnt match! 
+            //if (!currentUser.IsPasswordMatched(encryptedPass))
+            //    return; // Old password didnt match! 
 
-            await _personalService.ChangePasswordAsync(currentUser, newPassword);
+            //await _personalService.ChangePasswordAsync(currentUser, newPassword);
 
             return; // Notify successfully changed password!
         }
@@ -393,11 +436,5 @@ public class UserController : Controller
         {
             return; // Notify failed to change the password for some reasons!
         }
-    }
-
-    private async Task<UserModel> GetCurrentUser()
-    {
-        throw new NotImplementedException();
-        // return await _authService.GetAuthenticatedUserAsync();
     }
 }
