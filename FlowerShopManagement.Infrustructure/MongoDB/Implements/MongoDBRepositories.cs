@@ -214,16 +214,27 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
 {
     public OrderRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 
-    public void TotalSale()
+    public double TotalSale(DateTime beginDate, DateTime endDate)
     {
+        PipelineDefinition<Order, BsonDocument> pipeline = new BsonDocument[]
+            {
+                new BsonDocument("$match", new BsonDocument
+                    {
+                        {"_date", new BsonDocument {{ "$gte", beginDate }, { "$lte", endDate }}},
+                        {"_status", Status.Purchased}
+                    }),
+                new BsonDocument("$group", new BsonDocument
+                    {
+                        {"_id", new BsonDocument("$dayOfYear", "$_date")},
+                        {"Total", new BsonDocument("$sum", "$_total")}
+                    }),
+            };
+       
         try
         {
-            PipelineDefinition<Order, BsonDocument> pipeline = new BsonDocument[]
-            {
-                new BsonDocument("Total sale", new BsonDocument("$sum", "$_total"))
-            };
+            var result = _mongoDbCollection.Aggregate(pipeline).ToList();
 
-            _mongoDbCollection.Aggregate(pipeline);
+            return result[0]["Total"].ToDouble();
         }
         catch (Exception e)
         {

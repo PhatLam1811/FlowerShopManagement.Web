@@ -14,6 +14,6 @@ public class ReportService : IReportService
 
     public Task<double> GetTotalSale()
     {
-
+        throw new NotImplementedException();
     }
 }

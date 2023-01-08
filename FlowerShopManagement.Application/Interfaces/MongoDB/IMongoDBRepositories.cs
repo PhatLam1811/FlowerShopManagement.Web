@@ -34,7 +34,7 @@ public interface ICartRepository : IBaseRepository<Cart> { }
 
 public interface IOrderRepository : IBaseRepository<Order> 
 {
-    public void TotalSale();
+    public double TotalSale(DateTime beginDate, DateTime endDate);
 }
 
 public interface ICategoryRepository : IBaseRepository<Category> { }
