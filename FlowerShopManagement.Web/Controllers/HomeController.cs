@@ -132,7 +132,7 @@ public class HomeController : Controller
                     //productMs = productMs.OrderBy(s => s.LastName);
                     break;
             }
-            int pageSize = 3;
+            int pageSize = 8;
             return View(PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize));
         }
         return NotFound();
