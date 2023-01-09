@@ -1,13 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using FlowerShopManagement.Core.Entities;
 
-namespace FlowerShopManagement.Core.Entities;
-
+namespace FlowerShopManagement.Application.Models;
 public class CartModel
 {
     public string Id { get; private set; }
     [Required]
     public string CustomerId { get; set; } = "";
-    public List<Product> Items { get; set; } = new List<Product>();
+    public List<CartItemModel> Items { get; set; } = new List<CartItemModel>();
     public long Total { get; set; } = 0;
 
     public CartModel()
@@ -20,12 +20,27 @@ public class CartModel
     {
         this.Id = entity._id;
         this.CustomerId = entity.customerId;
-        this.Items = entity.items;
+        if (entity.items != null && entity.items.Count > 0)
+        {
+            foreach (var item in entity.items)
+            {
+                this.Items.Add(new CartItemModel(item));
+            }
+        }
         this.Total = entity.total;
     }
 
     public Cart ToEntity()
     {
-        return new Cart(Id, CustomerId, Items, Total);
+        List<CartItem> items = new List<CartItem>();
+        if (Items != null && Items.Count > 0)
+        {
+            foreach (var item in Items)
+            {
+                items.Add(item.ToEntity());
+            }
+        }
+            
+        return new Cart(Id, CustomerId, items , Total);
     }
 }

@@ -9,7 +9,8 @@ public interface IStockService
 	public Task<bool> CreateProduct(ProductDetailModel productModel);
 	public Task<bool> CreateVoucher(VoucherDetailModel voucherDetailModel, IVoucherRepository voucherRepository);
 	public Task<List<ProductModel>> GetUpdatedProducts();
-	public Task<List<ProductModel>> GetByIdsAsync(List<string> ids);
+	public Task<List<ProductDetailModel>> GetUpdatedDetailProducts();
+    public Task<List<ProductModel>> GetByIdsAsync(List<string> ids);
 	public Task<ProductDetailModel> GetADetailProduct(string id);
 	public Task<List<VoucherDetailModel>> GetUpdatedVouchers(IVoucherRepository voucherRepository);
 	public Task<List<string>> GetCategories();

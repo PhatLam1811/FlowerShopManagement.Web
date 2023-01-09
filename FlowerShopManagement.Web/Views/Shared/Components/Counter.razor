@@ -1,9 +1,36 @@
 ﻿<div class="d-flex">
 	<button class="btn btn-icon bg-color-fade fs-4">-</button>
-	<input class="border-0 form-control text-center h6" style="width:70px" />
+	<input class="border-0 form-control text-center h6" style="width:70px" value=@count />
 	<button class="btn btn-icon bg-color-fade fs-4">+</button>
 </div>
 
 @code {
+	[Parameter]
+	public int min { get; set; } = 1;
+	[Parameter]
+	public int max { get; set; } = 1;
+	[Parameter]
+	public int count { get; set; } = 1;
+	[Parameter]
+	public EventCallback<int> OnGetAmount { get; set; }
 
+	protected async Task Increament()
+	{
+		if (count < max)
+		{
+			count++;
+		}
+
+		await OnGetAmount.InvokeAsync(count);
+	}
+
+	protected async void Decreament()
+	{
+		if (count > 1)
+		{
+			count--;
+		}
+
+		await OnGetAmount.InvokeAsync(count);
+	}
 }

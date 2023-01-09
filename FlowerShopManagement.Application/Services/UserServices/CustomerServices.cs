@@ -10,14 +10,16 @@ public class CustomerService : UserService, ICustomerfService
 {
     IUserRepository _userRepository;
     ICartRepository _cartRepository;
+    IProductRepository _productRepository;
     private readonly IAddressRepository _addressRepository;
 
-    public CustomerService(IUserRepository userRepository, ICartRepository cartRepository, IAddressRepository addressRepository)
+    public CustomerService(IUserRepository userRepository, ICartRepository cartRepository, IAddressRepository addressRepository, IProductRepository productRepository)
         : base(userRepository, cartRepository)
     {
         _userRepository = userRepository;
         _cartRepository = cartRepository;
         _addressRepository = addressRepository;
+        _productRepository = productRepository;
     }
 
     public async Task<List<ProductModel>?> GetFavProductsAsync(string id, IAuthService authService, IProductRepository productRepository)
@@ -92,7 +94,7 @@ public class CustomerService : UserService, ICustomerfService
 
     public async Task<CartModel?> GetCartOfUserAsync(string id)
     {
-        var cart = await _cartRepository.GetById(id);
+        var cart = await _cartRepository.GetByField("customerId", id);
         if (cart != null)
         {
             CartModel cartModel = new CartModel(cart);
@@ -115,5 +117,84 @@ public class CustomerService : UserService, ICustomerfService
             }
         }
         return orderModels;
+    }
+
+    public async Task<bool> AddItemToCart(string userId, string productId, int amount)
+    {
+        var cart = await _cartRepository.GetByField("customerId", userId);
+        if (cart == null)
+        {
+            return false;
+        }
+
+        var products = cart.items;
+
+        if (products != null && products.Where(o => o._id == productId).Count() > 0)
+        {
+            // cart's not empty
+            // check if duplicate
+            // duplicate: yes, update amount
+            // check if amount exceed to stock
+            products.Where(o => o._id == productId).First().amount += amount;
+            cart.items = products;
+            bool result = await _cartRepository.UpdateById(cart._id, cart);
+            return result;
+        }
+        else
+        {
+            // cart's empty
+            // or duplicate: no
+            // add new
+            // check if product existed
+            Product? newItem = await _productRepository.GetById(productId);
+            if (newItem != null && newItem._id != null)
+            {
+                // if cart's empty
+                if (products == null)
+                {
+                    products = new List<CartItem>();
+                }
+
+                newItem._amount = amount;
+                products.Add(new CartItem(userId) { amount = amount, items = newItem, _productId = newItem._id });
+                cart.items = products;
+                bool result = await _cartRepository.UpdateById(cart._id, cart);
+                return result;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    }
+
+    public Task<bool> UpdateAmountOfItem(string userId, string productId, int amount)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<bool> RemoveItemToCart(string userId, string productId)
+    {
+        var cart = await _cartRepository.GetByField("customerId", userId);
+        if (cart == null)
+        {
+            return false;
+        }
+
+        var products = cart.items;
+
+        if (products != null && products.Where(o => o._id == productId).Count() > 0)
+        {
+            // cart's not empty
+            // check if product is existed
+            products.RemoveAll(o => o._productId == productId);
+            cart.items = products;
+            bool result = await _cartRepository.UpdateById(cart._id, cart);
+            return result;
+        }
+        else
+        {
+            return true;
+        }
     }
 }

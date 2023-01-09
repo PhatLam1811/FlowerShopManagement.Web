@@ -1,28 +1,64 @@
 ﻿@using FlowerShopManagement.Web.Views.Shared.Components;
 
 <div class="form-check mb-3">
-	<input class="form-check-input fs-4 me-2" type="checkbox" value="" id="defaultCheck1">
+	<input class="form-check-input fs-4 me-2" type="checkbox" value="" id="defaultCheck1" @onclick="SelectItem">
 	<div class="card d-flex flex-row">
 		<img src="image/flower2.png" class="card-img-top w-25 h-auto" />
 		<div class="card-body d-flex flex-column justify-content-between">
 			<div class="">
 				<div class="d-flex justify-content-between">
-					<span class="h4">Flower 1</span>
+					<span class="h4">@cartItem.items.Name</span>
 					<span class="h6 icon-arrow"></span>
 				</div>
 				<div class="mt-1 d-flex justify-content-between align-items-end">
-					<span class="h6">20.000</span>
-					<span class="h3 fw-bold text-primary">20.000</span>
+					<span class="h6">@cartItem.items.UniPrice</span>
+					<span class="h3 fw-bold text-primary">(@cartItem.items.UniPrice * @cartItem.items.Amount)</span>
 				</div>
 			</div>
 			<div class="mt-1 d-flex justify-content-between align-items-end">
-				<Counter />
-				<p class="icon-delete fs-5 m-0 icon-normal text-color-pink"></p>
+				<Counter max=@maxAmount OnGetAmount="ChangeAmount"/>
+				<p class="icon-delete fs-5 m-0 icon-normal text-color-pink" @onclick="RemoveOutOfCart"></p>
 			</div>
 		</div>
 	</div>
 </div>
 
 @code {
+	[Parameter]
+	public CartItemModel cartItem { get; set; } = null!;
 
+	[Parameter]
+	public string id { get; set; } = null!;
+
+	[Parameter]
+	public int maxAmount { get; set; } = 1;
+
+	[Parameter]
+	public string url { get; set; } = null!;
+
+	protected async void ChangeAmount(int count)
+	{
+		//var oldAmount = product.Amount;
+		//var oldPrice = product.UniPrice;
+
+		//cartItem.Amount = count;
+		//cartItem.CartDetailTotalSum = cartItem.Product.ProductUnitPrice * count;
+		StateHasChanged();
+
+		//await js.InvokeVoidAsync("updateAmount", new object[] { url1, cartItemId, count, cartItem.CartDetailTotalSum });
+		//await IsChanged.InvokeAsync(new MyArgs() { myInt = count, myOldInt = oldAmount, myBool = cartItem.IsChecked, myFloat = cartItem.CartDetailTotalSum, myOldFloat = oldPrice });
+	}
+	private async void RemoveOutOfCart()
+	{
+		if (cartItem._productId != null)
+		{
+			await js.InvokeVoidAsync("callWithId", new object[] { url, cartItem._productId });
+
+			StateHasChanged();
+		}
+	}
+	private void SelectItem()
+	{
+
+	}
 }

@@ -153,6 +153,20 @@ public class StockServices : IStockService
         }
         return productMs;
     }
+
+    public async Task<List<ProductDetailModel>> GetUpdatedDetailProducts()
+    {
+        List<Product>? products = await _productRepository.GetAll();
+        List<ProductDetailModel> productMs = new List<ProductDetailModel>();
+
+        if (products == null) return productMs;
+
+        foreach (var o in products)
+        {
+            productMs.Add(new ProductDetailModel(o));
+        }
+        return productMs;
+    }
     public async Task<List<VoucherDetailModel>> GetUpdatedVouchers(IVoucherRepository voucherRepository)
     {
         List<Voucher>? vouchers = await voucherRepository.GetAll();

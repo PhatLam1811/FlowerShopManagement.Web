@@ -7,10 +7,10 @@ public class Cart
     public string _id { get; private set; }
     [Required]
     public string customerId { get; set; }
-    public List<Product>? items { get; set; }
+    public List<CartItem>? items { get; set; }
     public long total { get; set; }
 
-    public Cart(string id = "", string customerId = "", List<Product>? items = null, long total = 0)
+    public Cart(string id = "", string customerId = "", List<CartItem>? items = null, long total = 0)
     {
         this._id = id;
         this.customerId = customerId;
@@ -23,7 +23,7 @@ public class Cart
     {
         this._id = Guid.NewGuid().ToString();
         this.customerId = customerId;
-        this.items = new List<Product>();
+        this.items = new List<CartItem>();
         this.total = 0;
     }
 }

@@ -22,14 +22,14 @@
 			</div>
 		</div>
 
-		<button class="btn btn-primary mt-2 w-100 button" @onclick="AddToCart">Add to Cart</button>
+		<button class="btn btn-primary mt-2 w-100 button" @onclick="AddToCart">@(isAddedToCart ? "Added" : "Add to Cart")</button>
 	</div>
 }
 
 @code {
 
 	[Parameter]
-	public ProductModel product { get; set; }
+	public ProductDetailModel product { get; set; }
 
 	[Parameter]
 	public string url { get; set; } = "";
@@ -43,16 +43,33 @@
 	[Parameter]
 	public bool isAuthenticated { get; set; }
 
+	[Parameter]
+	public bool isAddedToCart { get; set; } = false;
+
 	private async void AddToCart()
 	{
-		
+		if (isAuthenticated)
+		{
+			if (product.Id != null)
+			{
+				await js.InvokeVoidAsync("callWithId", new object[] { url, product.Id });
+				isAddedToCart = true;
+
+				StateHasChanged();
+			}
+		}
+		else
+		{
+			UriHelper.NavigateTo("Authentication/SignIn", true);
+		}
 	}
 
 	private async void AddToWishList()
 	{
 		if (isAuthenticated)
 		{
-			if (product.Id != null ) {
+			if (product.Id != null)
+			{
 				await js.InvokeVoidAsync("callWithId", new object[] { url1, product.Id });
 				product.IsLike = true;
 
