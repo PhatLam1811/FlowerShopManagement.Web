@@ -24,18 +24,25 @@
 		</div>
 	</div>
 }
-else {
+else
+{
 	<div class="mt-5 row">
 		<div class="col-6">
 			@if (Model.Items is not null && Model.Items.Count() > 0)
 			{
-				@foreach(var item in Model.Items) {
-					<component type="typeof(CartCardItem)" 
-						render-mode="ServerPrerendered"
-						param-cartItem=item
-						param-id=item._id
-						param-maxAmount=item.items.Amount
-						param-url=@Url.Action("RemoveOutOfCart","Cart",null,Context.Request.Scheme) />
+				@foreach (var item in Model.Items)
+				{
+					<component type="typeof(CartCardItem)"
+				   render-mode="ServerPrerendered"
+				   param-product=@item.items
+				   param-productId=@item._productId
+				   param-amount=@item.amount
+				   param-id=@item._id
+				   param-maxAmount=@item.items.Amount
+				   param-isSelected=@item.isSelected
+				   param-url=@Url.Action("RemoveOutOfCart","Cart",null,Context.Request.Scheme)
+				   param-url1=@Url.Action("UpdateAmount","Cart",null,Context.Request.Scheme)
+				   param-url2=@Url.Action("UpdateSelection","Cart",null,Context.Request.Scheme) />
 				}
 			}
 		</div>

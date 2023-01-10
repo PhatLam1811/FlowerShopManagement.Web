@@ -116,5 +116,27 @@ namespace FlowerShopManagement.Web.Controllers
 
             return NotFound();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateSelection(string id, bool isSelected)
+        {
+            string? userId;
+
+            if (this.HttpContext != null)
+            {
+                userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId != null)
+                {
+                    var result = await _customerService.UpdateSelection(userId, id, isSelected);
+                    if (result)
+                    {
+                        return RedirectToAction("Index", "Cart");
+                    }
+                }
+            }
+
+            return NotFound();
+        }
     }
 }

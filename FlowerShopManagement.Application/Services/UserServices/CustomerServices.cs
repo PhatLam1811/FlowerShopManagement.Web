@@ -168,9 +168,27 @@ public class CustomerService : UserService, ICustomerfService
         }
     }
 
-    public Task<bool> UpdateAmountOfItem(string userId, string productId, int amount)
+    public async Task<bool> UpdateAmountOfItem(string userId, string productId, int amount)
     {
-        throw new NotImplementedException();
+        var cart = await _cartRepository.GetByField("customerId", userId);
+        if (cart == null)
+        {
+            return false;
+        }
+
+        var products = cart.items;
+
+        if (products != null && products.Where(o => o._productId == productId).Count() > 0)
+        {
+            // cart's not empty
+            // update amount
+            // check if amount exceed to stock
+            products.Where(o => o._productId == productId).First().amount = amount;
+            cart.items = products;
+            bool result = await _cartRepository.UpdateById(cart._id, cart);
+            return result;
+        }
+        return false;
     }
 
     public async Task<bool> RemoveItemToCart(string userId, string productId)
@@ -183,7 +201,7 @@ public class CustomerService : UserService, ICustomerfService
 
         var products = cart.items;
 
-        if (products != null && products.Where(o => o._id == productId).Count() > 0)
+        if (products != null && products.Where(o => o._productId == productId).Count() > 0)
         {
             // cart's not empty
             // check if product is existed
@@ -196,5 +214,28 @@ public class CustomerService : UserService, ICustomerfService
         {
             return true;
         }
+    }
+
+    public async Task<bool> UpdateSelection(string userId, string cartItemId, bool isSelected)
+    {
+        var cart = await _cartRepository.GetByField("customerId", userId);
+        if (cart == null)
+        {
+            return false;
+        }
+
+        var products = cart.items;
+
+        if (products != null && products.Where(o => o._id == cartItemId).Count() > 0)
+        {
+            // cart's not empty
+            // update amount
+            // check if amount exceed to stock
+            products.Where(o => o._id == cartItemId).First().isSelected = isSelected;
+            cart.items = products;
+            bool result = await _cartRepository.UpdateById(cart._id, cart);
+            return result;
+        }
+        return false;
     }
 }

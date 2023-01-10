@@ -349,3 +349,43 @@ function callWithId(url, id) {
         }
     })
 }
+
+function updateAmount(url, id, amount) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: { id: id, amount: amount },
+        success: function (res) {
+            if (res.isValid) {
+                //$('#hihi').html(res.html);
+                //$.notify("Added to your wishlist", "success", { position: "right" });
+            }
+            else {
+                //$.notify("Error", "warn", { position: "right" });
+            }
+
+        }
+    })
+}
+
+function updateSelection(url, id, isSelected) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: { id: id, isSelected: isSelected },
+        success: function (res) {
+            if (res.isValid) {
+                //$('#hihi').html(res.html);
+                //$.notify("Added to your wishlist", "success", { position: "right" });
+            }
+            else {
+                //$.notify("Error", "warn", { position: "right" });
+            }
+
+        }
+    })
+}
+
+function showAlert(title) {
+    alert(title);
+}
