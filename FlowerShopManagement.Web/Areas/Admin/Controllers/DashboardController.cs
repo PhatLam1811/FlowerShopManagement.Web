@@ -1,12 +1,12 @@
 ﻿using ChartJSCore.Helpers;
 using ChartJSCore.Models;
-using FlowerShopManagement.Core.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Route("[area]/[controller]")]
     [Authorize(Policy = "StaffOnly")]
     public class DashboardController : Controller
     {

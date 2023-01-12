@@ -1,5 +1,4 @@
-﻿@using FlowerShopManagement.Web.Views.Shared.Components;
-
+﻿
 <div class="form-check mb-3">
 	<input class="form-check-input fs-4 me-2" type="checkbox" value="" id="defaultCheck1" @onclick="SelectItem">
 	<div class="card d-flex flex-row">
@@ -17,7 +16,7 @@
 			</div>
 			<div class="mt-1 d-flex justify-content-between align-items-end">
 				<Counter max=@maxAmount OnGetAmount="ChangeAmount"/>
-				<p class="icon-delete fs-5 m-0 icon-normal text-color-pink" @onclick="RemoveOutOfCart"></p>
+				<a class="icon-delete fs-5 m-0 icon-normal text-color-pink" @onclick="RemoveOutOfCart"></a>
 			</div>
 		</div>
 	</div>
@@ -43,12 +42,13 @@
 
 		//cartItem.Amount = count;
 		//cartItem.CartDetailTotalSum = cartItem.Product.ProductUnitPrice * count;
+		maxAmount = count;
 		StateHasChanged();
 
 		//await js.InvokeVoidAsync("updateAmount", new object[] { url1, cartItemId, count, cartItem.CartDetailTotalSum });
 		//await IsChanged.InvokeAsync(new MyArgs() { myInt = count, myOldInt = oldAmount, myBool = cartItem.IsChecked, myFloat = cartItem.CartDetailTotalSum, myOldFloat = oldPrice });
 	}
-	private async void RemoveOutOfCart()
+	public async void RemoveOutOfCart()
 	{
 		if (cartItem._productId != null)
 		{
