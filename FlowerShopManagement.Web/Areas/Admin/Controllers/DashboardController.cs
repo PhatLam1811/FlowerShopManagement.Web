@@ -22,15 +22,10 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         {
             ViewBag.Dashboard = true;
 
-            //var beginDate = DateTime.Today;
-            //var endDate = DateTime.Today.AddDays(1);
+            var beginDate = new DateTime(DateTime.Now.Year, 01, 01);
+            var endDate = beginDate.AddYears(1);
 
-            var beginDate = new DateTime(2022, 01, 01);
-            var endDate = new DateTime(2023, 01, 14);
-
-            _reportService.GetTotalSum(beginDate, endDate, "$month", Core.Enums.Status.Paying);
-            
-            var dataSet = new List<double?>();
+            var dataSet = _reportService.GetTotalRevenue(beginDate, endDate);
 
             Chart verticalBarChart = GenerateVerticalBarChart(dataSet);
 
@@ -57,7 +52,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             int index = 0;
 
-            for (int i = 0; i < 24; i++)
+            for (int i = 0; i < dataSet.Count; i++)
             {
                 data.Labels.Add(i.ToString());
                 dataValues.Add(0);

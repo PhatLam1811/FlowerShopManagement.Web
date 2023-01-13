@@ -1,8 +1,10 @@
 ﻿using FlowerShopManagement.Application.Interfaces.MongoDB;
+using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
 namespace FlowerShopManagement.Infrustructure.MongoDB.Implements;
@@ -92,7 +94,7 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
         }
     }
 
-    public void TotalCount(DateTime beginDate, DateTime endDate, string dateFormat = "$hour", Status? status = Status.Purchased)
+    public void TotalCount(DateTime beginDate, DateTime endDate, string criteria = "$hour", Status? status = Status.Purchased)
     {
         PipelineDefinition<Order, BsonDocument> pipeline = new BsonDocument[]
         {
@@ -112,8 +114,8 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
             new BsonDocument
             {
                 { "_id", 
-                new BsonDocument(dateFormat, "$_date") },
-                { "totalCount", 
+                new BsonDocument(criteria, "$_date") },
+                { "countResult", 
                 new BsonDocument("$count", new BsonDocument()) }
             })
         };
@@ -128,7 +130,7 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
         }
     }
 
-    public void TotalSum(DateTime beginDate, DateTime endDate, string dateFormat = "$hour", Status status = Status.Purchased)
+    public List<SumAggregate> TotalSum(DateTime beginDate, DateTime endDate, string criteria = "$hour", Status status = Status.Purchased)
     {
         PipelineDefinition<Order, BsonDocument> pipeline = new BsonDocument[]
         {
@@ -147,15 +149,25 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
             new BsonDocument
             {
                 { "_id", 
-                new BsonDocument(dateFormat, "$_date") },
-                { "totalSum", 
+                new BsonDocument(criteria, "$_date") },
+                { "revenue", 
                 new BsonDocument("$sum", "$_total") }
             })
         };
 
         try
         {
-            var result = _mongoDbCollection.Aggregate(pipeline).ToList();
+            var bsonList = _mongoDbCollection.Aggregate(pipeline).ToList();
+
+            var result = new List<SumAggregate>();
+
+            foreach (var bsonDoc in bsonList)
+            {
+                var model = BsonSerializer.Deserialize<SumAggregate>(bsonDoc);
+                result.Add(model);
+            }
+
+            return result;
         }
         catch (Exception e)
         {
