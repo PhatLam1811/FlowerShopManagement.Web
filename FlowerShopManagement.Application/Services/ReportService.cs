@@ -16,6 +16,17 @@ public class ReportService : IReportService
     {
         _orderRepository = orderRepository;
     }
+    public List<ProfitableProductModel> GetProfitableProducts(DateTime beginDate, DateTime endDate, int limit = 5)
+    {
+        try
+        {
+            return _orderRepository.GetProfitableProducts(beginDate, endDate, limit);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
 
     public List<ValuableCustomerModel> GetValuableCustomers(DateTime beginDate, DateTime endDate, int limit = 5)
     {

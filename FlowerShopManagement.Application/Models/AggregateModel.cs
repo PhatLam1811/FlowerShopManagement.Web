@@ -16,3 +16,9 @@ public class ValuableCustomerModel
     public string _id = string.Empty;
     public int numberOfOrders;
 }
+
+public class ProfitableProductModel
+{
+    public string _id = string.Empty;
+    public int soldNumber;
+}

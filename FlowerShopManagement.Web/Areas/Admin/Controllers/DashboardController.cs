@@ -32,6 +32,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             ViewData["VerticalBarChart"] = verticalBarChart;
             ViewData["WaitingOrder"] = _reportService.GetOrdersCount(beginDate, endDate, Core.Enums.Status.Paying);
             ViewData["ValuableCustomers"] = _reportService.GetValuableCustomers(new DateTime(2022, 01, 01), DateTime.Today);
+            ViewData["ProfitableProducts"] = _reportService.GetProfitableProducts(new DateTime(2022, 01, 01), DateTime.Today);
 
             return View();
         }

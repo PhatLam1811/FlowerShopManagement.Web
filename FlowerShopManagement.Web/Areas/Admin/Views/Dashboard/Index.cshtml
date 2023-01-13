@@ -77,16 +77,30 @@
 			</thead>
 			<tbody>
 				@{
-					var valuableCustomers = ViewData["ValuableCustomers"] as List<ValuableCustomerModel>;
+					//var valuableCustomers = ViewData["ValuableCustomers"] as List<ValuableCustomerModel>;
+					//int i = 1;
+
+					//if (valuableCustomers != null)
+					//	foreach (var record in valuableCustomers)
+					//	{
+					//		<tr class="align-middle">
+					//			<td>@i</td>
+					//			<td>@record._id</td>
+					//			<td class="text-center">@record.numberOfOrders</td>
+					//		</tr>
+					//		i++;
+					//	}
+
+					var profitableProducts = ViewData["ProfitableProducts"] as List<ProfitableProductModel>;
 					int i = 1;
 
-					if (valuableCustomers != null)
-						foreach (var record in valuableCustomers)
+					if (profitableProducts != null)
+						foreach (var record in profitableProducts)
 						{
 							<tr class="align-middle">
 								<td>@i</td>
 								<td>@record._id</td>
-								<td class="text-center">@record.numberOfOrders</td>
+								<td class="text-center">@record.soldNumber</td>
 							</tr>
 							i++;
 						}
