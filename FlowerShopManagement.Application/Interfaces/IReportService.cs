@@ -1,10 +1,14 @@
-﻿using FlowerShopManagement.Core.Enums;
+﻿using FlowerShopManagement.Application.Models;
+using FlowerShopManagement.Core.Enums;
 
 namespace FlowerShopManagement.Application.Interfaces;
 
 public interface IReportService
 {
     // Waiting orders count
+
+    // Most valuable customers of day, month, year
+    public List<ValuableCustomerModel> GetValuableCustomers(DateTime beginDate, DateTime endDate, int limit = 5);
 
     // Total sold order count of day, month, year
     public int GetOrdersCount(DateTime beginDate, DateTime endDate, Status status = Status.Purchased);
@@ -13,8 +17,6 @@ public interface IReportService
     public List<double?> GetTotalRevenue(DateTime beginDate, DateTime endDate, Status status = Status.Purchased);
 
     // Low on stock products count
-
-    // Potential customer
     
     // Profit of day, month, year
 

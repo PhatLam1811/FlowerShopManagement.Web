@@ -57,7 +57,7 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
         }
     }
 
-    public void GetPotentialCustomers(DateTime beginDate, DateTime endDate, int limit = 5)
+    public List<ValuableCustomerModel> GetValuableCustomers(DateTime beginDate, DateTime endDate, int limit = 5)
     {
         PipelineDefinition<Order, BsonDocument> pipeline = new BsonDocument[]
         {
@@ -76,18 +76,18 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
             new BsonDocument
             {
                 { "_id", "$_customerName" },
-                { "totalCount", 
+                { "numberOfOrders", 
                 new BsonDocument("$count", 
                 new BsonDocument()) }
             }),
             new BsonDocument("$sort",
-            new BsonDocument("totalCount", -1)),
+            new BsonDocument("numberOfOrders", -1)),
             new BsonDocument("$limit", limit)
         };
 
         try
         {
-            var result = _mongoDbCollection.Aggregate(pipeline).ToList();
+            return Aggregate<ValuableCustomerModel>(pipeline);
         }
         catch (Exception e)
         {
@@ -95,7 +95,7 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
         }
     }
 
-    public List<OrdersCountModel> GetOrdersCount(DateTime beginDate, DateTime endDate, Status? status = Status.Purchased)
+    public int GetOrdersCount(DateTime beginDate, DateTime endDate, Status? status = Status.Purchased)
     {
         PipelineDefinition<Order, BsonDocument> pipeline = new BsonDocument[]
         {
@@ -116,7 +116,9 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
 
         try
         {
-            return Aggregate<OrdersCountModel>(pipeline);
+            var aggregate = Aggregate<OrdersCountModel>(pipeline).First();
+
+            return aggregate.numberOfOrders;
         }
         catch (Exception e)
         {

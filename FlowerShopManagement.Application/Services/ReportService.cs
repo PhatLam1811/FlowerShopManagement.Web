@@ -1,5 +1,6 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Interfaces.MongoDB;
+using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Enums;
 
@@ -16,15 +17,24 @@ public class ReportService : IReportService
         _orderRepository = orderRepository;
     }
 
+    public List<ValuableCustomerModel> GetValuableCustomers(DateTime beginDate, DateTime endDate, int limit = 5)
+    {
+        try
+        {
+            return _orderRepository.GetValuableCustomers(beginDate, endDate, limit);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
     public int GetOrdersCount(DateTime beginDate, DateTime endDate, Status status = Status.Purchased)
     {
         try
         {
             // Get total number of orders per date/month/year
-            var result = _orderRepository.GetOrdersCount(beginDate, endDate, status);
-
-            return result.First().numberOfOrders;
-            
+            return _orderRepository.GetOrdersCount(beginDate, endDate, status);            
         }
         catch (Exception e)
         {
