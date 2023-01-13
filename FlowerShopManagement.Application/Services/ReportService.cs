@@ -1,19 +1,28 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
+using FlowerShopManagement.Application.Interfaces.MongoDB;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
+using FlowerShopManagement.Core.Enums;
 
 namespace FlowerShopManagement.Application.Services;
 
 public class ReportService : IReportService
 {
-    private readonly IProductRepository _productRepository;
+    private readonly IOrderRepository _orderRepository;
 
-    public ReportService(IProductRepository productRepository)
+    public ReportService(IProductRepository productRepository, IOrderRepository orderRepository)
     {
-        _productRepository = productRepository;
+        _orderRepository = orderRepository;
     }
 
-    public Task<double> GetTotalSale()
+    public void GetTotalSum(DateTime beginDate, DateTime endDate, string dateFormat, Status? status)
     {
-        throw new NotImplementedException();
+        try
+        {
+            _orderRepository.PotentialCustomer(beginDate, endDate);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 }

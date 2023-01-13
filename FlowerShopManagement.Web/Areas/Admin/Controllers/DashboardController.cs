@@ -1,5 +1,6 @@
 ﻿using ChartJSCore.Helpers;
 using ChartJSCore.Models;
+using FlowerShopManagement.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,18 +11,35 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
     [Authorize(Policy = "StaffOnly")]
     public class DashboardController : Controller
     {
+        private readonly IReportService _reportService;
+
+        public DashboardController(IReportService reportService)
+        {
+            _reportService = reportService;
+        }
+
         public IActionResult Index()
         {
             ViewBag.Dashboard = true;
 
-            Chart verticalBarChart = GenerateVerticalBarChart();
+            //var beginDate = DateTime.Today;
+            //var endDate = DateTime.Today.AddDays(1);
+
+            var beginDate = new DateTime(2022, 01, 01);
+            var endDate = new DateTime(2023, 01, 14);
+
+            _reportService.GetTotalSum(beginDate, endDate, "$month", Core.Enums.Status.Purchased);
+            
+            var dataSet = new List<double?>();
+
+            Chart verticalBarChart = GenerateVerticalBarChart(dataSet);
 
             ViewData["VerticalBarChart"] = verticalBarChart;
 
             return View();
         }
 
-        private Chart GenerateVerticalBarChart()
+        private Chart GenerateVerticalBarChart(List<double?> dataSet)
         {
             Chart chart = new Chart();
             chart.Type = Enums.ChartType.Bar;
@@ -39,9 +57,9 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             int index = 0;
 
-            for (int i = 1; i <= 7; i++)
+            for (int i = 0; i < 24; i++)
             {
-                data.Labels.Add("Day" + i.ToString());
+                data.Labels.Add(i.ToString());
                 dataValues.Add(0);
                 colors.Add(ChartColor.FromRgba(102, 152, 250, 1));
                 borderColors.Add(ChartColor.FromRgb(102, 152, 250));
@@ -53,7 +71,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             var dataset = new BarDataset
             {
                 Label = "Numbers of order",
-                Data = new List<double?>() { 0, 40, 20, 36, 50, 23, 100 },
+                Data = dataSet,
                 BackgroundColor = colors,
                 BorderColor = borderColors,
                 BorderWidth = new List<int> { 4 },
