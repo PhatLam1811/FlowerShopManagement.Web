@@ -1,5 +1,4 @@
-﻿using FlowerShopManagement.Application.Interfaces.MongoDB;
-using FlowerShopManagement.Application.MongoDB.Interfaces;
+﻿using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
@@ -31,6 +30,29 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         var indexOption = new CreateIndexOptions<TEntity>() { Unique = true };
         var indexModel = new CreateIndexModel<TEntity>(indexDefine, indexOption);
         return _mongoDbCollection.Indexes.CreateOne(indexModel);
+    }
+
+    // Aggregations
+    protected virtual List<T> Aggregate<T>(PipelineDefinition<TEntity, BsonDocument> pipeline)
+    {
+        try
+        {
+            var bsonList = _mongoDbCollection.Aggregate(pipeline).ToList();
+
+            var result = new List<T>();
+
+            foreach (var bsonDoc in bsonList)
+            {
+                var model = BsonSerializer.Deserialize<T>(bsonDoc);
+                result.Add(model);
+            }
+
+            return result;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     // CRUD operations
@@ -118,8 +140,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
         catch (Exception e)
         {
-            // throw new Exception(e.Message);
-            return false;
+            throw new Exception(e.Message);
         }
     }
 
@@ -132,8 +153,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
         catch (Exception e)
         {
-            // throw new Exception(e.Message);
-            return false;
+            throw new Exception(e.Message);
         }
     }
 
@@ -146,8 +166,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
         catch (Exception e)
         {
-            // throw new Exception(e.Message);
-            return false;
+            throw new Exception(e.Message);
         }
     }
 
@@ -168,6 +187,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     //}
 
     // Override disposable function
+
     public void Dispose() => GC.SuppressFinalize(this);
 }
 

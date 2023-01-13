@@ -16,8 +16,25 @@ public class ReportService : IReportService
         _orderRepository = orderRepository;
     }
 
+    public int GetOrdersCount(DateTime beginDate, DateTime endDate, Status status = Status.Purchased)
+    {
+        try
+        {
+            // Get total number of orders per date/month/year
+            var result = _orderRepository.GetOrdersCount(beginDate, endDate, status);
+
+            return result.First().numberOfOrders;
+            
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
     public List<double?> GetTotalRevenue(DateTime beginDate, DateTime endDate, Status status = Status.Purchased)
     {
+        var option = -1;
         var initValue = 0;
         var dataSize = 0;
         var criteria = string.Empty;
@@ -28,6 +45,7 @@ public class ReportService : IReportService
         {
             dataSize = 24; // total hours per day
             criteria = "$hour"; // group orders by hours
+            option = 0;
         }
 
         // Monthly
@@ -35,6 +53,7 @@ public class ReportService : IReportService
         {
             dataSize = DateTime.DaysInMonth(beginDate.Year, beginDate.Month);
             criteria = "$dayOfMonth"; // group orders by days
+            option = 1;
         }
 
         // Yearly
@@ -42,12 +61,13 @@ public class ReportService : IReportService
         {
             dataSize = 12; // total months per year
             criteria = "$month"; // group orders by months
+            option = 2;
         }
 
         try
         {
             // sum up all orders "_total" per date/month/year
-            var result = _orderRepository.TotalSum(beginDate, endDate, criteria, status);
+            var result = _orderRepository.GetTotalRevenue(beginDate, endDate, criteria, status);
 
             // generate data set
             var dataSet = Enumerable.Repeat<double?>(initValue, dataSize).ToList();
@@ -55,7 +75,7 @@ public class ReportService : IReportService
             foreach (var record in result)
             {
                 // local time offset
-                if (daysBetween.Days <= 1)
+                if (option == 0)
                 {
                     record._id = record._id + 7;
                     if (record._id >= 24)

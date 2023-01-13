@@ -22,14 +22,15 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         {
             ViewBag.Dashboard = true;
 
-            var beginDate = new DateTime(DateTime.Now.Year, 01, 01);
-            var endDate = beginDate.AddYears(1);
+            var beginDate = DateTime.Today;
+            var endDate = beginDate.AddDays(1);
 
             var dataSet = _reportService.GetTotalRevenue(beginDate, endDate);
 
             Chart verticalBarChart = GenerateVerticalBarChart(dataSet);
 
             ViewData["VerticalBarChart"] = verticalBarChart;
+            ViewData["WaitingOrder"] = _reportService.GetOrdersCount(beginDate, endDate, Core.Enums.Status.Paying);
 
             return View();
         }

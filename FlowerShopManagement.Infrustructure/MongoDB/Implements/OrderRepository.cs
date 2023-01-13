@@ -6,6 +6,7 @@ using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
+using Org.BouncyCastle.Crypto.Modes.Gcm;
 
 namespace FlowerShopManagement.Infrustructure.MongoDB.Implements;
 
@@ -13,7 +14,7 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
 {
     public OrderRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 
-    public void PotentialProduct(DateTime beginDate, DateTime endDate, int limit = 5)
+    public void GetPotentialProducts(DateTime beginDate, DateTime endDate, int limit = 5)
     {
         PipelineDefinition<Order, BsonDocument> pipeline = new BsonDocument[]
         {
@@ -56,7 +57,7 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
         }
     }
 
-    public void PotentialCustomer(DateTime beginDate, DateTime endDate, int limit = 5)
+    public void GetPotentialCustomers(DateTime beginDate, DateTime endDate, int limit = 5)
     {
         PipelineDefinition<Order, BsonDocument> pipeline = new BsonDocument[]
         {
@@ -94,7 +95,7 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
         }
     }
 
-    public void TotalCount(DateTime beginDate, DateTime endDate, string criteria = "$hour", Status? status = Status.Purchased)
+    public List<OrdersCountModel> GetOrdersCount(DateTime beginDate, DateTime endDate, Status? status = Status.Purchased)
     {
         PipelineDefinition<Order, BsonDocument> pipeline = new BsonDocument[]
         {
@@ -110,19 +111,12 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
                     { "$lte", endDate }
                 }
             }}),
-            new BsonDocument("$group",
-            new BsonDocument
-            {
-                { "_id", 
-                new BsonDocument(criteria, "$_date") },
-                { "countResult", 
-                new BsonDocument("$count", new BsonDocument()) }
-            })
+            new BsonDocument("$count", "numberOfOrders")
         };
 
         try
         {
-            var result = _mongoDbCollection.Aggregate(pipeline).ToList();
+            return Aggregate<OrdersCountModel>(pipeline);
         }
         catch (Exception e)
         {
@@ -130,7 +124,7 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
         }
     }
 
-    public List<SumAggregate> TotalSum(DateTime beginDate, DateTime endDate, string criteria = "$hour", Status status = Status.Purchased)
+    public List<RevenueModel> GetTotalRevenue(DateTime beginDate, DateTime endDate, string criteria = "$hour", Status status = Status.Purchased)
     {
         PipelineDefinition<Order, BsonDocument> pipeline = new BsonDocument[]
         {
@@ -157,17 +151,7 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
 
         try
         {
-            var bsonList = _mongoDbCollection.Aggregate(pipeline).ToList();
-
-            var result = new List<SumAggregate>();
-
-            foreach (var bsonDoc in bsonList)
-            {
-                var model = BsonSerializer.Deserialize<SumAggregate>(bsonDoc);
-                result.Add(model);
-            }
-
-            return result;
+            return Aggregate<RevenueModel>(pipeline);
         }
         catch (Exception e)
         {

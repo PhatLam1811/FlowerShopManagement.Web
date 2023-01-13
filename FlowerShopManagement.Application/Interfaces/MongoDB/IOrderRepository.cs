@@ -7,8 +7,8 @@ namespace FlowerShopManagement.Application.Interfaces.MongoDB;
 
 public interface IOrderRepository : IBaseRepository<Order>
 {
-    public void PotentialProduct(DateTime beginDate, DateTime endDate, int limit = 5);
-    public void PotentialCustomer(DateTime beginDate, DateTime endDate, int limit = 5);
-    public void TotalCount(DateTime beginDate, DateTime endDate, string criteria = "$hour", Status? status = Status.Purchased);
-    public List<SumAggregate> TotalSum(DateTime beginDate, DateTime endDate, string criteria = "$hour", Status status = Status.Purchased);
+    public void GetPotentialProducts(DateTime beginDate, DateTime endDate, int limit = 5);
+    public void GetPotentialCustomers(DateTime beginDate, DateTime endDate, int limit = 5);
+    public List<OrdersCountModel> GetOrdersCount(DateTime beginDate, DateTime endDate, Status? status = Status.Purchased);
+    public List<RevenueModel> GetTotalRevenue(DateTime beginDate, DateTime endDate, string criteria = "$hour", Status status = Status.Purchased);
 }
