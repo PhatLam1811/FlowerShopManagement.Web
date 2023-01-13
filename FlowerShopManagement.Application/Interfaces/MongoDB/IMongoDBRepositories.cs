@@ -32,11 +32,6 @@ public interface IUserRepository : IBaseRepository<User>
 
 public interface ICartRepository : IBaseRepository<Cart> { }
 
-public interface IOrderRepository : IBaseRepository<Order> 
-{
-    public double TotalSale(DateTime beginDate, DateTime endDate);
-}
-
 public interface ICategoryRepository : IBaseRepository<Category> { }
 
 public interface IMaterialRepository : IBaseRepository<Material> { }
@@ -47,6 +42,7 @@ public interface IProductRepository : IBaseRepository<Product>
 {
     public Task<List<Product>?> GetAllLowOnStock(int minimumAmount);
     public Task<List<Product>?> GetProductsById(List<string?> ids);
+    public int GetLowOnStockCount();
 }
 
 public interface IVoucherRepository : IBaseRepository<Voucher> { }

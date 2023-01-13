@@ -1,8 +1,10 @@
-﻿using FlowerShopManagement.Application.MongoDB.Interfaces;
+﻿using FlowerShopManagement.Application.Interfaces.MongoDB;
+using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
 namespace FlowerShopManagement.Infrustructure.MongoDB.Implements;
@@ -210,38 +212,6 @@ public class MaterialRepository : BaseRepository<Material>, IMaterialRepository
 {
     public MaterialRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 }
-public class OrderRepository : BaseRepository<Order>, IOrderRepository
-{
-    public OrderRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
-
-    public double TotalSale(DateTime beginDate, DateTime endDate)
-    {
-        PipelineDefinition<Order, BsonDocument> pipeline = new BsonDocument[]
-            {
-                new BsonDocument("$match", new BsonDocument
-                    {
-                        {"_date", new BsonDocument {{ "$gte", beginDate }, { "$lte", endDate }}},
-                        {"_status", Status.Purchased}
-                    }),
-                new BsonDocument("$group", new BsonDocument
-                    {
-                        {"_id", new BsonDocument("$dayOfYear", "$_date")},
-                        {"Total", new BsonDocument("$sum", "$_total")}
-                    }),
-            };
-       
-        try
-        {
-            var result = _mongoDbCollection.Aggregate(pipeline).ToList();
-
-            return result[0]["Total"].ToDouble();
-        }
-        catch (Exception e)
-        {
-            throw new Exception(e.Message);
-        }
-    }
-}
 
 public class SupplierRepository : BaseRepository<Supplier>, ISupplierRepository
 {
@@ -257,6 +227,28 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
         var filter = Builders<Product>.Filter.Lte("_amount", minimumAmount);
         var result = await _mongoDbCollection.FindAsync(filter);
         return result.ToList();
+    }
+
+    public int GetLowOnStockCount()
+    {
+        PipelineDefinition<Product, BsonDocument> pipeline = new BsonDocument[]
+        {
+            new BsonDocument("$match",
+            new BsonDocument("_amount",
+            new BsonDocument("$lte", 20))),
+            new BsonDocument("$count", "LowOnStocksAmount")
+        };
+
+        try
+        {
+            var result = _mongoDbCollection.Aggregate(pipeline);
+
+            return 1;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     public async Task<List<Product>?> GetProductsById(List<string?> ids)

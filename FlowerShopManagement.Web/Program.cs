@@ -14,6 +14,7 @@ using MongoDB.Bson.Serialization.Serializers;
 using IEmailService = FlowerShopManagement.Application.Interfaces.IEmailService;
 using FlowerShopManagement.Core.Enums;
 using System.Security.Claims;
+using FlowerShopManagement.Application.Interfaces.MongoDB;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -90,6 +91,7 @@ BsonClassMap.RegisterClassMap<Order>(cm =>
 // Add application logic services
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<ISaleService, SaleService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddScoped<IImportService, ImportService>();
 builder.Services.AddScoped<IStockService, StockServices>();
 builder.Services.AddScoped<IStaffService, StaffService>();
