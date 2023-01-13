@@ -33,17 +33,17 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
     }
 
     // Aggregations
-    protected virtual List<T> Aggregate<T>(PipelineDefinition<TEntity, BsonDocument> pipeline)
+    protected virtual List<TAggregate> Aggregate<TAggregate>(PipelineDefinition<TEntity, BsonDocument> pipeline)
     {
         try
         {
             var bsonList = _mongoDbCollection.Aggregate(pipeline).ToList();
 
-            var result = new List<T>();
+            var result = new List<TAggregate>();
 
             foreach (var bsonDoc in bsonList)
             {
-                var model = BsonSerializer.Deserialize<T>(bsonDoc);
+                var model = BsonSerializer.Deserialize<TAggregate>(bsonDoc);
                 result.Add(model);
             }
 

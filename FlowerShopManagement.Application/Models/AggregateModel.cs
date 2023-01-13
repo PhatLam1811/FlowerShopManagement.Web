@@ -8,6 +8,11 @@ public class RevenueModel
 
 public class OrdersCountModel
 {
-    public int _id;
+    public int numberOfOrders;
+}
+
+public class ValuableCustomerModel
+{
+    public string _id = string.Empty;
     public int numberOfOrders;
 }
