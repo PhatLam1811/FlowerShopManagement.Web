@@ -14,7 +14,7 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
 {
     public OrderRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 
-    public void GetPotentialProducts(DateTime beginDate, DateTime endDate, int limit = 5)
+    public List<ProfitableProductModel> GetProfitableProducts(DateTime beginDate, DateTime endDate, int limit = 5)
     {
         PipelineDefinition<Order, BsonDocument> pipeline = new BsonDocument[]
         {
@@ -39,17 +39,17 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
             new BsonDocument
             {
                 { "_id", "$_products._name" },
-                { "totalCount",
+                { "soldNumber",
                 new BsonDocument("$sum", "$_products._amount") }
             }),
             new BsonDocument("$sort",
-            new BsonDocument("totalCount", -1)),
+            new BsonDocument("soldNumber", -1)),
             new BsonDocument("$limit", limit)
         };
 
         try
         {
-            var result = _mongoDbCollection.Aggregate(pipeline).ToList();
+            return Aggregate<ProfitableProductModel>(pipeline);
         }
         catch (Exception e)
         {
