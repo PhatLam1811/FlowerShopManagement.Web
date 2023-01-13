@@ -28,7 +28,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             var beginDate = new DateTime(2022, 01, 01);
             var endDate = new DateTime(2023, 01, 14);
 
-            _reportService.GetTotalSum(beginDate, endDate, "$month", Core.Enums.Status.Purchased);
+            _reportService.GetTotalSum(beginDate, endDate, "$month", Core.Enums.Status.Paying);
             
             var dataSet = new List<double?>();
 

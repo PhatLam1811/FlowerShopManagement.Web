@@ -18,7 +18,7 @@ public class ReportService : IReportService
     {
         try
         {
-            _orderRepository.PotentialCustomer(beginDate, endDate);
+            _orderRepository.TotalCount(beginDate, endDate, dateFormat, status);
         }
         catch (Exception e)
         {
