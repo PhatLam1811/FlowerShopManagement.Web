@@ -11,11 +11,26 @@ namespace FlowerShopManagement.Application.Services;
 public class ReportService : IReportService
 {
     private readonly IOrderRepository _orderRepository;
+    private readonly IProductRepository _productRepository;
 
     public ReportService(IProductRepository productRepository, IOrderRepository orderRepository)
     {
         _orderRepository = orderRepository;
+        _productRepository = productRepository;
     }
+
+    public int GetLowOnStocksCount(int minimumAmount = 20)
+    {
+        try
+        {
+            return _productRepository.GetLowOnStockCount(minimumAmount);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
     public List<ProfitableProductModel> GetProfitableProducts(DateTime beginDate, DateTime endDate, int limit = 5)
     {
         try

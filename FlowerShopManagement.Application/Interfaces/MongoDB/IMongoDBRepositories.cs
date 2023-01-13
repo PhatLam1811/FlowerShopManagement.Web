@@ -42,7 +42,7 @@ public interface IProductRepository : IBaseRepository<Product>
 {
     public Task<List<Product>?> GetAllLowOnStock(int minimumAmount);
     public Task<List<Product>?> GetProductsById(List<string?> ids);
-    public int GetLowOnStockCount();
+    public int GetLowOnStockCount(int minimumAmount);
 }
 
 public interface IVoucherRepository : IBaseRepository<Voucher> { }

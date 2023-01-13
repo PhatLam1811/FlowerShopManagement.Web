@@ -238,48 +238,6 @@ public class SupplierRepository : BaseRepository<Supplier>, ISupplierRepository
     public SupplierRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 }
 
-public class ProductRepository : BaseRepository<Product>, IProductRepository
-{
-    public ProductRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
-
-    public async Task<List<Product>?> GetAllLowOnStock(int minimumAmount)
-    {
-        var filter = Builders<Product>.Filter.Lte("_amount", minimumAmount);
-        var result = await _mongoDbCollection.FindAsync(filter);
-        return result.ToList();
-    }
-
-    public int GetLowOnStockCount()
-    {
-        PipelineDefinition<Product, BsonDocument> pipeline = new BsonDocument[]
-        {
-            new BsonDocument("$match",
-            new BsonDocument("_amount",
-            new BsonDocument("$lte", 20))),
-            new BsonDocument("$count", "LowOnStocksAmount")
-        };
-
-        try
-        {
-            var result = _mongoDbCollection.Aggregate(pipeline);
-
-            return 1;
-        }
-        catch (Exception e)
-        {
-            throw new Exception(e.Message);
-        }
-    }
-
-    public async Task<List<Product>?> GetProductsById(List<string?> ids)
-    {
-        var filter = Builders<Product>.Filter.Where(p => p._id != null && ids.Contains(p._id));
-        var result = await _mongoDbCollection.FindAsync(filter);
-        return result.ToList();
-    }
-
-}
-
 public class VoucherRepository : BaseRepository<Voucher>, IVoucherRepository
 {
     public VoucherRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
