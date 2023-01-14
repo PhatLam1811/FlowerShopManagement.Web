@@ -9,10 +9,11 @@ function showContent2(url, title) {
         url: url,
         data: {},
         success: function (res) {
+            alert(res);
             $("#form-modal .modal-body").html(res);
             $("#form-modal .modal-title").html(title);
             $("#form-modal").modal('show');
-            //$.notify("I'm over here !");
+            
             //$.notify("Access granted", "success", { position: "right" });
 
         }
@@ -33,6 +34,28 @@ function showPartialView(url) {
             alert(err);
         }
     })
+}
+
+function showPartialView1(form) {
+    var obj = new FormData(form);
+    $.ajax({
+        type: "POST",
+        url: form.action,
+        data: obj,
+        contentType: false,
+        processData: false,
+        success: function (res) {
+            
+            $("#pw").html(res);
+            console.log(res);
+
+        },
+        error: function (err) {
+            console.log(err);
+            alert(err);
+        }
+    })
+    return false;
 }
 
 function OpenPostDialog(url, title) {
@@ -398,4 +421,19 @@ function updateSelection(url, id, isSelected) {
 
 function showAlert(title) {
     alert(title);
+}
+}
+
+function removeAddress(url, name, phone, address) {
+    debugger;
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: { name: name,phone: phone, address: address },
+        success: function (res) {
+            $("#pw").html(res);
+            console.log(res);
+
+        }
+    })
 }

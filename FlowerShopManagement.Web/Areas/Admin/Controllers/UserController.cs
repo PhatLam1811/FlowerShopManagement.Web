@@ -47,8 +47,8 @@ public class UserController : Controller
         {
             ViewData["Role"] = Enum.GetNames(typeof(Role)).Where(s => s != "Admin" && s != "Passenger").ToList();
             var users = await _staffService.GetUsersAsync() ?? new List<UserModel>();
-            int pagesize = 2;
-            return View(PaginatedList<UserModel>.CreateAsync(users ?? new List<UserModel>(), 1, pagesize));
+            int pageSize = 6;
+            return View(PaginatedList<UserModel>.CreateAsync(users ?? new List<UserModel>(), 1, pageSize));
 
         }
         catch
@@ -111,7 +111,7 @@ public class UserController : Controller
                 ViewData["CurrentFilter"] = searchString;
             }
 
-            int pageSize = 2;
+            int pageSize = 8;
             PaginatedList<UserModel> objs = PaginatedList<UserModel>.CreateAsync(users, pageNumber ?? 1, pageSize);
             return Json(new
             {
@@ -223,10 +223,9 @@ public class UserController : Controller
         if (string.IsNullOrEmpty(s)) return NoContent();
         var editUser = JsonConvert.DeserializeObject<UserModel>(s);
         if (editUser == null) return NoContent();
-        await model.ChangesTracking(editUser, _webHostEnvironment.WebRootPath);
         try
         {
-            var result = await _adminService.EditUserAsync(editUser);
+            var result = await _adminService.EditUserAsync(model);
             if (result == false) return NotFound();
             return RedirectToAction("Index"); // return the List of Models or attach it to the view model
 

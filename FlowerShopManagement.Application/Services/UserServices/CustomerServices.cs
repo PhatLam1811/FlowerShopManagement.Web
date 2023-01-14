@@ -3,6 +3,7 @@ using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
+using Microsoft.AspNetCore.Hosting;
 
 namespace FlowerShopManagement.Application.Services.UserServices;
 
@@ -12,14 +13,18 @@ public class CustomerService : UserService, ICustomerfService
     ICartRepository _cartRepository;
     IProductRepository _productRepository;
     private readonly IAddressRepository _addressRepository;
+    private readonly IWebHostEnvironment _webHostEnvironment;
 
-    public CustomerService(IUserRepository userRepository, ICartRepository cartRepository, IAddressRepository addressRepository, IProductRepository productRepository)
+
+    public CustomerService(IUserRepository userRepository, ICartRepository cartRepository, 
+        IAddressRepository addressRepository, IProductRepository productRepository, IWebHostEnvironment webHostEnvironment)
         : base(userRepository, cartRepository)
     {
         _userRepository = userRepository;
         _cartRepository = cartRepository;
         _addressRepository = addressRepository;
         _productRepository = productRepository;
+        _webHostEnvironment = webHostEnvironment;
     }
 
     public async Task<List<ProductModel>?> GetFavProductsAsync(string id, IAuthService authService, IProductRepository productRepository)
@@ -238,4 +243,36 @@ public class CustomerService : UserService, ICustomerfService
         }
         return false;
     }
+
+	public async Task<UserBasicInfoModel> GetUseBasicInfoById(string id)
+	{
+		var user =await _userRepository.GetById(id);
+        if (user == null) { return new UserBasicInfoModel(); }
+        var userBasicModel = new UserBasicInfoModel(user);
+        return userBasicModel;
+
+	}
+
+	public async Task<bool> EditInfoAsync(UserBasicInfoModel userModel)
+	{
+
+		try
+		{
+			var editUSer = await _userRepository.GetById(userModel._id);
+            // Model to entity
+            if (editUSer == null) return false;
+			await userModel.ChangesTracking(editUSer, _webHostEnvironment.WebRootPath);
+
+			// Set last modified date
+			editUSer.lastModified = DateTime.Now;
+
+			// Update database
+			return await _userRepository.UpdateById(editUSer._id, editUSer);
+		}
+		catch
+		{
+			// Failed to edit user's info
+			return false;
+		}
+	}
 }

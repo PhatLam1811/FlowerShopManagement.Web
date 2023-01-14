@@ -32,7 +32,7 @@ public class VoucherController : Controller
         ViewData["VoucherCategories"] = Enum.GetValues(typeof(VoucherCategories)).Cast<VoucherCategories>().ToList();
         ViewData["ValueType"] = Enum.GetValues(typeof(ValueType)).Cast<ValueType>().ToList();
         ViewData["VoucherStatus"] = Enum.GetValues(typeof(VoucherStatus)).Cast<VoucherStatus>().ToList();
-        List<VoucherDetailModel> productMs = await _stockServices.GetUpdatedVouchers(_voucherRepository);
+        List<VoucherDetailModel> productMs = await _stockServices.GetUpdatedVouchers();
         if(filter != "All")
         {
             productMs = productMs.Where(i => i.State.ToString() == filter).ToList();
@@ -108,7 +108,7 @@ public class VoucherController : Controller
             else
             {
                 //Detele successfully, we pull a new list of orders
-                List<VoucherDetailModel> productMs = await _stockServices.GetUpdatedVouchers(_voucherRepository);
+                List<VoucherDetailModel> productMs = await _stockServices.GetUpdatedVouchers();
 
                 return RedirectToAction("Index"/*Coult be a ViewModel in here*/); // A updated _ViewAll
             }
@@ -137,7 +137,7 @@ public class VoucherController : Controller
         var result = await _stockServices.CreateVoucher(voucherDetailModel, _voucherRepository);
         if (result == true)
         {
-            List<VoucherDetailModel> orders = await _stockServices.GetUpdatedVouchers(_voucherRepository);
+            List<VoucherDetailModel> orders = await _stockServices.GetUpdatedVouchers();
             return RedirectToAction("Index"/*Coult be a ViewModel in here*/); // A updated _ViewAll
         }
         return NotFound(); // Can be changed to Redirect

@@ -16,15 +16,17 @@ public class StockServices : IStockService
     ICategoryRepository _categoryRepository;
     IMaterialRepository _materialRepository;
     IProductRepository _productRepository;
-    IWebHostEnvironment _webHostEnvironment;
+    IWebHostEnvironment _webHostEnvironment;IVoucherRepository _voucherRepository;
 
-    public StockServices(ICategoryRepository categoryRepository, IMaterialRepository materialRepository,
-        IProductRepository productRepository, IWebHostEnvironment webHostEnvironment)
+
+	public StockServices(ICategoryRepository categoryRepository, IMaterialRepository materialRepository,
+        IProductRepository productRepository, IWebHostEnvironment webHostEnvironment,IVoucherRepository voucherRepository)
     {
         _categoryRepository = categoryRepository;
         _materialRepository = materialRepository;
         _productRepository = productRepository;
         _webHostEnvironment = webHostEnvironment;
+        _voucherRepository = voucherRepository;
     }
 
     public async Task<bool> CreateCategory(string name)
@@ -167,9 +169,9 @@ public class StockServices : IStockService
         }
         return productMs;
     }
-    public async Task<List<VoucherDetailModel>> GetUpdatedVouchers(IVoucherRepository voucherRepository)
+    public async Task<List<VoucherDetailModel>> GetUpdatedVouchers()
     {
-        List<Voucher>? vouchers = await voucherRepository.GetAll();
+        List<Voucher>? vouchers = await _voucherRepository.GetAll();
         List<VoucherDetailModel> voucherMs = new List<VoucherDetailModel>();
 
         if (vouchers == null) return voucherMs;
@@ -179,5 +181,23 @@ public class StockServices : IStockService
             voucherMs.Add(new VoucherDetailModel(o));
         }
         return voucherMs;
+    }
+
+    public async Task<bool> UpdateProduct(ProductDetailModel productModel)
+    {
+        if (productModel == null || productModel.Id == null) return false;
+
+        var oldObj = await _productRepository.GetById(productModel.Id);
+        var obj = await productModel.ToEntityContainingImages(wwwRootPath: _webHostEnvironment.WebRootPath);
+        if(obj == null || obj._id == null || oldObj == null) return false;
+        if(oldObj._material != obj._material)
+        {
+            var list = await _materialRepository.GetAll();
+            var material = list.FirstOrDefault(i => i._name == obj._material);
+            if (material == null) { return false; }
+            obj._maintainment = material._maintainment;
+        }
+        
+        return await _productRepository.UpdateById(obj._id,obj);
     }
 }

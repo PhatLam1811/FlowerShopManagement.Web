@@ -1,5 +1,6 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
+using FlowerShopManagement.Application.MongoDB.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,18 +16,22 @@ public class ImportController : Controller
     private readonly IImportService _importService;
     private readonly IWebHostEnvironment _webHostEnv;
 
+    private readonly IOrderRepository _orderRepository;
+
     private const string _reqTemplatePath = "/template/SupplyFormTemplate.html";
 
     public ImportController(
         IStockService stockService,
         IImportService importService,
         ISupplierService supplierService,
-        IWebHostEnvironment webHostEnv)
+        IWebHostEnvironment webHostEnv,
+        IOrderRepository orderRepository)
     {
         _stockService = stockService;
         _importService = importService;
         _supplierService = supplierService;
         _webHostEnv = webHostEnv;
+        _orderRepository = orderRepository;
     }
 
     [HttpGet]
@@ -58,39 +63,37 @@ public class ImportController : Controller
 
     [HttpPost]
     [ActionName("CreateRequestForm")]
-    public async Task<IActionResult> CreateRequestForm(List<string> productIds, List<int> reqAmounts, List<string> supplierIds)
+    public async Task CreateRequestForm(List<string> productIds, List<int> reqAmounts, List<string> supplierIds)
     {
-        var products = await _stockService.GetByIdsAsync(productIds);
-        var suppliers = await _supplierService.GetByIdsAsync(supplierIds);
-        var htmlPath = _webHostEnv.WebRootPath + _reqTemplatePath;
-
-        if (products.Count <= 0  || reqAmounts.Count <= 0 )
+        try 
         {
-            throw new NullReferenceException("Insufficient Values!");
+            // await _orderRepository.TotalSale();
         }
-
-        var reqForm = _importService.CreateReqSupplyForm(products, suppliers, reqAmounts, htmlPath);
-        try
-        {
-            _importService.SendRequest(reqForm);
-        }
-        catch (Exception e)
+        catch(Exception e)
         {
             throw new Exception(e.Message);
         }
 
-        return PartialView("SupplyForm1", reqForm);
+        //var products = await _stockService.GetByIdsAsync(productIds);
+        //var suppliers = await _supplierService.GetByIdsAsync(supplierIds);
+        //var htmlPath = _webHostEnv.WebRootPath + _reqTemplatePath;
 
-        //var message = _mailService.CreateMimeMessage(reqForm);
+        //if (products.Count <= 0  || reqAmounts.Count <= 0 )
+        //{
+        //    throw new NullReferenceException("Insufficient Values!");
+        //}
 
+        //var reqForm = _importService.CreateReqSupplyForm(products, suppliers, reqAmounts, htmlPath);
         //try
         //{
-        //    await _mailService.SendAsync(message);
+        //    _importService.SendRequest(reqForm);
         //}
         //catch (Exception e)
         //{
         //    throw new Exception(e.Message);
         //}
+
+        //return PartialView("SupplyForm1", reqForm);
 
         //if (requestForm != null)
         //    return Json(new

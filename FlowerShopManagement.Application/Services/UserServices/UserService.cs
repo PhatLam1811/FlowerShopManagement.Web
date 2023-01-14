@@ -3,6 +3,8 @@ using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
+using Microsoft.AspNetCore.Hosting;
+using System.Reflection;
 using System.Text.RegularExpressions;
 
 namespace FlowerShopManagement.Application.Services.UserServices;
@@ -11,21 +13,23 @@ public class UserService : IPersonalService
 {
 	private readonly IUserRepository _userRepository;
 	private readonly ICartRepository _cartRepository;
+	
 
 	public UserService(IUserRepository userRepository, ICartRepository cartRepository)
 	{
 		_userRepository = userRepository;
 		_cartRepository = cartRepository;
+		
 	}
 
 	public async Task<bool> EditInfoAsync(UserModel userModel)
 	{
-		var user = new User();
+		
 
 		try
 		{
 			// Model to entity
-			userModel.ToEntity(ref user);
+			var user = userModel.ToEntity();
 
 			// Set last modified date
 			user.lastModified = DateTime.Now;
@@ -127,5 +131,5 @@ public class UserService : IPersonalService
 		}
 	}
 
-	
+
 }
