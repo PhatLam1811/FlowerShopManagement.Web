@@ -1,5 +1,6 @@
 ﻿using ChartJSCore.Helpers;
 using ChartJSCore.Models;
+using FlowerShopManagement.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,18 +11,33 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
     [Authorize(Policy = "StaffOnly")]
     public class DashboardController : Controller
     {
+        private readonly IReportService _reportService;
+
+        public DashboardController(IReportService reportService)
+        {
+            _reportService = reportService;
+        }
+
         public IActionResult Index()
         {
             ViewBag.Dashboard = true;
 
-            Chart verticalBarChart = GenerateVerticalBarChart();
+            var beginDate = DateTime.Today;
+            var endDate = beginDate.AddDays(1);
+
+            var dataSet = _reportService.GetTotalRevenue(beginDate, endDate);
+
+            Chart verticalBarChart = GenerateVerticalBarChart(dataSet);
 
             ViewData["VerticalBarChart"] = verticalBarChart;
+            ViewData["WaitingOrder"] = _reportService.GetOrdersCount(beginDate, endDate, Core.Enums.Status.Paying);
+            ViewData["ValuableCustomers"] = _reportService.GetValuableCustomers(new DateTime(2022, 01, 01), DateTime.Today);
+            ViewData["ProfitableProducts"] = _reportService.GetProfitableProducts(new DateTime(2022, 01, 01), DateTime.Today);
 
             return View();
         }
 
-        private Chart GenerateVerticalBarChart()
+        private Chart GenerateVerticalBarChart(List<double?> dataSet)
         {
             Chart chart = new Chart();
             chart.Type = Enums.ChartType.Bar;
@@ -39,9 +55,9 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             int index = 0;
 
-            for (int i = 1; i <= 7; i++)
+            for (int i = 0; i < dataSet.Count; i++)
             {
-                data.Labels.Add("Day" + i.ToString());
+                data.Labels.Add(i.ToString());
                 dataValues.Add(0);
                 colors.Add(ChartColor.FromRgba(102, 152, 250, 1));
                 borderColors.Add(ChartColor.FromRgb(102, 152, 250));
@@ -53,7 +69,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             var dataset = new BarDataset
             {
                 Label = "Numbers of order",
-                Data = new List<double?>() { 0, 40, 20, 36, 50, 23, 100 },
+                Data = dataSet,
                 BackgroundColor = colors,
                 BorderColor = borderColors,
                 BorderWidth = new List<int> { 4 },
