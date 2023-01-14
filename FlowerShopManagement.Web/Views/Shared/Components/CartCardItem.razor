@@ -1,6 +1,5 @@
-﻿
-<div class="form-check mb-3">
-	<input class="form-check-input fs-4 me-2" type="checkbox" value="" id="defaultCheck1" @onclick="SelectItem">
+﻿<div class="form-check mb-3">
+	<input class="form-check-input fs-4 me-2" type="checkbox" value="" id="defaultCheck1" checked=@isSelected @onchange="SelectItem">
 	<div class="card d-flex flex-row">
 		<img src="image/flower2.png" class="card-img-top w-25 h-auto" />
 		<div class="card-body d-flex flex-column justify-content-between">
@@ -10,13 +9,13 @@
 					<span class="h6 icon-arrow"></span>
 				</div>
 				<div class="mt-1 d-flex justify-content-between align-items-end">
-					<span class="h6">@cartItem.items.UniPrice</span>
-					<span class="h3 fw-bold text-primary">(@cartItem.items.UniPrice * @cartItem.items.Amount)</span>
+					<span class="h6">$@cartItem.items.UniPrice</span>
+					<span class="h3 fw-bold text-primary">$@(cartItem.items.UniPrice * cartItem.amount)</span>
 				</div>
 			</div>
 			<div class="mt-1 d-flex justify-content-between align-items-end">
-				<Counter max=@maxAmount OnGetAmount="ChangeAmount"/>
-				<a class="icon-delete fs-5 m-0 icon-normal text-color-pink" @onclick="RemoveOutOfCart"></a>
+				<Counter count="@((int)cartItem.amount)" max=@cartItem.items.Amount OnGetAmount="ChangeAmount" />
+				<p class="icon-delete fs-5 m-0 icon-normal text-color-pink hover-icon" @onclick="RemoveOutOfCart"></p>
 			</div>
 		</div>
 	</div>
@@ -24,31 +23,38 @@
 
 @code {
 	[Parameter]
-	public CartItemModel cartItem { get; set; } = null!;
+	public CartItemModel cartItem { get; set; }
 
 	[Parameter]
 	public string id { get; set; } = null!;
 
 	[Parameter]
-	public int maxAmount { get; set; } = 1;
+	public string url { get; set; } = null!;
 
 	[Parameter]
-	public string url { get; set; } = null!;
+	public string url1 { get; set; } = null!;
+
+	[Parameter]
+	public string url2 { get; set; } = null!;
+
+	[Parameter]
+	public string url3 { get; set; } = null!;
+
+	[Parameter]
+	public bool isSelected { get; set; } = false;
+
+	[Parameter]
+	public EventCallback<MyArgs> IsChanged { get; set; }
 
 	protected async void ChangeAmount(int count)
 	{
-		//var oldAmount = product.Amount;
-		//var oldPrice = product.UniPrice;
-
-		//cartItem.Amount = count;
-		//cartItem.CartDetailTotalSum = cartItem.Product.ProductUnitPrice * count;
-		maxAmount = count;
+		cartItem.amount = count;
 		StateHasChanged();
 
-		//await js.InvokeVoidAsync("updateAmount", new object[] { url1, cartItemId, count, cartItem.CartDetailTotalSum });
-		//await IsChanged.InvokeAsync(new MyArgs() { myInt = count, myOldInt = oldAmount, myBool = cartItem.IsChecked, myFloat = cartItem.CartDetailTotalSum, myOldFloat = oldPrice });
+		await js.InvokeVoidAsync("updateAmount", new object[] { url1, cartItem._productId, count });
 	}
-	public async void RemoveOutOfCart()
+
+	private async void RemoveOutOfCart()
 	{
 		if (cartItem._productId != null)
 		{
@@ -57,8 +63,21 @@
 			StateHasChanged();
 		}
 	}
-	private void SelectItem()
-	{
 
+	private async void SelectItem()
+	{
+		isSelected = !isSelected;
+
+		await js.InvokeVoidAsync("updateSelection", new object[] { url2, id, isSelected });
+
+		if(isSelected) {
+			// update _viewTotal: increase
+			// use js
+			await js.InvokeVoidAsync("callPost", new object[] { url3 });
+		}
+		else {
+			// update _viewTotal: descrease
+			// use js
+		}
 	}
 }

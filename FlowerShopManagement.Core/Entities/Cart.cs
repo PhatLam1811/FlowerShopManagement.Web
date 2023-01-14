@@ -8,9 +8,9 @@ public class Cart
     [Required]
     public string customerId { get; set; }
     public List<CartItem>? items { get; set; }
-    public long total { get; set; }
+    public double total { get; set; }
 
-    public Cart(string id = "", string customerId = "", List<CartItem>? items = null, long total = 0)
+    public Cart(string id = "", string customerId = "", List<CartItem>? items = null, double total = 0)
     {
         this._id = id;
         this.customerId = customerId;

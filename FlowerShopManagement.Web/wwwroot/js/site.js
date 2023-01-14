@@ -307,7 +307,7 @@ function FindDistricts(selectTag, url) {
                 $('#ward').empty();
                 $.each(res, function (index, key) {
                     $('#district').append($('<option>', {
-                        
+
                         text: key
                     }));
                 });
@@ -327,24 +327,24 @@ function FindDistricts(selectTag, url) {
 }
 
 function FindWards(selectTag, url) {
-    
+
     try {
         $.ajax({
             type: 'POST',
             url: url,
-            data: { city: $('#city').find(":selected").text(),district: selectTag.options[selectTag.selectedIndex].text },
+            data: { city: $('#city').find(":selected").text(), district: selectTag.options[selectTag.selectedIndex].text },
             success: function (res) {
-                
+
                 $('#ward').empty();
 
                 $.each(res, function (index, key) {
                     $('#ward').append($('<option>', {
-                        
+
                         text: key
                     }));
                 });
                 $('#ward').removeClass("disabled");
-                
+
             },
             error: function (err) {
                 console.log(err)
@@ -375,6 +375,57 @@ function callWithId(url, id) {
 
         }
     })
+}
+function callPost(url) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        success: function (res) {
+            debugger;
+            $('#hix').html(res);
+        }
+    })
+}
+
+function updateAmount(url, id, amount) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: { id: id, amount: amount },
+        success: function (res) {
+            if (res.isValid) {
+                //$('#hihi').html(res.html);
+                //$.notify("Added to your wishlist", "success", { position: "right" });
+            }
+            else {
+                //$.notify("Error", "warn", { position: "right" });
+            }
+
+        }
+    })
+}
+
+function updateSelection(url, id, isSelected) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: { id: id, isSelected: isSelected },
+        success: function (res) {
+            if (res.isValid) {
+                //$('#hihi').html(res.html);
+                //$.notify("Added to your wishlist", "success", { position: "right" });
+            }
+            else {
+                //$.notify("Error", "warn", { position: "right" });
+            }
+
+        }
+    })
+}
+
+function showAlert(title) {
+    alert(title);
+}
 }
 
 function removeAddress(url, name, phone, address) {

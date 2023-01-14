@@ -8,7 +8,7 @@ public class CartModel
     [Required]
     public string CustomerId { get; set; } = "";
     public List<CartItemModel> Items { get; set; } = new List<CartItemModel>();
-    public long Total { get; set; } = 0;
+    public double Total { get; set; } = 0;
 
     public CartModel()
     {

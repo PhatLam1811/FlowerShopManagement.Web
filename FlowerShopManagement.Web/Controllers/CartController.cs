@@ -116,5 +116,57 @@ namespace FlowerShopManagement.Web.Controllers
 
             return NotFound();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateSelection(string id, bool isSelected)
+        {
+            string? userId;
+
+            if (this.HttpContext != null)
+            {
+                userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId != null)
+                {
+                    var result = await _customerService.UpdateSelection(userId, id, isSelected);
+                    if (result)
+                    {
+                        return RedirectToAction("Index", "Cart");
+                    }
+                }
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LoadViewTotal()
+        {
+            string? userId;
+
+            if (this.HttpContext != null)
+            {
+                userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId != null)
+                {
+                    //var result = await _customerService.UpdateSelection(userId, id, isSelected);
+                    //if (result)
+                    //{
+                    //    return RedirectToAction("Index", "Cart");
+                    //}
+                    var cart = await _customerService.GetCartOfUserAsync(userId);
+                    var total = 0;
+                    foreach(var item in cart.Items)
+                    {
+                        total += item.amount * item.items.UniPrice;
+                    }
+                    cart.Total = total;
+                    return PartialView("_ViewTotal", cart);
+                }
+            }
+
+            return NotFound();
+        }
     }
 }

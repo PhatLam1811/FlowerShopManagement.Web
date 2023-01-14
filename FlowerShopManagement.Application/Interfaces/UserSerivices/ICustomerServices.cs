@@ -11,6 +11,7 @@ public interface ICustomerfService : IUserService
     public Task<UserBasicInfoModel> GetUseBasicInfoById(string id);
     public Task<bool> AddItemToCart(string userId, string productId, int amount);
     public Task<bool> UpdateAmountOfItem(string userId, string productId, int amount);
+    public Task<bool> UpdateSelection(string userId, string cartItemId, bool isSelected);
     public Task<bool> RemoveItemToCart(string userId, string productId);
     public Task<List<ProductModel>?> GetFavProductsAsync(string id, IAuthService authService, IProductRepository productRepository);
     public Task<bool> AddFavProduct(string userId, string productId, IAuthService authService, IPersonalService personalService);

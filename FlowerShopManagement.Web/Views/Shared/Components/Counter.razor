@@ -1,7 +1,7 @@
 ﻿<div class="d-flex">
-	<button class="btn btn-icon bg-color-fade fs-4">-</button>
-	<input class="border-0 form-control text-center h6" style="width:70px" value=@count />
-	<button class="btn btn-icon bg-color-fade fs-4">+</button>
+	<button class="btn btn-icon bg-color-fade fs-4" @onclick="Decreament">-</button>
+	<p class="border-0 form-control text-center h6" style="width:70px">@count</p>
+	<button class="btn btn-icon bg-color-fade fs-4" @onclick="Increament">+</button>
 </div>
 
 @code {
@@ -20,6 +20,7 @@
 		{
 			count++;
 		}
+		else await js.InvokeVoidAsync("showAlert", new object[] { "Exceed to amount of product in stock!!" });
 
 		await OnGetAmount.InvokeAsync(count);
 	}
@@ -30,6 +31,7 @@
 		{
 			count--;
 		}
+		else await js.InvokeVoidAsync("showAlert", new object[] { "Amount of product in stock must be greater than 0!!" });
 
 		await OnGetAmount.InvokeAsync(count);
 	}
