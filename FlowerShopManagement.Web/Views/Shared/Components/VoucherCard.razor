@@ -19,8 +19,16 @@
 			<p class="caption text-primary">Order greater than $@voucher.ConditionValue</p>
 		</div>
 	</div>
+	@if(voucher.State == Core.Enums.VoucherStatus.ComingSoon)
+	{
+		<button class="btn-no-min btn-secondary" disabled>Use</button>
 
+	}
+	else
+	{
 	<button class="btn-no-min btn-secondary">Use</button>
+		
+	}
 </div>
 
 @code {
