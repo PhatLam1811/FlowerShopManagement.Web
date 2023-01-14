@@ -69,15 +69,6 @@
 		isSelected = !isSelected;
 
 		await js.InvokeVoidAsync("updateSelection", new object[] { url2, id, isSelected });
-
-		if(isSelected) {
-			// update _viewTotal: increase
-			// use js
-			await js.InvokeVoidAsync("callPost", new object[] { url3 });
-		}
-		else {
-			// update _viewTotal: descrease
-			// use js
-		}
+		await js.InvokeVoidAsync("callPost", new object[] { url3 });
 	}
 }

@@ -160,7 +160,7 @@ public class CustomerService : UserService, ICustomerfService
                     products = new List<CartItem>();
                 }
 
-                newItem._amount = amount;
+                //newItem._amount = amount;
                 products.Add(new CartItem(userId) { amount = amount, items = newItem, _productId = newItem._id });
                 cart.items = products;
                 bool result = await _cartRepository.UpdateById(cart._id, cart);
