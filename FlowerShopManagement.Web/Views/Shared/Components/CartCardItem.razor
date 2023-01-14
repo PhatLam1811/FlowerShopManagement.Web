@@ -22,6 +22,7 @@
 </div>
 
 @code {
+
 	[Parameter]
 	public CartItemModel cartItem { get; set; }
 
@@ -51,7 +52,7 @@
 		cartItem.amount = count;
 		StateHasChanged();
 
-		await js.InvokeVoidAsync("updateAmount", new object[] { url1, cartItem._productId, count });
+		await js.InvokeVoidAsync("updateAmount", new object[] { url1, url3, cartItem._productId, count });
 	}
 
 	private async void RemoveOutOfCart()
@@ -59,7 +60,6 @@
 		if (cartItem._productId != null)
 		{
 			await js.InvokeVoidAsync("callWithId", new object[] { url, cartItem._productId });
-
 			StateHasChanged();
 		}
 	}
@@ -67,17 +67,8 @@
 	private async void SelectItem()
 	{
 		isSelected = !isSelected;
+		StateHasChanged();
 
-		await js.InvokeVoidAsync("updateSelection", new object[] { url2, id, isSelected });
-
-		if(isSelected) {
-			// update _viewTotal: increase
-			// use js
-			await js.InvokeVoidAsync("callPost", new object[] { url3 });
-		}
-		else {
-			// update _viewTotal: descrease
-			// use js
-		}
+		await js.InvokeVoidAsync("updateSelection", new object[] { url2, url3, id, isSelected });
 	}
 }

@@ -381,44 +381,52 @@ function callPost(url) {
         type: "POST",
         url: url,
         success: function (res) {
-            debugger;
             $('#hix').html(res);
         }
     })
 }
 
-function updateAmount(url, id, amount) {
+function updateAmount(url, url2, id, amount) {
     $.ajax({
         type: "POST",
         url: url,
         data: { id: id, amount: amount },
         success: function (res) {
-            if (res.isValid) {
-                //$('#hihi').html(res.html);
-                //$.notify("Added to your wishlist", "success", { position: "right" });
-            }
-            else {
-                //$.notify("Error", "warn", { position: "right" });
-            }
-
+            $.ajax({
+                type: "POST",
+                url: url2,
+                success: function (res) {
+                    $('#hix').html(res);
+                }
+            })
         }
     })
 }
 
-function updateSelection(url, id, isSelected) {
+function updateSelection(url, url2, id, isSelected) {
     $.ajax({
         type: "POST",
         url: url,
         data: { id: id, isSelected: isSelected },
         success: function (res) {
-            if (res.isValid) {
-                //$('#hihi').html(res.html);
-                //$.notify("Added to your wishlist", "success", { position: "right" });
-            }
-            else {
-                //$.notify("Error", "warn", { position: "right" });
-            }
+            $.ajax({
+                type: "POST",
+                url: url2,
+                success: function (res) {
+                    $('#hix').html(res);
+                }
+            })
+        }
+    })
+}
 
+function removeCartItem(url, id) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: { id: id },
+        success: function (res) {
+            $('#cartviewall').html(res);
         }
     })
 }
@@ -426,7 +434,6 @@ function updateSelection(url, id, isSelected) {
 function showAlert(title) {
     alert(title);
 }
-
 
 function removeAddress(url, name, phone, address) {
     debugger;

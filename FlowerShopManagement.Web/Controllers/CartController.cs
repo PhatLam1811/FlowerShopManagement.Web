@@ -4,6 +4,7 @@ using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using FlowerShopManagement.Core.Entities;
 
 namespace FlowerShopManagement.Web.Controllers
 {
@@ -35,15 +36,19 @@ namespace FlowerShopManagement.Web.Controllers
 
                     if(cartM != null && cartM.Items != null && cartM.Items.Count > 0)
                     {
+                        var total = 0;
                         foreach (var item in cartM.Items)
                         {
                             var product = await _productRepository.GetById(item._productId);
                             if (product != null)
                             {
                                 item.items = new ProductDetailModel(product);
+                                if (item.isSelected)
+                                    total += item.amount * item.items.UniPrice;
                             }
                             else return NotFound();
                         }
+                        cartM.Total = total;
                     }
                 }
             }
@@ -87,7 +92,9 @@ namespace FlowerShopManagement.Web.Controllers
                     var result = await _customerService.RemoveItemToCart(userId, id);
                     if (result)
                     {
-                        return RedirectToAction("Index", "Home");
+                        var cart = await _customerService.GetCartOfUserAsync(userId);
+                        //await LoadViewTotal();
+                        return PartialView("_ViewAll", cart.Items);
                     }
                 }
             }
@@ -150,19 +157,35 @@ namespace FlowerShopManagement.Web.Controllers
 
                 if (userId != null)
                 {
-                    //var result = await _customerService.UpdateSelection(userId, id, isSelected);
-                    //if (result)
-                    //{
-                    //    return RedirectToAction("Index", "Cart");
-                    //}
                     var cart = await _customerService.GetCartOfUserAsync(userId);
                     var total = 0;
                     foreach(var item in cart.Items)
                     {
-                        total += item.amount * item.items.UniPrice;
+                        if (item.isSelected)
+                            total += item.amount * item.items.UniPrice;
                     }
                     cart.Total = total;
                     return PartialView("_ViewTotal", cart);
+                }
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> LoadViewAll()
+        {
+            string? userId;
+
+            if (this.HttpContext != null)
+            {
+                userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId != null)
+                {
+                    var cart = await _customerService.GetCartOfUserAsync(userId);
+                    await LoadViewTotal();
+                    return PartialView("_ViewAll", cart);
                 }
             }
 
