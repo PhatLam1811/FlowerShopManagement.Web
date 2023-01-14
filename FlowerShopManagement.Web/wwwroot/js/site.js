@@ -13,7 +13,7 @@ function showContent2(url, title) {
             $("#form-modal .modal-body").html(res);
             $("#form-modal .modal-title").html(title);
             $("#form-modal").modal('show');
-            
+
             //$.notify("Access granted", "success", { position: "right" });
 
         }
@@ -45,7 +45,7 @@ function showPartialView1(form) {
         contentType: false,
         processData: false,
         success: function (res) {
-            
+
             $("#pw").html(res);
             console.log(res);
 
@@ -83,6 +83,7 @@ function OpenPostDialog(url, title) {
     }
 
 }
+
 function OpenFormDialog(form) {
     var obj = new FormData(form);
     console.log(obj);
@@ -116,6 +117,7 @@ function OpenFormDialog(form) {
         return false;
     }
 }
+
 function OpenGetPage(url) {
     try {
         $.ajax({
@@ -237,6 +239,7 @@ function jQueryAjaxReloadPickingTable(form) {
         return false;
     }
 }
+
 function jQueryAjaxReloadPickingTableWithId(url, id) {
 
     try {
@@ -261,6 +264,7 @@ function jQueryAjaxReloadPickingTableWithId(url, id) {
         return false;
     }
 }
+
 function jQueryAjaxSearch(form) {
     var obj = new FormData(form);
     try {
@@ -422,14 +426,14 @@ function updateSelection(url, id, isSelected) {
 function showAlert(title) {
     alert(title);
 }
-}
+
 
 function removeAddress(url, name, phone, address) {
     debugger;
     $.ajax({
         type: "POST",
         url: url,
-        data: { name: name,phone: phone, address: address },
+        data: { name: name, phone: phone, address: address },
         success: function (res) {
             $("#pw").html(res);
             console.log(res);

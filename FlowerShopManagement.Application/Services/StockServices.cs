@@ -200,4 +200,28 @@ public class StockServices : IStockService
         
         return await _productRepository.UpdateById(obj._id,obj);
     }
+
+    public async Task<VoucherDetailModel> GetADetailVoucher(string id)
+    {
+
+        Voucher? voucher = await _voucherRepository.GetById(id);
+        if (voucher == null) return new VoucherDetailModel();
+        return new VoucherDetailModel(voucher);
+    }
+
+    public Task<bool> DeleteVoucher(string id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<bool> ActivateVoucher(string id)
+    {
+        Voucher? voucher = await _voucherRepository.GetById(id);
+        
+        if (voucher == null) return false;
+
+        voucher._state = Core.Enums.VoucherStatus.Using;
+
+        return await _voucherRepository.UpdateById(voucher._id, voucher);
+    }
 }
