@@ -83,6 +83,7 @@ function OpenPostDialog(url, title) {
     }
 
 }
+
 function OpenFormDialog(form) {
     var obj = new FormData(form);
     console.log(obj);
@@ -116,6 +117,7 @@ function OpenFormDialog(form) {
         return false;
     }
 }
+
 function OpenGetPage(url) {
     try {
         $.ajax({
@@ -237,6 +239,7 @@ function jQueryAjaxReloadPickingTable(form) {
         return false;
     }
 }
+
 function jQueryAjaxReloadPickingTableWithId(url, id) {
 
     try {
@@ -261,6 +264,7 @@ function jQueryAjaxReloadPickingTableWithId(url, id) {
         return false;
     }
 }
+
 function jQueryAjaxSearch(form) {
     var obj = new FormData(form);
     try {

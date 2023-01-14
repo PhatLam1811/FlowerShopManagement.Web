@@ -1,13 +1,15 @@
-﻿@{
-    List<string>? categories = ViewData["Categories"] as List<string> ?? null;
-    List<string>? materials = ViewData["Materials"] as List<string> ?? null;
-    List<string> prices = new List<string> { "All", "0 - 10", "11 - 50", ">50" };
-    string? currentCategory = ViewData["CurrentCategory"] as string ?? "All";
-    string? currentMaterial = ViewData["CurrentMaterial"] as string ?? "All";
-    string currentPrice = ViewData["CurrentPrice"] as string ?? "All";
+﻿
+@{
+    List<string>? categories = ViewData["VoucherCategories"] as List<string> ?? null;
+    List<string>? valueTypes = ViewData["ValueType"] as List<string> ?? null;
+    List<string> status = new List<string> { "All", "Using", "Coming soon", "Expired" };
+    string currentCategory = ViewData["CurrentCategory"] as string ?? "All";
+    string currentStatus = ViewData["CurrentStatus"] as string ?? "All";
+    string currentValueType = ViewData["CurrentValueType"] as string ?? "All";
+
 
 }
-<form method="post" action="@(Url.Action("Sort", "Product"))" onsubmit="return jQueryAjaxSearch(this);">
+<form method="post" action="@(Url.Action("Sort", "Voucher"))" onsubmit="return jQueryAjaxSearch(this);">
     <input type="text" name="pageNumber" value="1"
            class="form-control form-control-lg h5 h-100 position-relative" style="z-index:99"
            id="floatingInput" placeholder="Abc" hidden>
@@ -15,6 +17,7 @@
         <span class="h4">Filter</span>
         <div class="check-list mt-4">
             <span class="">Categories</span>
+
 
             @if (categories != null)
             {
@@ -33,53 +36,58 @@
                             <input type="radio" class="form-check-input disabled" value="@i" name="currentCategory" checked onclick="this.form.onsubmit()" />
                             @i
                         </label>
+
                     }
                 }
+
+
             }
         </div>
 
+    </div>
+    <div class="">
         <div class="check-list mt-4">
-
-            <span class="">Material</span>
-            @if (materials != null)
+            <span class="">Value Type</span>
+            @if (valueTypes != null)
             {
-                @foreach (var i in materials)
+                @foreach (var i in valueTypes)
                 {
-                    @if (i.ToString() != currentMaterial.ToString())
+                    @if (i != currentCategory)
                     {
                         <label class="check-list-item">
-                            <input type="radio" class="form-check-input" value="@i" id="@i" name="currentMaterial" onclick="this.form.onsubmit()" />
+                            <input type="radio" class="form-check-input" value="@i" id="@i" name="currentValueType" onclick="this.form.onsubmit()" />
                             @i
                         </label>
                     }
                     else
                     {
                         <label class="check-list-item">
-                            <input type="radio" class="form-check-input disabled" value="@i" name="currentMaterial" checked onclick="this.form.onsubmit()" />
+                            <input type="radio" class="form-check-input disabled" value="@i" name="currentValueType" checked onclick="this.form.onsubmit()" />
                             @i
                         </label>
-
                     }
                 }
             }
         </div>
-        <div class="check-list mt-3">
-            <span class="">Prices</span>
-            @if (currentPrice != null)
+    </div>
+    <div class="">
+        <div class="check-list mt-4">
+            <span class="">Status</span>
+            @if (categories != null)
             {
-                @foreach (var i in prices)
+                @foreach (var i in status)
                 {
-                    if (i == currentPrice)
+                    @if (i != currentStatus.ToString())
                     {
                         <label class="check-list-item">
-                            <input type="radio" class="form-check-input disabled" value="@i" name="currentPrice" checked onclick="this.form.onsubmit()" />
+                            <input type="radio" class="form-check-input" value="@i" id="@i" name="currentStatus" onclick="this.form.onsubmit()" />
                             @i
                         </label>
                     }
                     else
                     {
                         <label class="check-list-item">
-                            <input type="radio" class="form-check-input" value="@i" name="currentPrice" onclick="this.form.onsubmit()" />
+                            <input type="radio" class="form-check-input disabled" value="@i" name="currentStatus" checked onclick="this.form.onsubmit()" />
                             @i
                         </label>
                     }
