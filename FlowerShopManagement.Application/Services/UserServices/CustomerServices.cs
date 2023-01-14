@@ -220,7 +220,7 @@ public class CustomerService : UserService, ICustomerfService
         }
     }
 
-    public async Task<bool> UpdateSelection(string userId, string cartItemId, bool isSelected)
+    public async Task<bool> UpdateSelection(string userId, string productId, bool isSelected)
     {
         var cart = await _cartRepository.GetByField("customerId", userId);
         if (cart == null)
@@ -230,12 +230,12 @@ public class CustomerService : UserService, ICustomerfService
 
         var products = cart.items;
 
-        if (products != null && products.Where(o => o._id == cartItemId).Count() > 0)
+        if (products != null && products.Where(o => o._productId == productId).Count() > 0)
         {
             // cart's not empty
             // update amount
             // check if amount exceed to stock
-            products.Where(o => o._id == cartItemId).First().isSelected = isSelected;
+            products.Where(o => o._productId == productId).First().isSelected = isSelected;
             cart.items = products;
             bool result = await _cartRepository.UpdateById(cart._id, cart);
             return result;
