@@ -280,7 +280,7 @@ function FindDistricts(selectTag, url) {
                 $('#ward').empty();
                 $.each(res, function (index, key) {
                     $('#district').append($('<option>', {
-                        
+
                         text: key
                     }));
                 });
@@ -300,24 +300,24 @@ function FindDistricts(selectTag, url) {
 }
 
 function FindWards(selectTag, url) {
-    
+
     try {
         $.ajax({
             type: 'POST',
             url: url,
-            data: { city: $('#city').find(":selected").text(),district: selectTag.options[selectTag.selectedIndex].text },
+            data: { city: $('#city').find(":selected").text(), district: selectTag.options[selectTag.selectedIndex].text },
             success: function (res) {
-                
+
                 $('#ward').empty();
 
                 $.each(res, function (index, key) {
                     $('#ward').append($('<option>', {
-                        
+
                         text: key
                     }));
                 });
                 $('#ward').removeClass("disabled");
-                
+
             },
             error: function (err) {
                 console.log(err)
@@ -346,6 +346,16 @@ function callWithId(url, id) {
                 //$.notify("Error", "warn", { position: "right" });
             }
 
+        }
+    })
+}
+function callPost(url) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        success: function (res) {
+            debugger;
+            $('#hix').html(res);
         }
     })
 }

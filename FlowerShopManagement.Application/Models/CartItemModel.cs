@@ -7,10 +7,10 @@ public class CartItemModel
     public string _productId { get; set; }
     public string _id { get; private set; }
     public ProductDetailModel items { get; set; }// offline data
-    public long amount { get; set; }
+    public int amount { get; set; }
     public bool isSelected { get; set; }
 
-    public CartItemModel(string id = "", string pid = "", ProductDetailModel? items = null, long total = 0)
+    public CartItemModel(string id = "", string pid = "", ProductDetailModel? items = null, int total = 0)
     {
         this._id = id;
         this._productId = pid;
@@ -34,6 +34,15 @@ public class CartItemModel
     }
 
     public CartItemModel(string customerId)
+    {
+        this._id = Guid.NewGuid().ToString();
+        this._productId = "";
+        this.items = new ProductDetailModel();
+        this.amount = 0;
+        this.isSelected = false;
+    }
+
+    public CartItemModel()
     {
         this._id = Guid.NewGuid().ToString();
         this._productId = "";

@@ -8,10 +8,10 @@ public class CartItem
     public string _productId { get; set; }
 
     public Product items { get; set; }// offline data
-    public long amount { get; set; }
+    public int amount { get; set; }
     public bool isSelected { get; set; }
 
-    public CartItem(string id = "", string pid = "", Product? items = null, long total = 0, bool isSelected = false)
+    public CartItem(string id = "", string pid = "", Product? items = null, int total = 0, bool isSelected = false)
     {
         this._id = id;
         this._productId = pid;

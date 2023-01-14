@@ -5,16 +5,16 @@
 		<div class="card-body d-flex flex-column justify-content-between">
 			<div class="">
 				<div class="d-flex justify-content-between">
-					<span class="h4">@product.Name</span>
+					<span class="h4">@cartItem.items.Name</span>
 					<span class="h6 icon-arrow"></span>
 				</div>
 				<div class="mt-1 d-flex justify-content-between align-items-end">
-					<span class="h6">$@product.UniPrice</span>
-					<span class="h3 fw-bold text-primary">$@(product.UniPrice * amount)</span>
+					<span class="h6">$@cartItem.items.UniPrice</span>
+					<span class="h3 fw-bold text-primary">$@(cartItem.items.UniPrice * cartItem.amount)</span>
 				</div>
 			</div>
 			<div class="mt-1 d-flex justify-content-between align-items-end">
-				<Counter count="@((int)amount)" max=@maxAmount OnGetAmount="ChangeAmount"/>
+				<Counter count="@((int)cartItem.amount)" max=@cartItem.items.Amount OnGetAmount="ChangeAmount" />
 				<p class="icon-delete fs-5 m-0 icon-normal text-color-pink hover-icon" @onclick="RemoveOutOfCart"></p>
 			</div>
 		</div>
@@ -23,19 +23,10 @@
 
 @code {
 	[Parameter]
-	public ProductDetailModel product { get; set; }
-
-	[Parameter]
-	public long amount { get; set; }
-
-	[Parameter]
-	public string productId { get; set; } = null!;
+	public CartItemModel cartItem { get; set; }
 
 	[Parameter]
 	public string id { get; set; } = null!;
-
-	[Parameter]
-	public int maxAmount { get; set; } = 1;
 
 	[Parameter]
 	public string url { get; set; } = null!;
@@ -47,22 +38,27 @@
 	public string url2 { get; set; } = null!;
 
 	[Parameter]
+	public string url3 { get; set; } = null!;
+
+	[Parameter]
 	public bool isSelected { get; set; } = false;
+
+	[Parameter]
+	public EventCallback<MyArgs> IsChanged { get; set; }
 
 	protected async void ChangeAmount(int count)
 	{
-		amount = (long)count;
+		cartItem.amount = count;
 		StateHasChanged();
 
-		await js.InvokeVoidAsync("updateAmount", new object[] { url1, productId, count });
-		//await IsChanged.InvokeAsync(new MyArgs() { myInt = count, myOldInt = oldAmount, myBool = cartItem.IsChecked, myFloat = cartItem.CartDetailTotalSum, myOldFloat = oldPrice });
+		await js.InvokeVoidAsync("updateAmount", new object[] { url1, cartItem._productId, count });
 	}
 
 	private async void RemoveOutOfCart()
 	{
-		if (productId != null)
+		if (cartItem._productId != null)
 		{
-			await js.InvokeVoidAsync("callWithId", new object[] { url, productId });
+			await js.InvokeVoidAsync("callWithId", new object[] { url, cartItem._productId });
 
 			StateHasChanged();
 		}
@@ -73,5 +69,15 @@
 		isSelected = !isSelected;
 
 		await js.InvokeVoidAsync("updateSelection", new object[] { url2, id, isSelected });
+
+		if(isSelected) {
+			// update _viewTotal: increase
+			// use js
+			await js.InvokeVoidAsync("callPost", new object[] { url3 });
+		}
+		else {
+			// update _viewTotal: descrease
+			// use js
+		}
 	}
 }
