@@ -161,6 +161,7 @@ public class ProfileController : Controller
 	public async Task<IActionResult> Voucher()
 	{
 		var vouchers = await _stockService.GetUpdatedVouchers();
+		vouchers = vouchers.Where(i => i.State == Core.Enums.VoucherStatus.Using).ToList();
 		// load list voucher
 		return PartialView("Voucher", vouchers);
 	}
