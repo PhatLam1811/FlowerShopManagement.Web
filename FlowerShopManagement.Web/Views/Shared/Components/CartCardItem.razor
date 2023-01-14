@@ -70,6 +70,6 @@
 		isSelected = !isSelected;
 		StateHasChanged();
 
-		await js.InvokeVoidAsync("updateSelection", new object[] { url2, url3, id, isSelected });
+		await js.InvokeVoidAsync("updateSelection", new object[] { url2, url3, cartItem._productId, isSelected });
 	}
 }
