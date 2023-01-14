@@ -134,13 +134,13 @@ public class CustomerService : UserService, ICustomerfService
 
         var products = cart.items;
 
-        if (products != null && products.Where(o => o._id == productId).Count() > 0)
+        if (products != null && products.Where(o => o._productId == productId).Count() > 0)
         {
             // cart's not empty
             // check if duplicate
             // duplicate: yes, update amount
             // check if amount exceed to stock
-            products.Where(o => o._id == productId).First().amount += amount;
+            products.Where(o => o._productId == productId).First().amount += amount;
             cart.items = products;
             bool result = await _cartRepository.UpdateById(cart._id, cart);
             return result;
@@ -160,7 +160,6 @@ public class CustomerService : UserService, ICustomerfService
                     products = new List<CartItem>();
                 }
 
-                //newItem._amount = amount;
                 products.Add(new CartItem(userId) { amount = amount, items = newItem, _productId = newItem._id });
                 cart.items = products;
                 bool result = await _cartRepository.UpdateById(cart._id, cart);

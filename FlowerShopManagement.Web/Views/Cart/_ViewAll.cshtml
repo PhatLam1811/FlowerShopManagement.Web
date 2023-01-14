@@ -1,0 +1,13 @@
+﻿@model List<CartItemModel>
+
+@foreach (var i in Model)
+{
+	<component type="typeof(CartCardItem)" render-mode="ServerPrerendered"
+		   param-cartItem=@i
+		   param-id=@i._id
+		   param-isSelected=@i.isSelected
+		   param-url=@Url.Action("RemoveOutOfCart","Cart",null,Context.Request.Scheme)
+		   param-url1=@Url.Action("UpdateAmount","Cart",null,Context.Request.Scheme)
+		   param-url2=@Url.Action("UpdateSelection","Cart",null,Context.Request.Scheme)
+		   param-url3=@Url.Action("LoadViewTotal","Cart",null,Context.Request.Scheme) />
+}
