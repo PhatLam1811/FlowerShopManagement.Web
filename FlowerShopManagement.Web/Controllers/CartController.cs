@@ -171,25 +171,5 @@ namespace FlowerShopManagement.Web.Controllers
 
             return NotFound();
         }
-
-        [HttpPost]
-        public async Task<IActionResult> LoadViewAll()
-        {
-            string? userId;
-
-            if (this.HttpContext != null)
-            {
-                userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                if (userId != null)
-                {
-                    var cart = await _customerService.GetCartOfUserAsync(userId);
-                    await LoadViewTotal();
-                    return PartialView("_ViewAll", cart);
-                }
-            }
-
-            return NotFound();
-        }
     }
 }

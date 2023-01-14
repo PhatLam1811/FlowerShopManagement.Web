@@ -27,26 +27,14 @@
 else
 {
 	<div class="mt-5 row">
-		<div class="col-6" id="cartviewall">
-			<component type="typeof(ViewAll)"
+		<div class="col-6">
+			<component type="typeof(CartList)"
 				   render-mode="ServerPrerendered"
 				   param-Model="@Model.Items"
 				   param-url=@Url.Action("RemoveOutOfCart","Cart",null,Context.Request.Scheme)
 				   param-url1=@Url.Action("UpdateAmount","Cart",null,Context.Request.Scheme)
 				   param-url2=@Url.Action("UpdateSelection","Cart",null,Context.Request.Scheme)
 				   param-url3=@Url.Action("LoadViewTotal","Cart",null,Context.Request.Scheme) />
-			@*<partial name="_ViewAll.cshtml" model="@Model.Items" />*@
-			@*@foreach (var i in Model.Items)
-		{
-		<component type="typeof(CartCardItem)" render-mode="ServerPrerendered"
-		param-cartItem=@i
-		param-id=@i._id
-		param-isSelected=@i.isSelected
-		param-url=@Url.Action("RemoveOutOfCart","Cart",null,Context.Request.Scheme)
-		param-url1=@Url.Action("UpdateAmount","Cart",null,Context.Request.Scheme)
-		param-url2=@Url.Action("UpdateSelection","Cart",null,Context.Request.Scheme)
-		param-url3=@Url.Action("LoadViewTotal","Cart",null,Context.Request.Scheme) />
-		}*@
 		</div>
 		<div class="col-3"></div>
 		<div class="col-3" id="hix">

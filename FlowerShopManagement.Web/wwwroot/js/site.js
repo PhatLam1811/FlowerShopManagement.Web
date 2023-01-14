@@ -420,13 +420,19 @@ function updateSelection(url, url2, id, isSelected) {
     })
 }
 
-function removeCartItem(url, id) {
+function removeCartItem(url, url2, id) {
     $.ajax({
         type: "POST",
         url: url,
         data: { id: id },
         success: function (res) {
-            $('#cartviewall').html(res);
+            $.ajax({
+                type: "POST",
+                url: url2,
+                success: function (res) {
+                    $('#hix').html(res);
+                }
+            })
         }
     })
 }

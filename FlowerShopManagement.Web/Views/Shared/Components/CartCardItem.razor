@@ -45,7 +45,7 @@
 	public bool isSelected { get; set; } = false;
 
 	[Parameter]
-	public EventCallback<MyArgs> IsChanged { get; set; }
+	public EventCallback<string> IsChanged { get; set; }
 
 	protected async void ChangeAmount(int count)
 	{
@@ -59,7 +59,8 @@
 	{
 		if (cartItem._productId != null)
 		{
-			await js.InvokeVoidAsync("callWithId", new object[] { url, cartItem._productId });
+			await js.InvokeVoidAsync("removeCartItem", new object[] { url, url3, cartItem._productId });
+			await IsChanged.InvokeAsync(cartItem._productId);
 			StateHasChanged();
 		}
 	}
