@@ -59,9 +59,15 @@
 	{
 		if (cartItem._productId != null)
 		{
-			await js.InvokeVoidAsync("removeCartItem", new object[] { url, url3, cartItem._productId });
-			await IsChanged.InvokeAsync(cartItem._productId);
-			StateHasChanged();
+			// confirm if user want to remove this item
+			var result = await js.InvokeAsync<bool>("confirmRemove", null);
+			if (result)
+			{
+				await js.InvokeVoidAsync("removeCartItem", new object[] { url, url3, cartItem._productId });
+				await IsChanged.InvokeAsync(cartItem._productId);
+				StateHasChanged();
+			}
+
 		}
 	}
 

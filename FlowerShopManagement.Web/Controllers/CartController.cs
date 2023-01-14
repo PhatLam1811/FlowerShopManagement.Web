@@ -92,9 +92,7 @@ namespace FlowerShopManagement.Web.Controllers
                     var result = await _customerService.RemoveItemToCart(userId, id);
                     if (result)
                     {
-                        var cart = await _customerService.GetCartOfUserAsync(userId);
-                        //await LoadViewTotal();
-                        return PartialView("_ViewAll", cart.Items);
+                        return RedirectToAction("Index", "Cart");
                     }
                 }
             }

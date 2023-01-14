@@ -420,12 +420,19 @@ function updateSelection(url, url2, id, isSelected) {
     })
 }
 
+function confirmRemove() {
+    if (confirm("Press")) {
+        return true;
+    }
+    return false;
+}
+
 function removeCartItem(url, url2, id) {
     $.ajax({
         type: "POST",
         url: url,
         data: { id: id },
-        success: function (res) {
+        success: function () {
             $.ajax({
                 type: "POST",
                 url: url2,
