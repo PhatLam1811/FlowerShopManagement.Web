@@ -13,7 +13,7 @@ function showContent2(url, title) {
             $("#form-modal .modal-body").html(res);
             $("#form-modal .modal-title").html(title);
             $("#form-modal").modal('show');
-            
+
             //$.notify("Access granted", "success", { position: "right" });
 
         }
@@ -45,7 +45,7 @@ function showPartialView1(form) {
         contentType: false,
         processData: false,
         success: function (res) {
-            
+
             $("#pw").html(res);
             console.log(res);
 
@@ -426,14 +426,14 @@ function updateSelection(url, id, isSelected) {
 function showAlert(title) {
     alert(title);
 }
-}
+
 
 function removeAddress(url, name, phone, address) {
     debugger;
     $.ajax({
         type: "POST",
         url: url,
-        data: { name: name,phone: phone, address: address },
+        data: { name: name, phone: phone, address: address },
         success: function (res) {
             $("#pw").html(res);
             console.log(res);

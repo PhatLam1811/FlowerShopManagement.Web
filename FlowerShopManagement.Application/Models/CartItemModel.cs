@@ -25,7 +25,7 @@ public class CartItemModel
     {
         this._id = cartItem._id;
         this._productId = cartItem._productId;
-        if (items != null)
+        if (cartItem.items != null)
             this.items = new ProductDetailModel(cartItem.items);
         else
             this.items = new ProductDetailModel();
