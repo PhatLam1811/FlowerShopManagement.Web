@@ -362,26 +362,26 @@ namespace FlowerShopManagement.Web.Controllers
             return NotFound();
         }
 
-        [HttpPost]
-        public async Task<IActionResult> HandleStatus(OrderDetailModel orderM)
+        [HttpGet]
+        public async Task<IActionResult> HandleStatus(string? id)
         {
             // check what order's status is
             // if waiting, paying, purchased -> cancel
             // if delivering -> delivered
-            if (ModelState.IsValid)
+            Order? order = await _orderRepository.GetById(id);
+            if (order != null)
             {
-                if (orderM.Status == Status.Waiting || orderM.Status == Status.Paying || orderM.Status == Status.Purchased)
+                if (order._status == Status.Waiting || order._status == Status.Paying || order._status == Status.Purchased)
                 {
-                    orderM.Status = Status.Canceled;
+                    order._status = Status.Canceled;
                 }
-                else if (orderM.Status == Status.Delivering)
+                else if (order._status == Status.Delivering)
                 {
-                    orderM.Status = Status.Delivered;
+                    order._status = Status.Delivered;
                 }
 
                 // update db
-                Order order = orderM.ToEntity();
-                var result = await _orderRepository.UpdateById(orderM.Id, order);
+                var result = await _orderRepository.UpdateById(order._id, order);
                 if (result)
                 {
                     return RedirectToAction("Index", "Order");

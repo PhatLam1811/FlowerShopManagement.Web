@@ -140,6 +140,14 @@ p, span, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
         border: none;
     }
 
+    .btn-secondary:disabled {
+        background-color: inherit;
+        color: inherit;
+        font-weight: 700;
+        border-color: var(--bs-primary);
+        opacity: 0.3;
+    }
+
 .btn-remove {
     border-color: var(--bs-secondary);
     background-color: transparent;

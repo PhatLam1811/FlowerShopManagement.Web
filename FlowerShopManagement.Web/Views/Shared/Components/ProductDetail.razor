@@ -6,10 +6,17 @@
 	</div>
 	<div class="form-group mt-4">
 		<label for="exampleFormControlInput1" class="h6 mb-3">Amount</label>
-		<Counter max="@Model.Amount" OnGetAmount="ChangeAmount" />
-		<small id="passwordHelpInline" class="text-muted">
+		@if (Model.Amount > 0)
+		{
+			<Counter max="@Model.Amount" OnGetAmount="ChangeAmount" />
+			<small id="passwordHelpInline" class="text-muted">
 			Remain: @Model.Amount
 		</small>
+		}
+		else
+		{
+			<p class="h6 fst-italic text-color-secondary">Product sold out temporarily!!</p>
+		}
 	</div>
 	<div class="form-group mt-4">
 		<label for="exampleFormControlInput1" class="h6">Material</label>
@@ -21,8 +28,11 @@
 	</div>
 </div>
 <div class="d-flex flex-column">
-	<button class="btn btn-secondary w-50 icon-cart" @onclick="AddToCart">Add to Cart</button>
-	<button class="btn btn-primary w-50 mt-2 icon-arrow" @onclick="BuyNow">Buy Now</button>
+	@if (Model.Amount > 0)
+	{
+		<button class="btn btn-secondary w-50 icon-cart" @onclick="AddToCart">Add to Cart</button>
+		<button class="btn btn-primary w-50 mt-2 icon-arrow" @onclick="BuyNow">Buy Now</button>
+	}
 </div>
 
 @code {
@@ -43,8 +53,10 @@
 		StateHasChanged();
 	}
 
-	private async void AddToCart() {
-		if (Model.Id != null) {
+	private async void AddToCart()
+	{
+		if (Model.Id != null)
+		{
 			await js.InvokeVoidAsync("addToCart", new object[] { url, Model.Id, amount });
 		}
 	}

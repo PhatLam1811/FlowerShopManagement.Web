@@ -377,6 +377,24 @@ function callWithId(url, id) {
     })
 }
 
+function callGetWithId(url, id) {
+    $.ajax({
+        type: "GET",
+        url: url,
+        data: { id: id },
+        success: function (res) {
+            if (res.isValid) {
+                //$('#hihi').html(res.html);
+                //$.notify("Added to your wishlist", "success", { position: "right" });
+            }
+            else {
+                //$.notify("Error", "warn", { position: "right" });
+            }
+
+        }
+    })
+}
+
 function callPost(url) {
     $.ajax({
         type: "POST",

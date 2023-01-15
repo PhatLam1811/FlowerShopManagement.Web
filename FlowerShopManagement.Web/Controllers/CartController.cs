@@ -41,7 +41,14 @@ namespace FlowerShopManagement.Web.Controllers
                         {
                             var product = await _productRepository.GetById(item._productId);
                             if (product != null)
-                            {
+                            { 
+                                // check if item in cart have no enough amount in stock
+                                // update cart
+                                if (product._amount < item.amount)
+                                {
+                                    item.amount = product._amount;
+                                    var result = await _cartRepository.UpdateById(cartM.Id, cartM.ToEntity());
+                                }
                                 item.items = new ProductDetailModel(product);
                                 if (item.isSelected)
                                     total += item.amount * item.items.UniPrice;
