@@ -108,9 +108,9 @@ public class CustomerService : UserService, ICustomerfService
         return null;
     }
 
-    public async Task<List<OrderModel>?> GetOrdersOfUserAsync(string id, IOrderRepository orderRepository)
+    public async Task<List<OrderDetailModel>?> GetOrdersOfUserAsync(string id, IOrderRepository orderRepository)
     {
-        List<OrderModel> orderModels = new List<OrderModel>();
+        List<OrderDetailModel> orderModels = new List<OrderDetailModel>();
         var orders = await orderRepository.GetAll();
         if (orders != null)
         {
@@ -118,7 +118,7 @@ public class CustomerService : UserService, ICustomerfService
 
             foreach (var order in orders)
             {
-                orderModels.Add(new OrderModel(order));
+                orderModels.Add(new OrderDetailModel(order));
             }
         }
         return orderModels;

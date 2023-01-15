@@ -57,7 +57,7 @@ namespace FlowerShopManagement.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddtoCart(string id)
+        public async Task<IActionResult> AddToCart(string id, int amount)
         {
             string? userId;
 
@@ -67,7 +67,7 @@ namespace FlowerShopManagement.Web.Controllers
 
                 if (userId != null)
                 {
-                    var result = await _customerService.AddItemToCart(userId, id, 1);
+                    var result = await _customerService.AddItemToCart(userId, id, amount);
                     if (result)
                     {
                         return RedirectToAction("Index", "Home");

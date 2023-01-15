@@ -8,7 +8,7 @@
 		<div class="card-body">
 			<div class="d-flex justify-content-between">
 				<div>
-					<p class="h4">@product.Name</p>
+					<p class="h4" @onclick="NavigateToDetail">@product.Name</p>
 					<p class="h3 text-secondary mt-3">$@product.UniPrice</p>
 				</div>
 				@if (product.IsLike == false)
@@ -52,7 +52,7 @@
 		{
 			if (product.Id != null)
 			{
-				await js.InvokeVoidAsync("callWithId", new object[] { url, product.Id });
+				await js.InvokeVoidAsync("addToCart", new object[] { url, product.Id, 1 });
 				isAddedToCart = true;
 
 				StateHasChanged();
@@ -98,6 +98,10 @@
 		{
 			UriHelper.NavigateTo("Authentication/SignIn", true);
 		}
+	}
+
+	private void NavigateToDetail() {
+		UriHelper.NavigateTo("ProductDetail/ProductDetail/" + product.Id, true);
 	}
 
 	//public async Task SignIn()

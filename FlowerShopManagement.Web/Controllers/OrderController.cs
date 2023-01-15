@@ -2,9 +2,11 @@
 using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
+using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using static MongoDB.Driver.WriteConcern;
 
 namespace FlowerShopManagement.Web.Controllers
 {
@@ -42,7 +44,7 @@ namespace FlowerShopManagement.Web.Controllers
             //ViewData["Categories"] = Enum.GetValues(typeof(Status)).Cast<Status>().ToList();
 
             string? userId;
-            List<OrderModel>? orderMs = new List<OrderModel>();
+            List<OrderDetailModel>? orderMs = new List<OrderDetailModel>();
 
             if (this.HttpContext != null)
             {
@@ -68,7 +70,7 @@ namespace FlowerShopManagement.Web.Controllers
             else
             {
                 string? userId = "";
-                List<OrderModel>? orderMs = new List<OrderModel>();
+                List<OrderDetailModel>? orderMs = new List<OrderDetailModel>();
 
                 if (this.HttpContext != null)
                 {
@@ -86,8 +88,303 @@ namespace FlowerShopManagement.Web.Controllers
 
                 if (orderMs?.Count > 0)
                 {
-                    OrderModel orderM = orderMs.Where(o => o.Id == id).First();
+                    OrderDetailModel orderM = orderMs.Where(o => o.Id == id).First();
                     return View(orderM);
+                }
+            }
+
+            return NotFound();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Create()
+        {
+            // get cart of current user
+            string? userId;
+
+            if (this.HttpContext != null)
+            {
+                userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId != null)
+                {
+                    List<CartItemModel>? cartItems = _customerService.GetCartOfUserAsync(userId).Result?.Items;
+                    var orderM = new OrderDetailModel();
+
+                    // update order items
+                    if (cartItems?.Count > 0)
+                    {
+                        orderM.Products = new List<ProductDetailModel>();
+                        foreach (var i in cartItems)
+                        {
+                            if (i.isSelected)
+                            {
+                                ProductDetailModel item = i.items;
+                                item.Amount = i.amount;
+                                orderM.Products.Add(item);
+                                orderM.Amount += i.amount;
+                                orderM.Total += i.items.UniPrice * i.amount;
+                            }
+                        }
+                    }
+
+                    // update user's information
+                    // find delivery information of user, if default info is different from initial info
+                    // get info delivery
+                    // check which info is default
+                    // attach to orderM
+                    UserModel? user = await _authService.GetAuthenticatedUserAsync(userId);
+                    if (user != null)
+                    {
+                        if (user.InforDelivery != null && user.InforDelivery.Count > 0)
+                        {
+                            var info = user.InforDelivery.Where(o => o.IsDefault = true).First();
+                            orderM.FullName = info.Name;
+                            orderM.PhoneNumber = info.Phone;
+                            orderM.Address = info.Address;
+                        }
+                        else
+                        {
+                            orderM.FullName = user.Name;
+                            orderM.PhoneNumber = user.PhoneNumber;
+                            orderM.Address = "";
+                        }
+                    }
+
+                    return View(orderM);
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpGet("Order/BuyNow/{id?}/{amount}")]
+        public async Task<IActionResult> BuyNow(string id, int amount)
+        {
+            // get cart of current user
+            string? userId;
+
+            if (this.HttpContext != null)
+            {
+                userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                if (userId != null)
+                {
+                    var orderM = new OrderDetailModel();
+                    // update order products
+                    var product = await _productRepository.GetById(id);
+                    if (product != null)
+                    {
+                        var productM = new ProductDetailModel(product);
+                        productM.Amount = amount;
+
+                        orderM.Products.Add(productM);
+                        orderM.Amount = amount;
+                        orderM.Total = amount * productM.UniPrice;
+                    }
+
+                    // update user's information
+                    // find delivery information of user, if default info is different from initial info
+                    // get info delivery
+                    // check which info is default
+                    // attach to orderM
+                    UserModel? user = await _authService.GetAuthenticatedUserAsync(userId);
+                    if (user != null)
+                    {
+                        if (user.InforDelivery != null && user.InforDelivery.Count > 0)
+                        {
+                            var info = user.InforDelivery.Where(o => o.IsDefault = true).First();
+                            orderM.FullName = info.Name;
+                            orderM.PhoneNumber = info.Phone;
+                            orderM.Address = info.Address;
+                        }
+                        else
+                        {
+                            orderM.FullName = user.Name;
+                            orderM.PhoneNumber = user.PhoneNumber;
+                            orderM.Address = "";
+                        }
+                    }
+
+                    return View(orderM);
+                }
+            }
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(OrderDetailModel orderM)
+        {
+            // check if model is valid?
+            if (ModelState.IsValid)
+            {
+                string? userId;
+
+                if (this.HttpContext != null)
+                {
+                    userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                    if (userId != null)
+                    {
+                        List<CartItemModel>? cartItems = _customerService.GetCartOfUserAsync(userId).Result?.Items;
+
+                        // update order items
+                        if (cartItems?.Count > 0)
+                        {
+                            //orderM.Products = new List<ProductDetailModel>();
+                            foreach (var i in cartItems)
+                            {
+                                if (i.isSelected)
+                                {
+                                    // check if product is remain in stock && voucher date is in using time
+                                    var product = await _productRepository.GetById(i._productId);
+                                    if (product != null && i.amount <= product._amount)
+                                    {
+                                        ProductDetailModel item = i.items;
+                                        item.Amount = i.amount;
+                                        orderM.Products.Add(item);
+                                        orderM.Amount += i.amount;
+                                        orderM.Total += i.items.UniPrice * i.amount;
+                                    }   
+                                    else
+                                    {
+                                        //notify that
+                                    }
+                                }
+                            }
+                        }
+                        else
+                        {
+                            // have no any products
+                            // notify that
+                        }
+
+                        // update customer's info
+                        orderM.AccountID = userId;
+
+                        // all check pass
+                        // create new order
+                        var result = await _orderRepository.Add(orderM.ToEntity());
+                        if (result)
+                        {
+                            // update amount of bought products
+                            // remove products out of cart
+                            foreach (var i in orderM.Products)
+                            {
+                                Product? product = await _productRepository.GetById(i.Id);
+                                if (product != null && product._amount >= i.Amount)
+                                {
+                                    product._amount -= i.Amount;
+                                }
+                                var isOk = await _productRepository.UpdateById(i.Id, product);
+                                if (isOk == false)
+                                {
+                                    // notify
+                                }
+
+                                cartItems.RemoveAll(o => o.isSelected == true);
+                            }
+                        }
+                        else
+                        {
+
+                        }
+                    }
+
+                }
+                return RedirectToAction("Index", "Order");
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateBuyNow(OrderDetailModel orderM)
+        {
+            // check if model is valid?
+            if (ModelState.IsValid)
+            {
+                string? userId;
+
+                if (this.HttpContext != null)
+                {
+                    userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                    if (userId != null)
+                    {
+                        // update order products
+                        var productId = orderM.Products[0].Id;
+                        if (productId != null)
+                        {
+                            var product = await _productRepository.GetById(productId);
+                            if (product != null)
+                            {
+                                var productM = new ProductDetailModel(product);
+                                productM.Amount = orderM.Amount;
+                                orderM.Products.Clear();
+                                orderM.Products.Add(productM);
+                            }
+                        }
+
+                        // update customer's info
+                        orderM.AccountID = userId;
+
+                        // all check pass
+                        // create new order
+                        var result = await _orderRepository.Add(orderM.ToEntity());
+                        if (result)
+                        {
+                            // update amount of bought products
+                            // remove products out of cart
+                            foreach (var i in orderM.Products)
+                            {
+                                Product? product = await _productRepository.GetById(i.Id);
+                                if (product != null && product._amount >= i.Amount)
+                                {
+                                    product._amount -= i.Amount;
+                                }
+                                var isOk = await _productRepository.UpdateById(i.Id, product);
+                                if (isOk == false)
+                                {
+                                    // notify
+                                }
+                            }
+                        }
+                        else
+                        {
+
+                        }
+                    }
+
+                }
+                return RedirectToAction("Index", "Order");
+            }
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> HandleStatus(OrderDetailModel orderM)
+        {
+            // check what order's status is
+            // if waiting, paying, purchased -> cancel
+            // if delivering -> delivered
+            if (ModelState.IsValid)
+            {
+                if (orderM.Status == Status.Waiting || orderM.Status == Status.Paying || orderM.Status == Status.Purchased)
+                {
+                    orderM.Status = Status.Canceled;
+                }
+                else if (orderM.Status == Status.Delivering)
+                {
+                    orderM.Status = Status.Delivered;
+                }
+
+                // update db
+                Order order = orderM.ToEntity();
+                var result = await _orderRepository.UpdateById(orderM.Id, order);
+                if (result)
+                {
+                    return RedirectToAction("Index", "Order");
                 }
             }
 

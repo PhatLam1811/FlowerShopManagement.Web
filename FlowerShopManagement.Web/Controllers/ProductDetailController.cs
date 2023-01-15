@@ -1,17 +1,38 @@
 ﻿using FlowerShopManagement.Application.Models;
+using FlowerShopManagement.Application.MongoDB.Interfaces;
+using FlowerShopManagement.Core.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlowerShopManagement.Web.Controllers;
 
 public class ProductDetailController : Controller
 {
+    readonly IProductRepository _productRepository;
+
+    public ProductDetailController(IProductRepository productRepository)
+    {
+        _productRepository = productRepository;
+    }
+
     public IActionResult Index()
     {
         return View();
     }
 
-    public IActionResult ProductDetail()
+    [HttpGet]
+    public async Task<IActionResult> ProductDetail(string? id)
     {
-        return View(new ProductDetailModel(amount: 20, id: "huhu") { Name = "F hoa", UniPrice = 10 });
+        if (id != null)
+        {
+            Product? product = await _productRepository.GetById(id);
+            ProductDetailModel? productM;
+            if (product != null)
+            {
+                productM = new ProductDetailModel(product);
+                return View(productM);
+            }
+        }
+
+        return NotFound();
     }
 }

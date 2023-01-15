@@ -1,7 +1,7 @@
 ﻿<div class="d-flex">
-	<button class="btn btn-icon bg-color-fade fs-4" @onclick="Decreament">-</button>
-	<p class="border-0 form-control text-center h6" style="width:70px">@count</p>
-	<button class="btn btn-icon bg-color-fade fs-4" @onclick="Increament">+</button>
+	<button class="btn btn-icon bg-color-fade fs-4" style="z-index:2" @onclick="Decreament">-</button>
+	<p class="border-0 form-control text-center h6" style="width:70px" id="selectedcount">@count</p>
+	<button class="btn btn-icon bg-color-fade fs-4" style="z-index:2" @onclick="Increament">+</button>
 </div>
 
 @code {

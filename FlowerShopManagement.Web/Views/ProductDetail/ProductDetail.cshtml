@@ -11,32 +11,11 @@
 	</div>
 
 	<div class="col-5 d-flex flex-column justify-content-between">
-		<div>
-			<p class="h2">@Model.Name</p>
-			<div class="form-group mt-4">
-				<label for="exampleFormControlInput1" class="h6">Color</label>
-				<span>@Model.Color</span>
-			</div>
-			<div class="form-group mt-4">
-				<label for="exampleFormControlInput1" class="h6">Amount</label>
-				<input type="number" class="form-control" />
-				<small id="passwordHelpInline" class="text-muted">
-					Remain: @Model.Amount
-				</small>
-			</div>
-			<div class="form-group mt-4">
-				<label for="exampleFormControlInput1" class="h6">Material</label>
-				<span>@Model.Material</span>
-			</div>
-			<div class="form-group mt-4">
-				<label for="exampleFormControlInput1" class="h6">Dimension</label>
-				<span>@Model.Size</span>
-			</div>
-		</div>
-		<div class="d-flex flex-column">
-			<button class="btn btn-secondary w-50 icon-cart">Add to Cart</button>
-			<button class="btn btn-primary w-50 mt-2 icon-arrow">Buy Now</button>
-		</div>
+		<component type="typeof(ProductDetail)"
+				   render-mode="ServerPrerendered"
+				   param-url=@Url.Action("AddToCart","Cart",null,Context.Request.Scheme)
+				   param-url1=@Url.Action("BuyNow","Order",null,Context.Request.Scheme)
+				   param-Model="@Model" />
 	</div>
 
 	<div class="col-3 d-flex flex-column justify-content-between">

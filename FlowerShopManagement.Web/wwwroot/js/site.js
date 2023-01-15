@@ -376,6 +376,7 @@ function callWithId(url, id) {
         }
     })
 }
+
 function callPost(url) {
     $.ajax({
         type: "POST",
@@ -449,7 +450,6 @@ function showAlert(title) {
 }
 
 function removeAddress(url, name, phone, address) {
-    debugger;
     $.ajax({
         type: "POST",
         url: url,
@@ -458,6 +458,26 @@ function removeAddress(url, name, phone, address) {
             $("#pw").html(res);
             console.log(res);
 
+        }
+    })
+}
+
+function addToCart(url, id, amount) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: { id: id, amount: amount },
+        success: function () {
+        }
+    })
+}
+
+function buyNow(url, id, amount) {
+    $.ajax({
+        type: "GET",
+        url: url,
+        data: { id: id, amount: amount },
+        success: function (res) {
         }
     })
 }
