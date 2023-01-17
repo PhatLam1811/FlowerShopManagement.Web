@@ -1,35 +1,35 @@
 ﻿@model InforDeliveryModel
 <h1>Create new infor delivery</h1>
 
-<form asp-action="CreateInfoDelivery" asp-controller="Profile" method="post" onsubmit="showPartialView1(this); return false;>
-<div class="border border-2 border-app radius-2 px-4 py-3 d-flex mt-4">
-	<div class="flex-grow-1">
-		@if (Model.IsDefault)
-		{
-			<p class="h4 text-secondary mb-3">Default</p>
-		}
-		<div class="d-flex flex-column gap-3">
-			<div class="d-flex align-items-end gap-3">
-				<p class="h6">Name:</p>
-				
-				<input type="text" asp-for="Name" />
-			</div>
-			<div class="d-flex align-items-end gap-3">
-				<p class="h6">Phone:</p>
-				<input type="tel" asp-for="Phone" />
+<form asp-action="CreateInfoDelivery" asp-controller="Profile" method="post" onsubmit="return addAddress(this);" >
+    <div class="border border-2 border-app radius-2 px-4 py-3 d-flex mt-4">
+        <div class="flex-grow-1">
+            @if (Model.IsDefault)
+            {
+                <p class="h4 text-secondary mb-3">Default</p>
+            }
+            <div class="d-flex flex-column gap-3">
+                <div class="d-flex align-items-end gap-3">
+                    <p class="h6">Name:</p>
 
-			</div>
-			<div class="d-flex align-items-end gap-3">
-				<p class="h6">Address:</p>
-				
-				<input type="text" asp-for="Address" />
+                    <input type="text" asp-for="Name" />
+                </div>
+                <div class="d-flex align-items-end gap-3">
+                    <p class="h6">Phone:</p>
+                    <input type="tel" asp-for="Phone" />
 
-			</div>
-		</div>
-	</div>
-	<div class="d-flex flex-column gap-2">
-		<button class="btn-no-min btn-secondary">Submit</button>
-		
-	</div>
-</div>
+                </div>
+                <div class="d-flex align-items-end gap-3">
+                    <p class="h6">Address:</p>
+
+                    <input type="text" asp-for="Address" />
+
+                </div>
+            </div>
+        </div>
+        <div class="d-flex flex-column gap-2">
+            <button class="btn-no-min btn-secondary">Submit</button>
+
+        </div>
+    </div>
 </form>

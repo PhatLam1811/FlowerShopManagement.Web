@@ -9,7 +9,6 @@ function showContent2(url, title) {
         url: url,
         data: {},
         success: function (res) {
-            alert(res);
             $("#form-modal .modal-body").html(res);
             $("#form-modal .modal-title").html(title);
             $("#form-modal").modal('show');
@@ -498,4 +497,27 @@ function buyNow(url, id, amount) {
         success: function (res) {
         }
     })
+}
+
+function addAddress(form) {
+    var obj = new FormData(form);
+    $.ajax({
+        type: "POST",
+        url: form.action,
+        data: obj,
+        contentType: false,
+        processData: false,
+        success: function (res) {
+            $("#form-modal .modal-body").html('');
+            $("#form-modal .modal-title").html('');
+            $("#form-modal").modal('hide');
+            $("#pw").html(res);
+            console.log(res);
+        },
+        error: function (err) {
+            console.log(err);
+            alert(err);
+        }
+    })
+    return false;
 }

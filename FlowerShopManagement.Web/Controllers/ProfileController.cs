@@ -205,7 +205,10 @@ public class ProfileController : Controller
 
 		var user = await _authServices.GetAuthenticatedUserAsync(userId);
 		if (user is null) return NotFound();
-
+		if(user.InforDelivery.Count <= 1)
+		{
+			return NotFound();
+		}
         user.InforDelivery = user.InforDelivery.Where(i => !(i.Address.Equals(address) && i.Name.Equals(name) && i.Phone.Equals(phone))).ToList();
 		await _customerfService.EditInfoAsync(user);
 
