@@ -18,6 +18,8 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             _reportService = reportService;
         }
 
+    [Route("")]
+        [Route("Index")]
         public IActionResult Index()
         {
             ViewBag.Dashboard = true;
