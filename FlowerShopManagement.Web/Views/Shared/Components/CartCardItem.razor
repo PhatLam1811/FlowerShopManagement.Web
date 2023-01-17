@@ -1,5 +1,11 @@
 ﻿<div class="form-check mb-3">
-	<input class="form-check-input fs-4 me-2" type="checkbox" value="" id="defaultCheck1" checked=@isSelected @onchange="SelectItem">
+	@if (cartItem.items.Amount > 0) {
+		<input class="form-check-input fs-4 me-2"
+		   type="checkbox"
+		   id="defaultCheck1"
+		   checked=@isSelected
+		   @onchange="SelectItem">
+	}
 	<div class="card d-flex flex-row">
 		<img src="image/flower2.png" class="card-img-top w-25 h-auto" />
 		<div class="card-body d-flex flex-column justify-content-between">
@@ -14,7 +20,15 @@
 				</div>
 			</div>
 			<div class="mt-1 d-flex justify-content-between align-items-end">
-				<Counter count="@((int)cartItem.amount)" max=@cartItem.items.Amount OnGetAmount="ChangeAmount" />
+				@if (cartItem.items.Amount > 0)
+				{
+					<Counter count="@((int)cartItem.amount)" max=@cartItem.items.Amount OnGetAmount="ChangeAmount" />
+				}
+				else
+				{
+					<p class="h6 fst-italic text-color-secondary">Product sold out temporarily!!</p>
+				}
+
 				<p class="icon-delete fs-5 m-0 icon-normal text-color-pink hover-icon" @onclick="RemoveOutOfCart"></p>
 			</div>
 		</div>
@@ -45,7 +59,7 @@
 	public bool isSelected { get; set; } = false;
 
 	[Parameter]
-	public EventCallback<MyArgs> IsChanged { get; set; }
+	public EventCallback<string> IsChanged { get; set; }
 
 	protected async void ChangeAmount(int count)
 	{
@@ -59,8 +73,15 @@
 	{
 		if (cartItem._productId != null)
 		{
-			await js.InvokeVoidAsync("callWithId", new object[] { url, cartItem._productId });
-			StateHasChanged();
+			// confirm if user want to remove this item
+			var result = await js.InvokeAsync<bool>("confirmRemove", null);
+			if (result)
+			{
+				await js.InvokeVoidAsync("removeCartItem", new object[] { url, url3, cartItem._productId });
+				await IsChanged.InvokeAsync(cartItem._productId);
+				StateHasChanged();
+			}
+
 		}
 	}
 

@@ -376,6 +376,25 @@ function callWithId(url, id) {
         }
     })
 }
+
+function callGetWithId(url, id) {
+    $.ajax({
+        type: "GET",
+        url: url,
+        data: { id: id },
+        success: function (res) {
+            if (res.isValid) {
+                //$('#hihi').html(res.html);
+                //$.notify("Added to your wishlist", "success", { position: "right" });
+            }
+            else {
+                //$.notify("Error", "warn", { position: "right" });
+            }
+
+        }
+    })
+}
+
 function callPost(url) {
     $.ajax({
         type: "POST",
@@ -420,13 +439,26 @@ function updateSelection(url, url2, id, isSelected) {
     })
 }
 
-function removeCartItem(url, id) {
+function confirmRemove() {
+    if (confirm("Press")) {
+        return true;
+    }
+    return false;
+}
+
+function removeCartItem(url, url2, id) {
     $.ajax({
         type: "POST",
         url: url,
         data: { id: id },
-        success: function (res) {
-            $('#cartviewall').html(res);
+        success: function () {
+            $.ajax({
+                type: "POST",
+                url: url2,
+                success: function (res) {
+                    $('#hix').html(res);
+                }
+            })
         }
     })
 }
@@ -436,7 +468,6 @@ function showAlert(title) {
 }
 
 function removeAddress(url, name, phone, address) {
-    debugger;
     $.ajax({
         type: "POST",
         url: url,
@@ -445,6 +476,26 @@ function removeAddress(url, name, phone, address) {
             $("#pw").html(res);
             console.log(res);
 
+        }
+    })
+}
+
+function addToCart(url, id, amount) {
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: { id: id, amount: amount },
+        success: function () {
+        }
+    })
+}
+
+function buyNow(url, id, amount) {
+    $.ajax({
+        type: "GET",
+        url: url,
+        data: { id: id, amount: amount },
+        success: function (res) {
         }
     })
 }

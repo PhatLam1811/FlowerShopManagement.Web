@@ -41,7 +41,14 @@ namespace FlowerShopManagement.Web.Controllers
                         {
                             var product = await _productRepository.GetById(item._productId);
                             if (product != null)
-                            {
+                            { 
+                                // check if item in cart have no enough amount in stock
+                                // update cart
+                                if (product._amount < item.amount)
+                                {
+                                    item.amount = product._amount;
+                                    var result = await _cartRepository.UpdateById(cartM.Id, cartM.ToEntity());
+                                }
                                 item.items = new ProductDetailModel(product);
                                 if (item.isSelected)
                                     total += item.amount * item.items.UniPrice;
@@ -57,7 +64,7 @@ namespace FlowerShopManagement.Web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddtoCart(string id)
+        public async Task<IActionResult> AddToCart(string id, int amount)
         {
             string? userId;
 
@@ -67,7 +74,7 @@ namespace FlowerShopManagement.Web.Controllers
 
                 if (userId != null)
                 {
-                    var result = await _customerService.AddItemToCart(userId, id, 1);
+                    var result = await _customerService.AddItemToCart(userId, id, amount);
                     if (result)
                     {
                         return RedirectToAction("Index", "Home");
@@ -92,9 +99,7 @@ namespace FlowerShopManagement.Web.Controllers
                     var result = await _customerService.RemoveItemToCart(userId, id);
                     if (result)
                     {
-                        var cart = await _customerService.GetCartOfUserAsync(userId);
-                        //await LoadViewTotal();
-                        return PartialView("_ViewAll", cart.Items);
+                        return RedirectToAction("Index", "Cart");
                     }
                 }
             }
@@ -166,26 +171,6 @@ namespace FlowerShopManagement.Web.Controllers
                     }
                     cart.Total = total;
                     return PartialView("_ViewTotal", cart);
-                }
-            }
-
-            return NotFound();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> LoadViewAll()
-        {
-            string? userId;
-
-            if (this.HttpContext != null)
-            {
-                userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                if (userId != null)
-                {
-                    var cart = await _customerService.GetCartOfUserAsync(userId);
-                    await LoadViewTotal();
-                    return PartialView("_ViewAll", cart);
                 }
             }
 
