@@ -20,7 +20,7 @@ function showContent2(url, title) {
 }
 
 function showPartialView(url) {
-
+    debugger;
     $.ajax({
         type: "GET",
         url: url,
@@ -520,4 +520,81 @@ function addAddress(form) {
         }
     })
     return false;
+}
+
+function showPartialViewForChoosingAddress(url) {
+
+    $.ajax({
+        type: "GET",
+        url: url,
+        data: {},
+        success: function (res) {
+            $("#form-modal .modal-body").html(res);
+            $("#form-modal .modal-title").html('Choose address');
+            $("#form-modal").modal('show');
+           
+        },
+        error: function (err) {
+            console.log(err);
+            alert(err);
+        }
+    })
+}
+
+function chooseAddress(form) {
+    var obj = new FormData(form);
+    $.ajax({
+        type: "POST",
+        url: form.action,
+        data: obj,
+        contentType: false,
+        processData: false,
+        success: function (res) {
+            $("#form-modal .modal-body").html('');
+            $("#form-modal .modal-title").html('');
+            $("#form-modal").modal('hide');
+            $("#info-Cus").html(res);
+            console.log(res);
+        },
+        error: function (err) {
+            console.log(err);
+            alert(err);
+        }
+    })
+    return false;
+}
+
+function checkVoucher(url) {
+    if ($("#voucher-input").val() != null) {
+        var id = $("#voucher-input").val();
+        var value = $("#total-input").val();
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: { id: id, value : value },
+            success: function (res) {
+                if (res.isValid === true) {
+                    $("#voucher-input").notify(
+                        res.message, { position: "bottom", className: "success", showDuration: 400, showAnimation: 'slideDown' }
+                    );
+                    //$("#discount-input").val(res.)
+
+                    $("#balance-input").val(res.value);
+                    $("#discount-input").val(res.discount);
+                }
+                else {
+
+                    $("#voucher-input").notify(
+                        res.message, { position: "bottom", className: "warn", showDuration: 400, showAnimation: 'slideDown' }
+                    );
+                }
+
+            },
+            error: function (err) {
+                alert('sai');
+                alert(err);
+                console.log(err)
+            }
+        })
+    }
 }
