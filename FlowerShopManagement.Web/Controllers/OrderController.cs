@@ -1,16 +1,15 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
+using FlowerShopManagement.Application.Interfaces.MongoDB;
 using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
-using FlowerShopManagement.Application.Services.UserServices;
-using FlowerShopManagement.Application.Services;
-using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using static MongoDB.Driver.WriteConcern;
 using FlowerShopManagement.Web.ViewModels;
 using ValueType = FlowerShopManagement.Core.Enums.ValueType;
+using FlowerShopManagement.Core.Entities;
 
 namespace FlowerShopManagement.Web.Controllers
 {
