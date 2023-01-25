@@ -116,7 +116,9 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
 
         try
         {
-            var aggregate = Aggregate<OrdersCountModel>(pipeline).First();
+            var aggregate = Aggregate<OrdersCountModel>(pipeline).FirstOrDefault();
+
+            if (aggregate == null) return 0;
 
             return aggregate.numberOfOrders;
         }
