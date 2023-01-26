@@ -7,7 +7,7 @@ public class GoodsReceivedNote
     public string _PoNo;
 
     public string supplierName;
-    public List<GoodsReceivedDetails> details;
+    public List<SupplyItem> details;
     public string receivedBy;
     public string checkedBy;
 
@@ -19,7 +19,7 @@ public class GoodsReceivedNote
         _PoNo = Guid.NewGuid().ToString();
 
         supplierName = string.Empty;
-        details = new List<GoodsReceivedDetails>();
+        details = new List<SupplyItem>();
         receivedBy = string.Empty;
         checkedBy = string.Empty;
 
@@ -27,8 +27,9 @@ public class GoodsReceivedNote
     }
 }
 
-public struct GoodsReceivedDetails
+public struct SupplyItem
 {
+    string _productId;
     string productName;
     int orderQty;
     int deliveredQty;

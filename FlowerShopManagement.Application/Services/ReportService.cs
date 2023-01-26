@@ -6,8 +6,6 @@ using FlowerShopManagement.Core.Enums;
 
 namespace FlowerShopManagement.Application.Services;
 
-
-
 public class ReportService : IReportService
 {
     private readonly IOrderRepository _orderRepository;
