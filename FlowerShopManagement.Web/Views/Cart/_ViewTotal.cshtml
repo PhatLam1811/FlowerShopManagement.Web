@@ -1,0 +1,25 @@
+﻿@model CartModel
+
+@{
+	var disabled = "disabled";
+	foreach (var i in Model.Items) {
+		if (i.isSelected) {
+			disabled = "";
+			break;
+		}
+	}
+}
+
+<div class="d-flex justify-content-between">
+	<p class="h3 text-primary">Total</p>
+	<p class="h3 text-primary">$@Model.Total</p>
+</div>
+<div class="mt-2 d-flex justify-content-between">
+	<p class="caption">Discount</p>
+	<p class="caption">$0</p>
+</div>
+<div class="mt-4 d-flex justify-content-between">
+	<p class="h2">Balance</p>
+	<p class="h2">$@(Model.Total)</p>
+</div>
+<button class="btn btn-primary w-100 mt-5" onclick="location.href = '@(Url.Action("Create", "Order"))'" @disabled>Buy Now</button>

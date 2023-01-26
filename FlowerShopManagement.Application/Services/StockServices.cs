@@ -16,15 +16,17 @@ public class StockServices : IStockService
     ICategoryRepository _categoryRepository;
     IMaterialRepository _materialRepository;
     IProductRepository _productRepository;
-    IWebHostEnvironment _webHostEnvironment;
+    IWebHostEnvironment _webHostEnvironment;IVoucherRepository _voucherRepository;
 
-    public StockServices(ICategoryRepository categoryRepository, IMaterialRepository materialRepository,
-        IProductRepository productRepository, IWebHostEnvironment webHostEnvironment)
+
+	public StockServices(ICategoryRepository categoryRepository, IMaterialRepository materialRepository,
+        IProductRepository productRepository, IWebHostEnvironment webHostEnvironment,IVoucherRepository voucherRepository)
     {
         _categoryRepository = categoryRepository;
         _materialRepository = materialRepository;
         _productRepository = productRepository;
         _webHostEnvironment = webHostEnvironment;
+        _voucherRepository = voucherRepository;
     }
 
     public async Task<bool> CreateCategory(string name)
@@ -153,9 +155,23 @@ public class StockServices : IStockService
         }
         return productMs;
     }
-    public async Task<List<VoucherDetailModel>> GetUpdatedVouchers(IVoucherRepository voucherRepository)
+
+    public async Task<List<ProductDetailModel>> GetUpdatedDetailProducts()
     {
-        List<Voucher>? vouchers = await voucherRepository.GetAll();
+        List<Product>? products = await _productRepository.GetAll();
+        List<ProductDetailModel> productMs = new List<ProductDetailModel>();
+
+        if (products == null) return productMs;
+
+        foreach (var o in products)
+        {
+            productMs.Add(new ProductDetailModel(o));
+        }
+        return productMs;
+    }
+    public async Task<List<VoucherDetailModel>> GetUpdatedVouchers()
+    {
+        List<Voucher>? vouchers = await _voucherRepository.GetAll();
         List<VoucherDetailModel> voucherMs = new List<VoucherDetailModel>();
 
         if (vouchers == null) return voucherMs;
@@ -183,5 +199,29 @@ public class StockServices : IStockService
         }
         
         return await _productRepository.UpdateById(obj._id,obj);
+    }
+
+    public async Task<VoucherDetailModel> GetADetailVoucher(string id)
+    {
+
+        Voucher? voucher = await _voucherRepository.GetById(id);
+        if (voucher == null) return new VoucherDetailModel();
+        return new VoucherDetailModel(voucher);
+    }
+
+    public Task<bool> DeleteVoucher(string id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public async Task<bool> ActivateVoucher(string id)
+    {
+        Voucher? voucher = await _voucherRepository.GetById(id);
+        
+        if (voucher == null) return false;
+
+        voucher._state = Core.Enums.VoucherStatus.Using;
+
+        return await _voucherRepository.UpdateById(voucher._id, voucher);
     }
 }

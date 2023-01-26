@@ -8,7 +8,7 @@
 		<div class="card-body">
 			<div class="d-flex justify-content-between">
 				<div>
-					<p class="h4">@product.Name</p>
+					<p class="h4" @onclick="NavigateToDetail">@product.Name</p>
 					<p class="h3 text-secondary mt-3">$@product.UniPrice</p>
 				</div>
 				@if (product.IsLike == false)
@@ -22,14 +22,20 @@
 			</div>
 		</div>
 
-		<button class="btn btn-primary mt-2 w-100 button" @onclick="AddToCart">Add to Cart</button>
+		@if (product.Amount > 0) {
+			<button class="btn btn-primary mt-2 w-100" @onclick="AddToCart">@(isAddedToCart ? "Added" : "Add to Cart")</button>
+		}
+		else {
+			<button class="btn btn-secondary mt-2 w-100" @onclick="AddToCart" disabled>Sold out</button>
+		}
+		
 	</div>
 }
 
 @code {
 
 	[Parameter]
-	public ProductModel product { get; set; }
+	public ProductDetailModel product { get; set; }
 
 	[Parameter]
 	public string url { get; set; } = "";
@@ -43,16 +49,33 @@
 	[Parameter]
 	public bool isAuthenticated { get; set; }
 
+	[Parameter]
+	public bool isAddedToCart { get; set; } = false;
+
 	private async void AddToCart()
 	{
-		
+		if (isAuthenticated)
+		{
+			if (product.Id != null)
+			{
+				await js.InvokeVoidAsync("addToCart", new object[] { url, product.Id, 1 });
+				isAddedToCart = true;
+
+				StateHasChanged();
+			}
+		}
+		else
+		{
+			UriHelper.NavigateTo("Authentication/SignIn", true);
+		}
 	}
 
 	private async void AddToWishList()
 	{
 		if (isAuthenticated)
 		{
-			if (product.Id != null ) {
+			if (product.Id != null)
+			{
 				await js.InvokeVoidAsync("callWithId", new object[] { url1, product.Id });
 				product.IsLike = true;
 
@@ -63,7 +86,7 @@
 		{
 			UriHelper.NavigateTo("Authentication/SignIn", true);
 		}
-	}
+	}	
 
 	private async void RemoveOutOfWishList()
 	{
@@ -81,6 +104,10 @@
 		{
 			UriHelper.NavigateTo("Authentication/SignIn", true);
 		}
+	}
+
+	private void NavigateToDetail() {
+		UriHelper.NavigateTo("ProductDetail/ProductDetail/" + product.Id, true);
 	}
 
 	//public async Task SignIn()
