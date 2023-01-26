@@ -8,8 +8,8 @@
     var addresses = JsonConvert.DeserializeObject<List<AddressModel>>(s) ?? new List<AddressModel>();
 
     var cities = addresses.GroupBy(i => i._city).Select(i => i.Key).ToList();
-    var districts = ViewData["Districts"] as List<string> ?? new List<string>();
-    var wards = ViewData["Wards"] as List<string> ?? new List<string>();
+    var districts = ViewData["Districts"] as List<string> ?? addresses.Where(i => i._city == "Thành phố Hà Nội").GroupBy(i => i._district).Select(i => i.Key).ToList();
+    var wards = ViewData["Districts"] as List<string> ?? addresses.Where(i => i._city == "Thành phố Hà Nội" && i._district == "Huyện Đông Anh").GroupBy(i => i._commune).Select(i => i.Key).ToList();
 }
 <form asp-action="CreateInfoDelivery" asp-controller="Profile" method="post" onsubmit="return addAddress(this);" >
     <div class="">
@@ -66,7 +66,7 @@
                         else
                         {*@
                             <div class="d-flex">
-                                <input type="text" name="detailAddress"
+                                <input type="text" asp-for="Address"
                                    class="form-control form-control-lg h5 py-3"
                                    id="ip-address" placeholder="eg: 69 Le Loi street">
                             </div>
@@ -75,8 +75,6 @@
                 </div>
             </div>
         </div>
-        <div class="d-flex flex-column gap-2">
-            <button class="btn-no-min btn-secondary">Submit</button>
 
 		<button class="btn btn-primary mt-5 w-100">Submit</button>
 	</div>

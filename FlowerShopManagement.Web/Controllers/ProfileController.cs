@@ -5,9 +5,11 @@ using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Application.Services;
 using FlowerShopManagement.Application.Services.UserServices;
 using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Security.Claims;
 using ZstdSharp.Unsafe;
 
@@ -186,12 +188,21 @@ public class ProfileController : Controller
 
     [Route("FindDistricts")]
     [HttpPost]
-    public async Task<List<string>> FindDistricts(string city)
+    public async Task<IActionResult> FindDistricts(string city)
     {
-        List<string> districts = await _adminService.FindDistricts(city);
-        ViewData["Districts"] = districts;
 
-        return districts;
+        List<string> districts = await _adminService.FindDistricts(city);
+        List<string> wards = await _adminService.FindWards(city, districts.FirstOrDefault());
+        ViewData["Districts"] = districts;
+        ViewData["Wards"] = wards;
+
+        return Json(new
+        {
+            districts = districts,
+            wards = wards
+
+        });
+
     }
     [Route("FindWards")]
     [HttpPost]
@@ -205,12 +216,15 @@ public class ProfileController : Controller
     [HttpPost]
 	public async Task<IActionResult> CreateInfoDelivery(InforDeliveryModel inforDeliveryModel, string city, string district, string ward)
 	{
-		if(!ModelState.IsValid) return NotFound();
+		if (city == null && district == null
+		&& ward == null && inforDeliveryModel == null) return NotFound();
+		inforDeliveryModel.Address = inforDeliveryModel.Address + ", " + ward + ", " + district + ", " + city;
+		
+		if (!ModelState.IsValid) return NotFound();
 		var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
 		// Unauthenticated user
 		if (userId is null) return NotFound();
-
 		var user = await _authServices.GetAuthenticatedUserAsync(userId);
 		if (user is null) return NotFound();
 
