@@ -1,4 +1,6 @@
-﻿namespace FlowerShopManagement.Core.Entities;
+﻿using FlowerShopManagement.Core.Enums;
+
+namespace FlowerShopManagement.Core.Entities;
 
 public class SupplyRequest
 {
@@ -6,6 +8,7 @@ public class SupplyRequest
 
     public List<Supplier> suppliers;
     public List<RequestedItem> details;
+    public RequestStatus status;
 
     public DateTime createdDate;
 
@@ -15,9 +18,17 @@ public class SupplyRequest
 
         suppliers = new List<Supplier>();
         details = new List<RequestedItem>();
+        status = RequestStatus.Pending;
 
         createdDate = DateTime.Now;
     }
+}
+
+public enum RequestStatus
+{
+    Pending,
+    Canceled,
+    Completed
 }
 
 public struct RequestedItem
