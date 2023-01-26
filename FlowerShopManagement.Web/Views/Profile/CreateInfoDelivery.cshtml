@@ -1,6 +1,16 @@
-﻿@model InforDeliveryModel
-@*<h1>Create new infor delivery</h1>*@
+﻿@using Newtonsoft.Json;
 
+@model InforDeliveryModel
+@*<h1>Create new infor delivery</h1>*@
+@{
+    string s = ViewData["Addresses"] as string ?? "";
+
+    var addresses = JsonConvert.DeserializeObject<List<AddressModel>>(s) ?? new List<AddressModel>();
+
+    var cities = addresses.GroupBy(i => i._city).Select(i => i.Key).ToList();
+    var districts = ViewData["Districts"] as List<string> ?? new List<string>();
+    var wards = ViewData["Wards"] as List<string> ?? new List<string>();
+}
 <form asp-action="CreateInfoDelivery" asp-controller="Profile" method="post" onsubmit="return addAddress(this);" >
     <div class="">
         <div class="flex-grow-1">
@@ -17,9 +27,51 @@
                     <label class="form-label">Phone:</label>
                     <input type="text" asp-for="Phone" class="form-control form-control-lg h5 py-3" placeholder="">
                 </div>
-                <div class="form-group">
-                    <label class="form-label">Address:</label>
-                    <input type="text" asp-for="Address" class="form-control form-control-lg h5 py-3" placeholder="">
+                @*changes*@
+                <div class="row">
+                    <div class="col form-group">
+                        <label class="form-label" for="floatingSelect">City</label>
+                        <select asp-items="@(new SelectList(cities))" id="city" name="city"
+                                class="form-select form-select-lg h5 py-3" style="font-family:Open Sans"
+                                id="floatingSelect" aria-label="Floating label select example"
+                                required onchange="if (this.selectedIndex != -1) FindDistricts(this,'@Url.Action("FindDistricts","Profile",null,Context.Request.Scheme)');">
+                        </select>
+                    </div>
+
+                    <div class="col form-group ">
+                        <label class="form-label">District</label>
+                        <select class="form-select form-select-lg h5 py-3" id="district" name="district" style="font-family:'Open Sans'"
+                                asp-items="@(new SelectList(districts))" aria-label="Floating label select example"
+                                required onchange="if (this.selectedIndex != -1) FindWards(this,'@Url.Action("FindWards","Profile",null,Context.Request.Scheme)');">
+                        </select>
+                    </div>
+                    <div class="col form-group ">
+                        <label class="form-label">Ward</label>
+                        <select class="form-select form-select-lg h5 py-3" id="ward" name="ward" style="font-family:'Open Sans'"
+                                asp-items="@(new SelectList(wards))"
+                                aria-label="Floating label select example"
+                                required>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="exampleFormControlInput1">Address</label>
+                       @* @if (Model != null && Model.userModel != null && Model.userModel.InforDelivery != null && Model.userModel.InforDelivery.Count > 0)
+                        {
+                            <div class="d-flex">
+                                <input type="text" name="detailAddress"
+                                   class="form-control form-control-lg h5 py-3"
+                                   id="ip-address" placeholder="eg: 69 Le Loi street">
+                            </div>
+                        }
+                        else
+                        {*@
+                            <div class="d-flex">
+                                <input type="text" name="detailAddress"
+                                   class="form-control form-control-lg h5 py-3"
+                                   id="ip-address" placeholder="eg: 69 Le Loi street">
+                            </div>
+                        @*}*@
+                    </div>
                 </div>
             </div>
         </div>

@@ -65,7 +65,7 @@
                 <select asp-items="@(new SelectList(cities))" id="city" name="city"
                         class="form-select form-select-lg h5 py-3" style="font-family:Open Sans"
                         id="floatingSelect" aria-label="Floating label select example" 
-                        required onchange="if (this.selectedIndex != -1) FindDistricts(this,'@Url.Action("FindDistricts","User",null,Context.Request.Scheme)');">
+                        required onchange="debugger; if (this.selectedIndex != -1) FindDistricts(this,'@Url.Action("FindDistricts","User",null,Context.Request.Scheme)');">
                 </select>
             </div>
 

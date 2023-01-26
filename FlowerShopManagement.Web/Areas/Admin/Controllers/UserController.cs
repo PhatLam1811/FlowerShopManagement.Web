@@ -143,7 +143,7 @@ public class UserController : Controller
         return View(new UserCreateVM());
     }
 
-    [Route("FindDistrict")]
+    [Route("FindDistricts")]
     [HttpPost]
     public async Task<List<string>> FindDistricts(string city)
     {
@@ -165,6 +165,7 @@ public class UserController : Controller
 
         return wards;
     }
+
     [Route("Create")]
     [HttpPost]
     public async Task<IActionResult> Create(UserCreateVM userCreateVM)
