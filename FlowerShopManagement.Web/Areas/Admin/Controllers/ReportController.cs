@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Route("[area]/[controller]")]
     [Authorize(Policy = "StaffOnly")]
     public class ReportController : Controller
     {
