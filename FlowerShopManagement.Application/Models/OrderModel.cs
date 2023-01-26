@@ -92,6 +92,8 @@ public class OrderDetailModel
     public double Total { get; set; } = 0;
     public double DeliveryCharge { get; set; }
     public string? Address { get; set; }
+    public string? Voucher { get; set; }
+    public double Discount { get; set; } = 0;
 
     public OrderDetailModel()
     {
@@ -105,6 +107,7 @@ public class OrderDetailModel
         Date = DateTime.Now;
         Notes = "";
         Address = "";
+        Voucher = "";
     }
 
     public OrderDetailModel (Order entity)
@@ -129,6 +132,8 @@ public class OrderDetailModel
         Notes = entity._notes;
         Total = entity._total;
         Date = entity._date;
+        Voucher = entity._voucher;
+        Discount = entity._discount;
     }
 
     public Order ToEntity()
@@ -144,7 +149,7 @@ public class OrderDetailModel
 
         }
         return new Order(id: Id, products: tempProducts, phoneNumber: PhoneNumber, notes: Notes, deliveryMethod: DeliveryMethod,
-            status: Status, customerName: FullName, total: Total, deliveryCharge: DeliveryCharge, accountID: AccountID, date: Date, address: Address);
+            status: Status, customerName: FullName, total: Total, deliveryCharge: DeliveryCharge, accountID: AccountID, date: Date, address: Address, voucher: Voucher, discount: Discount);
 
     }
 }

@@ -6,7 +6,6 @@ namespace FlowerShopManagement.Application.Models;
 
 public class VoucherDetailModel
 {
-
     public string? Code { get; set; }
     public VoucherCategories Categories { get; set; }
     public float Discount { get; set; }
