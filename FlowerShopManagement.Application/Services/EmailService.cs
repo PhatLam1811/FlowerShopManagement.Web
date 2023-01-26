@@ -8,13 +8,15 @@ namespace FlowerShopManagement.Application.Services;
 
 public class EmailService : IEmailService
 {
+    private const string sendEmail = "phatlam1811@gmail.com";
+
     public async Task<bool> SendAsync(MimeMessage mimeMessage)
     {
         try
         {
             using var smtp = new SmtpClient();
             smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-            smtp.Authenticate("phatlam1811@gmail.com", "xhbstfiflmipyjfq");
+            smtp.Authenticate(sendEmail, "xhbstfiflmipyjfq");
 
             await smtp.SendAsync(mimeMessage);
 
@@ -34,7 +36,7 @@ public class EmailService : IEmailService
         {
             using var smtp = new SmtpClient();
             smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-            smtp.Authenticate("phatlam1811@gmail.com", "xhbstfiflmipyjfq");
+            smtp.Authenticate(sendEmail, "xhbstfiflmipyjfq");
 
             smtp.Send(mimeMessage);
 
@@ -53,19 +55,17 @@ public class EmailService : IEmailService
         var mimeMessage = new MimeMessage();
 
         // Configure header
-        mimeMessage.From.Add(MailboxAddress.Parse(supplyForm.From));
-        mimeMessage.Sender = MailboxAddress.Parse(supplyForm.From);
-        mimeMessage.Subject = supplyForm.Subject;
+        mimeMessage.From.Add(MailboxAddress.Parse(sendEmail));
+        mimeMessage.Subject = "Supply request from Dallas";
 
         // Set message's bcc
-        foreach (var email in supplyForm.To)
+        foreach (var suppliers in supplyForm.Suppliers)
         {
-            mimeMessage.Bcc.Add(MailboxAddress.Parse(email));
+            mimeMessage.Bcc.Add(MailboxAddress.Parse(suppliers.email));
         }
 
         // Build message body
         BodyBuilder builder = new BodyBuilder();
-        builder.TextBody = supplyForm.TextPart;
         builder.HtmlBody = supplyForm.HtmlPart;
 
         mimeMessage.Body = builder.ToMessageBody();

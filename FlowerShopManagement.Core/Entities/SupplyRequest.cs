@@ -1,23 +1,23 @@
-﻿using FlowerShopManagement.Core.Enums;
-
-namespace FlowerShopManagement.Core.Entities;
+﻿namespace FlowerShopManagement.Core.Entities;
 
 public class SupplyRequest
 {
     public string _id;
 
-    public List<Supplier> suppliers;
-    public List<RequestedItem> details;
+    public List<RequestSupplier> suppliers;
+    public List<RequestProduct> details;
+    public RequestedStaff createdBy;
     public RequestStatus status;
 
     public DateTime createdDate;
 
-    public SupplyRequest()
+    public SupplyRequest(List<RequestSupplier> suppliers, List<RequestProduct> details, RequestedStaff createdBy)
     {
         _id = Guid.NewGuid().ToString();
 
-        suppliers = new List<Supplier>();
-        details = new List<RequestedItem>();
+        this.suppliers = suppliers;
+        this.details = details;
+        this.createdBy = createdBy;
         status = RequestStatus.Pending;
 
         createdDate = DateTime.Now;
@@ -31,10 +31,23 @@ public enum RequestStatus
     Completed
 }
 
-public struct RequestedItem
+public struct RequestedStaff
 {
-    string _productId;
-    string productName;
-    int requestedQty;
-    string note;
+    public string _id;
+    public string name;
+}
+
+public struct RequestSupplier
+{
+    public string _id;
+    public string name;
+    public string email;
+}
+
+public struct RequestProduct
+{
+    public string _id;
+    public string name;
+    public int requestQty;
+    public string note;
 }

@@ -1,9 +1,8 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
-using FlowerShopManagement.Application.Interfaces.MongoDB;
 using FlowerShopManagement.Application.Models;
-using FlowerShopManagement.Application.MongoDB.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 
@@ -17,24 +16,21 @@ public class ImportController : Controller
     private readonly IImportService _importService;
     private readonly IWebHostEnvironment _webHostEnv;
 
-    private readonly IOrderRepository _orderRepository;
-
     private const string _reqTemplatePath = "/template/SupplyFormTemplate.html";
 
     public ImportController(
         IStockService stockService,
         IImportService importService,
         ISupplierService supplierService,
-        IWebHostEnvironment webHostEnv,
-        IOrderRepository orderRepository)
+        IWebHostEnvironment webHostEnv)
     {
         _stockService = stockService;
         _importService = importService;
         _supplierService = supplierService;
         _webHostEnv = webHostEnv;
-        _orderRepository = orderRepository;
     }
 
+    // IMPORT MAIN PAGE
     [HttpGet]
     public async Task<IActionResult> Index()
     {
@@ -52,58 +48,41 @@ public class ImportController : Controller
     [HttpGet("SupplyForm")]
     public IActionResult SupplyForm(SupplyFormModel model)
     {
+        return View(model);
+    }
+
+    [HttpPost]
+    [ActionName("CreateRequestForm")]
+    public async Task CreateRequestForm(List<string> productIds, List<int> requestQty, List<string> supplierIds)
+    {
+        var products = await _stockService.GetByIdsAsync(productIds);
+        var suppliers = await _supplierService.GetByIdsAsync(supplierIds);
+        var htmlPath = _webHostEnv.WebRootPath + _reqTemplatePath;
+        
+        var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        var userName = HttpContext.User.FindFirst("Username")?.Value;
+
+        if (userId is null || userName is null) return;
+
+        if (products.Count <= 0 || requestQty.Count <= 0)
+        {
+            throw new NullReferenceException("Insufficient Values!");
+        }
+
+        var reqForm = _importService.CreateReqSupplyForm(
+            products, 
+            suppliers, 
+            requestQty,
+            userId, userName, htmlPath);
+
         try
         {
-            return View(model);
+            _importService.SendRequest(reqForm);
         }
         catch (Exception e)
         {
             throw new Exception(e.Message);
         }
-    }
-
-    [HttpPost]
-    [ActionName("CreateRequestForm")]
-    public async Task CreateRequestForm(List<string> productIds, List<int> reqAmounts, List<string> supplierIds)
-    {
-        try 
-        {
-            // await _orderRepository.TotalSale();
-        }
-        catch(Exception e)
-        {
-            throw new Exception(e.Message);
-        }
-
-        //var products = await _stockService.GetByIdsAsync(productIds);
-        //var suppliers = await _supplierService.GetByIdsAsync(supplierIds);
-        //var htmlPath = _webHostEnv.WebRootPath + _reqTemplatePath;
-
-        //if (products.Count <= 0  || reqAmounts.Count <= 0 )
-        //{
-        //    throw new NullReferenceException("Insufficient Values!");
-        //}
-
-        //var reqForm = _importService.CreateReqSupplyForm(products, suppliers, reqAmounts, htmlPath);
-        //try
-        //{
-        //    _importService.SendRequest(reqForm);
-        //}
-        //catch (Exception e)
-        //{
-        //    throw new Exception(e.Message);
-        //}
-
-        //return PartialView("SupplyForm1", reqForm);
-
-        //if (requestForm != null)
-        //    return Json(new
-        //    {
-        //        isValid = true,
-        //        html = Helper.RenderRazorViewToString(this, "SupplyForm", requestForm),
-        //    });
-        //else
-        //    return NotFound(); // Failed to create a new supply request form!
     }
 }
 
