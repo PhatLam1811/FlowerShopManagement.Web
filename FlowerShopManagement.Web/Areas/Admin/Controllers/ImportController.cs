@@ -34,9 +34,15 @@ public class ImportController : Controller
         _webHostEnv = webHostEnv;
         _orderRepository = orderRepository;
     }
-
+    
     [HttpGet]
     public async Task<IActionResult> Index()
+    {
+        return View();
+    }
+
+    [HttpGet("Create")]
+    public async Task<IActionResult> Create()
     {
         // Load data
         var lowOnStockProducts = await _stockService.GetLowOnStockProducts();
@@ -104,6 +110,12 @@ public class ImportController : Controller
         //    });
         //else
         //    return NotFound(); // Failed to create a new supply request form!
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ImportDetail(string? id)
+    {
+        return View();
     }
 }
 

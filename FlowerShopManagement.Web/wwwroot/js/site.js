@@ -532,7 +532,7 @@ function showPartialViewForChoosingAddress(url) {
             $("#form-modal .modal-body").html(res);
             $("#form-modal .modal-title").html('Choose address');
             $("#form-modal").modal('show');
-           
+
         },
         error: function (err) {
             console.log(err);
@@ -577,10 +577,10 @@ function checkVoucher(url) {
                     $("#voucher-input").notify(
                         res.message, { position: "bottom", className: "success", showDuration: 400, showAnimation: 'slideDown' }
                     );
-                    //$("#discount-input").val(res.)
 
-                    $("#balance-input").val(res.value);
+                    $("#balance-input").html(res.value);
                     $("#discount-input").val(res.discount);
+                    $("#discount").html(res.discount);
                 }
                 else {
 

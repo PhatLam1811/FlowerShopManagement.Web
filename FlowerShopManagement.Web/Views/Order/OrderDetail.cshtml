@@ -5,8 +5,7 @@
 		<div class="col-12 col-md-10 col-lg-9 shadow-color bg-color-fade radius20" style="padding: 36px 24px 36px 24px;">
 			<div class="d-flex justify-content-between text-dark">
 				<div class="">
-					<p class="h4">Status</p>
-					<p class="h5 text-secondary">@Model.Status</p>
+					<partial name="_ViewStatus" model="@Model" />
 				</div>
 				<div class="">
 					<p class="caption">Ordered By @Model.Date</p>
@@ -33,9 +32,14 @@
 							<p class="caption-lg">Name:</p>
 							<p class="h5">@Model.FullName</p>
 						</div>
-
-						<p class="h5">@Model.PhoneNumber</p>
-						<p class="h5">@Model.Address</p>
+						<div class="d-flex align-items-end gap-2">
+							<p class="caption-lg">Phone:</p>
+							<p class="h5">@Model.PhoneNumber</p>
+						</div>
+						<div class="d-flex align-items-end gap-2">
+							<p class="caption-lg">Address:</p>
+							<p class="h5">@Model.Address</p>
+						</div>
 					</div>
 					<div class="row mt-4 text-dark">
 						<div class="col d-flex flex-column gap-2">
@@ -46,6 +50,10 @@
 							<p class="h4">Delivery</p>
 							<p class="h5">@Model.DeliveryMethod</p>
 						</div>
+					</div>
+					<div class="col d-flex flex-column gap-2 mt-4">
+						<p class="h4">Voucher</p>
+						<p class="h5">@Model.Voucher</p>
 					</div>
 				</div>
 
@@ -66,9 +74,13 @@
 							<span class="caption">Delivery Fee</span>
 							<span class="caption">$@Model.DeliveryCharge</span>
 						</div>
+						<div class="d-flex justify-content-between mt-2">
+							<span class="caption">Discount</span>
+							<span class="caption">$@Model.Discount</span>
+						</div>
 						<div class="d-flex justify-content-between h1 mt-2 text-primary">
 							<span>Total</span>
-							<span>$@Model.Total</span>
+							<span>$@(Model.Total - Model.Discount)</span>
 						</div>
 					</div>
 				</div>

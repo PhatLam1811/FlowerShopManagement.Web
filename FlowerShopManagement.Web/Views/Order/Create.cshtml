@@ -67,8 +67,7 @@
                 <div class="form-group col-6">
                     <label class="form-label h6 mb-2" for="exampleFormControlInput1">Voucher</label>
                     <div class="d-flex">
-                        <input type="text" class="form-control form-control-lg h5 py-2" id="voucher-input" placeholder="">
-                        @*<span asp-validation-for=""></span>*@
+                        <input type="text" name="voucher" class="form-control form-control-lg h5 py-2" id="voucher-input" placeholder="">
                         <button type="button" class="btn-no-p btn-secondary"
                                 onclick="checkVoucher('@Url.Action("CheckVoucher","Order",null,Context.Request.Scheme)')">
                             Check
