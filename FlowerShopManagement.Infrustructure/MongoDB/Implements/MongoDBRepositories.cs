@@ -238,6 +238,11 @@ public class SupplierRepository : BaseRepository<Supplier>, ISupplierRepository
     public SupplierRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 }
 
+public class SupplyRequestRepository : BaseRepository<SupplyRequest>, ISupplyRequestRepository
+{
+    public SupplyRequestRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+}
+
 public class VoucherRepository : BaseRepository<Voucher>, IVoucherRepository
 {
     public VoucherRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
