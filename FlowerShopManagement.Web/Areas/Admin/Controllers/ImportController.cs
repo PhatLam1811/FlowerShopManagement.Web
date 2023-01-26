@@ -34,6 +34,12 @@ public class ImportController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
+        return View();
+    }
+
+    [HttpGet("Create")]
+    public async Task<IActionResult> Create()
+    {
         // Load data
         var lowOnStockProducts = await _stockService.GetLowOnStockProducts();
         var suppliers = await _supplierService.GetAllAsync();
@@ -83,6 +89,12 @@ public class ImportController : Controller
         {
             throw new Exception(e.Message);
         }
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ImportDetail(string? id)
+    {
+        return View();
     }
 }
 

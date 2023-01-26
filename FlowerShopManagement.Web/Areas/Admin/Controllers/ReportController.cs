@@ -15,19 +15,19 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         {
             ViewBag.Report = true;
 
-            Chart verticalBarChart = GenerateVerticalBarChart();
             Chart donutChart = GenerateDonutChart();
+            Chart lineChart = GenerateLineChart();
 
-            ViewData["VerticalBarChart"] = verticalBarChart;
             ViewData["DonutChart"] = donutChart;
+            ViewData["LineChart"] = lineChart;
 
             return View();
         }
 
-        private Chart GenerateVerticalBarChart()
+        private Chart GenerateLineChart()
         {
             Chart chart = new Chart();
-            chart.Type = Enums.ChartType.Bar;
+            chart.Type = Enums.ChartType.Line;
 
             ChartJSCore.Models.Data data = new ChartJSCore.Models.Data();
 
@@ -53,20 +53,35 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             }
 
 
-            var dataset = new BarDataset
+            var dataset = new LineDataset
             {
                 Label = "Numbers of order",
                 Data = new List<double?>() { 0, 40, 20, 36, 50, 23, 100 },
+                Fill = "false",
+                Tension = 0.1,
                 BackgroundColor = colors,
                 BorderColor = borderColors,
                 BorderWidth = new List<int> { 4 },
-                BarPercentage = 0.5,
-                BarThickness = 6,
-                MaxBarThickness = 8,
-                MinBarLength = 2,
+                PointBorderWidth = new List<int> { 8 },
+                PointHoverBorderWidth = new List<int> { 10 },
+                PointBorderColor = new List<ChartColor>() { ChartColor.FromRgba(102, 152, 250, 0.4) },
             };
 
-            data.Datasets = new List<Dataset> { dataset };
+            var dataset1 = new LineDataset
+            {
+                Label = "Total of order",
+                Data = new List<double?>() { 0, 10, 20, 16, 50, 23, 33 },
+                Fill = "false",
+                Tension = 0.1,
+                BackgroundColor = new List<ChartColor>() { ChartColor.FromRgba(214, 103, 191, 1) },
+                BorderColor = new List<ChartColor>() { ChartColor.FromRgba(214, 103, 191, 1) },
+                BorderWidth = new List<int> { 4 },
+                PointBorderWidth = new List<int> { 8 },
+                PointHoverBorderWidth = new List<int> { 10 },
+                PointBorderColor = new List<ChartColor>() { ChartColor.FromRgba(214, 103, 191, 0.4) },
+            };
+
+            data.Datasets = new List<Dataset> { dataset, dataset1 };
 
             chart.Data = data;
 

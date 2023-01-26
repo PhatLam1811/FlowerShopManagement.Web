@@ -46,8 +46,8 @@ public class UserController : Controller
         {
             ViewData["Role"] = Enum.GetNames(typeof(Role)).Where(s => s != "Admin" && s != "Passenger").ToList();
             var users = await _staffService.GetUsersAsync() ?? new List<UserModel>();
-            int pagesize = 2;
-            return View(PaginatedList<UserModel>.CreateAsync(users ?? new List<UserModel>(), 1, pagesize));
+            int pageSize = 6;
+            return View(PaginatedList<UserModel>.CreateAsync(users ?? new List<UserModel>(), 1, pageSize));
 
         }
         catch
@@ -107,7 +107,7 @@ public class UserController : Controller
                 ViewData["CurrentFilter"] = searchString;
             }
 
-            int pageSize = 2;
+            int pageSize = 8;
             PaginatedList<UserModel> objs = PaginatedList<UserModel>.CreateAsync(users, pageNumber ?? 1, pageSize);
             return Json(new
             {

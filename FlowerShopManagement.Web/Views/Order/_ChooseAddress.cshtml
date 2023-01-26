@@ -1,0 +1,52 @@
+﻿@using System.Net.Http
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+@model List<InforDeliveryModel>
+
+@{
+    ViewData["Title"] = "Manage Address";
+}
+<div class="">
+    @if (Model != null && Model.Count > 0)
+    {
+        foreach (var item in Model)
+        {
+            <form asp-action="ChooseAddress" asp-controller="Order" method="post" onsubmit="return chooseAddress(this);" class="mb-2">
+                <input name="Name" value="@item.Name" hidden/>
+                <input name="Phone" value="@item.Phone" hidden />
+                <input name="Address" value="@item.Address" hidden />
+                <div class="border border-2 border-app radius-2 px-4 py-3 d-flex gap-5">
+                    <div class="flex-grow-1">
+                        @if (item.IsDefault)
+                        {
+                            <p class="h4 text-secondary mb-3">Default</p>
+                        }
+                        <div class="d-flex flex-column gap-3">
+                            <div class="d-flex align-items-end gap-3">
+                                <p class="h6">Name:</p>
+                                <p name="Name" class="h5 text-primary">@item.Name</p>
+                            </div>
+                            <div class="d-flex align-items-end gap-3">
+                                <p class="h6">Phone:</p>
+                                <p name="Phone" class="h5 text-primary">@item.Phone</p>
+                            </div>
+                            <div class="d-flex align-items-end gap-3">
+                                <p class="h6">Address:</p>
+                                <p name="Address" class="h5 text-primary">@item.Address</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column gap-2">
+                        <button class="btn-no-min btn-secondary" type="submit">
+                            Pick
+                        </button>
+                    </div>
+                </div>
+            </form>
+        }
+    }
+</div>

@@ -29,7 +29,7 @@
 	<div class="col-lg-7 col-12">
 		<p class="h6 text-color-secondary">Numbers of Order in this week</p>
 		<div class="">
-			<canvas id="barChart" class="h-auto"></canvas>
+			<canvas id="lineChart" class="h-auto"></canvas>
 		</div>
 	</div>
 	<div class="col-lg-5 row h-fit gy-3">
@@ -186,16 +186,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
 
 @{
-
-
-	ChartJSCore.Models.Chart chart = (ChartJSCore.Models.Chart)ViewData["VerticalBarChart"];
-	ChartJSCore.Models.Chart chart1 = (ChartJSCore.Models.Chart)ViewData["DonutChart"];
+	ChartJSCore.Models.Chart donutChart = (ChartJSCore.Models.Chart)ViewData["DonutChart"];
+	ChartJSCore.Models.Chart lineChart = (ChartJSCore.Models.Chart)ViewData["LineChart"];
 }
 
 @section Scripts {
 	<script src="~/lib/Chart.js/dist/Chart.js"></script>
 	<script>
-		@Html.Raw(chart.CreateChartCode("barChart"));
-		@Html.Raw(chart1.CreateChartCode("donutChart"));
+		@Html.Raw(lineChart.CreateChartCode("lineChart"));
+		@Html.Raw(donutChart.CreateChartCode("donutChart"));
 	</script>
 }

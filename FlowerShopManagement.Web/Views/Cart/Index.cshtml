@@ -1,4 +1,4 @@
-﻿@using FlowerShopManagement.Web.Views.Shared.Components;
+﻿@model CartModel
 
 @{
 	ViewData["Title"] = "Cart Page";
@@ -24,26 +24,22 @@
 		</div>
 	</div>
 }
-else {
+else
+{
 	<div class="mt-5 row">
 		<div class="col-6">
-			<component type="typeof(CartCardItem)" render-mode="Static" />
+			<component type="typeof(CartList)"
+				   render-mode="ServerPrerendered"
+				   param-Model="@Model.Items"
+				   param-url=@Url.Action("RemoveOutOfCart","Cart",null,Context.Request.Scheme)
+				   param-url1=@Url.Action("UpdateAmount","Cart",null,Context.Request.Scheme)
+				   param-url2=@Url.Action("UpdateSelection","Cart",null,Context.Request.Scheme)
+				   param-url3=@Url.Action("LoadViewTotal","Cart",null,Context.Request.Scheme) />
 		</div>
 		<div class="col-3"></div>
-		<div class="col-3">
-			<div class="d-flex justify-content-between">
-				<p class="h3 text-primary">Total</p>
-				<p class="h3 text-primary">$20</p>
-			</div>
-			<div class="mt-2 d-flex justify-content-between">
-				<p class="caption">Discount</p>
-				<p class="caption">20.000</p>
-			</div>
-			<div class="mt-4 d-flex justify-content-between">
-				<p class="h2">Balance</p>
-				<p class="h2">$40</p>
-			</div>
-			<button class="btn btn-primary w-100 mt-5" onclick="">Buy Now</button>
+		<div class="col-3" id="hix">
+			<partial name="_ViewTotal.cshtml" model="@Model" />
 		</div>
 	</div>
+
 }

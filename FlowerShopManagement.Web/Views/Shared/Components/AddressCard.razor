@@ -22,11 +22,13 @@
 	</div>
 	<div class="d-flex flex-column gap-2">
 		<button class="btn-no-min btn-secondary">Edit</button>
-		<button class="btn-no-min btn-secondary">Remove</button>
+		@*<button class="btn-no-min btn-secondary" onclick="removeAddress(@Url.Action("RemoveInfoDelivery", "Profile"),@inforDelivery.Name,@inforDelivery.Phone, @inforDelivery.Address)">Remove</button>*@
 	</div>
 </div>
 
 @code {
 	[Parameter]
 	public InforDeliveryModel inforDelivery { get; set; } = null!;
+
+	
 }
