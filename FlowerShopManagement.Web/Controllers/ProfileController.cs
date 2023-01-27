@@ -140,7 +140,7 @@ public class ProfileController : Controller
 	}
 
 	[HttpGet]
-	public async Task<IActionResult> ManageAddress()
+	public async Task<IActionResult> ManageAddress() 
 	{
 		var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 

@@ -42,17 +42,18 @@
 			</div>
 		</div>
 		<div class="col-4">
-			@if(Model != null && Model.Avatar != null)
+			@if(Model != null && Model.Avatar != null&& Model.Avatar != "" )
 			{
-			<img src="~/avatar/@Model.Avatar" alt="avatar" class="w-100 h-auto" />
-				
+				<img src="~/avatar/@Model.Avatar" alt="avatar" class="w-100 h-auto" />
+				<input asp-for="Avatar" />
+
 			}
 			else
 			{
-				<img src="~/image/flower1.png" alt="avatar" class="w-100 h-auto" />
+				<img src="~/avatar/user.png" alt="avatar" class="w-100 h-auto" />
+				<input asp-for="Avatar" value="user.png"/>
 
 			}
-			<input asp-for="Avatar"  />
 			<div class="form-group mt-3">
 				
 				<input asp-for="FormFile" style="border-width:0px" accept="image/*" class="form-control" />

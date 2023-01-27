@@ -44,6 +44,7 @@ function showPartialView1(form) {
         contentType: false,
         processData: false,
         success: function (res) {
+            $.notify("Success", "success", { position: "right" });
 
             $("#pw").html(res);
             console.log(res);
