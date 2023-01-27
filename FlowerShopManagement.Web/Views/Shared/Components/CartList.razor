@@ -1,0 +1,32 @@
+﻿@foreach (var i in Model)
+{
+	<CartCardItem cartItem="@i" id="@i._id" isSelected=@i.isSelected url="@url" url1="@url1" url2="@url2" url3="@url3" IsChanged="Rerender" />
+}
+
+@code {
+	[Parameter]
+	public List<CartItemModel> Model { get; set; } = null!;
+
+	[Parameter]
+	public string url { get; set; } = null!;
+
+	[Parameter]
+	public string url1 { get; set; } = null!;
+
+	[Parameter]
+	public string url2 { get; set; } = null!;
+
+	[Parameter]
+	public string url3 { get; set; } = null!;
+
+	protected void Rerender(string productId)
+	{
+		for (var i = 0; i < Model.Count(); i++)
+		{
+			if (Model[i]._productId == productId)
+			{
+				Model.RemoveAt(i);
+			}
+		}
+	}
+}

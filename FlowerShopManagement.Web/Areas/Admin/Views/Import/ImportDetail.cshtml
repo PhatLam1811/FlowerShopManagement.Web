@@ -1,0 +1,50 @@
+﻿<div>
+	<div class="d-flex gap-3 align-items-end">
+		<p>Supplier Name:</p>
+		<p>Le Hoang Quy</p>
+	</div>
+	<div class="d-flex gap-3 align-items-end">
+		<p>Create Date:</p>
+		<p>02/02/2022</p>
+	</div>
+</div>
+
+<div class="table-wrap">
+    <table class="table myaccordion table-hover" id="accordion">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th class="button">Goods</th>
+                <th class="button">Order Quantity</th>
+                <th class="button">Delivery Quatity</th>
+                <th class="button">Note</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                var i = 0;
+                foreach (var item in Model)
+                {
+                    i++;
+
+                    <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
+
+                        <th scope="row">@i</th>
+                        <td>
+                        </td>
+                        <td></td>
+                        <td>
+                            <input type="number" />
+                        </td>
+                        <td>
+                            <input type="text" />
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+
+</div>

@@ -30,6 +30,8 @@ public class ProductController : Controller
 
     public ProductController(IProductRepository productRepository, IStockService stockServices, IWebHostEnvironment webHostEnvironment)
     {
+        ViewBag.Product = true;
+
         _productRepository = productRepository;
         _stockServices = stockServices;
 
@@ -57,7 +59,6 @@ public class ProductController : Controller
     {
         //Set up default values for ProductPage
 
-        ViewBag.Product = true;
         ViewData["Categories"] = listCategories.Where(i => i != "Unknown").ToList();
         ViewData["Materials"] = listMaterials.Where(i => i != "Unknown").ToList();
 

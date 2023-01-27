@@ -26,7 +26,7 @@ namespace FlowerShopManagement.Web.Controllers
 
             ViewData["Categories"] = Enum.GetValues(typeof(Categories)).Cast<Categories>().ToList();
 
-            List<ProductModel> productMs;
+            List<ProductDetailModel> productMs;
 
             var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -39,9 +39,9 @@ namespace FlowerShopManagement.Web.Controllers
             // get product list like from this user
             if (user != null && user.FavProductIds != null && user.FavProductIds.Count > 0)
             {
-                productMs = new List<ProductModel>();
+                productMs = new List<ProductDetailModel>();
 
-                var temp = await _stockServices.GetUpdatedProducts();
+                var temp = await _stockServices.GetUpdatedDetailProducts();
 
                 foreach (var item in temp)
                 {
@@ -57,7 +57,7 @@ namespace FlowerShopManagement.Web.Controllers
                 return View(productMs);
             }
 
-            productMs = new List<ProductModel>();
+            productMs = new List<ProductDetailModel>();
             
             return View(productMs);
 		}

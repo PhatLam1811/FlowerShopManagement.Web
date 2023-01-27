@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     List<string>? categories = ViewData["Categories"] as List<string> ?? null;
     List<string>? materials = ViewData["Materials"] as List<string> ?? null;
     List<string> prices = new List<string> { "All", "0 - 10", "11 - 50", ">50" };
@@ -16,7 +15,6 @@
         <span class="h4">Filter</span>
         <div class="check-list mt-4">
             <span class="">Categories</span>
-
 
             @if (categories != null)
             {
@@ -35,42 +33,35 @@
                             <input type="radio" class="form-check-input disabled" value="@i" name="currentCategory" checked onclick="this.form.onsubmit()" />
                             @i
                         </label>
-
                     }
                 }
-
-
             }
         </div>
 
         <div class="check-list mt-4">
-           
-                <span class="">Material</span>
 
-                @if (materials != null)
+            <span class="">Material</span>
+            @if (materials != null)
+            {
+                @foreach (var i in materials)
                 {
-                    @foreach (var i in materials)
-                    {
                     @if (i.ToString() != currentMaterial.ToString())
-                        {
-                            <label class="check-list-item">
-                                <input type="radio" class="form-check-input" value="@i" id="@i" name="currentMaterial" onclick="this.form.onsubmit()" />
-                                @i
-                            </label>
-                        }
-                        else
-                        {
-                            <label class="check-list-item">
-                                <input type="radio" class="form-check-input disabled" value="@i" name="currentMaterial" checked onclick="this.form.onsubmit()" />
-                                @i
-                            </label>
-
-                        }
+                    {
+                        <label class="check-list-item">
+                            <input type="radio" class="form-check-input" value="@i" id="@i" name="currentMaterial" onclick="this.form.onsubmit()" />
+                            @i
+                        </label>
                     }
+                    else
+                    {
+                        <label class="check-list-item">
+                            <input type="radio" class="form-check-input disabled" value="@i" name="currentMaterial" checked onclick="this.form.onsubmit()" />
+                            @i
+                        </label>
 
+                    }
                 }
-            
-
+            }
         </div>
         <div class="check-list mt-3">
             <span class="">Prices</span>
@@ -92,11 +83,8 @@
                             @i
                         </label>
                     }
-
                 }
-
             }
-
         </div>
     </div>
 </form>
