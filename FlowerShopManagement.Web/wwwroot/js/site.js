@@ -35,6 +35,7 @@ function showPartialView(url) {
     })
 }
 
+//change pw when editing profile
 function showPartialView1(form) {
     var obj = new FormData(form);
     $.ajax({

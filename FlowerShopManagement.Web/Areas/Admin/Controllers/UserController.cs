@@ -47,7 +47,7 @@ public class UserController : Controller
         {
             ViewData["Role"] = Enum.GetNames(typeof(Role)).Where(s => s != "Admin" && s != "Passenger").ToList();
             var users = await _staffService.GetUsersAsync() ?? new List<UserModel>();
-            int pageSize = 6;
+            int pageSize = 8;
             return View(PaginatedList<UserModel>.CreateAsync(users ?? new List<UserModel>(), 1, pageSize));
 
         }
