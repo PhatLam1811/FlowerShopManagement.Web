@@ -1,7 +1,6 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
-using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Application.Services;
 using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Web.ViewModels;
@@ -63,9 +62,6 @@ public class UserController : Controller
     {
         ViewData["CurrentSort"] = sortOrder;
         ViewData["CurrentCategory"] = currentCategory;
-
-
-
 
         ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";

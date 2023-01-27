@@ -46,6 +46,7 @@ builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IMaterialRepository, MaterialRepository>();
 builder.Services.AddScoped<ISupplierRepository, SupplierRepository>();
+builder.Services.AddScoped<IImportRepository, ImportRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IVoucherRepository, VoucherRepository>();
 builder.Services.AddScoped<IAddressRepository, AddressRepository>();

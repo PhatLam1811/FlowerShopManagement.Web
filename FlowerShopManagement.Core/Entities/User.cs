@@ -43,3 +43,9 @@ public class User
         lastModified = DateTime.Now;
     }
 }
+
+public class UserBasic
+{
+    public string _id = string.Empty;
+    public string name = string.Empty;
+}

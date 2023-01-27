@@ -11,6 +11,11 @@ public class OrdersCountModel
     public int numberOfOrders;
 }
 
+public class LowOnStocksCountModel
+{
+    public int amount;
+}
+
 public class ValuableCustomerModel
 {
     public string _id = string.Empty;

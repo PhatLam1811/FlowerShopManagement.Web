@@ -5,6 +5,9 @@ namespace FlowerShopManagement.Application.Interfaces;
 
 public interface IReportService
 {
+    // Number of low on stock products
+    public int GetLowOnStocksCount(int minimumAmount = 20);
+
     // Most profitable products of day, month, year
     public List<ProfitableProductModel> GetProfitableProducts(DateTime beginDate, DateTime endDate, int limit = 5);
 
@@ -16,8 +19,6 @@ public interface IReportService
 
     // Total revenue per selected day, month, year
     public List<double?> GetTotalRevenue(DateTime beginDate, DateTime endDate, Status status = Status.Purchased);
-
-    // Low on stock products count
     
     // Profit of day, month, year
 

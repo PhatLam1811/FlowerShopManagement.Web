@@ -1,0 +1,61 @@
+﻿@model ImportModel
+
+<form method="post" asp-action="Verify" asp-controller="Import" asp-area="Admin" onshow="window.alert(sadasdas)">
+	<input name="importId" type="text" value=@Model._Id hidden />
+	<div>
+		<div class="d-flex gap-3 align-items-end">
+			<p>Supplier Name:</p>
+			<p>@Model.Supplier.name</p>
+		</div>
+		<div class="d-flex gap-3 align-items-end">
+			<p>Create Date:</p>
+			<p>@Model.CreatedDate</p>
+		</div>
+	</div>
+
+	<div class="table-wrap">
+		<table class="table myaccordion table-hover" id="accordion">
+			<thead>
+				<tr>
+					<th>#</th>
+					<th class="button">Goods</th>
+					<th class="button">Order Quantity</th>
+					<th class="button">Delivery Quatity</th>
+					<th class="button">Note</th>
+				</tr>
+			</thead>
+			<tbody>
+				@if (Model != null)
+				{
+					var i = 0;
+					foreach (var item in Model.Details)
+					{
+						i++;
+
+						<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
+							<th scope="row">@i</th>
+							<td>@item.name</td>
+							<td>@item.orderQty</td>
+							@if (Model.Status == FlowerShopManagement.Core.Enums.ImportStatus.Completed ||
+									Model.Status == FlowerShopManagement.Core.Enums.ImportStatus.Canceled)
+							{
+								<td>@item.deliveredQty</td>
+								<td>@item.note</td>
+							}
+							else
+							{
+								<td>
+									<input name="deliveredQties" type="number" value="@item.deliveredQty" />
+								</td>
+								<td>
+									<input name="notes" type="text" value="@item.note" />
+								</td>
+							}
+						</tr>
+					}
+				}
+			</tbody>
+		</table>
+	</div>
+	<button type="submit" class="btn btn-primary">Verify</button>
+</form>

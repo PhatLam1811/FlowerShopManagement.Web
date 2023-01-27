@@ -17,7 +17,7 @@ public interface IStockService
     #region Product
 
     public Task<bool> CreateProduct(ProductDetailModel productModel);
-    public Task<List<ProductModel>> GetLowOnStockProducts();
+    public List<ProductModel> GetLowOnStockProducts();
     public Task<List<ProductModel>> GetUpdatedProducts();
     public Task<List<ProductDetailModel>> GetUpdatedDetailProducts();
     public Task<List<ProductModel>> GetByIdsAsync(List<string> ids);

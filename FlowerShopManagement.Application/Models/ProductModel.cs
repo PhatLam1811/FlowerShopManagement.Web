@@ -8,7 +8,7 @@ namespace FlowerShopManagement.Application.Models;
 public class ProductModel
 
 {
-    public string? Id { get; set; } = string.Empty;
+    public string Id { get; set; } = string.Empty;
     public string Name { get; set; } = string.Empty;
     //public string Picture { get; set; } = string.Empty;
     public List<string> Pictures { get; set; } = new List<string>();
