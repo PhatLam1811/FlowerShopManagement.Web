@@ -143,16 +143,23 @@ public class UserController : Controller
         return View(new UserCreateVM());
     }
 
-    [Route("FindDistrict")]
+    [Route("FindDistricts")]
     [HttpPost]
-    public async Task<List<string>> FindDistricts(string city)
+    public async Task<IActionResult> FindDistricts(string city)
     {
 
         var list = await _adminService.GetAddresses();
         List<string> districts = list.AsParallel().Where(i => i._city == city).GroupBy(i => i._district).Select(i => i.Key).ToList();
+        List<string> wards = list.AsParallel().Where(i => i._city == city && i._district == districts.FirstOrDefault()).GroupBy(i => i._commune).Select(i => i.Key).ToList();
         ViewData["Districts"] = districts;
+        ViewData["Wards"] = wards;
 
-        return districts;
+        return Json(new
+        {
+            districts = districts,
+            wards = wards
+
+        });
     }
     [Route("FindWards")]
     [HttpPost]
@@ -165,6 +172,7 @@ public class UserController : Controller
 
         return wards;
     }
+
     [Route("Create")]
     [HttpPost]
     public async Task<IActionResult> Create(UserCreateVM userCreateVM)

@@ -4,6 +4,7 @@ using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FlowerShopManagement.Application.Services.UserServices;
 
@@ -122,5 +123,23 @@ public class AdminService : StaffService, IAdminService
         }
 
         return singleton.addressModels;
+    }
+
+  
+    public async Task<List<string>> FindDistricts(string city)
+    {
+
+        var list = await this.GetAddresses();
+        List<string> districts = list.AsParallel().Where(i => i._city == city).GroupBy(i => i._district).Select(i => i.Key).ToList();
+        return districts;
+    }
+
+
+    public async Task<List<string>> FindWards(string city, string district)
+    {
+
+        var list = await this.GetAddresses();
+        List<string> wards = list.Where(i => i._city == city && i._district == district).GroupBy(i => i._commune).Select(i => i.Key).ToList();
+        return wards;
     }
 }

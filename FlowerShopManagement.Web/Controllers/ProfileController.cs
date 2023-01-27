@@ -3,9 +3,13 @@ using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Application.Services;
+using FlowerShopManagement.Application.Services.UserServices;
 using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Security.Claims;
 using ZstdSharp.Unsafe;
 
@@ -16,13 +20,14 @@ public class ProfileController : Controller
 {
 	private readonly IAuthService _authServices;
 	private readonly IPersonalService _personalService;
+	private readonly IAdminService _adminService;
 	private readonly IUserRepository _userRepository;
 	private readonly ICustomerfService _customerfService;
 	private readonly IStockService _stockService;
 	private readonly ILogger<ProfileController> _logger;
 
 	public ProfileController(IAuthService authServices, ILogger<ProfileController> logger
-		, IUserRepository userRepository, IPersonalService userService, ICustomerfService customerfService, IStockService stockService)
+		, IUserRepository userRepository, IPersonalService userService, ICustomerfService customerfService, IStockService stockService, IAdminService adminService)
 	{
 		_authServices = authServices;
 		_logger = logger;
@@ -30,6 +35,7 @@ public class ProfileController : Controller
 		_personalService = userService;
 		_customerfService = customerfService;
 		_stockService = stockService;
+		_adminService = adminService;
 	}
 
 	public async Task<IActionResult> Index()
@@ -173,19 +179,50 @@ public class ProfileController : Controller
 	}
 
 	[HttpGet]
-	public IActionResult CreateInfoDelivery()
+	public async Task<IActionResult> CreateInfoDelivery()
 	{
-		return PartialView(new InforDeliveryModel());
+        var list = await _adminService.GetAddresses();
+        ViewData["Addresses"] = JsonConvert.SerializeObject(list, Formatting.Indented);
+        return PartialView(new InforDeliveryModel());
 	}
-	[HttpPost]
-	public async Task<IActionResult> CreateInfoDelivery(InforDeliveryModel inforDeliveryModel)
+
+    [Route("FindDistricts")]
+    [HttpPost]
+    public async Task<IActionResult> FindDistricts(string city)
+    {
+
+        List<string> districts = await _adminService.FindDistricts(city);
+        List<string> wards = await _adminService.FindWards(city, districts.FirstOrDefault());
+        ViewData["Districts"] = districts;
+        ViewData["Wards"] = wards;
+
+        return Json(new
+        {
+            districts = districts,
+            wards = wards
+
+        });
+
+    }
+    [Route("FindWards")]
+    [HttpPost]
+    public async Task<List<string>> FindWards(string city, string district)
+    {
+        List<string> wards = await _adminService.FindWards(city,district);
+        ViewData["Wards"] = wards;
+        return wards;
+    }
+
+    [HttpPost]
+	public async Task<IActionResult> CreateInfoDelivery(InforDeliveryModel inforDeliveryModel, string city, string district, string ward)
 	{
-		if(!ModelState.IsValid) return NotFound();
+		
+		if (!ModelState.IsValid) return NotFound();
 		var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        inforDeliveryModel.Address = inforDeliveryModel.Address + ", " + ward + ", " + district + ", " + city;
 
-		// Unauthenticated user
-		if (userId is null) return NotFound();
-
+        // Unauthenticated user
+        if (userId is null) return NotFound();
 		var user = await _authServices.GetAuthenticatedUserAsync(userId);
 		if (user is null) return NotFound();
 
@@ -194,6 +231,7 @@ public class ProfileController : Controller
 
 		return PartialView("ManageAddress", user.InforDelivery);
 	}
+
 	[HttpPost]
 	public async Task<IActionResult> RemoveInfoDelivery(string name, string phone, string address)
 	{

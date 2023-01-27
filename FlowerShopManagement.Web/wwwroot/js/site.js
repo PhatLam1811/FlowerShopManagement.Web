@@ -305,13 +305,20 @@ function FindDistricts(selectTag, url) {
             success: function (res) {
                 $('#district').empty();
                 $('#ward').empty();
-                $.each(res, function (index, key) {
+                $.each(res.districts, function (index, key) {
                     $('#district').append($('<option>', {
 
                         text: key
                     }));
                 });
+                $.each(res.wards, function (index, key) {
+                    $('#ward').append($('<option>', {
+
+                        text: key
+                    }));
+                });
                 $('#district').removeClass("disabled");
+                $('#ward').removeClass("disabled");
             },
             error: function (err) {
                 console.log(err)
