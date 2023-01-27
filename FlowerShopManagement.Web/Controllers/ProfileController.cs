@@ -216,15 +216,13 @@ public class ProfileController : Controller
     [HttpPost]
 	public async Task<IActionResult> CreateInfoDelivery(InforDeliveryModel inforDeliveryModel, string city, string district, string ward)
 	{
-		if (city == null && district == null
-		&& ward == null && inforDeliveryModel == null) return NotFound();
-		inforDeliveryModel.Address = inforDeliveryModel.Address + ", " + ward + ", " + district + ", " + city;
 		
 		if (!ModelState.IsValid) return NotFound();
 		var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        inforDeliveryModel.Address = inforDeliveryModel.Address + ", " + ward + ", " + district + ", " + city;
 
-		// Unauthenticated user
-		if (userId is null) return NotFound();
+        // Unauthenticated user
+        if (userId is null) return NotFound();
 		var user = await _authServices.GetAuthenticatedUserAsync(userId);
 		if (user is null) return NotFound();
 
