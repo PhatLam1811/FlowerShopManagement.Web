@@ -35,6 +35,7 @@ function showPartialView(url) {
     })
 }
 
+//change pw when editing profile
 function showPartialView1(form) {
     var obj = new FormData(form);
     $.ajax({
@@ -44,6 +45,7 @@ function showPartialView1(form) {
         contentType: false,
         processData: false,
         success: function (res) {
+            $.notify("Success", "success", { position: "right" });
 
             $("#pw").html(res);
             console.log(res);
@@ -304,13 +306,20 @@ function FindDistricts(selectTag, url) {
             success: function (res) {
                 $('#district').empty();
                 $('#ward').empty();
-                $.each(res, function (index, key) {
+                $.each(res.districts, function (index, key) {
                     $('#district').append($('<option>', {
 
                         text: key
                     }));
                 });
+                $.each(res.wards, function (index, key) {
+                    $('#ward').append($('<option>', {
+
+                        text: key
+                    }));
+                });
                 $('#district').removeClass("disabled");
+                $('#ward').removeClass("disabled");
             },
             error: function (err) {
                 console.log(err)

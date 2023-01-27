@@ -53,9 +53,8 @@ public class ProductController : Controller
     }
 
     [Route("Index")]
-    [Route("")]
     [HttpGet]
-    [Authorize]
+    //[Authorize]
     public async Task<IActionResult> Index()
     {
         //Set up default values for ProductPage

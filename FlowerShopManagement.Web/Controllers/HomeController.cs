@@ -117,23 +117,31 @@ public class HomeController : Controller
         {
             if (!String.IsNullOrEmpty(searchString))
             {
-                productMs = (List<ProductDetailModel>)productMs.Where(s => s.Name.Contains(searchString));
+                productMs = productMs.Where(s => s.Name.Contains(searchString)).ToList();
             }
 
             switch (sortOrder)
             {
                 case "name_desc":
-                    productMs = (List<ProductDetailModel>)productMs.OrderByDescending(s => s.Name);
+                    productMs = productMs.OrderByDescending(s => s.Name).ToList();
                     break;
                 case "name_asc":
-                    productMs = (List<ProductDetailModel>)productMs.OrderBy(s => s.Name);
+                    productMs = productMs.OrderBy(s => s.Name).ToList();
                     break;
                 default:
                     //productMs = productMs.OrderBy(s => s.LastName);
                     break;
             }
             int pageSize = 8;
-            return View(PaginatedList<ProductDetailModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize));
+            PaginatedList<ProductDetailModel> objs = PaginatedList<ProductDetailModel>
+                            .CreateAsync(productMs, pageNumber ?? 1, pageSize);
+            return Json(new
+            {
+                isValid = true,
+                htmlViewAll = Helper.RenderRazorViewToString(this, "_ViewAll", objs),
+                htmlPagination = Helper.RenderRazorViewToString(this, "_Pagination", objs)
+
+            });
         }
         return NotFound();
 
