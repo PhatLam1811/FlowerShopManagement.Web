@@ -96,7 +96,7 @@ public class AuthenticationController : Controller
             if (user.Role == Role.Customer)
                 return Redirect("~/Home");
             else
-                return Redirect("~/Admin/Product");
+                return Redirect("~/Admin/DashBoard");
         }
         catch (Exception e)
         {

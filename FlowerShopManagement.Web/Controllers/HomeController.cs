@@ -64,7 +64,7 @@ public class HomeController : Controller
         ViewData["Categories"] = listCategories.Where(i => i != "Unknown").ToList();
         ViewData["Materials"] = listMaterials.Where(i => i != "Unknown").ToList();
 
-        List<ProductModel> productMs = await _stockServices.GetUpdatedProducts();
+        List<ProductDetailModel> productMs = await _stockServices.GetUpdatedDetailProducts();
 
         // get user's id
         var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -73,9 +73,9 @@ public class HomeController : Controller
         if (userId != null)
         {
 
-            productMs = new List<ProductModel>();
+            productMs = new List<ProductDetailModel>();
 
-            var temp = await _stockServices.GetUpdatedProducts();
+            var temp = await _stockServices.GetUpdatedDetailProducts();
 
             UserModel? user = await _authServices.GetAuthenticatedUserAsync(userId);
 
@@ -112,28 +112,36 @@ public class HomeController : Controller
         }
 
         ViewData["CurrentFilter"] = searchString;
-        List<ProductModel> productMs = await _stockServices.GetUpdatedProducts();
+        List<ProductDetailModel> productMs = await _stockServices.GetUpdatedDetailProducts();
         if (productMs != null)
         {
             if (!String.IsNullOrEmpty(searchString))
             {
-                productMs = (List<ProductModel>)productMs.Where(s => s.Name.Contains(searchString));
+                productMs = productMs.Where(s => s.Name.Contains(searchString)).ToList();
             }
 
             switch (sortOrder)
             {
                 case "name_desc":
-                    productMs = (List<ProductModel>)productMs.OrderByDescending(s => s.Name);
+                    productMs = productMs.OrderByDescending(s => s.Name).ToList();
                     break;
                 case "name_asc":
-                    productMs = (List<ProductModel>)productMs.OrderBy(s => s.Name);
+                    productMs = productMs.OrderBy(s => s.Name).ToList();
                     break;
                 default:
                     //productMs = productMs.OrderBy(s => s.LastName);
                     break;
             }
-            int pageSize = 3;
-            return View(PaginatedList<ProductModel>.CreateAsync(productMs, pageNumber ?? 1, pageSize));
+            int pageSize = 8;
+            PaginatedList<ProductDetailModel> objs = PaginatedList<ProductDetailModel>
+                            .CreateAsync(productMs, pageNumber ?? 1, pageSize);
+            return Json(new
+            {
+                isValid = true,
+                htmlViewAll = Helper.RenderRazorViewToString(this, "_ViewAll", objs),
+                htmlPagination = Helper.RenderRazorViewToString(this, "_Pagination", objs)
+
+            });
         }
         return NotFound();
 

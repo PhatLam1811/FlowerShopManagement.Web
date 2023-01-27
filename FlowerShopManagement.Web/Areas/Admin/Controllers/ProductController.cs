@@ -1,11 +1,13 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
+using FlowerShopManagement.Application.MyRegex;
 using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 
@@ -28,6 +30,8 @@ public class ProductController : Controller
 
     public ProductController(IProductRepository productRepository, IStockService stockServices, IWebHostEnvironment webHostEnvironment)
     {
+        ViewBag.Product = true;
+
         _productRepository = productRepository;
         _stockServices = stockServices;
 
@@ -49,19 +53,17 @@ public class ProductController : Controller
     }
 
     [Route("Index")]
-    [Route("")]
     [HttpGet]
-    [Authorize]
+    //[Authorize]
     public async Task<IActionResult> Index()
     {
         //Set up default values for ProductPage
 
-        ViewBag.Product = true;
         ViewData["Categories"] = listCategories.Where(i => i != "Unknown").ToList();
         ViewData["Materials"] = listMaterials.Where(i => i != "Unknown").ToList();
 
         List<ProductModel> productMs = await _stockServices.GetUpdatedProducts();
-        int pageSizes = 2;
+        int pageSizes = 8;
         ProductVM productVM = new ProductVM()
         {
             productModels = PaginatedList<ProductModel>
@@ -162,7 +164,7 @@ public class ProductController : Controller
     public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString,
         int? pageNumber, string? currentPrice, string currentMaterial, string? currentCategory)
     {
-        int pageSize = 2;
+        int pageSize = 8;
 
         ViewData["CurrentSort"] = sortOrder;
         ViewData["CurrentPrice"] = currentPrice;
@@ -256,10 +258,10 @@ public class ProductController : Controller
 
     [Route("AddCategory")]
     [HttpPost]
-    public async Task<IActionResult> AddCategory(string name)
+    public async Task<IActionResult> AddCategory(/*[Required][MinLength(3, ErrorMessage = "Password must be greater than 6 characters")]*/string name)
     {
         var list = listCategories.Where(i => i != "Unknown" && i != "All").ToList();
-
+        if(!ModelState.IsValid ) { return Category(); }
         if (list.Any(i => i == name) == true) return BadRequest();
         var result = _stockServices.CreateCategory(name);
         listCategories = await _stockServices.GetCategories();

@@ -29,7 +29,8 @@ public class AuthService : IAuthService
             email = email,
             phoneNumber = phoneNb,
             password = encryptedPass,
-            role = role
+            role = role,
+            avatar = "user.png"
         };
 
         try

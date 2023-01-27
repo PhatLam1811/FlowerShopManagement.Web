@@ -12,7 +12,6 @@ using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using MongoDB.Bson.Serialization.Serializers;
 using IEmailService = FlowerShopManagement.Application.Interfaces.IEmailService;
-using FlowerShopManagement.Core.Enums;
 using System.Security.Claims;
 using FlowerShopManagement.Application.Interfaces.MongoDB;
 

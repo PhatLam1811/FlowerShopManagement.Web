@@ -1,62 +1,54 @@
-﻿@model List<ProductModel>
+﻿@model List<ProductDetailModel>
 
 @{
-	ViewData["Title"] = "Home Page";
-	List<string>? categories = ViewData["Categories"] as List<string> ?? null;
+    ViewData["Title"] = "Home Page";
+    List<string>? categories = ViewData["Categories"] as List<string> ?? null;
     List<string>? materials = ViewData["Materials"] as List<string> ?? null;
-	List<string> prices = new List<string> { "All", "0 - 10", "11 - 50", ">50" };
+    List<string> prices = new List<string> { "All", "0 - 10", "11 - 50", ">50" };
 }
 
 <div class="d-flex align-items-end justify-content-between mt-3 mb-4">
-	<div class="d-flex gap-3">
-		<div class="form-group">
-			<label class="form-label h6" for="selectCategory">Category</label>
-			<select class="form-select" asp-items="@(new SelectList(categories))" id="selectCategory" aria-label="Floating label select example">
-			</select>
-		</div>
-		<div class="form-group">
-			<label class="form-label h6" for="selectCategory">Material</label>
-			<select class="form-select" asp-items="@(new SelectList(materials))" id="selectCategory" aria-label="Floating label select example">
-			</select>
-		</div>
-		<div class="form-group">
-			<label class="form-label h6" for="selectCategory">Price</label>
-			<select class="form-select" asp-items="@(new SelectList(prices))" id="selectCategory" aria-label="Floating label select example">
-			</select>
-		</div>
-	</div>
-	<div class="">
-		<label class="form-label h6" for="selectCategory">Search</label>
-		<div class="d-flex align-items-stretch">
-			<div class="h-fit form-group flex-grow-1">
-				<input type="text" class="h-fit form-control position-relative" style="z-index:99" id="floatingInput" placeholder="Abc">
-			</div>
-			<button class="btn btn-no-p border border-primary position-relative" style="z-index:999">
-				<i class="fa-solid fa-magnifying-glass"></i>
-			</button>
-		</div>
-	</div>
+    <div class="d-flex gap-3">
+        <div class="form-group">
+            <label class="form-label h6" for="selectCategory">Category</label>
+            <select class="form-select" asp-items="@(new SelectList(categories))" id="selectCategory" aria-label="Floating label select example">
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label h6" for="selectCategory">Material</label>
+            <select class="form-select" asp-items="@(new SelectList(materials))" id="selectCategory" aria-label="Floating label select example">
+            </select>
+        </div>
+        <div class="form-group">
+            <label class="form-label h6" for="selectCategory">Price</label>
+            <select class="form-select" asp-items="@(new SelectList(prices))" id="selectCategory" aria-label="Floating label select example">
+            </select>
+        </div>
+    </div>
+    <form method="post" action="@(Url.Action("Sort", "Home"))" onsubmit="return jQueryAjaxSearch(this)">
+        <label class="form-label h6" for="selectCategory">Search</label>
+        <div class="d-flex align-items-stretch">
+            <div class="h-fit form-group flex-grow-1">
+                <input type="text" class="h-fit form-control position-relative" name="searchString" id="ip-search" style="z-index:99" value="@ViewData["CurrentFilter"]" placeholder="Name of product">
+            </div>
+            <button class="btn btn-no-p border border-primary position-relative" style="z-index:999">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </div>
+    </form>
 </div>
-@*	<form asp-action="SignIn" method="SignIn()">
-		<button class="btn btn-default">Button</button>
-		</form>*@
-@*<form asp-action="SignOutAsync" asp-controller="Authentication">
-		<button class="btn btn-default">Button</button>
-		</form>*@
-<partial name="_ViewAll" model="@Model" />
-
-@*<nav class="container" id="pagination">
-	<partial name="_Pagination" model=@Model view-data="ViewData" />
-</nav>*@
+<div class="" id="hihi">
+    <partial name="_ViewAll" model="@Model" />
+</div>
 
 <div class="d-flex w-100 justify-content-center gap-3 mt-3">
-	<button class="btn btn-no-min disabled">
-		Previous
-	</button>
-	<button class="btn btn-no-min focus">
-		1
-	</button>
-	<button class="btn btn-no-min disabled">
-		Next
-	</button>
+    <button class="btn btn-no-min disabled">
+        Previous
+    </button>
+    <button class="btn btn-no-min focus">
+        1
+    </button>
+    <button class="btn btn-no-min disabled">
+        Next
+    </button>
 </div>

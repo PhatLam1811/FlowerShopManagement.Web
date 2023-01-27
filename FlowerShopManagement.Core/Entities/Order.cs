@@ -15,15 +15,17 @@ public class Order
     public List<Product>? _products { get; set; }
     // Could be added in future 
     // protected Vouchers _voucher { get; set; }
-    public long _total { get; set; } = 0;
+    public double _total { get; set; } = 0;
     public Status _status { get; set; }
     public DeliverryMethods _deliveryMethod { get; set; }
-    public long _deliveryCharge { get; set; }
+    public double _deliveryCharge { get; set; } = 0;
     public string? _notes { get; set; }
     public string? _address { get; set; }
+    public string? _voucher { get; set; }
+    public double _discount { get; set; } = 0;
 
     public Order(string id = "", string? accountID = null, DateTime? date = null, List<Product>? products = null, string? customerName = "", string? phoneNumber = "",
-        long total = 0, Status status = Status.sampleStatus, DeliverryMethods deliveryMethod = DeliverryMethods.sampleMethod, long deliveryCharge = 0, string? notes = null, string? address = null)
+        double total = 0, Status status = Status.Waiting, DeliverryMethods deliveryMethod = DeliverryMethods.Normal, double deliveryCharge = 0, string? notes = null, string? address = null, string? voucher = null, double discount = 0)
     {
         if (id != "")
             _id = id;
@@ -39,6 +41,8 @@ public class Order
         _customerName = customerName;
         _phoneNumber = phoneNumber;
         _address = address;
+        _voucher = voucher; 
+        _discount = discount;
     }
     public Order(Order s)
     {
@@ -53,6 +57,8 @@ public class Order
         _customerName = s._customerName;
         _phoneNumber = s._phoneNumber;
         _address = s._address;
+        _voucher = s._voucher;
+        _discount = s._discount;
     }
 
     public Order()

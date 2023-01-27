@@ -3,160 +3,253 @@ using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Application.Services;
+using FlowerShopManagement.Application.Services.UserServices;
+using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.Security.Claims;
+using ZstdSharp.Unsafe;
 
 namespace FlowerShopManagement.Web.Controllers;
 
 [Authorize]
 public class ProfileController : Controller
 {
-    private readonly IAuthService _authServices;
-    private readonly IPersonalService _personalService;
-    private readonly IUserRepository _userRepository;
-    private readonly ILogger<ProfileController> _logger;
+	private readonly IAuthService _authServices;
+	private readonly IPersonalService _personalService;
+	private readonly IAdminService _adminService;
+	private readonly IUserRepository _userRepository;
+	private readonly ICustomerfService _customerfService;
+	private readonly IStockService _stockService;
+	private readonly ILogger<ProfileController> _logger;
 
-    public ProfileController(IAuthService authServices, ILogger<ProfileController> logger, IUserRepository userRepository, IPersonalService userService)
+	public ProfileController(IAuthService authServices, ILogger<ProfileController> logger
+		, IUserRepository userRepository, IPersonalService userService, ICustomerfService customerfService, IStockService stockService, IAdminService adminService)
+	{
+		_authServices = authServices;
+		_logger = logger;
+		_userRepository = userRepository;
+		_personalService = userService;
+		_customerfService = customerfService;
+		_stockService = stockService;
+		_adminService = adminService;
+	}
+
+	public async Task<IActionResult> Index()
+	{
+		ViewBag.Profile = true;
+
+		var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+		// Unauthenticated user
+		if (userId is null) return NotFound();
+
+		var user = await _authServices.GetAuthenticatedUserAsync(userId);
+
+		// Create UserModel
+		//UserDetailsModel user1 = new UserDetailsModel(user);
+
+		return View(user);
+	}
+
+	[HttpGet]
+	public async Task<IActionResult> PersonalInformation()
+	{
+		if (this.HttpContext == null) return NotFound();
+
+		string userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "";
+		if (userId == "") return NotFound(userId);
+
+		UserBasicInfoModel userBasicInfoModel = await _customerfService.GetUseBasicInfoById(userId);
+		if (userBasicInfoModel == null) return NotFound();
+		// Create UserModel
+
+
+		return PartialView("PersonalInformation", userBasicInfoModel);
+	}
+
+	[HttpPost]
+	public async Task<IActionResult> PersonalInformation(UserBasicInfoModel model)
+	{
+		// edit
+		try
+		{
+			if (ModelState.IsValid)
+			{
+				// Change & save the editted info from front-end to database
+				await _customerfService.EditInfoAsync(model);
+			}
+		}
+		catch
+		{
+			return NotFound(); // Notify failed to edit current user info for some reasons!
+		}
+
+		UserBasicInfoModel userBasicInfoModel = await _customerfService.GetUseBasicInfoById(model._id);
+		if (userBasicInfoModel == null) return NotFound();
+		// Create UserModel
+
+
+		return PartialView("PersonalInformation", userBasicInfoModel);
+		//return PartialView("PersonalInformation", model);
+	}
+
+	[HttpGet]
+	public IActionResult ChangePassword()
+	{
+		return PartialView("ChangePassword", new ChangePasswordModel());
+	}
+
+	[HttpPost]
+	public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
+	{
+		// Check old password
+
+		if (ModelState.IsValid)
+		{
+			if (model.NewPassword != model.ConfirmPassword)
+				return NotFound(); // Notify the passwords dont match!
+
+			if (model.OldPassword == model.NewPassword)
+				return NotFound(); // Notify new password is the same as old password!
+
+			try
+			{
+				var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+				// Unauthenticated user
+				if (userId is null) return NotFound();
+
+
+				var currentUser = await _authServices.GetAuthenticatedUserAsync(userId);
+				if (currentUser is null) return NotFound();
+
+				// Verify old password
+				var encryptedPass = Validator.MD5Hash(model.OldPassword);
+				if (!currentUser.IsPasswordMatched(encryptedPass))
+					return NotFound(); // Old password didnt match! 
+
+				await _personalService.ChangePasswordAsync(currentUser, model.NewPassword);
+
+				return PartialView("ChangePassword", new ChangePasswordModel()); // Notify successfully changed password!
+			}
+			catch
+			{
+				return NotFound(); // Notify failed to change the password for some reasons!
+			}
+		}
+
+		return PartialView("ChangePassword", new ChangePasswordModel());
+	}
+
+	[HttpGet]
+	public async Task<IActionResult> ManageAddress() 
+	{
+		var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+		// Unauthenticated user
+		if (userId is null) return NotFound();
+
+		var user = await _authServices.GetAuthenticatedUserAsync(userId);
+		if (user is null) return NotFound();
+
+		// load list infor
+		var infos = user.InforDelivery;
+		//////////////////////////////////////
+
+		return PartialView("ManageAddress", infos);
+	}
+
+	[HttpGet]
+	public async Task<IActionResult> Voucher()
+	{
+		var vouchers = await _stockService.GetUpdatedVouchers();
+		vouchers = vouchers.Where(i => i.State == Core.Enums.VoucherStatus.Using).ToList();
+		// load list voucher
+		return PartialView("Voucher", vouchers);
+	}
+
+	[HttpGet]
+	public IActionResult ManageAccount()
+	{
+		return PartialView("ManageAccount");
+	}
+
+	[HttpGet]
+	public async Task<IActionResult> CreateInfoDelivery()
+	{
+        var list = await _adminService.GetAddresses();
+        ViewData["Addresses"] = JsonConvert.SerializeObject(list, Formatting.Indented);
+        return PartialView(new InforDeliveryModel());
+	}
+
+    [Route("FindDistricts")]
+    [HttpPost]
+    public async Task<IActionResult> FindDistricts(string city)
     {
-        _authServices = authServices;
-        _logger = logger;
-        _userRepository = userRepository;
-        _personalService = userService;
+
+        List<string> districts = await _adminService.FindDistricts(city);
+        List<string> wards = await _adminService.FindWards(city, districts.FirstOrDefault());
+        ViewData["Districts"] = districts;
+        ViewData["Wards"] = wards;
+
+        return Json(new
+        {
+            districts = districts,
+            wards = wards
+
+        });
+
+    }
+    [Route("FindWards")]
+    [HttpPost]
+    public async Task<List<string>> FindWards(string city, string district)
+    {
+        List<string> wards = await _adminService.FindWards(city,district);
+        ViewData["Wards"] = wards;
+        return wards;
     }
 
-    public async Task<IActionResult> Index()
-    {
-        ViewBag.Profile = true;
-
-        var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    [HttpPost]
+	public async Task<IActionResult> CreateInfoDelivery(InforDeliveryModel inforDeliveryModel, string city, string district, string ward)
+	{
+		
+		if (!ModelState.IsValid) return NotFound();
+		var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        inforDeliveryModel.Address = inforDeliveryModel.Address + ", " + ward + ", " + district + ", " + city;
 
         // Unauthenticated user
         if (userId is null) return NotFound();
+		var user = await _authServices.GetAuthenticatedUserAsync(userId);
+		if (user is null) return NotFound();
 
-        var user = await _authServices.GetAuthenticatedUserAsync(userId);
+		user.InforDelivery.Add(inforDeliveryModel);
+		await _customerfService.EditInfoAsync(user);
 
-        // Create UserModel
-        //UserDetailsModel user1 = new UserDetailsModel(user);
+		return PartialView("ManageAddress", user.InforDelivery);
+	}
 
-        return View(user);
-    }
+	[HttpPost]
+	public async Task<IActionResult> RemoveInfoDelivery(string name, string phone, string address)
+	{
+		if(!ModelState.IsValid) return NotFound();
+		var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-    [HttpGet]
-    public async Task<IActionResult> PersonalInformation()
-    {
-        var user = await _userRepository.GetByEmailOrPhoneNb("jah@gmail.com");
+		// Unauthenticated user
+		if (userId is null) return NotFound();
 
-        // Create UserModel
-        UserModel user1 = new UserModel(user);
+		var user = await _authServices.GetAuthenticatedUserAsync(userId);
+		if (user is null) return NotFound();
+		if(user.InforDelivery.Count <= 1)
+		{
+			return NotFound();
+		}
+        user.InforDelivery = user.InforDelivery.Where(i => !(i.Address.Equals(address) && i.Name.Equals(name) && i.Phone.Equals(phone))).ToList();
+		await _customerfService.EditInfoAsync(user);
 
-        return PartialView("PersonalInformation", user1);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> PersonalInformation(UserModel model)
-    {
-        var user = await _userRepository.GetByEmailOrPhoneNb("jah@gmail.com");
-
-        // edit
-        if (ModelState.IsValid)
-        {
-            try
-            {
-                // Change & save the editted info from front-end to database
-                await _personalService.EditInfoAsync(model);
-
-                return PartialView("PersonalInformation", model); // Notify succesfully editted current user info
-            }
-            catch
-            {
-                return NotFound(); // Notify failed to edit current user info for some reasons!
-            }
-        }
-
-        return PartialView("PersonalInformation", model);
-    }
-
-    [HttpGet]
-    public IActionResult ChangePassword()
-    {
-        return PartialView("ChangePassword", new ChangePasswordModel());
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> ChangePassword(ChangePasswordModel model)
-    {
-        // Check old password
-
-        if (ModelState.IsValid)
-        {
-            if (model.NewPassword != model.ConfirmPassword)
-                return NotFound(); // Notify the passwords dont match!
-
-            if (model.OldPassword == model.NewPassword)
-                return NotFound(); // Notify new password is the same as old password!
-
-            try
-            {
-                var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                // Unauthenticated user
-                if (userId is null) return NotFound();
-
-                var currentUser = await _authServices.GetAuthenticatedUserAsync(userId);
-
-                // Verify old password
-                var encryptedPass = Validator.MD5Hash(model.OldPassword);
-                if (!currentUser.IsPasswordMatched(encryptedPass))
-                    return NotFound(); // Old password didnt match! 
-
-                await _personalService.ChangePasswordAsync(currentUser, model.NewPassword);
-
-                return PartialView("ChangePassword", new ChangePasswordModel()); // Notify successfully changed password!
-            }
-            catch
-            {
-                return NotFound(); // Notify failed to change the password for some reasons!
-            }
-        }
-
-        return PartialView("ChangePassword", new ChangePasswordModel());
-    }
-
-    [HttpGet]
-    public IActionResult ManageAddress()
-    {
-        // load list infor
-        var infos = new List<InforDeliveryModel>
-        {
-            new InforDeliveryModel() { Name = "LHQ", Phone = "204829303", Address = "Viet Nam", IsDefault = true },
-            new InforDeliveryModel() { Name = "LTP", Phone = "204829303", Address = "Viet Nam", IsDefault = false }
-        };
-        //////////////////////////////////////
-
-        return PartialView("ManageAddress", infos);
-    }
-
-    [HttpGet]
-    public IActionResult Voucher()
-    {
-        var vouchers = new List<VoucherDetailModel>()
-        {
-            new VoucherDetailModel() { Code = "CHAOBANMOI", Amount = 200, Categories = Core.Enums.VoucherCategories.NewCustomer, ConditionValue = 20, CreatedDate = DateTime.Now, Discount = 2, State = Core.Enums.VoucherStatus.Using, ValueType = Core.Enums.ValueType.RealValue },
-        };
-        // load list voucher
-        return PartialView("Voucher", vouchers);
-    }
-
-    [HttpGet]
-    public IActionResult ManageAccount()
-    {
-        return PartialView("ManageAccount");
-    }
-
-    [HttpGet]
-    public IActionResult CreateInfoDelivery()
-    {
-        return View();
-    }
+		return PartialView("ManageAddress", user.InforDelivery);
+	}
 }
