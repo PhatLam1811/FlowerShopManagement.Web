@@ -50,19 +50,14 @@ public class EmailService : IEmailService
         }
     }
 
-    public MimeMessage CreateMimeMessage(SupplyFormModel supplyForm)
+    public MimeMessage CreateMimeMessage(SupplyRequestModel supplyForm)
     {
         var mimeMessage = new MimeMessage();
 
         // Configure header
         mimeMessage.From.Add(MailboxAddress.Parse(sendEmail));
+        mimeMessage.To.Add(MailboxAddress.Parse(supplyForm.reqSupplier.email));
         mimeMessage.Subject = "Supply request from Dallas";
-
-        // Set message's bcc
-        foreach (var suppliers in supplyForm.Suppliers)
-        {
-            mimeMessage.Bcc.Add(MailboxAddress.Parse(suppliers.email));
-        }
 
         // Build message body
         BodyBuilder builder = new BodyBuilder();

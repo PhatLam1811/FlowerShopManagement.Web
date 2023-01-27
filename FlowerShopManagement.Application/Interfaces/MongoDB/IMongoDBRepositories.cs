@@ -38,8 +38,6 @@ public interface IMaterialRepository : IBaseRepository<Material> { }
 
 public interface ISupplierRepository : IBaseRepository<Supplier> { }
 
-public interface ISupplyRequestRepository : IBaseRepository<SupplyRequest> { }
-
 public interface IProductRepository : IBaseRepository<Product>
 {
     public Task<List<Product>?> GetAllLowOnStock(int minimumAmount);

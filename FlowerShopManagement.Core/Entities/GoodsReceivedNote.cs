@@ -29,9 +29,10 @@ public class GoodsReceivedNote
 
 public struct SupplyItem
 {
-    string _productId;
-    string productName;
-    int orderQty;
-    int deliveredQty;
-    string note;
+    public string _id;
+    public string name;
+    public string price;
+    public int orderQty;
+    public int deliveredQty;
+    public string note;
 }

@@ -1,6 +1,6 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
+using FlowerShopManagement.Application.Interfaces.MongoDB;
 using FlowerShopManagement.Application.Models;
-using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using System.Text;
 
@@ -17,10 +17,47 @@ public class ImportService : IImportService
         _mailService = mailService;
     }
 
-    public bool SendRequest(SupplyFormModel form)
+    public List<SupplyRequestModel> GetSupplyRequests()
+    {
+        var result = new List<SupplyRequestModel>();
+        try
+        {
+            var requests = _supplyRequestRepository.GetRequests();
+
+            foreach (var request in requests)
+            {
+                var model = new SupplyRequestModel(request);
+                result.Add(model);
+            }
+
+            return result;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public async Task<SupplyRequestModel?> GetSupplyRequest(string id)
+    {
+        try
+        {
+            var request = await _supplyRequestRepository.GetById(id);
+
+            if (request == null) return null;
+
+            return new SupplyRequestModel(request);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public bool SendRequest(SupplyRequestModel form)
     {
         var mimeMessage = _mailService.CreateMimeMessage(form);
-        var request = new SupplyRequest(form.Suppliers, form.Details, form.CreatedBy);
+        var request = new SupplyRequest(form.reqSupplier, form.Details, form.CreatedBy);
 
         try
         {
@@ -36,13 +73,13 @@ public class ImportService : IImportService
         }
     }
 
-    public SupplyFormModel CreateReqSupplyForm(
+    public SupplyRequestModel CreateReqSupplyForm(
         List<ProductModel> products,  
-        List<SupplierModel> suppliers, 
+        SupplierModel suppliers, 
         List<int> requestQty,
         string staffId, string staffName, string htmlPath)
     {
-        var form = new SupplyFormModel(
+        var form = new SupplyRequestModel(
             suppliers, 
             products, requestQty, 
             staffName, staffId);
@@ -62,7 +99,7 @@ public class ImportService : IImportService
                 {
                     // Table header
                     builder.AppendLine("        <tr>");
-                    builder.AppendLine("          <th>#</th>");
+                    builder.AppendLine("          <th>No.</th>");
                     builder.AppendLine("          <th>Product Name</th>");
                     builder.AppendLine("          <th>Amount</th>");
                     builder.AppendLine("        <tr>");

@@ -32,9 +32,10 @@ public class ImportController : Controller
 
     // IMPORT MAIN PAGE
     [HttpGet]
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
-        return View();
+        var requests = _importService.GetSupplyRequests();
+        return View(requests);
     }
 
     [HttpGet("Create")]
@@ -52,17 +53,17 @@ public class ImportController : Controller
 
     // SUPPLY FORM
     [HttpGet("SupplyForm")]
-    public IActionResult SupplyForm(SupplyFormModel model)
+    public IActionResult SupplyForm(SupplyRequestModel model)
     {
         return View(model);
     }
 
     [HttpPost]
     [ActionName("CreateRequestForm")]
-    public async Task CreateRequestForm(List<string> productIds, List<int> requestQty, List<string> supplierIds)
+    public async Task CreateRequestForm(List<string> productIds, List<int> requestQty, string supplierIds)
     {
         var products = await _stockService.GetByIdsAsync(productIds);
-        var suppliers = await _supplierService.GetByIdsAsync(supplierIds);
+        var suppliers = await _supplierService.GetOneAsync(supplierIds);
         var htmlPath = _webHostEnv.WebRootPath + _reqTemplatePath;
         
         var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -90,11 +91,13 @@ public class ImportController : Controller
             throw new Exception(e.Message);
         }
     }
-
-    [HttpGet]
-    public async Task<IActionResult> ImportDetail(string? id)
+    
+    // IMPORT DETAIL
+    [HttpGet("Detail")]
+    public async Task<IActionResult> Detail(string id)
     {
-        return View();
+        var model = await _importService.GetSupplyRequest(id);
+        return View(model);
     }
 }
 

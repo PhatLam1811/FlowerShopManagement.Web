@@ -4,7 +4,7 @@ namespace FlowerShopManagement.Core.Entities;
 
 public class Product
 {
-    public string? _id { get; set; }
+    public string _id { get; set; }
     public string _name { get; set; }
     //public string _picture { get; set; }
     public List<string> _pictures { get; set; } 
