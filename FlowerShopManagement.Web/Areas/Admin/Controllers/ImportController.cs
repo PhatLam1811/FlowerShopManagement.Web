@@ -103,10 +103,30 @@ public class ImportController : Controller
     
     // IMPORT DETAIL
     [HttpGet("Detail")]
-    public async Task<IActionResult> Detail(string id)
+    public async Task<IActionResult> Detail(string id, string? alert = null)
     {
+        ViewData["alert"] = alert;
+
         var model = await _importService.GetRequest(id);
+
         return View(model);
+    }
+
+    [HttpPost("Verify")]
+    public async Task<IActionResult> Verify(string importId, List<int> deliveredQties, List<string> notes)
+    {
+        try
+        {
+            var result = await _importService.Verify(importId, deliveredQties, notes);
+
+            if (result != null) return RedirectToAction("Detail", new { id = importId, alert = result });
+
+            return RedirectToAction("Index");
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 }
 

@@ -8,6 +8,8 @@ public interface IImportService
 
     public Task<ImportModel?> GetRequest(string id);
 
+    public Task<string?> Verify(string id, List<int> deliveredQties, List<string> notes);
+
     public bool SendRequest(ImportModel form);
     
     public ImportModel CreateRequestForm(

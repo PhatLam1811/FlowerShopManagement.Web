@@ -15,7 +15,7 @@ public class ImportModel
     [Required] public double Total { get; set; }
 
     [Required] public UserBasic CreatedBy { get; set; }
-    public UserBasic CheckedBy { get; set; }
+    public UserBasic? CheckedBy { get; set; }
 
     [Required] public ImportStatus Status { get; set; }
     [Required] public DateTime CreatedDate { get; }
@@ -57,6 +57,7 @@ public class ImportModel
 
         Details = new List<ImportItem>();
         HtmlPart = string.Empty;
+        Note = string.Empty;
         CreatedDate = DateTime.Now;
 
         // Parse from SupplierModel to RequestSupplier

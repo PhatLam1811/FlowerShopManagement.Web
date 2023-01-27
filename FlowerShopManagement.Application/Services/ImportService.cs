@@ -8,12 +8,12 @@ namespace FlowerShopManagement.Application.Services;
 
 public class ImportService : IImportService
 {
-    private readonly IImportRepository _supplyRequestRepository;
+    private readonly IImportRepository _importRepository;
     private readonly IEmailService _mailService;
 
     public ImportService(IImportRepository supplyRequestRepository, IEmailService mailService)
     {
-        _supplyRequestRepository = supplyRequestRepository;
+        _importRepository = supplyRequestRepository;
         _mailService = mailService;
     }
 
@@ -22,7 +22,7 @@ public class ImportService : IImportService
         var result = new List<ImportModel>();
         try
         {
-            var requests = _supplyRequestRepository.GetRequests();
+            var requests = _importRepository.GetRequests();
 
             foreach (var request in requests)
             {
@@ -42,11 +42,42 @@ public class ImportService : IImportService
     {
         try
         {
-            var request = await _supplyRequestRepository.GetById(id);
+            var request = await _importRepository.GetById(id);
 
             if (request == null) return null;
 
             return new ImportModel(request);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public async Task<string?> Verify(string id, List<int> deliveredQties, List<string> notes)
+    {
+        try
+        {
+            var importDetail = await _importRepository.GetById(id);
+
+            if (importDetail == null) return "Import not found!";
+
+            for (int i = 0; i < deliveredQties.Count; i++)
+            {
+                if (importDetail.details[i].orderQty != deliveredQties[i])
+                {
+                    return "Delivered quantity unmatched!!";
+                }
+
+                importDetail.details[i].deliveredQty = deliveredQties[i];
+                importDetail.details[i].note = notes[i];
+            }
+
+            importDetail.status = Core.Enums.ImportStatus.Completed;
+
+            await _importRepository.UpdateById(id, importDetail);
+
+            return null;
         }
         catch (Exception e)
         {
@@ -62,7 +93,7 @@ public class ImportService : IImportService
         try
         {
             // Save request to database before really sending it
-            _supplyRequestRepository.Add(request);
+            _importRepository.Add(request);
 
             // Send request
             return _mailService.Send(mimeMessage);
