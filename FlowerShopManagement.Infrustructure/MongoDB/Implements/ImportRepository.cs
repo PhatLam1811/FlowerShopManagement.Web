@@ -9,11 +9,7 @@ namespace FlowerShopManagement.Infrustructure.MongoDB.Implements;
 
 public class ImportRepository : BaseRepository<Import>, IImportRepository
 {
-    public ImportRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) 
-    {
-        CreateUniqueIndex("_GRNNo");
-        CreateUniqueIndex("_PoNo");
-    }
+    public ImportRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 
     public List<Import> GetRequests(ImportStatus? status = null, int skip = 0, int? limit = null)
     {

@@ -10,10 +10,12 @@ public interface IImportService
 
     public Task<string?> Verify(string id, List<int> deliveredQties, List<string> notes);
 
-    public bool SendRequest(ImportModel form);
+    public Task UpdateStock(string importId);
+
+    public Task<bool> SendRequest(ImportModel form);
     
     public ImportModel CreateRequestForm(
-        List<ProductModel> products, 
+        List<ProductDetailModel> products, 
         SupplierModel suppliers, 
         List<int> reqAmounts, 
         string staffId, string staffName, string htmlPath);

@@ -64,7 +64,15 @@ public class ImportController : Controller
     [ActionName("CreateRequestForm")]
     public async Task CreateRequestForm(List<string> productIds, List<int> requestQty, string supplierIds)
     {
-        var products = await _stockService.GetByIdsAsync(productIds);
+        var products = new List<ProductDetailModel>();
+        foreach (var id in productIds)
+        {
+            var result = await _stockService.GetADetailProduct(id);
+            
+            if (result == null) return;
+
+            products.Add(result);
+        }
         var supplier = await _supplierService.GetOneAsync(supplierIds);
         var htmlPath = _webHostEnv.WebRootPath + _reqTemplatePath;
 
@@ -86,7 +94,7 @@ public class ImportController : Controller
 
         try
         {
-            _importService.SendRequest(reqForm);
+            await _importService.SendRequest(reqForm);
         }
         catch (Exception e)
         {
@@ -120,6 +128,8 @@ public class ImportController : Controller
             var result = await _importService.Verify(importId, deliveredQties, notes);
 
             if (result != null) return RedirectToAction("Detail", new { id = importId, alert = result });
+
+            await _importService.UpdateStock(importId);
 
             return RedirectToAction("Index");
         }

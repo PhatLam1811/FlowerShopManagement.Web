@@ -2,7 +2,7 @@
 
 public enum ImportStatus
 {
-    Pending,
+    OnGoing,
     Completed,
     Canceled
 }

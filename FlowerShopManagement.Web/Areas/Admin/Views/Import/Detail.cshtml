@@ -36,12 +36,21 @@
 							<th scope="row">@i</th>
 							<td>@item.name</td>
 							<td>@item.orderQty</td>
-							<td>
-								<input name="deliveredQties" type="number" value="@item.deliveredQty" />
-							</td>
-							<td>
-								<input name="notes" type="text" value="@item.note" />
-							</td>
+							@if (Model.Status == FlowerShopManagement.Core.Enums.ImportStatus.Completed ||
+									Model.Status == FlowerShopManagement.Core.Enums.ImportStatus.Canceled)
+							{
+								<td>@item.deliveredQty</td>
+								<td>@item.note</td>
+							}
+							else
+							{
+								<td>
+									<input name="deliveredQties" type="number" value="@item.deliveredQty" />
+								</td>
+								<td>
+									<input name="notes" type="text" value="@item.note" />
+								</td>
+							}
 						</tr>
 					}
 				}

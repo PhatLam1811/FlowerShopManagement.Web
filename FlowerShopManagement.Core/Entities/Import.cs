@@ -5,8 +5,6 @@ namespace FlowerShopManagement.Core.Entities;
 public class Import
 {
     public string _id;
-    public int _GRNNo;
-    public string _PoNo;
 
     public SupplierBasic supplier;
     public List<ImportItem> details;
@@ -25,7 +23,6 @@ public class Import
         UserBasic createdBy)
     {
         _id = Guid.NewGuid().ToString();
-        _PoNo = Guid.NewGuid().ToString();
 
         this.supplier = supplier;
         this.details = details;

@@ -16,11 +16,11 @@ public class StockServices : IStockService
     ICategoryRepository _categoryRepository;
     IMaterialRepository _materialRepository;
     IProductRepository _productRepository;
-    IWebHostEnvironment _webHostEnvironment;IVoucherRepository _voucherRepository;
+    IWebHostEnvironment _webHostEnvironment; IVoucherRepository _voucherRepository;
 
 
-	public StockServices(ICategoryRepository categoryRepository, IMaterialRepository materialRepository,
-        IProductRepository productRepository, IWebHostEnvironment webHostEnvironment,IVoucherRepository voucherRepository)
+    public StockServices(ICategoryRepository categoryRepository, IMaterialRepository materialRepository,
+        IProductRepository productRepository, IWebHostEnvironment webHostEnvironment, IVoucherRepository voucherRepository)
     {
         _categoryRepository = categoryRepository;
         _materialRepository = materialRepository;
@@ -42,7 +42,7 @@ public class StockServices : IStockService
     {
         if (name == null || name == "" || description == null || description == "") return false;
 
-        Material meterial = new Material() { _id = Guid.NewGuid().ToString(), _name = name , _maintainment = description};
+        Material meterial = new Material() { _id = Guid.NewGuid().ToString(), _name = name, _maintainment = description };
         var result = await _materialRepository.Add(meterial);
         return result;
     }
@@ -121,7 +121,7 @@ public class StockServices : IStockService
         List<ProductModel> lowOnStockProducts = new List<ProductModel>();
 
         var result = _productRepository.GetAllLowOnStock(minimumAmount);
-        
+
         if (result == null) return lowOnStockProducts;
 
         // Convert Product to ProductModel
@@ -188,16 +188,16 @@ public class StockServices : IStockService
 
         var oldObj = await _productRepository.GetById(productModel.Id);
         var obj = await productModel.ToEntityContainingImages(wwwRootPath: _webHostEnvironment.WebRootPath);
-        if(obj == null || obj._id == null || oldObj == null) return false;
-        if(oldObj._material != obj._material)
+        if (obj == null || obj._id == null || oldObj == null) return false;
+        if (oldObj._material != obj._material)
         {
             var list = await _materialRepository.GetAll();
             var material = list.FirstOrDefault(i => i._name == obj._material);
             if (material == null) { return false; }
             obj._maintainment = material._maintainment;
         }
-        
-        return await _productRepository.UpdateById(obj._id,obj);
+
+        return await _productRepository.UpdateById(obj._id, obj);
     }
 
     public async Task<VoucherDetailModel> GetADetailVoucher(string id)
@@ -216,7 +216,7 @@ public class StockServices : IStockService
     public async Task<bool> ActivateVoucher(string id)
     {
         Voucher? voucher = await _voucherRepository.GetById(id);
-        
+
         if (voucher == null) return false;
 
         voucher._state = Core.Enums.VoucherStatus.Using;

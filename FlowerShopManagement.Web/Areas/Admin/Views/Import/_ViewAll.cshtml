@@ -28,7 +28,18 @@
                         <td>@item.Supplier.name</td>
                         <td>@item.CreatedBy.name</td>
                         <td>@item.CreatedDate</td>
-                        <td>@item.Status.ToString()</td>
+                        @if (item.Status == FlowerShopManagement.Core.Enums.ImportStatus.OnGoing)
+                        {
+                            <td class="text-warning fst-italic">On-going</td>
+                        }
+                        @if (item.Status == FlowerShopManagement.Core.Enums.ImportStatus.Completed)
+                        {
+                            <td class="text-success fst-italic">Completed</td>
+                        }
+                        @if (item.Status == FlowerShopManagement.Core.Enums.ImportStatus.Canceled)
+                        {
+                            <td class="text-danger fst-italic">On-going</td>
+                        }
                         <td>
                             <a href="@Url.Action("Detail","Import",new {id = @item._Id})" id="@item._Id" class="border-1 table-icon">
                                 <i class="fas fa-edit"></i>

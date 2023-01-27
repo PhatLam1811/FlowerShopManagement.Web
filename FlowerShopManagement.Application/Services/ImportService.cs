@@ -1,6 +1,7 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Interfaces.MongoDB;
 using FlowerShopManagement.Application.Models;
+using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
 using System.Text;
 
@@ -9,11 +10,13 @@ namespace FlowerShopManagement.Application.Services;
 public class ImportService : IImportService
 {
     private readonly IImportRepository _importRepository;
+    private readonly IProductRepository _productRepository;
     private readonly IEmailService _mailService;
 
-    public ImportService(IImportRepository supplyRequestRepository, IEmailService mailService)
+    public ImportService(IImportRepository importRepository, IProductRepository productRepository, IEmailService mailService)
     {
-        _importRepository = supplyRequestRepository;
+        _importRepository = importRepository;
+        _productRepository = productRepository;
         _mailService = mailService;
     }
 
@@ -62,18 +65,17 @@ public class ImportService : IImportService
 
             if (importDetail == null) return "Import not found!";
 
+            var isCompleted = true;
+
             for (int i = 0; i < deliveredQties.Count; i++)
             {
-                if (importDetail.details[i].orderQty != deliveredQties[i])
-                {
-                    return "Delivered quantity unmatched!!";
-                }
+                if (importDetail.details[i].orderQty != deliveredQties[i]) isCompleted = false;
 
                 importDetail.details[i].deliveredQty = deliveredQties[i];
                 importDetail.details[i].note = notes[i];
             }
 
-            importDetail.status = Core.Enums.ImportStatus.Completed;
+            if (isCompleted) importDetail.status = Core.Enums.ImportStatus.Completed;
 
             await _importRepository.UpdateById(id, importDetail);
 
@@ -85,7 +87,33 @@ public class ImportService : IImportService
         }
     }
 
-    public bool SendRequest(ImportModel form)
+    public async Task UpdateStock(string importId)
+    {
+        try
+        {
+            var importDetail = await _importRepository.GetById(importId);
+
+            if (importDetail == null) return;
+
+            foreach (var item in importDetail.details)
+            { 
+                var product = await _productRepository.GetById(item._id);
+
+                if (product == null) return;
+
+                product._amount += item.deliveredQty;
+
+                await _productRepository.UpdateById(product._id, product);
+            }
+
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public async Task<bool> SendRequest(ImportModel form)
     {
         var mimeMessage = _mailService.CreateMimeMessage(form);
         var request = new Import(form.Supplier, form.Details, form.CreatedBy);
@@ -93,7 +121,7 @@ public class ImportService : IImportService
         try
         {
             // Save request to database before really sending it
-            _importRepository.Add(request);
+            await _importRepository.Add(request);
 
             // Send request
             return _mailService.Send(mimeMessage);
@@ -105,7 +133,7 @@ public class ImportService : IImportService
     }
 
     public ImportModel CreateRequestForm(
-        List<ProductModel> products,  
+        List<ProductDetailModel> products,  
         SupplierModel suppliers, 
         List<int> requestQty,
         string staffId, string staffName, string htmlPath)

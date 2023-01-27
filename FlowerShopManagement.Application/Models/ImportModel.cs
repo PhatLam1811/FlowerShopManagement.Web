@@ -7,8 +7,6 @@ namespace FlowerShopManagement.Application.Models;
 public class ImportModel
 {
     public string _Id { get; set; }
-    public int GRNNo { get; set; }
-    public string PoNo { get; set; }
 
     [Required] public SupplierBasic Supplier { get; set; }
     [Required] public List<ImportItem> Details { get; set; }
@@ -26,8 +24,6 @@ public class ImportModel
     public ImportModel(Import entity)
     {
         _Id = entity._id;
-        GRNNo = entity._GRNNo;
-        PoNo = entity._PoNo;
 
         Supplier = entity.supplier;
         Details = entity.details;
@@ -45,15 +41,13 @@ public class ImportModel
 
     public ImportModel(
         SupplierModel supplier,
-        List<ProductModel> products,
+        List<ProductDetailModel> products,
         List<int> orderQty,
         string staffname,
         string staffId)
     {
         // Init
         _Id = string.Empty;
-        GRNNo = 0;
-        PoNo = string.Empty;
 
         Details = new List<ImportItem>();
         HtmlPart = string.Empty;
