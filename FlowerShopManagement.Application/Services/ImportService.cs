@@ -8,25 +8,25 @@ namespace FlowerShopManagement.Application.Services;
 
 public class ImportService : IImportService
 {
-    private readonly ISupplyRequestRepository _supplyRequestRepository;
+    private readonly IImportRepository _supplyRequestRepository;
     private readonly IEmailService _mailService;
 
-    public ImportService(ISupplyRequestRepository supplyRequestRepository, IEmailService mailService)
+    public ImportService(IImportRepository supplyRequestRepository, IEmailService mailService)
     {
         _supplyRequestRepository = supplyRequestRepository;
         _mailService = mailService;
     }
 
-    public List<SupplyRequestModel> GetSupplyRequests()
+    public List<ImportModel> GetRequests()
     {
-        var result = new List<SupplyRequestModel>();
+        var result = new List<ImportModel>();
         try
         {
             var requests = _supplyRequestRepository.GetRequests();
 
             foreach (var request in requests)
             {
-                var model = new SupplyRequestModel(request);
+                var model = new ImportModel(request);
                 result.Add(model);
             }
 
@@ -38,7 +38,7 @@ public class ImportService : IImportService
         }
     }
 
-    public async Task<SupplyRequestModel?> GetSupplyRequest(string id)
+    public async Task<ImportModel?> GetRequest(string id)
     {
         try
         {
@@ -46,7 +46,7 @@ public class ImportService : IImportService
 
             if (request == null) return null;
 
-            return new SupplyRequestModel(request);
+            return new ImportModel(request);
         }
         catch (Exception e)
         {
@@ -54,10 +54,10 @@ public class ImportService : IImportService
         }
     }
 
-    public bool SendRequest(SupplyRequestModel form)
+    public bool SendRequest(ImportModel form)
     {
         var mimeMessage = _mailService.CreateMimeMessage(form);
-        var request = new SupplyRequest(form.reqSupplier, form.Details, form.CreatedBy);
+        var request = new Import(form.Supplier, form.Details, form.CreatedBy);
 
         try
         {
@@ -73,13 +73,13 @@ public class ImportService : IImportService
         }
     }
 
-    public SupplyRequestModel CreateReqSupplyForm(
+    public ImportModel CreateRequestForm(
         List<ProductModel> products,  
         SupplierModel suppliers, 
         List<int> requestQty,
         string staffId, string staffName, string htmlPath)
     {
-        var form = new SupplyRequestModel(
+        var form = new ImportModel(
             suppliers, 
             products, requestQty, 
             staffName, staffId);
@@ -110,7 +110,7 @@ public class ImportService : IImportService
                         builder.AppendLine("        <tr>");
                         builder.AppendLine("          <td class=\"product-index\">" + (i + 1).ToString() + "</td>");
                         builder.AppendLine("          <td>" + form.Details[i].name + "</td>");
-                        builder.AppendLine("          <td>" + form.Details[i].requestQty + "</td>");
+                        builder.AppendLine("          <td>" + form.Details[i].orderQty + "</td>");
                         builder.AppendLine("        <tr>");
                     }
                 }

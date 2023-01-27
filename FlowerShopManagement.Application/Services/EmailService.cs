@@ -50,13 +50,13 @@ public class EmailService : IEmailService
         }
     }
 
-    public MimeMessage CreateMimeMessage(SupplyRequestModel supplyForm)
+    public MimeMessage CreateMimeMessage(ImportModel supplyForm)
     {
         var mimeMessage = new MimeMessage();
 
         // Configure header
         mimeMessage.From.Add(MailboxAddress.Parse(sendEmail));
-        mimeMessage.To.Add(MailboxAddress.Parse(supplyForm.reqSupplier.email));
+        mimeMessage.To.Add(MailboxAddress.Parse(supplyForm.Supplier.email));
         mimeMessage.Subject = "Supply request from Dallas";
 
         // Build message body

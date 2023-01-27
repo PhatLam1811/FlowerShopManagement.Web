@@ -34,15 +34,24 @@ public class ImportController : Controller
     [HttpGet]
     public IActionResult Index()
     {
-        var requests = _importService.GetSupplyRequests();
-        return View(requests);
+        try
+        {
+            var requests = _importService.GetRequests();
+
+            return View(requests);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
+    // REQUEST FORM
     [HttpGet("Create")]
     public async Task<IActionResult> Create()
     {
         // Load data
-        var lowOnStockProducts = await _stockService.GetLowOnStockProducts();
+        var lowOnStockProducts = _stockService.GetLowOnStockProducts();
         var suppliers = await _supplierService.GetAllAsync();
 
         // Configure viewmodel
@@ -51,34 +60,27 @@ public class ImportController : Controller
         return View(viewmodel);
     }
 
-    // SUPPLY FORM
-    [HttpGet("SupplyForm")]
-    public IActionResult SupplyForm(SupplyRequestModel model)
-    {
-        return View(model);
-    }
-
     [HttpPost]
     [ActionName("CreateRequestForm")]
     public async Task CreateRequestForm(List<string> productIds, List<int> requestQty, string supplierIds)
     {
         var products = await _stockService.GetByIdsAsync(productIds);
-        var suppliers = await _supplierService.GetOneAsync(supplierIds);
+        var supplier = await _supplierService.GetOneAsync(supplierIds);
         var htmlPath = _webHostEnv.WebRootPath + _reqTemplatePath;
-        
+
         var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
         var userName = HttpContext.User.FindFirst("Username")?.Value;
 
         if (userId is null || userName is null) return;
 
-        if (products.Count <= 0 || requestQty.Count <= 0)
+        if (products.Count <= 0 || requestQty.Count <= 0 || supplier == null)
         {
             throw new NullReferenceException("Insufficient Values!");
         }
 
-        var reqForm = _importService.CreateReqSupplyForm(
-            products, 
-            suppliers, 
+        var reqForm = _importService.CreateRequestForm(
+            products,
+            supplier,
             requestQty,
             userId, userName, htmlPath);
 
@@ -91,12 +93,19 @@ public class ImportController : Controller
             throw new Exception(e.Message);
         }
     }
+
+    // SUPPLY FORM
+    [HttpGet("SupplyForm")]
+    public IActionResult SupplyForm(ImportModel model)
+    {
+        return View(model);
+    }
     
     // IMPORT DETAIL
     [HttpGet("Detail")]
     public async Task<IActionResult> Detail(string id)
     {
-        var model = await _importService.GetSupplyRequest(id);
+        var model = await _importService.GetRequest(id);
         return View(model);
     }
 }

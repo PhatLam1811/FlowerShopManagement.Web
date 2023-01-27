@@ -27,3 +27,10 @@ public class Supplier
         lastModified = DateTime.Now;
     }
 }
+
+public class SupplierBasic
+{
+    public string _id = string.Empty;
+    public string name = string.Empty;
+    public string email = string.Empty;
+}

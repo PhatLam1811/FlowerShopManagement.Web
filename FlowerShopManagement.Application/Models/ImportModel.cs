@@ -1,47 +1,66 @@
 ﻿using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Core.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace FlowerShopManagement.Application.Models;
 
-public class SupplyRequestModel
+public class ImportModel
 {
     public string _Id { get; set; }
+    public int GRNNo { get; set; }
+    public string PoNo { get; set; }
 
-    public RequestSupplier reqSupplier { get; set; }
-    public List<RequestProduct> Details { get; set; }
-    public RequestedStaff CreatedBy { get; set; }
-    public RequestStatus Status { get; set; }
+    [Required] public SupplierBasic Supplier { get; set; }
+    [Required] public List<ImportItem> Details { get; set; }
+    [Required] public double Total { get; set; }
 
-    public DateTime CreatedDate { get; }
+    [Required] public UserBasic CreatedBy { get; set; }
+    public UserBasic CheckedBy { get; set; }
+
+    [Required] public ImportStatus Status { get; set; }
+    [Required] public DateTime CreatedDate { get; }
+ 
+    public string Note { get; set; }
     public string HtmlPart { get; set; }
 
-    public SupplyRequestModel(SupplyRequest entity)
+    public ImportModel(Import entity)
     {
         _Id = entity._id;
+        GRNNo = entity._GRNNo;
+        PoNo = entity._PoNo;
 
-        reqSupplier = entity.suppliers;
+        Supplier = entity.supplier;
         Details = entity.details;
+        Total = entity.total;
+
         CreatedBy = entity.createdBy;
+        CheckedBy = entity.checkedBy;
+
         Status = entity.status;
-        
         CreatedDate = entity.createdDate;
+        
+        Note = string.Empty;
         HtmlPart = string.Empty;
     }
 
-    public SupplyRequestModel(
+    public ImportModel(
         SupplierModel supplier,
         List<ProductModel> products,
-        List<int> requestQty,
+        List<int> orderQty,
         string staffname,
         string staffId)
     {
         // Init
         _Id = string.Empty;
-        Details = new List<RequestProduct>();
+        GRNNo = 0;
+        PoNo = string.Empty;
+
+        Details = new List<ImportItem>();
         HtmlPart = string.Empty;
         CreatedDate = DateTime.Now;
 
         // Parse from SupplierModel to RequestSupplier
-        reqSupplier = new RequestSupplier()
+        Supplier = new SupplierBasic()
         {
             _id = supplier._id,
             name = supplier.Name,
@@ -51,23 +70,22 @@ public class SupplyRequestModel
         // Parse from ProductModel to RequestProduct
         for (int i = 0; i < products.Count; i++)
         {
-            var reqProduct = new RequestProduct()
+            var reqProduct = new ImportItem()
             {
                 _id = products[i].Id,
                 name = products[i].Name,
                 price = products[i].UniPrice,
-                requestQty = requestQty[i]
+                orderQty = orderQty[i]
             };
 
             Details.Add(reqProduct);
+            Total += reqProduct.price;
         }
 
-        var staff = new RequestedStaff()
+        CreatedBy = new UserBasic()
         {
             _id = staffId,
             name = staffname
         };
-
-        CreatedBy = staff;
     }
 }

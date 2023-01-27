@@ -11,11 +11,15 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
 {
     public ProductRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 
-    public async Task<List<Product>?> GetAllLowOnStock(int minimumAmount)
+    public List<Product>? GetAllLowOnStock(int minimumAmount)
     {
-        var filter = Builders<Product>.Filter.Lte("_amount", minimumAmount);
-        var result = await _mongoDbCollection.FindAsync(filter);
-        return result.ToList();
+        PipelineDefinition<Product, BsonDocument> pipeline = new BsonDocument[]
+        {
+            new BsonDocument("$sort",
+            new BsonDocument("_amount", 1))
+        };
+
+        return Aggregate<Product>(pipeline);
     }
 
     public int GetLowOnStockCount(int minimumAmount)

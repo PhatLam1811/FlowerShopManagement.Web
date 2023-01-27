@@ -1,4 +1,4 @@
-﻿@model List<SupplyRequestModel>
+﻿@model List<ImportModel>
 
 <div class="table-wrap">
     <table class="table myaccordion table-hover" id="accordion">
@@ -25,7 +25,7 @@
                     <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
                         <th scope="row">@i</th>
                         <td>@item._Id</td>
-                        <td>@item.reqSupplier.name</td>
+                        <td>@item.Supplier.name</td>
                         <td>@item.CreatedBy.name</td>
                         <td>@item.CreatedDate</td>
                         <td>@item.Status.ToString()</td>

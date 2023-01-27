@@ -113,22 +113,21 @@ public class StockServices : IStockService
         if (list == null) return new List<Material>();
         return list;
     }
-    public async Task<List<ProductModel>> GetLowOnStockProducts()
+    public List<ProductModel> GetLowOnStockProducts()
     {
         // This is only a temporary value of the minimum amount
         // needed for supply request
         int minimumAmount = 20;
         List<ProductModel> lowOnStockProducts = new List<ProductModel>();
 
-        var result = await _productRepository.GetAllLowOnStock(minimumAmount);
+        var result = _productRepository.GetAllLowOnStock(minimumAmount);
+        
         if (result == null) return lowOnStockProducts;
-        // Convert Product to SupplyItemModel
+
+        // Convert Product to ProductModel
         foreach (var item in result)
         {
-            // Convert product to model
             var model = new ProductModel(item);
-
-            // Add model to list
             lowOnStockProducts.Add(model);
         }
 
