@@ -57,9 +57,6 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             ChartJSCore.Models.Data data = new ChartJSCore.Models.Data();
 
-            int currentMonth = DateTime.Now.Month;
-            int currentYear = DateTime.Now.Year;
-
             data.Labels = new List<string>();
 
             List<double?> dataValues = new List<double?>();
@@ -81,7 +78,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             var dataset = new BarDataset
             {
-                Label = "Numbers of order",
+                Label = "Total per hour",
                 Data = dataSet,
                 BackgroundColor = colors,
                 BorderColor = borderColors,
