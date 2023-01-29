@@ -1,4 +1,5 @@
-﻿using FlowerShopManagement.Core.Entities;
+﻿using FlowerShopManagement.Application.Models;
+using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 
 namespace FlowerShopManagement.Application.MongoDB.Interfaces;
@@ -42,6 +43,7 @@ public interface IProductRepository : IBaseRepository<Product>
 {
     public List<Product>? GetAllLowOnStock(int minimumAmount);
     public Task<List<Product>?> GetProductsById(List<string?> ids);
+    public List<CategoryStatisticModel>? GetCategoryStatistic();
     public int GetLowOnStockCount(int minimumAmount);
 }
 

@@ -25,6 +25,7 @@ builder.Services.AddControllersWithViews().AddJsonOptions(opt => opt.JsonSeriali
 
 builder.Services.AddAuthorization(options =>
 {
+    options.AddPolicy("CustomerOnly", policy => policy.RequireClaim(ClaimTypes.Role, "Customer"));
     options.AddPolicy("StaffOnly", policy => policy.RequireClaim(ClaimTypes.Role, "Staff", "Admin"));
 });
 

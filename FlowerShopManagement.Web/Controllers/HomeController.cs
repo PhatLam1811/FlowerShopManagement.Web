@@ -57,6 +57,9 @@ public class HomeController : Controller
     [HttpGet]
     public async Task<IActionResult> Index()
     {
+        if (HttpContext.User.FindFirst(ClaimTypes.Role)?.Value == "Staff") 
+            return RedirectToAction("index","dashboard", new { area = "admin" });
+
         // Get current user Id
         var currentUserId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
