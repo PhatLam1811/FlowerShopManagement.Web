@@ -146,8 +146,8 @@ namespace FlowerShopManagement.Web.Controllers
                         if (user.InforDelivery != null && user.InforDelivery.Count > 0)
                         {
                             var info = user.InforDelivery.Where(o => o.IsDefault = true).First();
-                            orderM.FullName = info.Name;
-                            orderM.PhoneNumber = info.Phone;
+                            orderM.FullName = info.FullName;
+                            orderM.PhoneNumber = info.PhoneNumber;
                             orderM.Address = info.Address;
                         }
                         else
@@ -200,8 +200,8 @@ namespace FlowerShopManagement.Web.Controllers
                         if (user.InforDelivery != null && user.InforDelivery.Count > 0)
                         {
                             var info = user.InforDelivery.Where(o => o.IsDefault = true).First();
-                            orderM.FullName = info.Name;
-                            orderM.PhoneNumber = info.Phone;
+                            orderM.FullName = info.FullName;
+                            orderM.PhoneNumber = info.PhoneNumber;
                             orderM.Address = info.Address;
                         }
                         else
@@ -294,7 +294,7 @@ namespace FlowerShopManagement.Web.Controllers
                                     // notify
                                 }
 
-                                cartItems.RemoveAll(o => o.isSelected == true);
+                                _customerService.RemoveItemToCart(userId, i.Id);
                             }
                         }
                         else
@@ -424,6 +424,7 @@ namespace FlowerShopManagement.Web.Controllers
             }
             return NotFound();
         }
+
         [HttpPost]
         public IActionResult ChooseAddress(InforDeliveryModel inforDeliveryModel)
         {

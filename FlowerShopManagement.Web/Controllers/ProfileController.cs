@@ -247,7 +247,7 @@ public class ProfileController : Controller
 		{
 			return NotFound();
 		}
-        user.InforDelivery = user.InforDelivery.Where(i => !(i.Address.Equals(address) && i.Name.Equals(name) && i.Phone.Equals(phone))).ToList();
+        user.InforDelivery = user.InforDelivery.Where(i => !(i.Address.Equals(address) && i.FullName.Equals(name) && i.PhoneNumber.Equals(phone))).ToList();
 		await _customerfService.EditInfoAsync(user);
 
 		return PartialView("ManageAddress", user.InforDelivery);
