@@ -196,7 +196,8 @@ public class HomeController : Controller
 
         if (isOk)
         {
-            return RedirectToAction("Index", "Home");
+            //return RedirectToAction("Index", "Home");
+            return Json( new {isTrue = true});
         }
 
         return NotFound();
@@ -216,10 +217,12 @@ public class HomeController : Controller
 
         if (isOk)
         {
-            return RedirectToAction("Index", "Home");
-        }
+			//return RedirectToAction("Index", "Home");
+			return Json(new { isTrue = false });
 
-        return NotFound();
+		}
+
+		return NotFound();
     }
 
     public IActionResult Privacy()
