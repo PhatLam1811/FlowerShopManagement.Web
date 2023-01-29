@@ -272,6 +272,19 @@
 }
 
 /* AVATAR */
+.avatar-nav {
+    width: 30px;
+    height: 30px;
+    border: 2px solid black;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.avatar-nav:hover {
+    width: 35px;
+    height: 35px;
+}
+
 .avatar {
     width: 100px;
     height: 100px;
