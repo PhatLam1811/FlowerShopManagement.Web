@@ -96,10 +96,18 @@ public class HomeController : Controller
         return View(productMs);
     }
 
-    public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString, int? pageNumber)
+    [Route("Sort")]
+    [HttpPost]
+    public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString,
+       int? pageNumber, string? currentPrice, string currentMaterial, string? currentCategory)
     {
+        int pageSize = 8;
+
         ViewData["CurrentSort"] = sortOrder;
-        ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "name_asc";
+        ViewData["CurrentPrice"] = currentPrice;
+        ViewData["CurrentCategory"] = currentCategory;
+        ViewData["CurrentMaterial"] = currentMaterial;
+        ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
 
         if (searchString != null)
@@ -119,22 +127,49 @@ public class HomeController : Controller
             {
                 productMs = productMs.Where(s => s.Name.Contains(searchString)).ToList();
             }
-
+            // sort order - feature incoming
             switch (sortOrder)
             {
                 case "name_desc":
                     productMs = productMs.OrderByDescending(s => s.Name).ToList();
                     break;
+                //case "Date":
+                //    productMs = (List<ProductModel>)productMs.OrderBy(s => s.);
+                //      break;
                 case "name_asc":
                     productMs = productMs.OrderBy(s => s.Name).ToList();
                     break;
                 default:
-                    //productMs = productMs.OrderBy(s => s.LastName);
+                    //case filter
+
                     break;
             }
-            int pageSize = 8;
+            switch (currentPrice)
+            {
+                case "0 - 10":
+                    productMs = productMs.Where(s => s.UniPrice > 0 && s.UniPrice <= 10).ToList();
+                    break;
+                case "11 - 50":
+                    productMs = productMs.Where(s => s.UniPrice > 10 && s.UniPrice <= 50).ToList();
+                    break;
+                case ">50":
+                    productMs = productMs.Where(s => s.UniPrice > 50).ToList();
+                    break;
+                default:
+
+                    break;
+            }
+
+            if (currentMaterial != null && currentMaterial != "All")
+            {
+                productMs = productMs.Where(s => s.Material.Equals(currentMaterial)).ToList();
+            }
+            if (currentCategory != null && currentCategory != "All")
+            {
+                productMs = productMs.Where(s => s.Category.Equals(currentCategory)).ToList();
+            }
             PaginatedList<ProductDetailModel> objs = PaginatedList<ProductDetailModel>
-                            .CreateAsync(productMs, pageNumber ?? 1, pageSize);
+                .CreateAsync(productMs, pageNumber ?? 1, pageSize);
             return Json(new
             {
                 isValid = true,

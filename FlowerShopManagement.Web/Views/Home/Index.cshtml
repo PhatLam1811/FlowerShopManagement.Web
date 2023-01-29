@@ -8,24 +8,25 @@
 }
 
 <div class="d-flex align-items-end justify-content-between mt-3 mb-4">
-    <div class="d-flex gap-3">
-        <div class="form-group">
-            <label class="form-label h6" for="selectCategory">Category</label>
-            <select class="form-select" asp-items="@(new SelectList(categories))" id="selectCategory" aria-label="Floating label select example">
-            </select>
-        </div>
-        <div class="form-group">
-            <label class="form-label h6" for="selectCategory">Material</label>
-            <select class="form-select" asp-items="@(new SelectList(materials))" id="selectCategory" aria-label="Floating label select example">
-            </select>
-        </div>
-        <div class="form-group">
-            <label class="form-label h6" for="selectCategory">Price</label>
-            <select class="form-select" asp-items="@(new SelectList(prices))" id="selectCategory" aria-label="Floating label select example">
-            </select>
-        </div>
-    </div>
     <form method="post" action="@(Url.Action("Sort", "Home"))" onsubmit="return jQueryAjaxSearch(this)">
+
+        <div class="d-flex gap-3">
+            <div class="form-group">
+                <label class="form-label h6" for="selectCategory">Category</label>
+                <select class="form-select" asp-items="@(new SelectList(categories))" name="currentCategory" onchange="this.form.onsubmit()" aria-label="Floating label select example">
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label h6" for="selectCategory">Material</label>
+                <select class="form-select" asp-items="@(new SelectList(materials))" name="currentMaterial" onchange="this.form.onsubmit()" aria-label="Floating label select example">
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label h6" for="selectCategory">Price</label>
+                <select class="form-select" asp-items="@(new SelectList(prices))" name="currentPrice" onchange="this.form.onsubmit()" aria-label="Floating label select example">
+                </select>
+            </div>
+        </div>
         <label class="form-label h6" for="selectCategory">Search</label>
         <div class="d-flex align-items-stretch">
             <div class="h-fit form-group flex-grow-1">
