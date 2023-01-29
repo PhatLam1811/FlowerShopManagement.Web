@@ -117,6 +117,7 @@ public class AuthenticationController : Controller
             new Claim(ClaimTypes.NameIdentifier, user._id),
             new Claim(ClaimTypes.Role, user.Role.ToString()),
             new Claim("Username", user.Name),
+            new Claim("Email", user.Email),
             new Claim("Avatar", user.Avatar)
         };
 
