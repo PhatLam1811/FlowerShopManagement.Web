@@ -8,13 +8,15 @@ namespace FlowerShopManagement.Application.Services;
 
 public class EmailService : IEmailService
 {
+    private const string sendEmail = "phatlam1811@gmail.com";
+
     public async Task<bool> SendAsync(MimeMessage mimeMessage)
     {
         try
         {
             using var smtp = new SmtpClient();
             smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-            smtp.Authenticate("phatlam1811@gmail.com", "xhbstfiflmipyjfq");
+            smtp.Authenticate(sendEmail, "xhbstfiflmipyjfq");
 
             await smtp.SendAsync(mimeMessage);
 
@@ -34,7 +36,7 @@ public class EmailService : IEmailService
         {
             using var smtp = new SmtpClient();
             smtp.Connect("smtp.gmail.com", 587, SecureSocketOptions.StartTls);
-            smtp.Authenticate("phatlam1811@gmail.com", "xhbstfiflmipyjfq");
+            smtp.Authenticate(sendEmail, "xhbstfiflmipyjfq");
 
             smtp.Send(mimeMessage);
 
@@ -48,24 +50,17 @@ public class EmailService : IEmailService
         }
     }
 
-    public MimeMessage CreateMimeMessage(SupplyFormModel supplyForm)
+    public MimeMessage CreateMimeMessage(ImportModel supplyForm)
     {
         var mimeMessage = new MimeMessage();
 
         // Configure header
-        mimeMessage.From.Add(MailboxAddress.Parse(supplyForm.From));
-        mimeMessage.Sender = MailboxAddress.Parse(supplyForm.From);
-        mimeMessage.Subject = supplyForm.Subject;
-
-        // Set message's bcc
-        foreach (var email in supplyForm.To)
-        {
-            mimeMessage.Bcc.Add(MailboxAddress.Parse(email));
-        }
+        mimeMessage.From.Add(MailboxAddress.Parse(sendEmail));
+        mimeMessage.To.Add(MailboxAddress.Parse(supplyForm.Supplier.email));
+        mimeMessage.Subject = "Supply request from Dallas";
 
         // Build message body
         BodyBuilder builder = new BodyBuilder();
-        builder.TextBody = supplyForm.TextPart;
         builder.HtmlBody = supplyForm.HtmlPart;
 
         mimeMessage.Body = builder.ToMessageBody();

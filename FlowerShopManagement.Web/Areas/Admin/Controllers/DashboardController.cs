@@ -31,10 +31,21 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             Chart verticalBarChart = GenerateVerticalBarChart(dataSet);
 
+            // Day
+            ViewData["Today"] = DateTime.Today;
+
+            // Current staff info
+            ViewData["Username"] = HttpContext.User.FindFirst("Username")?.Value;
+            ViewData["Email"] = HttpContext.User.FindFirst("Email")?.Value;
+            ViewData["Avatar"] = HttpContext.User.FindFirst("Avatar")?.Value;
+
+            // Today's statistic
             ViewData["VerticalBarChart"] = verticalBarChart;
             ViewData["WaitingOrder"] = _reportService.GetOrdersCount(beginDate, endDate, Core.Enums.Status.Paying);
             ViewData["ValuableCustomers"] = _reportService.GetValuableCustomers(new DateTime(2022, 01, 01), DateTime.Today);
             ViewData["ProfitableProducts"] = _reportService.GetProfitableProducts(new DateTime(2022, 01, 01), DateTime.Today);
+            ViewData["LowOnStocksCount"] = _reportService.GetLowOnStocksCount();
+            ViewData["OutOfStocksCount"] = _reportService.GetLowOnStocksCount(0);
 
             return View();
         }
@@ -45,9 +56,6 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             chart.Type = Enums.ChartType.Bar;
 
             ChartJSCore.Models.Data data = new ChartJSCore.Models.Data();
-
-            int currentMonth = DateTime.Now.Month;
-            int currentYear = DateTime.Now.Year;
 
             data.Labels = new List<string>();
 
@@ -70,7 +78,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             var dataset = new BarDataset
             {
-                Label = "Numbers of order",
+                Label = "Total per hour",
                 Data = dataSet,
                 BackgroundColor = colors,
                 BorderColor = borderColors,

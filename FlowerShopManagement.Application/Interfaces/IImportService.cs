@@ -4,6 +4,19 @@ namespace FlowerShopManagement.Application.Interfaces;
 
 public interface IImportService
 {
-    public bool SendRequest(SupplyFormModel form);
-    public SupplyFormModel CreateReqSupplyForm(List<ProductModel> products, List<SupplierModel> suppliers, List<int> reqAmounts, string htmlPath);
+    public List<ImportModel> GetRequests();
+
+    public Task<ImportModel?> GetRequest(string id);
+
+    public Task<string?> Verify(string id, List<int> deliveredQties, List<string> notes);
+
+    public Task UpdateStock(string importId);
+
+    public Task<bool> SendRequest(ImportModel form);
+    
+    public ImportModel CreateRequestForm(
+        List<ProductDetailModel> products, 
+        SupplierModel suppliers, 
+        List<int> reqAmounts, 
+        string staffId, string staffName, string htmlPath);
 }

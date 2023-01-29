@@ -3,13 +3,22 @@ using ChartJSCore.Helpers;
 using ChartJSCore.Models;
 using ChartJSCore.Models.ChartJSCore.Models;
 using Microsoft.AspNetCore.Mvc;
+using FlowerShopManagement.Application.Interfaces;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 {
     [Area("Admin")]
+    [Route("[area]/[controller]")]
     [Authorize(Policy = "StaffOnly")]
     public class ReportController : Controller
     {
+        private readonly IReportService _reportService;
+
+        public ReportController(IReportService reportService)
+        {
+            _reportService = reportService;
+        }
+
         public IActionResult Index()
         {
             ViewBag.Report = true;

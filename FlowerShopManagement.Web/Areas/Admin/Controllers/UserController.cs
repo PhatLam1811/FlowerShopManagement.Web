@@ -1,7 +1,6 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Interfaces.UserSerivices;
 using FlowerShopManagement.Application.Models;
-using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Application.Services;
 using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Web.ViewModels;
@@ -63,9 +62,6 @@ public class UserController : Controller
     {
         ViewData["CurrentSort"] = sortOrder;
         ViewData["CurrentCategory"] = currentCategory;
-
-
-
 
         ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
         ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
@@ -183,9 +179,9 @@ public class UserController : Controller
             && userCreateVM.ward == null && userCreateVM.detailAddress == null) return NotFound();
         var infoAddress = new InforDeliveryModel()
         {
-            Name = userCreateVM.userModel.Name,
+            FullName = userCreateVM.userModel.Name,
             IsDefault = true,
-            Phone = userCreateVM.userModel.PhoneNumber,
+            PhoneNumber = userCreateVM.userModel.PhoneNumber,
             Address = userCreateVM.detailAddress + ", " + userCreateVM.ward + ", " + userCreateVM.district + ", " + userCreateVM.city
         };
         userCreateVM.userModel.InforDelivery.Add(infoAddress);

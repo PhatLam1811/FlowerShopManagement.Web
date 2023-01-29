@@ -9,7 +9,7 @@
 		<div class="d-flex gap-3">
 			<div class="form-group">
 				<label class="form-label h6" for="selectCategory">By</label>
-				<select class="form-select" asp-items="@(new SelectList(times))" id="selectCategory" aria-label="Floating label select example">
+				<select class="form-select" asp-items="@(new SelectList(times))" id="selectCategory" aria-label="Floating label select example" onchange="">
 				</select>
 			</div>
 			<div class="form-group">
@@ -21,7 +21,7 @@
 				<input type="date" class="form-control">
 			</div>
 		</div>
-		<button class="btn btn-primary">Preview and Print Report</button>
+		<button class="btn btn-primary" onclick="window.print()">Preview and Print Report</button>
 	</div>
 </div>
 
