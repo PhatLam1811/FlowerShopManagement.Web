@@ -179,9 +179,9 @@ public class UserController : Controller
             && userCreateVM.ward == null && userCreateVM.detailAddress == null) return NotFound();
         var infoAddress = new InforDeliveryModel()
         {
-            Name = userCreateVM.userModel.Name,
+            FullName = userCreateVM.userModel.Name,
             IsDefault = true,
-            Phone = userCreateVM.userModel.PhoneNumber,
+            PhoneNumber = userCreateVM.userModel.PhoneNumber,
             Address = userCreateVM.detailAddress + ", " + userCreateVM.ward + ", " + userCreateVM.district + ", " + userCreateVM.city
         };
         userCreateVM.userModel.InforDelivery.Add(infoAddress);
