@@ -4,6 +4,7 @@ using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using System.Diagnostics.CodeAnalysis;
 
 namespace FlowerShopManagement.Infrustructure.MongoDB.Implements;
 
@@ -34,7 +35,9 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
 
         try
         {
-            var result = Aggregate<LowOnStocksCountModel>(pipeline).First();
+            var result = Aggregate<LowOnStocksCountModel>(pipeline).FirstOrDefault();
+
+            if (result == null) return 0;
 
             return result.amount;
         }
