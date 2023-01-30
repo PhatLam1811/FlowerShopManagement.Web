@@ -11,7 +11,7 @@ public class Import
     public double total;
 
     public UserBasic createdBy;
-    public UserBasic checkedBy;
+    public UserBasic? checkedBy;
 
     public ImportStatus status;
     public DateTime createdDate;
@@ -27,12 +27,15 @@ public class Import
         this.supplier = supplier;
         this.details = details;
         
-        total = 0.0d;
+        foreach (var item in details)
+        {
+            total += item.price * item.orderQty;
+        }
         
         note = string.Empty;
 
         this.createdBy = createdBy;
-        checkedBy = new UserBasic();
+        checkedBy = null;
 
         createdDate = DateTime.Now;
     }

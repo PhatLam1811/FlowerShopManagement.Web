@@ -11,6 +11,12 @@ public class OrdersCountModel
     public int numberOfOrders;
 }
 
+public class TotalOrdersModel
+{
+    public int _id;
+    public int numberOfOrders;
+}
+
 public class LowOnStocksCountModel
 {
     public int amount;
@@ -26,4 +32,10 @@ public class ProfitableProductModel
 {
     public string _id = string.Empty;
     public int soldNumber;
+}
+
+public class CategoryStatisticModel
+{
+    public string _id = string.Empty;
+    public int numberOfProducts;
 }

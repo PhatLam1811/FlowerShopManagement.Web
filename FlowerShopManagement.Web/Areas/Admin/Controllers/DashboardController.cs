@@ -24,18 +24,31 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         {
             ViewBag.Dashboard = true;
 
-            var beginDate = DateTime.Today;
-            var endDate = beginDate.AddDays(1);
+            var today = DateTime.Today;
+            var beginDate = new DateTime(today.Year, today.Month, 01);
+            var endDate = today.AddDays(1);
 
-            var dataSet = _reportService.GetTotalRevenue(beginDate, endDate);
+            var dataSet = _reportService.GetTotalOrders(today, endDate);
 
             Chart verticalBarChart = GenerateVerticalBarChart(dataSet);
 
+            // Day
+            ViewData["Today"] = today;
+
+            // Current staff info
+            ViewData["Username"] = HttpContext.User.FindFirst("Username")?.Value;
+            ViewData["Email"] = HttpContext.User.FindFirst("Email")?.Value;
+            ViewData["Avatar"] = HttpContext.User.FindFirst("Avatar")?.Value;
+
+            // Today's total orders
             ViewData["VerticalBarChart"] = verticalBarChart;
+
+            // Current month's statistic
             ViewData["WaitingOrder"] = _reportService.GetOrdersCount(beginDate, endDate, Core.Enums.Status.Paying);
-            ViewData["ValuableCustomers"] = _reportService.GetValuableCustomers(new DateTime(2022, 01, 01), DateTime.Today);
-            ViewData["ProfitableProducts"] = _reportService.GetProfitableProducts(new DateTime(2022, 01, 01), DateTime.Today);
-            ViewData["LowOnStocksCount"] = _reportService.GetLowOnStocksCount();
+            ViewData["ValuableCustomers"] = _reportService.GetValuableCustomers(beginDate, endDate);
+            ViewData["ProfitableProducts"] = _reportService.GetProfitableProducts(beginDate, endDate);
+            ViewData["LowOnStocksCount"] = _reportService.GetProductsCount(20);
+            ViewData["OutOfStocksCount"] = _reportService.GetProductsCount(0);
 
             return View();
         }
@@ -47,9 +60,6 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             ChartJSCore.Models.Data data = new ChartJSCore.Models.Data();
 
-            int currentMonth = DateTime.Now.Month;
-            int currentYear = DateTime.Now.Year;
-
             data.Labels = new List<string>();
 
             List<double?> dataValues = new List<double?>();
@@ -60,7 +70,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             for (int i = 0; i < dataSet.Count; i++)
             {
-                data.Labels.Add(i.ToString());
+                data.Labels.Add(i.ToString() + (i > 11 ? "PM" : "AM"));
                 dataValues.Add(0);
                 colors.Add(ChartColor.FromRgba(102, 152, 250, 1));
                 borderColors.Add(ChartColor.FromRgb(102, 152, 250));
@@ -71,7 +81,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             var dataset = new BarDataset
             {
-                Label = "Numbers of order",
+                Label = "Total per hour",
                 Data = dataSet,
                 BackgroundColor = colors,
                 BorderColor = borderColors,

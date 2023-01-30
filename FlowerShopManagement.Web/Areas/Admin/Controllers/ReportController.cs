@@ -3,6 +3,8 @@ using ChartJSCore.Helpers;
 using ChartJSCore.Models;
 using ChartJSCore.Models.ChartJSCore.Models;
 using Microsoft.AspNetCore.Mvc;
+using FlowerShopManagement.Application.Interfaces;
+using FlowerShopManagement.Application.Models;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 {
@@ -11,20 +13,50 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
     [Authorize(Policy = "StaffOnly")]
     public class ReportController : Controller
     {
+        private readonly IReportService _reportService;
+
+        public ReportController(IReportService reportService)
+        {
+            _reportService = reportService;
+        }
+
         public IActionResult Index()
         {
             ViewBag.Report = true;
 
-            Chart donutChart = GenerateDonutChart();
-            Chart lineChart = GenerateLineChart();
+            var beginDate = new DateTime(2023, 01, 01);
+            var endDate = beginDate.AddMonths(1);
 
-            ViewData["DonutChart"] = donutChart;
+            // Analize data
+            var dataSet1 = _reportService.GetTotalOrders(beginDate, endDate);
+            var dataSet2 = _reportService.GetTotalRevenue(beginDate, endDate);
+            var dataSet3 = _reportService.GetCategoryStatistic();
+
+            Chart lineChart = GenerateLineChart(dataSet1, dataSet2);
+            Chart donutChart = GenerateDonutChart(dataSet3);
+
+            // Charts
             ViewData["LineChart"] = lineChart;
+            ViewData["DonutChart"] = donutChart;
+
+            // Orders Statistics
+            ViewData["WaitingOrders"] = _reportService.GetOrdersCount(beginDate, endDate, Core.Enums.Status.Paying);
+            ViewData["CanceledOrders"] = _reportService.GetOrdersCount(beginDate, endDate, Core.Enums.Status.Canceled);
+            ViewData["CompletedOrders"] = _reportService.GetOrdersCount(beginDate, endDate);
+
+            // Products Statistics
+            ViewData["OutOfStocks"] = _reportService.GetProductsCount(0);
+            ViewData["LowOnStocks"] = _reportService.GetProductsCount(20);
+            ViewData["ProductsCount"] = _reportService.GetProductsCount(-1);
+
+            // Sum-up
+            ViewData["TopCustomers"] = _reportService.GetValuableCustomers(beginDate, endDate);
+            ViewData["ProfitableProducts"] = _reportService.GetProfitableProducts(beginDate, endDate);
 
             return View();
         }
 
-        private Chart GenerateLineChart()
+        private Chart GenerateLineChart(List<double?> dataSet1, List<double?> dataSet2)
         {
             Chart chart = new Chart();
             chart.Type = Enums.ChartType.Line;
@@ -42,7 +74,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             int index = 0;
 
-            for (int i = 1; i <= 7; i++)
+            for (int i = 1; i <= dataSet1.Count; i++)
             {
                 data.Labels.Add("Day" + i.ToString());
                 dataValues.Add(0);
@@ -53,10 +85,10 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             }
 
 
-            var dataset = new LineDataset
+            var dataset1 = new LineDataset
             {
-                Label = "Numbers of order",
-                Data = new List<double?>() { 0, 40, 20, 36, 50, 23, 100 },
+                Label = "Total Orders",
+                Data = dataSet1,
                 Fill = "false",
                 Tension = 0.1,
                 BackgroundColor = colors,
@@ -67,10 +99,10 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
                 PointBorderColor = new List<ChartColor>() { ChartColor.FromRgba(102, 152, 250, 0.4) },
             };
 
-            var dataset1 = new LineDataset
+            var dataset2 = new LineDataset
             {
-                Label = "Total of order",
-                Data = new List<double?>() { 0, 10, 20, 16, 50, 23, 33 },
+                Label = "Total Revenue",
+                Data = dataSet2,
                 Fill = "false",
                 Tension = 0.1,
                 BackgroundColor = new List<ChartColor>() { ChartColor.FromRgba(214, 103, 191, 1) },
@@ -81,27 +113,46 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
                 PointBorderColor = new List<ChartColor>() { ChartColor.FromRgba(214, 103, 191, 0.4) },
             };
 
-            data.Datasets = new List<Dataset> { dataset, dataset1 };
+            data.Datasets = new List<Dataset> { dataset1, dataset2 };
 
             chart.Data = data;
 
             return chart;
         }
 
-        private Chart GenerateDonutChart()
+        private Chart GenerateDonutChart(List<CategoryStatisticModel>? dataSet)
         {
             Chart chart = new Chart();
             chart.Type = Enums.ChartType.Doughnut;
 
+            if (dataSet == null) return chart;
+
+            var numberOfProducts = new List<double?>();
+            var labels = new List<string>();
+
+            foreach (var category in dataSet)
+            {
+                labels.Add(category._id);
+                numberOfProducts.Add(category.numberOfProducts);
+            }
+
             var dataset = new DoughnutDataset
             {
-                Label = "Numbers of order",
-                Data = new List<double?>() { 23, 41, 17, 29 },
-                BackgroundColor = new List<ChartColor>() { ChartColor.FromHexString("#a4c2a3"), ChartColor.FromHexString("#6698fa"), ChartColor.FromHexString("#e5573c"), ChartColor.FromHexString("#eea13d") },
+                Label = "Numbers of Products",
+                Data = numberOfProducts,
+                BackgroundColor = new List<ChartColor>() 
+                { 
+                    ChartColor.FromHexString("#a4c2a3"), 
+                    ChartColor.FromHexString("#6698fa"), 
+                    ChartColor.FromHexString("#e5573c"), 
+                    ChartColor.FromHexString("#eea13d") 
+                },
                 Spacing = 6,
             };
              
             var data = new Data();
+
+            data.Labels = labels;
 
             data.Datasets = new List<Dataset>() { dataset };
 

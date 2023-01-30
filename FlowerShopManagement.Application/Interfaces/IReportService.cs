@@ -6,7 +6,7 @@ namespace FlowerShopManagement.Application.Interfaces;
 public interface IReportService
 {
     // Number of low on stock products
-    public int GetLowOnStocksCount(int minimumAmount = 20);
+    public int GetProductsCount(int minimumAmount = 20);
 
     // Most profitable products of day, month, year
     public List<ProfitableProductModel> GetProfitableProducts(DateTime beginDate, DateTime endDate, int limit = 5);
@@ -16,9 +16,13 @@ public interface IReportService
 
     // Total waiting/sold/... order count of day, month, year
     public int GetOrdersCount(DateTime beginDate, DateTime endDate, Status status = Status.Purchased);
+    public List<double?> GetTotalOrders(DateTime beginDate, DateTime endDate, Status status = Status.Purchased);
 
     // Total revenue per selected day, month, year
     public List<double?> GetTotalRevenue(DateTime beginDate, DateTime endDate, Status status = Status.Purchased);
+
+    // Categories statistic
+    public List<CategoryStatisticModel>? GetCategoryStatistic();
     
     // Profit of day, month, year
 

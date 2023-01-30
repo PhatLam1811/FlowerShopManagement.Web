@@ -72,12 +72,22 @@
 
     <div class="col-4">
         @*add image*@
-        @foreach (var i in @Model.Pictures)
+        @if (Model.Pictures != null && Model.Pictures.Count > 0)
         {
-            <img src="~/image/@i" style="width:300; height:300px"
+            @foreach (var i in @Model.Pictures)
+            {
+                <img src="~/image/@i" style="width:300; height:300px"
              asp-append-version="true" />
-             <input value="@i" asp-for="Pictures" />
+                <input value="@i" asp-for="Pictures" hidden />
+            }
+
         }
+        else
+        {
+            <img src="~/image/flower1.png" style="width:300; height:300px"
+             asp-append-version="true" />
+        }
+        
 
         <div class="form-floating">
             <input asp-for="FormPicture" style="border-width:0px" accept="image/*" class="form-control" />

@@ -2,6 +2,16 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
+$(function () {
+    $("#loaderbody").addClass('d-none');
+
+    $(document).bind('ajaxStart', function () {
+        $("#loaderbody").removeClass('d-none');
+
+    }).bind('ajaxStop', function () {
+        $("#loaderbody").addClass('d-none');
+    });
+});
 function showContent2(url, title) {
 
     $.ajax({
@@ -20,7 +30,6 @@ function showContent2(url, title) {
 }
 
 function showPartialView(url) {
-    debugger;
     $.ajax({
         type: "GET",
         url: url,
@@ -373,13 +382,32 @@ function callWithId(url, id) {
         url: url,
         data: { id: id },
         success: function (res) {
-            if (res.isValid) {
-                //$('#hihi').html(res.html);
-                //$.notify("Added to your wishlist", "success", { position: "right" });
+
+            if (res.isTrue === true) {
+
+               $("#" + id).removeClass("hover-icon");
+                $("#" + id).removeClass("text-color-fade");
+                $("#" + id).addClass("text-secondary");
+                $("#" + id).addClass("hover-dark-icon");
+
             }
             else {
-                //$.notify("Error", "warn", { position: "right" });
+
+                $("#" + id).removeClass("hover-dark-icon");
+                $("#" + id).addClass("hover-icon");
+                $("#" + id).addClass("text-color-fade");
+                $("#" + id).removeClass("text-secondary");
+
             }
+
+            //if (res.isValid) {
+
+            //    //$('#hihi').html(res.html);
+            //    //$.notify("Added to your wishlist", "success", { position: "right" });
+            //}
+            //else {
+            //    //$.notify("Error", "warn", { position: "right" });
+            //}
 
         }
     })
@@ -494,6 +522,8 @@ function addToCart(url, id, amount) {
         url: url,
         data: { id: id, amount: amount },
         success: function () {
+            $.notify("Added to your cart", "success", { position: "right" });
+
         }
     })
 }
@@ -517,10 +547,13 @@ function addAddress(form) {
         contentType: false,
         processData: false,
         success: function (res) {
+
             $("#form-modal .modal-body").html('');
             $("#form-modal .modal-title").html('');
             $("#form-modal").modal('hide');
+
             $("#pw").html(res);
+
             console.log(res);
         },
         error: function (err) {

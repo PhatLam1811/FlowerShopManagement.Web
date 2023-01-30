@@ -90,7 +90,7 @@
                 @if (Model != null && Model.userModel != null && Model.userModel.InforDelivery != null && Model.userModel.InforDelivery.Count > 0)
                 {
                     <div class="d-flex">
-                        <input type="text" name="detailAddress"
+                        <input type="text" name="detailAddress" style="font-family:'Open Sans'"
                            class="form-control form-control-lg h5 py-3"
                            id="ip-address" placeholder="eg: 69 Le Loi street">
                     </div>
@@ -98,7 +98,7 @@
                 else
                 {
                     <div class="d-flex">
-                        <input type="text" name="detailAddress"
+                        <input type="text" name="detailAddress" style="font-family:'Open Sans'"
                            class="form-control form-control-lg h5 py-3"
                            id="ip-address" placeholder="eg: 69 Le Loi street">
                         </div>
@@ -113,7 +113,7 @@
 
     <div class="col-6">
         @*add image*@
-        <img src="~/image/flower1.png"
+        <img src="~/avatar/user.png"
              class="w-100 h-auto"
              asp-append-version="true" />
         <div class="form-floating">

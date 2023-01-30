@@ -1,4 +1,17 @@
 ﻿<!DOCTYPE html>
+@{
+	ViewBag.IsAuthenticated = false;
+	
+	if (Context.User.Identity is not null)
+	ViewBag.IsAuthenticated = Context.User.Identity.IsAuthenticated;
+
+	if (ViewBag.IsAuthenticated)
+	{
+		ViewData["Username"] = Context.User.FindFirst("Username")?.Value;
+		ViewData["Avatar"] = Context.User.FindFirst("Avatar")?.Value;
+	}
+}
+
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
@@ -46,8 +59,17 @@
 						<i class="fa-solid fa-cart-shopping nav-icon"></i>
 					</a>
 					<div class="dropdown">
-						<button class="nav-icon-link fa-regular fa-circle-user nav-icon border-0 p-0 m-0" type="button" id="drop" data-bs-toggle="dropdown" aria-expanded="false">
-						</button>
+						@if (!ViewBag.IsAuthenticated)
+						{
+							<button class="nav-icon-link fa-regular fa-circle-user nav-icon border-0 p-0 m-0" type="button" id="drop" data-bs-toggle="dropdown" aria-expanded="false">
+							</button>
+						}
+						else 
+						{
+							<button class="fa-regular border-0 p-0 m-0" type="button" id="drop" data-bs-toggle="dropdown" aria-expanded="false">
+								<img src="~/avatar/@ViewData["Avatar"]" class="avatar-nav" />
+							</button>
+						}
 						<div class="dropdown-menu dropdown-menu-end" aria-labelledby="drop">
 							<partial name="_LoginPartial"/>
 						</div>
@@ -74,6 +96,12 @@
 			</div>
 		</div>
 	</div>
+	<div class="d-flex justify-content-center" style="position: absolute;vertical-align: middle; top: 50%; left: 50%;">
+		<div class="spinner-border" role="status" id="loaderbody">
+			<span class="visually-hidden">Loading...</span>
+		</div>
+	</div>
+
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 

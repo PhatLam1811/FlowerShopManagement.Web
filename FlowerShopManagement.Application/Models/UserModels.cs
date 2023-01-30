@@ -27,7 +27,7 @@ public class UserModel
     [Required]
     [RegularExpression(@"^([A-Z][a-zA-Z_\s]*$)")]
     public string Name { get; set; }
-    public string Avatar { get; set; } = "user.png";
+    public string Avatar { get; set; } = "avt3.png";
     public Gender Gender { get; set; }
 
     [DataType(DataType.DateTime)]
@@ -163,6 +163,11 @@ public class UserModel
                 await this.FormFile.CopyToAsync(fileStream);
                 entity.avatar = this.FormFile.FileName;
             }
+        }
+        else
+        {
+            entity.avatar = "avt2.png";
+
         }
         entity.name = Name;
         entity.password = Password;

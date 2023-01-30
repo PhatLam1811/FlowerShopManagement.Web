@@ -74,7 +74,7 @@ public class ImportModel
             };
 
             Details.Add(reqProduct);
-            Total += reqProduct.price;
+            Total += reqProduct.price * reqProduct.orderQty;
         }
 
         CreatedBy = new UserBasic()

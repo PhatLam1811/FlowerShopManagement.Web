@@ -6,51 +6,77 @@ using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using static MongoDB.Driver.WriteConcern;
-using FlowerShopManagement.Web.ViewModels;
 using ValueType = FlowerShopManagement.Core.Enums.ValueType;
 using FlowerShopManagement.Core.Entities;
 using System.Web.WebPages;
+using Microsoft.AspNetCore.Authorization;
 
-namespace FlowerShopManagement.Web.Controllers
+namespace FlowerShopManagement.Web.Controllers;
+
+//--------------------------------------Customer Order Controller--------------------------------------------------
+
+[Authorize(Policy = "CustomerOnly")]
+public class OrderController : Controller
 {
-    //--------------------------------------Customer Order Controller--------------------------------------------------
+    //Services
+    ISaleService _saleServices;
+    //Repositories
+    IOrderRepository _orderRepository;
+    IStockService _stockService;
+    IProductRepository _productRepository;
+    IUserRepository _userRepository;
+    ICustomerfService _customerService;
+    IAuthService _authService;
 
-    public class OrderController : Controller
+
+    public OrderController(ISaleService saleServices, IOrderRepository orderRepository, IProductRepository productRepository,
+        IUserRepository userRepository, ICustomerfService customerfService, IAuthService authService, IStockService stockService)
     {
-        //Services
-        ISaleService _saleServices;
-        //Repositories
-        IOrderRepository _orderRepository;
-        IStockService _stockService;
-        IProductRepository _productRepository;
-        IUserRepository _userRepository;
-        ICustomerfService _customerService;
-        IAuthService _authService;
+        _orderRepository = orderRepository;
+        _saleServices = saleServices;
+        _productRepository = productRepository;
+        _userRepository = userRepository;
+        _customerService = customerfService;
+        _authService = authService;
+        _stockService = stockService;
+    }
 
+    [HttpGet]
+    public async Task<IActionResult> Index()
+    {
+        ViewBag.Order = true;
 
-        public OrderController(ISaleService saleServices, IOrderRepository orderRepository, IProductRepository productRepository,
-            IUserRepository userRepository, ICustomerfService customerfService, IAuthService authService, IStockService stockService)
+        //Set up default values for OrderPage
+
+        //ViewData["Categories"] = Enum.GetValues(typeof(Status)).Cast<Status>().ToList();
+
+        string? userId;
+        List<OrderDetailModel>? orderMs = new List<OrderDetailModel>();
+
+        if (this.HttpContext != null)
         {
-            _orderRepository = orderRepository;
-            _saleServices = saleServices;
-            _productRepository = productRepository;
-            _userRepository = userRepository;
-            _customerService = customerfService;
-            _authService = authService;
-            _stockService = stockService;
+            userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId != null)
+            {
+                orderMs = await _customerService.GetOrdersOfUserAsync(userId, _orderRepository);
+
+            }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Index()
+        return View(orderMs);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> OrderDetail(string id)
+    {
+        if (id == null)
         {
-            ViewBag.Order = true;
-
-            //Set up default values for OrderPage
-
-            //ViewData["Categories"] = Enum.GetValues(typeof(Status)).Cast<Status>().ToList();
-
-            string? userId;
+            return NotFound();
+        }
+        else
+        {
+            string? userId = "";
             List<OrderDetailModel>? orderMs = new List<OrderDetailModel>();
 
             if (this.HttpContext != null)
@@ -60,53 +86,150 @@ namespace FlowerShopManagement.Web.Controllers
                 if (userId != null)
                 {
                     orderMs = await _customerService.GetOrdersOfUserAsync(userId, _orderRepository);
-
+                }
+                else
+                {
+                    return NotFound("Not Found! This order can't show!");
                 }
             }
 
-            return View(orderMs);
+            if (orderMs?.Count > 0)
+            {
+                OrderDetailModel orderM = orderMs.Where(o => o.Id == id).First();
+                return View(orderM);
+            }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> OrderDetail(string id)
+        return NotFound();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> Create()
+    {
+        // get cart of current user
+        string? userId;
+
+        if (this.HttpContext != null)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-            else
-            {
-                string? userId = "";
-                List<OrderDetailModel>? orderMs = new List<OrderDetailModel>();
+            userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-                if (this.HttpContext != null)
+            if (userId != null)
+            {
+                List<CartItemModel>? cartItems = _customerService.GetCartOfUserAsync(userId).Result?.Items;
+                var orderM = new OrderDetailModel();
+
+                // update order items
+                if (cartItems?.Count > 0)
                 {
-                    userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                    if (userId != null)
+                    orderM.Products = new List<ProductDetailModel>();
+                    foreach (var i in cartItems)
                     {
-                        orderMs = await _customerService.GetOrdersOfUserAsync(userId, _orderRepository);
+                        if (i.isSelected)
+                        {
+                            ProductDetailModel item = i.items;
+                            item.Amount = i.amount;
+                            orderM.Products.Add(item);
+                            orderM.Amount += i.amount;
+                            orderM.Total += i.items.UniPrice * i.amount;
+                        }
+                    }
+                }
+
+                // update user's information
+                // find delivery information of user, if default info is different from initial info
+                // get info delivery
+                // check which info is default
+                // attach to orderM
+                UserModel? user = await _authService.GetAuthenticatedUserAsync(userId);
+                if (user != null)
+                {
+                    if (user.InforDelivery != null && user.InforDelivery.Count > 0)
+                    {
+                        var info = user.InforDelivery.Where(o => o.IsDefault = true).First();
+                        orderM.FullName = info.FullName;
+                        orderM.PhoneNumber = info.PhoneNumber;
+                        orderM.Address = info.Address;
                     }
                     else
                     {
-                        return NotFound("Not Found! This order can't show!");
+                        orderM.FullName = user.Name;
+                        orderM.PhoneNumber = user.PhoneNumber;
+                        orderM.Address = "";
                     }
                 }
 
-                if (orderMs?.Count > 0)
-                {
-                    OrderDetailModel orderM = orderMs.Where(o => o.Id == id).First();
-                    return View(orderM);
-                }
+                return View(orderM);
             }
-
-            return NotFound();
         }
+        return NotFound();
+    }
 
-        [HttpGet]
-        public async Task<IActionResult> Create()
+    [HttpGet("Order/BuyNow/{id?}/{amount}")]
+    public async Task<IActionResult> BuyNow(string id, int amount)
+    {
+        // get cart of current user
+        string? userId;
+
+        if (this.HttpContext != null)
         {
-            // get cart of current user
+            userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (userId != null)
+            {
+                var orderM = new OrderDetailModel();
+                // update order products
+                var product = await _productRepository.GetById(id);
+                if (product != null)
+                {
+                    var productM = new ProductDetailModel(product);
+                    productM.Amount = amount;
+
+                    orderM.Products.Add(productM);
+                    orderM.Amount = amount;
+                    orderM.Total = amount * productM.UniPrice;
+                }
+
+                // update user's information
+                // find delivery information of user, if default info is different from initial info
+                // get info delivery
+                // check which info is default
+                // attach to orderM
+                UserModel? user = await _authService.GetAuthenticatedUserAsync(userId);
+                if (user != null)
+                {
+                    if (user.InforDelivery != null && user.InforDelivery.Count > 0)
+                    {
+                        var info = user.InforDelivery.Where(o => o.IsDefault = true).First();
+                        orderM.FullName = info.FullName;
+                        orderM.PhoneNumber = info.PhoneNumber;
+                        orderM.Address = info.Address;
+                    }
+                    else
+                    {
+                        orderM.FullName = user.Name;
+                        orderM.PhoneNumber = user.PhoneNumber;
+                        orderM.Address = "";
+                    }
+                }
+
+                return View(orderM);
+            }
+        }
+        return NotFound();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> Create(OrderDetailModel orderM, string discounte)
+    {
+        discounte = discounte.Remove(0, 1);
+        if(!discounte.IsEmpty())
+        {
+            orderM.Discount = Double.Parse(discounte);
+        }
+        
+        // check if model is valid?
+        if (ModelState.IsValid)
+        {
             string? userId;
 
             if (this.HttpContext != null)
@@ -116,58 +239,83 @@ namespace FlowerShopManagement.Web.Controllers
                 if (userId != null)
                 {
                     List<CartItemModel>? cartItems = _customerService.GetCartOfUserAsync(userId).Result?.Items;
-                    var orderM = new OrderDetailModel();
 
                     // update order items
                     if (cartItems?.Count > 0)
                     {
-                        orderM.Products = new List<ProductDetailModel>();
+                        //orderM.Products = new List<ProductDetailModel>();
                         foreach (var i in cartItems)
                         {
                             if (i.isSelected)
                             {
-                                ProductDetailModel item = i.items;
-                                item.Amount = i.amount;
-                                orderM.Products.Add(item);
-                                orderM.Amount += i.amount;
-                                orderM.Total += i.items.UniPrice * i.amount;
+                                // check if product is remain in stock && voucher date is in using time
+                                var product = await _productRepository.GetById(i._productId);
+                                if (product != null && i.amount <= product._amount)
+                                {
+                                    ProductDetailModel item = i.items;
+                                    item.Amount = i.amount;
+                                    orderM.Products.Add(item);
+                                    orderM.Amount += i.amount;
+                                    orderM.Total += i.items.UniPrice * i.amount;
+                                }
+                                else
+                                {
+                                    //notify that
+                                }
                             }
                         }
                     }
-
-                    // update user's information
-                    // find delivery information of user, if default info is different from initial info
-                    // get info delivery
-                    // check which info is default
-                    // attach to orderM
-                    UserModel? user = await _authService.GetAuthenticatedUserAsync(userId);
-                    if (user != null)
+                    else
                     {
-                        if (user.InforDelivery != null && user.InforDelivery.Count > 0)
-                        {
-                            var info = user.InforDelivery.Where(o => o.IsDefault = true).First();
-                            orderM.FullName = info.FullName;
-                            orderM.PhoneNumber = info.PhoneNumber;
-                            orderM.Address = info.Address;
-                        }
-                        else
-                        {
-                            orderM.FullName = user.Name;
-                            orderM.PhoneNumber = user.PhoneNumber;
-                            orderM.Address = "";
-                        }
+                        // have no any products
+                        // notify that
                     }
 
-                    return View(orderM);
+                    // update customer's info
+                    orderM.AccountID = userId;
+
+                    // all check pass
+                    // create new order
+                    var result = await _orderRepository.Add(orderM.ToEntity());
+                    if (result)
+                    {
+                        // update amount of bought products
+                        // remove products out of cart
+                        foreach (var i in orderM.Products)
+                        {
+                            Product? product = await _productRepository.GetById(i.Id);
+                            if (product != null && product._amount >= i.Amount)
+                            {
+                                product._amount -= i.Amount;
+                            }
+                            var isOk = await _productRepository.UpdateById(i.Id, product);
+                            if (isOk == false)
+                            {
+                                // notify
+                            }
+
+                            _customerService.RemoveItemToCart(userId, i.Id);
+                        }
+                    }
+                    else
+                    {
+
+                    }
                 }
+
             }
-            return NotFound();
+            return RedirectToAction("Index", "Order");
         }
 
-        [HttpGet("Order/BuyNow/{id?}/{amount}")]
-        public async Task<IActionResult> BuyNow(string id, int amount)
+        return NotFound();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateBuyNow(OrderDetailModel orderM)
+    {
+        // check if model is valid?
+        if (ModelState.IsValid)
         {
-            // get cart of current user
             string? userId;
 
             if (this.HttpContext != null)
@@ -176,331 +324,182 @@ namespace FlowerShopManagement.Web.Controllers
 
                 if (userId != null)
                 {
-                    var orderM = new OrderDetailModel();
                     // update order products
-                    var product = await _productRepository.GetById(id);
-                    if (product != null)
+                    var productId = orderM.Products[0].Id;
+                    if (productId != null)
                     {
-                        var productM = new ProductDetailModel(product);
-                        productM.Amount = amount;
-
-                        orderM.Products.Add(productM);
-                        orderM.Amount = amount;
-                        orderM.Total = amount * productM.UniPrice;
-                    }
-
-                    // update user's information
-                    // find delivery information of user, if default info is different from initial info
-                    // get info delivery
-                    // check which info is default
-                    // attach to orderM
-                    UserModel? user = await _authService.GetAuthenticatedUserAsync(userId);
-                    if (user != null)
-                    {
-                        if (user.InforDelivery != null && user.InforDelivery.Count > 0)
+                        var product = await _productRepository.GetById(productId);
+                        if (product != null)
                         {
-                            var info = user.InforDelivery.Where(o => o.IsDefault = true).First();
-                            orderM.FullName = info.FullName;
-                            orderM.PhoneNumber = info.PhoneNumber;
-                            orderM.Address = info.Address;
-                        }
-                        else
-                        {
-                            orderM.FullName = user.Name;
-                            orderM.PhoneNumber = user.PhoneNumber;
-                            orderM.Address = "";
+                            var productM = new ProductDetailModel(product);
+                            productM.Amount = orderM.Amount;
+                            orderM.Products.Clear();
+                            orderM.Products.Add(productM);
                         }
                     }
 
-                    return View(orderM);
-                }
-            }
-            return NotFound();
-        }
+                    // update customer's info
+                    orderM.AccountID = userId;
 
-        [HttpPost]
-        public async Task<IActionResult> Create(OrderDetailModel orderM, string discounte)
-        {
-            discounte = discounte.Remove(0, 1);
-            if(!discounte.IsEmpty())
-            {
-                orderM.Discount = Double.Parse(discounte);
-            }
-            
-            // check if model is valid?
-            if (ModelState.IsValid)
-            {
-                string? userId;
-
-                if (this.HttpContext != null)
-                {
-                    userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                    if (userId != null)
+                    // all check pass
+                    // create new order
+                    var result = await _orderRepository.Add(orderM.ToEntity());
+                    if (result)
                     {
-                        List<CartItemModel>? cartItems = _customerService.GetCartOfUserAsync(userId).Result?.Items;
-
-                        // update order items
-                        if (cartItems?.Count > 0)
+                        // update amount of bought products
+                        // remove products out of cart
+                        foreach (var i in orderM.Products)
                         {
-                            //orderM.Products = new List<ProductDetailModel>();
-                            foreach (var i in cartItems)
+                            Product? product = await _productRepository.GetById(i.Id);
+                            if (product != null && product._amount >= i.Amount)
                             {
-                                if (i.isSelected)
-                                {
-                                    // check if product is remain in stock && voucher date is in using time
-                                    var product = await _productRepository.GetById(i._productId);
-                                    if (product != null && i.amount <= product._amount)
-                                    {
-                                        ProductDetailModel item = i.items;
-                                        item.Amount = i.amount;
-                                        orderM.Products.Add(item);
-                                        orderM.Amount += i.amount;
-                                        orderM.Total += i.items.UniPrice * i.amount;
-                                    }
-                                    else
-                                    {
-                                        //notify that
-                                    }
-                                }
+                                product._amount -= i.Amount;
                             }
-                        }
-                        else
-                        {
-                            // have no any products
-                            // notify that
-                        }
-
-                        // update customer's info
-                        orderM.AccountID = userId;
-
-                        // all check pass
-                        // create new order
-                        var result = await _orderRepository.Add(orderM.ToEntity());
-                        if (result)
-                        {
-                            // update amount of bought products
-                            // remove products out of cart
-                            foreach (var i in orderM.Products)
+                            var isOk = await _productRepository.UpdateById(i.Id, product);
+                            if (isOk == false)
                             {
-                                Product? product = await _productRepository.GetById(i.Id);
-                                if (product != null && product._amount >= i.Amount)
-                                {
-                                    product._amount -= i.Amount;
-                                }
-                                var isOk = await _productRepository.UpdateById(i.Id, product);
-                                if (isOk == false)
-                                {
-                                    // notify
-                                }
-
-                                _customerService.RemoveItemToCart(userId, i.Id);
+                                // notify
                             }
-                        }
-                        else
-                        {
-
                         }
                     }
-
-                }
-                return RedirectToAction("Index", "Order");
-            }
-
-            return NotFound();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> CreateBuyNow(OrderDetailModel orderM)
-        {
-            // check if model is valid?
-            if (ModelState.IsValid)
-            {
-                string? userId;
-
-                if (this.HttpContext != null)
-                {
-                    userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-                    if (userId != null)
+                    else
                     {
-                        // update order products
-                        var productId = orderM.Products[0].Id;
-                        if (productId != null)
-                        {
-                            var product = await _productRepository.GetById(productId);
-                            if (product != null)
-                            {
-                                var productM = new ProductDetailModel(product);
-                                productM.Amount = orderM.Amount;
-                                orderM.Products.Clear();
-                                orderM.Products.Add(productM);
-                            }
-                        }
 
-                        // update customer's info
-                        orderM.AccountID = userId;
-
-                        // all check pass
-                        // create new order
-                        var result = await _orderRepository.Add(orderM.ToEntity());
-                        if (result)
-                        {
-                            // update amount of bought products
-                            // remove products out of cart
-                            foreach (var i in orderM.Products)
-                            {
-                                Product? product = await _productRepository.GetById(i.Id);
-                                if (product != null && product._amount >= i.Amount)
-                                {
-                                    product._amount -= i.Amount;
-                                }
-                                var isOk = await _productRepository.UpdateById(i.Id, product);
-                                if (isOk == false)
-                                {
-                                    // notify
-                                }
-                            }
-                        }
-                        else
-                        {
-
-                        }
                     }
-
                 }
-                return RedirectToAction("Index", "Order");
-            }
 
-            return NotFound();
+            }
+            return RedirectToAction("Index", "Order");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> HandleStatus(string? id)
+        return NotFound();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> HandleStatus(string? id)
+    {
+        // check what order's status is
+        // if waiting, paying, purchased -> cancel
+        // if delivering -> delivered
+        Order? order = await _orderRepository.GetById(id);
+        if (order != null)
         {
-            // check what order's status is
-            // if waiting, paying, purchased -> cancel
-            // if delivering -> delivered
-            Order? order = await _orderRepository.GetById(id);
-            if (order != null)
+            if (order._status == Status.Waiting || order._status == Status.Paying || order._status == Status.Purchased)
             {
-                if (order._status == Status.Waiting || order._status == Status.Paying || order._status == Status.Purchased)
-                {
-                    order._status = Status.Canceled;
-                }
-                else if (order._status == Status.Delivering)
-                {
-                    order._status = Status.Delivered;
-                }
-
-                // update db
-                var result = await _orderRepository.UpdateById(order._id, order);
-                if (result)
-                {
-                    return PartialView("_ViewStatus", new OrderDetailModel(order));
-                }
+                order._status = Status.Canceled;
+            }
+            else if (order._status == Status.Delivering)
+            {
+                order._status = Status.Delivered;
             }
 
-            return NotFound();
+            // update db
+            var result = await _orderRepository.UpdateById(order._id, order);
+            if (result)
+            {
+                return PartialView("_ViewStatus", new OrderDetailModel(order));
+            }
         }
 
-        [HttpGet]
-        public async Task<IActionResult> ChooseAddress()
+        return NotFound();
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> ChooseAddress()
+    {
+        // get cart of current user
+        string? userId;
+
+        if (this.HttpContext != null)
         {
-            // get cart of current user
-            string? userId;
+            userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            if (this.HttpContext != null)
+            if (userId != null)
             {
-                userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-                if (userId != null)
-                {
-
-                    UserModel? user = await _authService.GetAuthenticatedUserAsync(userId);
-                    if (user == null) return NotFound();
-                    return PartialView("_ChooseAddress", user.InforDelivery);
-                }
+                UserModel? user = await _authService.GetAuthenticatedUserAsync(userId);
+                if (user == null) return NotFound();
+                return PartialView("_ChooseAddress", user.InforDelivery);
             }
-            return NotFound();
         }
+        return NotFound();
+    }
 
-        [HttpPost]
-        public IActionResult ChooseAddress(InforDeliveryModel inforDeliveryModel)
+    [HttpPost]
+    public IActionResult ChooseAddress(InforDeliveryModel inforDeliveryModel)
+    {
+        if (!ModelState.IsValid) return NotFound();
+
+        return PartialView("_ViewInfoCus", inforDeliveryModel);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CheckVoucher(string id, string value)
+    {
+        string message = "Invalid";
+        bool isValid = false;
+        float finalValue = 0;
+        string discount = "$0";
+        if (!float.TryParse(value, out finalValue))
         {
-            if (!ModelState.IsValid) return NotFound();
-
-            return PartialView("_ViewInfoCus", inforDeliveryModel);
+            return Json(new { isValid = isValid, message = message, value = value });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CheckVoucher(string id, string value)
+        // Handle if having voucher code
+
+        VoucherDetailModel voucher = await _stockService.GetADetailVoucher(id);
+
+        if (voucher != null)
         {
-            string message = "Invalid";
-            bool isValid = false;
-            float finalValue = 0;
-            string discount = "$0";
-            if (!float.TryParse(value, out finalValue))
+            // Handle voucher's type
+            if (voucher.State == VoucherStatus.ComingSoon)
             {
-                return Json(new { isValid = isValid, message = message, value = value });
+                message = "Unavaiable! The voucher is coming soon!";
             }
-
-            // Handle if having voucher code
-
-            VoucherDetailModel voucher = await _stockService.GetADetailVoucher(id);
-
-            if (voucher != null)
+            else
+            if (finalValue < voucher.ConditionValue)
             {
-                // Handle voucher's type
-                if (voucher.State == VoucherStatus.ComingSoon)
-                {
-                    message = "Unavaiable! The voucher is coming soon!";
-                }
-                else
-                if (finalValue < voucher.ConditionValue)
-                {
-                    message = "Buy " + (voucher.ConditionValue - finalValue) + "$ more to apply this voucher";
-                }
-                else
-                // Handle if expired
-                if (voucher.ExpiredDate > DateTime.Now)
-                {
-                    // Annouce that voucer has been expired
-                    message = "Expired!";
-                }
-                else
-                if (voucher.Amount <= 0)
-                {
-                    // Annouce that voucer has been expired
-                    message = "Out of stock!";
-                }
-                else
-                {
-                    switch (voucher.ValueType)
-                    {
-                        case ValueType.RealValue:
-                            {
-                                finalValue -= voucher.Discount;
-                                discount = voucher.Discount.ToString();
-                                break;
-                            }
-                        case ValueType.Percent:
-                            {
-                                finalValue -= finalValue * voucher.Discount / 100;
-                                discount = "$" + (finalValue * voucher.Discount / 100).ToString();
-
-                                break;
-                            }
-                    }
-                    isValid = true;
-                    message = "Voucher valid!";
-                }
-                // Handle voucher value type
-
+                message = "Buy " + (voucher.ConditionValue - finalValue) + "$ more to apply this voucher";
             }
+            else
+            // Handle if expired
+            if (voucher.ExpiredDate > DateTime.Now)
+            {
+                // Annouce that voucer has been expired
+                message = "Expired!";
+            }
+            else
+            if (voucher.Amount <= 0)
+            {
+                // Annouce that voucer has been expired
+                message = "Out of stock!";
+            }
+            else
+            {
+                switch (voucher.ValueType)
+                {
+                    case ValueType.RealValue:
+                        {
+                            finalValue -= voucher.Discount;
+                            discount = voucher.Discount.ToString();
+                            break;
+                        }
+                    case ValueType.Percent:
+                        {
+                            finalValue -= finalValue * voucher.Discount / 100;
+                            discount = "$" + (finalValue * voucher.Discount / 100).ToString();
 
-            return Json(new { isValid = isValid, message = message, value = "$" + finalValue.ToString(), discount = discount });
+                            break;
+                        }
+                }
+                isValid = true;
+                message = "Voucher valid!";
+            }
+            // Handle voucher value type
 
         }
+
+        return Json(new { isValid = isValid, message = message, value = "$" + finalValue.ToString(), discount = discount });
+
     }
 }
