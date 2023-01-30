@@ -5,7 +5,7 @@ namespace FlowerShopManagement.Application.Models;
 
 public class OrderModel
 {
-    public string Id = string.Empty;
+    public string Id { get; set; } = string.Empty;
     public string? AccountID { get; set; }
     public string? PhoneNumber { get; set; }
     public string? FullName { get; set; }

@@ -54,7 +54,7 @@ public class VoucherController : Controller
         List<VoucherDetailModel> productMs = await _stockServices.GetUpdatedVouchers();
 
         productMs = productMs.OrderBy(i => i.ExpiredDate).ToList();
-        int pageSize = 2;
+        int pageSize = 8;
         
         return View(PaginatedList<VoucherDetailModel>.CreateAsync(productMs,1,pageSize));
     }
@@ -109,7 +109,7 @@ public class VoucherController : Controller
                 ViewData["CurrentFilter"] = searchString;
             }
 
-            int pageSize = 2;
+            int pageSize = 8;
             PaginatedList<VoucherDetailModel> objs = PaginatedList<VoucherDetailModel>.CreateAsync(vouchers, pageNumber ?? 1, pageSize);
             return Json(new
             {
