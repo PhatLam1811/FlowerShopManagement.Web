@@ -27,7 +27,7 @@ else
 {
 	@*Da dang nhap*@
 	<li class="nav-item dropdown-item">
-		<a id="manage" class="nav-link text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @ViewData["Username"]</a>
+        <a id="manage" class="nav-link text-dark" asp-controller="Profile" asp-action="Index" title="Manage">Hello @ViewData["Username"]</a>
 	</li>
 	<li class="nav-item dropdown-item">
 		<form id="logoutForm" class="form-inline" asp-action="SignOutAsync" asp-controller="Authentication">

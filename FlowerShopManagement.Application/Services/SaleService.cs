@@ -22,10 +22,10 @@ public class SaleService : ISaleService
 	}
 
 
-	public async Task<bool> CreateOfflineOrder(OrderModel order, UserModel user, IOrderRepository orderRepository,
+	public async Task<OrderModel?> CreateOfflineOrder(OrderModel order, UserModel user, IOrderRepository orderRepository,
 		IUserRepository userRepository, IProductRepository productRepository)
 	{
-		if (order.Products == null || user == null || order.Products.Count > 20 || order.Products.Count == 0) return false;
+		if (order.Products == null || user == null || order.Products.Count > 20 || order.Products.Count == 0) return null;
 
 		//Create OrderEntity object
 		var newOrder = order.ToEntity();
@@ -57,7 +57,7 @@ public class SaleService : ISaleService
 						var product = await productRepository.GetById(item._id);
 						//Amount unavaibale => false
 						if (product == null || product._amount < item._amount)
-							return false;
+							return null;
 						product._amount -= item._amount;
 						newOrder._total += product._amount * product._uniPrice;
 						//Add to updateProList
@@ -73,17 +73,17 @@ public class SaleService : ISaleService
 				{
 					var updateResult = await productRepository.UpdateById(item._id, item);
 					if (!updateResult)
-						return false;
+						return null;
 				}
 			}
 			newOrder._date = DateTime.Now;
 			// Successful case happens
 			newOrder._status = Status.Paying;//On charging
 			var result = await orderRepository.Add(newOrder);
-			return result;
+			if (result) return new OrderModel(newOrder);
 
 		}
-		return false;
+		return null;
 	}
 
 	public async Task<bool> VerifyOnlineOrder(OrderModel order, IOrderRepository orderRepository, IProductRepository productRepository)

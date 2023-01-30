@@ -7,7 +7,7 @@ namespace FlowerShopManagement.Application.Interfaces;
 public interface ISaleService
 {
     public Task<bool> VerifyOnlineOrder(OrderModel order, IOrderRepository orderRepository, IProductRepository productRepository);
-    public Task<bool> CreateOfflineOrder(OrderModel order, UserModel user, IOrderRepository orderRepository,
+    public Task<OrderModel?> CreateOfflineOrder(OrderModel order, UserModel user, IOrderRepository orderRepository,
         IUserRepository userRepository, IProductRepository productRepository);
 
     public Task<List<OrderModel>> GetUpdatedOrders(IOrderRepository orderRepository);

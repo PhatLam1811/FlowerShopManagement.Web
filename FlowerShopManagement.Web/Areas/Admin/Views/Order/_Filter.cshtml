@@ -4,6 +4,7 @@
 @{
     List<string>? status = ViewData["Status"] as List<string> ?? null;
     string? currentCategory = ViewData["CurrentCategory"] as string ?? "All";
+    string? currentDateOrdering = ViewData["CurrentDateOrdering"] as string ?? "none";
 
 }
 <form method="post" action="@(Url.Action("Sort", "Order"))" onsubmit="return jQueryAjaxSearch(this);">
@@ -16,7 +17,6 @@
             <span class="">Categories</span>
             @if (currentCategory != null)
             {
-
                 @if (status != null)
                 {
                     @foreach (var i in status)
@@ -42,6 +42,28 @@
             }
 
         </div>
-        
+        <div class="check-list mt-2">
+            <span class="">Order by</span>
+            <label class="check-list-item">
+                <input type="radio" class="form-check-input" value="none" name="currentDateOrdering" onclick="this.form.onsubmit()" checked />
+                None
+            </label>
+            <label class="check-list-item">
+                <input type="radio" class="form-check-input" value="descending" name="currentDateOrdering" onclick="this.form.onsubmit()" />
+                Older -> Newer
+            </label>
+
+            <label class="check-list-item">
+                <input type="radio" class="form-check-input disabled" value="ascending" name="currentDateOrdering" onclick="this.form.onsubmit()" />
+                Newer -> Older
+            </label>
+
+
+
+
+
+
+
+        </div>
     </div>
 </form>
