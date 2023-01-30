@@ -11,7 +11,7 @@
     var districts = ViewData["Districts"] as List<string> ?? addresses.Where(i => i._city == "Thành phố Hà Nội").GroupBy(i => i._district).Select(i => i.Key).ToList();
     var wards = ViewData["Districts"] as List<string> ?? addresses.Where(i => i._city == "Thành phố Hà Nội" && i._district == "Huyện Đông Anh").GroupBy(i => i._commune).Select(i => i.Key).ToList();
 }
-<form asp-action="CreateInfoDelivery" asp-controller="Profile" method="post" onsubmit="return addAddress(this);" >
+<form asp-action="UpdateInfoDelivery" asp-controller="Profile" method="post" onsubmit="return addAddress(this);">
     <div class="">
         <div class="flex-grow-1">
             @if (Model.IsDefault)
@@ -35,6 +35,7 @@
                                 class="form-select form-select-lg h5 py-3" style="font-family:Open Sans"
                                 id="floatingSelect" aria-label="Floating label select example"
                                 required onchange="if (this.selectedIndex != -1) FindDistricts(this,'@Url.Action("FindDistricts","Profile",null,Context.Request.Scheme)');">
+                            <option value="@Model.City" selected> @Model.City</option>
                         </select>
                     </div>
 
@@ -43,6 +44,8 @@
                         <select class="form-select form-select-lg h5 py-3" id="district" name="district" style="font-family:'Open Sans'"
                                 asp-items="@(new SelectList(districts))" aria-label="Floating label select example"
                                 required onchange="if (this.selectedIndex != -1) FindWards(this,'@Url.Action("FindWards","Profile",null,Context.Request.Scheme)');">
+                            <option value="@Model.District" selected>@Model.District</option>
+
                         </select>
                     </div>
                     <div class="col form-group ">
@@ -51,31 +54,24 @@
                                 asp-items="@(new SelectList(wards))"
                                 aria-label="Floating label select example"
                                 required>
+                            <option value="@Model.Commune" selected>@Model.Commune</option>
+
                         </select>
                     </div>
                     <div class="form-group">
                         <label class="form-label" for="exampleFormControlInput1">Address</label>
-                       @* @if (Model != null && Model.userModel != null && Model.userModel.InforDelivery != null && Model.userModel.InforDelivery.Count > 0)
-                        {
-                            <div class="d-flex">
-                                <input type="text" name="detailAddress"
+
+                        <div class="d-flex">
+                            <input type="text" asp-for="Address"
                                    class="form-control form-control-lg h5 py-3"
-                                   id="ip-address" placeholder="eg: 69 Le Loi street">
-                            </div>
-                        }
-                        else
-                        {*@
-                            <div class="d-flex">
-                                <input type="text" asp-for="Address"
-                                   class="form-control form-control-lg h5 py-3"
-                                   id="ip-address"style="font-family:'Open Sans'" placeholder="eg: 69 Le Loi street">
-                            </div>
-                        @*}*@
+                                   id="ip-address" style="font-family:'Open Sans'" placeholder="eg: 69 Le Loi street">
+                        </div>
+
                     </div>
                 </div>
             </div>
         </div>
 
-		<button class="btn btn-primary mt-5 w-100">Submit</button>
-	</div>
+        <button class="btn btn-primary mt-5 w-100">Submit</button>
+    </div>
 </form>

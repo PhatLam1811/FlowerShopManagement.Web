@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Security.Claims;
+using System.Xml.Linq;
 using ZstdSharp.Unsafe;
 
 namespace FlowerShopManagement.Web.Controllers;
@@ -219,7 +220,9 @@ public class ProfileController : Controller
 		
 		if (!ModelState.IsValid) return NotFound();
 		var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        inforDeliveryModel.Address = inforDeliveryModel.Address + ", " + ward + ", " + district + ", " + city;
+		inforDeliveryModel.Commune = ward;
+		inforDeliveryModel.District = district;
+		inforDeliveryModel.City = city;
 
         // Unauthenticated user
         if (userId is null) return NotFound();
@@ -232,7 +235,60 @@ public class ProfileController : Controller
 		return PartialView("ManageAddress", user.InforDelivery);
 	}
 
+    [HttpPost]
+    [Route("EditInfoDelivery")]
+    public async Task<IActionResult> EditInfoDelivery(string phone,string address,string name)
+    {
+        var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        // Unauthenticated user
+        if (userId is null) return NotFound();
+
+        var user = await _authServices.GetAuthenticatedUserAsync(userId);
+        if (user is null) return NotFound();
+
+        var info = user.InforDelivery.FirstOrDefault(x => x.PhoneNumber == phone && x.Address == address && x.FullName == name);
+		if (info is null) return NotFound();
+
+        var list = await _adminService.GetAddresses();
+        ViewData["Addresses"] = JsonConvert.SerializeObject(list, Formatting.Indented);
+        TempData["EditAddress"] = JsonConvert.SerializeObject(info, Formatting.Indented);
+        return PartialView(info);
+    }
 	[HttpPost]
+    [Route("UpdateInfoDelivery")]
+
+    public async Task<IActionResult> UpdateInfoDelivery(InforDeliveryModel inforDeliveryModel, string city, string district, string ward)
+    {
+
+        if (!ModelState.IsValid) return NotFound();
+		string s = TempData["EditAddress"] as string ?? "";
+		var info = JsonConvert.DeserializeObject<InforDeliveryModel>(s);
+		if(info == null) return NotFound();
+
+        var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        
+
+        // Unauthenticated user
+        if (userId is null) return NotFound();
+        var user = await _authServices.GetAuthenticatedUserAsync(userId);
+        if (user is null) return NotFound();
+		var editInfo = user.InforDelivery
+			.AsParallel()
+			.FirstOrDefault(x => x.PhoneNumber == info.PhoneNumber && x.Address == info.Address && x.FullName == info.FullName && x.Commune == info.Commune);
+        if (editInfo is null) return NotFound();
+
+        editInfo.Commune = ward;
+        editInfo.District = district;
+        editInfo.City = city;
+        editInfo.Address = inforDeliveryModel.Address;
+        
+        await _customerfService.EditInfoAsync(user);
+
+        return PartialView("ManageAddress", user.InforDelivery);
+    }
+
+    [HttpPost]
 	public async Task<IActionResult> RemoveInfoDelivery(string name, string phone, string address)
 	{
 		if(!ModelState.IsValid) return NotFound();

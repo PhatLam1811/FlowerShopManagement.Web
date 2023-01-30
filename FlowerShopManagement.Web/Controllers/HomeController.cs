@@ -81,7 +81,7 @@ public class HomeController : Controller
 
             for (int i = 0; i < temp.Count; i++)
             {
-                if (user != null && user.FavProductIds.Where(o => o == temp[i].Id).Count() > 0)
+                if (user != null && user.FavProductIds != null&& user.FavProductIds.Where(o => o == temp[i].Id).Count() > 0)
                 {
                     temp[i].IsLike = true;
                 }

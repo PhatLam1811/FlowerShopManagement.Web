@@ -58,7 +58,7 @@ public class StaffService : UserService, IStaffService
         try
         {
 
-            if (newCustomerModel.FormFile == null) return false;
+            //if (newCustomerModel.FormFile == null) return false;
             var customer = await newCustomerModel.ToNewEntity(
                 wwwRootPath: _webHostEnvironment.WebRootPath
                 );

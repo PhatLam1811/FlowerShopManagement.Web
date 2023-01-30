@@ -40,6 +40,7 @@ public class UserController : Controller
 
     [HttpGet]
     [Route("Index")]
+    [Route("")]
     public async Task<IActionResult> Index()
     {
         try
@@ -175,14 +176,17 @@ public class UserController : Controller
     {
         // Create
         bool result = false;
-        if (userCreateVM.city == null && userCreateVM.district == null 
+        if (userCreateVM.city == null && userCreateVM.district == null
             && userCreateVM.ward == null && userCreateVM.detailAddress == null) return NotFound();
         var infoAddress = new InforDeliveryModel()
         {
             FullName = userCreateVM.userModel.Name,
             IsDefault = true,
             PhoneNumber = userCreateVM.userModel.PhoneNumber,
-            Address = userCreateVM.detailAddress + ", " + userCreateVM.ward + ", " + userCreateVM.district + ", " + userCreateVM.city
+            Address = userCreateVM.detailAddress,
+            Commune = userCreateVM.ward,
+            District = userCreateVM.district,
+            City = userCreateVM.city
         };
         userCreateVM.userModel.InforDelivery.Add(infoAddress);
         try

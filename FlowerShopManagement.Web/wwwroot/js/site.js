@@ -30,7 +30,6 @@ function showContent2(url, title) {
 }
 
 function showPartialView(url) {
-    debugger;
     $.ajax({
         type: "GET",
         url: url,

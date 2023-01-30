@@ -33,12 +33,20 @@
                         </div>
                         <div class="d-flex align-items-end gap-3">
                             <p class="h6">Address:</p>
-                            <p class="h5 text-primary">@item.Address</p>
+                            <p class="h5  text-primary" style="font-weight:400; font-family:'Open Sans'">
+                                @item.Address,@item.Commune, @item.District, @item.City
+                            </p>
                         </div>
                     </div>
                 </div>
                 <div class="d-flex flex-column gap-2">
-                    <button class="btn-no-min btn-secondary">Edit</button>
+                    <form asp-action="EditInfoDelivery" asp-controller="Profile"  method="post" onsubmit="return OpenFormDialog(this);">
+                        <input name="phone" value="@item.PhoneNumber" hidden/>
+                        <input name="address" value="@item.Address" hidden />
+                        <input name="name" value="@item.FullName" hidden />
+                        <button type="submit" class="btn-no-min btn-secondary">Edit</button>
+
+                    </form>
                     <button class="btn-no-min btn-secondary"
                     type="button"
                     onclick="removeAddress('@Url.Action("RemoveInfoDelivery", "Profile")','@item.FullName','@item.PhoneNumber', '@item.Address')">

@@ -49,7 +49,7 @@
                         <div class="d-flex justify-content-between">
                             <div>
                                 @*<p class="h4" onclick="NavigateToDetail">@i.Name</p>*@
-                                <a class="h4" asp-action="ProductDetail" asp-controller="ProductDetail" asp-route-id="@i.Id">@i.Name</a>
+                                <a class="h4 text-decoration-none text-black" asp-action="ProductDetail" asp-controller="ProductDetail" asp-route-id="@i.Id">@i.Name</a>
                                 <p class="h3 text-secondary mt-3">$@i.UniPrice</p>
                             </div>
                             @if (isAuthenticated == true)
