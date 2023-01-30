@@ -1,14 +1,17 @@
 ﻿using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Http;
+using System.ComponentModel.DataAnnotations;
 using System.Web.Helpers;
 
 namespace FlowerShopManagement.Application.Models;
 
 public class ProductModel
-
 {
     public string Id { get; set; } = string.Empty;
+
+    [Required]
+    [RegularExpression(@"^[a-zA-Z0-9_/s]*$", ErrorMessage = "Invalid email!")]
     public string Name { get; set; } = string.Empty;
     //public string Picture { get; set; } = string.Empty;
     public List<string> Pictures { get; set; } = new List<string>();

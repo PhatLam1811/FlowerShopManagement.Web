@@ -6,7 +6,7 @@
 	List<string> prices = new List<string> { "All", "0 - 10", "11 - 50", ">50" };
 }
 
-<div class="d-flex align-items-end justify-content-between mt-5 mb-4">
+<div class="d-flex align-items-end justify-content-between mt-3 mb-4">
 	<div class="d-flex gap-3">
 		<div class="form-group">
 			<label class="form-label h6" for="selectCategory">Category</label>
@@ -31,12 +31,5 @@
 		</div>
 	</div>
 </div>
-@*	<form asp-action="SignIn" method="SignIn()">
-		<button class="btn btn-default">Button</button>
-		</form>*@
-@*<form asp-action="SignOutAsync" asp-controller="Authentication">
-		<button class="btn btn-default">Button</button>
-		</form>*@
-<partial name="_ViewAll" model="@Model" />
 
-<div>Pagination</div>
+<partial name="_ViewAll" model="@Model" />

@@ -1,5 +1,6 @@
 ﻿using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
+using System.ComponentModel.DataAnnotations;
 
 namespace FlowerShopManagement.Application.Models;
 
@@ -13,6 +14,8 @@ public class OrderModel
     public Status Status { get; set; }
     public List<ProductModel> Products { get; set; } = new List<ProductModel>();
     public string? Notes { get; set; }
+
+    [DataType(DataType.DateTime)]
     public DateTime? Date { get; set; } = default(DateTime?);
     public int Amount { get; set; } = 0;
     public double Total { get; set; } = 0;

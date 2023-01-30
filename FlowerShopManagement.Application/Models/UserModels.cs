@@ -3,6 +3,7 @@ using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 using static System.Net.Mime.MediaTypeNames;
 
 namespace FlowerShopManagement.Application.Models;
@@ -12,22 +13,33 @@ public class UserModel
     public string _id { get; set; }
 
     // Account
+    [Required]
+    [RegularExpression(@"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$", ErrorMessage = "Invalid email!")]
     public string Email { get; set; }
+
+    [Required]
+    [RegularExpression(@"^([\\+]?84[-]?|[0])?[1-9][0-9]{8}$", ErrorMessage = "Invalid phone number!")]
     public string PhoneNumber { get; set; }
     public string Password { get; set; }
     public Role Role { get; set; } = Role.Customer;
 
     // Profile
+    [Required]
+    [RegularExpression(@"^([A-Z][a-zA-Z_\s]*$)")]
     public string Name { get; set; }
     public string Avatar { get; set; } = "user.png";
     public Gender Gender { get; set; }
+
+    [DataType(DataType.DateTime)]
     public DateTime BirthYear { get; set; }
     public List<InforDeliveryModel> InforDelivery = new List<InforDeliveryModel>();
 
     public List<string> FavProductIds { get; set; }
 
     // Extra
+    [DataType(DataType.DateTime)]
     public DateTime CreatedDate { get; set; }
+    [DataType(DataType.DateTime)]
     public DateTime LastModified { get; set; }
 
     // More Extra
@@ -178,15 +190,26 @@ public class UserBasicInfoModel
 {
 	public string _id { get; set; } = string.Empty;
 
-	public string Email { get; set; } = string.Empty;
-	public string PhoneNumber { get; set; } = string.Empty;
+    [Required]
+    [RegularExpression(@"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$", ErrorMessage = "Invalid email!")]
+    public string Email { get; set; } = string.Empty;
+
+    [Required]
+    [RegularExpression(@"^([\\+]?84[-]?|[0])?[1-9][0-9]{8}$", ErrorMessage = "Invalid phone number!")]
+    public string PhoneNumber { get; set; } = string.Empty;
 
 
-	// Profile
-	public string Name { get; set; } = string.Empty;
+    // Profile
+    [Required]
+    [RegularExpression(@"^([A-Z][a-zA-Z_\s]*$)")]
+    public string Name { get; set; } = string.Empty;
 	public string Avatar { get; set; } = "user.png";
+
+    [Required]
 	public Gender Gender { get; set; } = Gender.Male;
-	public DateTime BirthYear { get; set; } = DateTime.UtcNow;
+
+    [DataType(DataType.DateTime)]
+    public DateTime BirthYear { get; set; } = DateTime.UtcNow;
 	// More Extra
 
 	public IFormFile? FormFile { get; set; } // help to generate user avatar, no need to store on dB nha 
