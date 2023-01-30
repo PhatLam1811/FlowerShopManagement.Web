@@ -1,10 +1,10 @@
 ﻿using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
-using System.Diagnostics.CodeAnalysis;
 
 namespace FlowerShopManagement.Infrustructure.MongoDB.Implements;
 
@@ -23,13 +23,38 @@ public class ProductRepository : BaseRepository<Product>, IProductRepository
         return Aggregate<Product>(pipeline);
     }
 
+    public List<CategoryStatisticModel>? GetCategoryStatistic()
+    {
+        PipelineDefinition<Product, BsonDocument> pipeline = new BsonDocument[]
+        {
+            new BsonDocument("$group",
+            new BsonDocument
+            {
+                { "_id", "$_category" },
+                { "numberOfProducts",
+                new BsonDocument("$count",
+                new BsonDocument()) }
+            })
+        };
+
+        try
+        {
+            return Aggregate<CategoryStatisticModel>(pipeline);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
     public int GetLowOnStockCount(int minimumAmount)
     {
         PipelineDefinition<Product, BsonDocument> pipeline = new BsonDocument[]
         {
             new BsonDocument("$match",
-            new BsonDocument("_amount",
-            new BsonDocument("$lte", minimumAmount))),
+            new BsonDocument("_amount", minimumAmount >= 0 ?
+            new BsonDocument("$lte", minimumAmount) :
+            new BsonDocument("$exists", true))),
             new BsonDocument("$count", "amount")
         };
 

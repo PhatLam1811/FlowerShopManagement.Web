@@ -1,10 +1,12 @@
 ﻿using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FlowerShopManagement.Web.Controllers;
 
+[Authorize(Policy = "CustomerOnly")]
 public class ProductDetailController : Controller
 {
     readonly IProductRepository _productRepository;

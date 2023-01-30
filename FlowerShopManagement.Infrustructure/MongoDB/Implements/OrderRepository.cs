@@ -74,8 +74,8 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
             new BsonDocument
             {
                 { "_id", "$_customerName" },
-                { "numberOfOrders", 
-                new BsonDocument("$count", 
+                { "numberOfOrders",
+                new BsonDocument("$count",
                 new BsonDocument()) }
             }),
             new BsonDocument("$sort",
@@ -144,9 +144,9 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
             new BsonDocument("$group",
             new BsonDocument
             {
-                { "_id", 
+                { "_id",
                 new BsonDocument(criteria, "$_date") },
-                { "revenue", 
+                { "revenue",
                 new BsonDocument("$sum", "$_total") }
             })
         };
@@ -154,6 +154,38 @@ public class OrderRepository : BaseRepository<Order>, IOrderRepository
         try
         {
             return Aggregate<RevenueModel>(pipeline);
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public List<TotalOrdersModel> GetTotalOrders(DateTime beginDate, DateTime endDate, string criteria = "$hour", Status status = Status.Purchased)
+    {
+        PipelineDefinition<Order, BsonDocument> pipeline = new BsonDocument[]
+        {
+            new BsonDocument("$match",
+            new BsonDocument("_date",
+            new BsonDocument
+            {
+                { "$gte", beginDate },
+                { "$lte", endDate }
+            })),
+            new BsonDocument("$group",
+            new BsonDocument
+            {
+                { "_id",
+                new BsonDocument(criteria, "$_date") },
+                { "numberOfOrders",
+                new BsonDocument("$count",
+                new BsonDocument()) }
+            })
+        };
+
+        try
+        {
+            return Aggregate<TotalOrdersModel>(pipeline);
         }
         catch (Exception e)
         {
