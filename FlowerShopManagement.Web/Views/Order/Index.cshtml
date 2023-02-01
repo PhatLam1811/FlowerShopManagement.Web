@@ -8,10 +8,13 @@
 		<p class="row-1 h4 mb-2">Status</p>
 
 		<div class="tabCustom row-cols-6 w-100" style="max-height:260px;">
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="All" type="button">All</a>
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Waiting" type="button">Waiting</a>
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Delivering" type="button">Delivering</a>
-			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-route-filter="Delivered" type="button">Delivered</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-controller="Order" asp-route-filter="All" type="button">All</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-controller="Order" asp-route-filter="Waiting" type="button">Waiting</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-controller="Order" asp-route-filter="Purchased" type="button">Purchased</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-controller="Order" asp-route-filter="Delivering" type="button">Delivering</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-controller="Order" asp-route-filter="Delivered" type="button">Delivered</a>
+			<a class="tabCustom" style="height:50px;" asp-action="Index" asp-controller="Order" asp-route-filter="Canceled" type="button">Canceled</a>
+
 		</div>
 	</div>
 
