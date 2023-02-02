@@ -18,28 +18,35 @@
 				   param-Model="@Model" />
 	</div>
 
-	<div class="col-3 d-flex flex-column justify-content-between">
+	<div class="col-3 d-flex flex-column gap-3">
 
 		<div class="">
 			<label class="h6">Description</label>
-			<p class="mt-2">
+			<p class="mt-2 limit-line-8">
 				@Model.Description
 			</p>
-
+			<a class="text-decoration-underline caption-lg text-color-secondary cursor float-end">See more</a>
 		</div>
-		<div class="row gx-2 gy-3">
+		@*<div class="row gx-2 gy-3">
 			<component type="typeof(ProductInformationPanel)" render-mode="Static" />
 			<component type="typeof(ProductInformationPanel)" render-mode="Static" />
 			<component type="typeof(ProductInformationPanel)" render-mode="Static" />
 			<component type="typeof(ProductInformationPanel)" render-mode="Static" />
+		</div>*@
+		<div class="">
+			<label class="h6">Maintainment</label>
+			<p class="mt-2 limit-line-8">
+				@Model.Maintainment
+			</p>
+			<a class="text-decoration-underline caption-lg text-color-secondary cursor float-end">See more</a>
 		</div>
 	</div>
 </div>
 
-<div class="row mt-5">
+@*<div class="row mt-5">
 	<span>Review</span>
 </div>
 
 <div class="row mt-5">
 	<span>Relative Product</span>
-</div>
+</div>*@

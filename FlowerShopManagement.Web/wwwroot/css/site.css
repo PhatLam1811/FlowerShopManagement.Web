@@ -13,6 +13,12 @@
 
     .nav-link.active {
         font-weight: 600;
+        transform: scale(1.2);
+        color: var(--bs-primary) !important;
+    }
+
+    .nav-link:hover {
+        font-weight: 600;
         color: var(--bs-dark) !important;
     }
 
@@ -22,11 +28,9 @@
     transition-duration: 0.2s;
 }
 
-/*CARD*/
-.card-img-top {
-    width: 100%;
-    height: auto;
-    background-color: #dfdfdf
+.nav-item.bg-hover:active, .nav-item.bg-hover:focus, .nav-item.bg-hover:visited {
+    background: rgba(173, 161, 230, 0.5);
+    border: none;
 }
 
 /*DROPDOWN*/
@@ -280,10 +284,9 @@
     object-fit: cover;
 }
 
-.avatar-nav:hover {
-    width: 35px;
-    height: 35px;
-}
+    .avatar-nav:hover {
+        scale: 1.1;
+    }
 
 .avatar {
     width: 100px;
@@ -304,6 +307,11 @@
 .card-img-left {
     border-top-left-radius: calc(0.25rem - 1px);
     border-bottom-left-radius: calc(0.25rem - 1px);
+}
+
+.card-img-top {
+    height: 328px;
+    object-fit: cover;
 }
 
 /* SHADOW */

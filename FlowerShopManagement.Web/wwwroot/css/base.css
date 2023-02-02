@@ -114,14 +114,16 @@ p, span, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     background-color: transparent;
     color: rgb(20, 33, 61);
     font-weight: 500;
+    border: rgb(96,83,153) 2px solid outset;
 }
 
     .btn-secondary:hover {
-        background-color: rgba(20, 33, 61, 0.1);
+        background-color: #fff;
         color: rgba(20, 33, 61, 0.8);
         font-weight: inherit;
         transition-delay: 100ms;
         transition-duration: 100ms;
+        border-color: #bfb9ec;
     }
 
     .btn-secondary:active {
@@ -208,3 +210,8 @@ p, span, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
         font-size: 20px;
         margin: 0;
     }
+
+/* CURSOR */
+.cursor {
+    cursor: pointer;
+}

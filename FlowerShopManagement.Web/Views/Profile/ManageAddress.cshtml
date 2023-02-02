@@ -44,10 +44,9 @@
                         <input name="phone" value="@item.PhoneNumber" hidden/>
                         <input name="address" value="@item.Address" hidden />
                         <input name="name" value="@item.FullName" hidden />
-                        <button type="submit" class="btn-no-min btn-secondary">Edit</button>
-
+                        <button type="submit" class="btn-no-min btn-secondary w-100">Edit</button>
                     </form>
-                    <button class="btn-no-min btn-secondary"
+                    <button class="btn-no-min btn-secondary w-100"
                     type="button"
                     onclick="removeAddress('@Url.Action("RemoveInfoDelivery", "Profile")','@item.FullName','@item.PhoneNumber', '@item.Address')">
                         Remove

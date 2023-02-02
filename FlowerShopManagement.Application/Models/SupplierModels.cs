@@ -10,6 +10,7 @@ public class SupplierModel
     public string _id { get; set; }
 
     [Required]
+    [RegularExpression(@"^[a-zA-Z_/s]*$", ErrorMessage = "Invalid name!")]
     public string Name { get; set; }
 
     [Required]
@@ -22,9 +23,15 @@ public class SupplierModel
     [Required]
     [EmailOrPhone(ErrorMessage = "Email or phone number required!")]
     public string PhoneNumber { get; set; }
+
     public string Description { get; set; }
 
+    [Required]
+    [DataType(DataType.DateTime)]
     public DateTime CreatedDate { get; set; }
+
+    [Required]
+    [DataType(DataType.DateTime)]
     public DateTime LastModified { get; set; }
 
     public SupplierModel()
