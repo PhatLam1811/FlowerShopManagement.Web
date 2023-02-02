@@ -12,32 +12,43 @@
 			<div class="col-8 form-group">
 				<label class="form-label" >Name</label>
 				<input type="text" asp-for="Name" class="form-control form-control-lg h5 py-3" id="ip-productname" placeholder="">
+				<span asp-validation-for="Name"></span>
 			</div>
 			<div class="col-4 form-group">
 				<label class="form-label" >Color</label>
 				<input type="text" asp-for="Color" class="form-control form-control-lg h5 py-3" id="ip-color" placeholder="">
+				<span asp-validation-for="Color"></span>
+
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-4 form-group">
 				<label class="form-label" >Size</label>
 				<input type="text" asp-for="Size" class="form-control form-control-lg h5 py-3" id="ip-size" placeholder="">
+				<span asp-validation-for="Size"></span>
+
 			</div>
 			<div class="col form-group">
 				<label class="form-label" for="selectCategory">Materials</label>
 				<select class="form-select form-select-lg h5 py-3" asp-for="Material" asp-items="@(new SelectList(materials))" id="selectCategory" aria-label="Floating label select example">
 				</select>
+				<span asp-validation-for="Material"></span>
+
 			</div>
 		</div>
 		<div class="row">
 			<div class="col form-group">
 				<label class="form-label" >Price</label>
 				<input type="number" asp-for="UniPrice" class="form-control form-control-lg h5 py-3" id="ip-price" value="" placeholder="0">
+				<span asp-validation-for="UniPrice"></span>
+
 			</div>
 
 			<div class="col form-group">
 				<label class="form-label" >Amount</label>
 				<input type="number" asp-for="Amount" class="form-control form-control-lg h5 py-3" id="ip-amount" value="" placeholder="0">
+				<span asp-validation-for="Amount"></span>
+
 			</div>
 			<div class="col form-group">
 				<label class="form-label" for="selectCategory">Category</label>
@@ -52,6 +63,7 @@
 		<div class="form-group">
 			<label class="form-label" >Description</label>
 			<textarea type="text" asp-for="Description" class="form-control form-control-lg h5 py-3" id="ip-description" placeholder=""></textarea>
+
 		</div>
 
 		<div class="mt-5 d-flex gap-3">
@@ -67,6 +79,8 @@
 			 asp-append-version="true" />
 		<div class="form-floating">
 			<input asp-for="FormPicture" style="border-width:0px" accept="image/*" class="form-control" multiple />
+			<span asp-validation-for="FormPicture"></span>
+
 			@*<label for="FormPicture">Image</label>*@
 		</div>
 	</div>
