@@ -20,14 +20,18 @@ public class UserModel
     [Required]
     [RegularExpression(@"^([\\+]?84[-]?|[0])?[1-9][0-9]{8}$", ErrorMessage = "Invalid phone number!")]
     public string PhoneNumber { get; set; }
+
     public string Password { get; set; }
+
     public Role Role { get; set; } = Role.Customer;
 
     // Profile
     [Required]
-    [RegularExpression(@"^([A-Z][a-zA-Z_\s]*$)")]
+    [RegularExpression(@"^([A-Z][a-zA-Z_\s]*$)", ErrorMessage = "Invalid name!")]
     public string Name { get; set; }
+
     public string Avatar { get; set; } = "avt3.png";
+
     public Gender Gender { get; set; }
 
     [DataType(DataType.DateTime)]
@@ -39,11 +43,11 @@ public class UserModel
     // Extra
     [DataType(DataType.DateTime)]
     public DateTime CreatedDate { get; set; }
+
     [DataType(DataType.DateTime)]
     public DateTime LastModified { get; set; }
 
     // More Extra
-
     public IFormFile? FormFile { get; set; } // help to generate user avatar, no need to store on dB nha 
 
     public UserModel(User entity)

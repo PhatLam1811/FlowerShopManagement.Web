@@ -11,18 +11,31 @@ public class ProductModel
     public string Id { get; set; } = string.Empty;
 
     [Required]
-    [RegularExpression(@"^[a-zA-Z0-9_/s]*$", ErrorMessage = "Invalid email!")]
+    [RegularExpression(@"^[a-zA-Z0-9_/s]*$", ErrorMessage = "Invalid name!")]
     public string Name { get; set; } = string.Empty;
-    //public string Picture { get; set; } = string.Empty;
+
     public List<string> Pictures { get; set; } = new List<string>();
 
+    [Required]
+    [DataType(DataType.Currency)]
     public int UniPrice { get; set; } = 0;
+
+    [Required]
+    [RegularExpression(@"^[0-9]*$", ErrorMessage = "Invalid Amount!")]
     public int Amount { get; set; } = 0;
+
     public Color Color { get; set; } = Color.Sample;
+
+    [Required]
+    [DataType(DataType.Currency)]
     public float WholesaleDiscount { get; set; } = 0;
+
     public string Category { get; set; } = "Unknown";
+
     public string Material { get; set; } = "Unknown";
+
     public bool IsLike { get; set; }
+
     public ProductModel(Product entity)
     {
         Id = entity._id;
@@ -35,7 +48,6 @@ public class ProductModel
         IsLike = entity._isLike;
         Category = entity._category;
         Material = entity._material;
-
     }
 
     public ProductModel(string id, int amount)
@@ -76,18 +88,39 @@ public class ProductModel
 public class ProductDetailModel
 {
     public string? Id { get; set; } = string.Empty;
+
+    [Required]
+    [RegularExpression(@"^[a-zA-Z0-9_/s]*$", ErrorMessage = "Invalid name!")]
     public string Name { get; set; } = string.Empty;
+
     public List<string> Pictures { get; set; } = new List<string>();
+
+    [Required]
+    [DataType(DataType.Currency)]
     public int UniPrice { get; set; } = 0;
+
+    [Required]
+    [RegularExpression(@"^[0-9]*$", ErrorMessage = "Invalid Amount!")]
     public int Amount { get; set; } = 0;
+
+    [Required]
+    [DataType(DataType.Currency)]
     public float WholesaleDiscount { get; set; } = 0;
+
     public Color Color { get; set; } = Color.Sample;
+
     public string Description { get; set; } = string.Empty;
+
     public string Material { get; set; } = "Unknown";
+
     public string Size { get; set; } = string.Empty;
+
     public string Maintainment { get; set; } = string.Empty;
+
     public string Category { get; set; } = "Unknown";
+
     public List<IFormFile> FormPicture { get; set; } = new List<IFormFile>();
+
     public bool IsLike { get; set; } = false;
 
     public ProductDetailModel(Product entity)

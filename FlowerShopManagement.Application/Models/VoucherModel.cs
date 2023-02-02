@@ -1,19 +1,40 @@
 ﻿using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
+using System.ComponentModel.DataAnnotations;
 using ValueType = FlowerShopManagement.Core.Enums.ValueType;
 
 namespace FlowerShopManagement.Application.Models;
 
 public class VoucherDetailModel
 {
+    [Required]
     public string? Code { get; set; }
+
+    [Required]
     public VoucherCategories Categories { get; set; }
+
+    [Required]
     public float Discount { get; set; }
+
+    [Required]
     public ValueType ValueType { get; set; } = ValueType.Percent;
+
+    [Required]
     public double ConditionValue { get; set; } = 0;
+
+    [Required]
+    [RegularExpression(@"^[0-9]*$", ErrorMessage = "Invalid Amount!")]
     public int Amount { get; set; } = 0;
+
+    [Required]
+    [DataType(DataType.DateTime)]
     public DateTime? ExpiredDate { get; set; } = DateTime.Now.AddDays(1);
+
+    [Required]
+    [DataType(DataType.DateTime)]
     public DateTime? CreatedDate { get; set; } = DateTime.Now;
+
+    [Required]
     public VoucherStatus State { get; set; } = VoucherStatus.ComingSoon;
 
     public VoucherDetailModel(Voucher entity)
