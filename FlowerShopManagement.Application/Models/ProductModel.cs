@@ -11,7 +11,7 @@ public class ProductModel
     public string Id { get; set; } = string.Empty;
 
     [Required]
-    [RegularExpression(@"^[a-zA-Z0-9_/s]*$", ErrorMessage = "Invalid name!")]
+    [RegularExpression(@"^[a-zA-Z0-9\s]*$", ErrorMessage = "Invalid name!")]
     public string Name { get; set; } = string.Empty;
 
     public List<string> Pictures { get; set; } = new List<string>();
@@ -90,7 +90,7 @@ public class ProductDetailModel
     public string? Id { get; set; } = string.Empty;
 
     [Required]
-    [RegularExpression(@"^[a-zA-Z0-9_/s]*$", ErrorMessage = "Invalid name!")]
+    [RegularExpression(@"^[a-zA-Z0-9\s]*$", ErrorMessage = "Invalid name!")]
     public string Name { get; set; } = string.Empty;
 
     public List<string> Pictures { get; set; } = new List<string>();

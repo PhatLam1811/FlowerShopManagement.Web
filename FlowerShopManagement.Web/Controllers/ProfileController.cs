@@ -184,6 +184,7 @@ public class ProfileController : Controller
 	{
         var list = await _adminService.GetAddresses();
         ViewData["Addresses"] = JsonConvert.SerializeObject(list, Formatting.Indented);
+
         return PartialView(new InforDeliveryModel());
 	}
 
@@ -215,11 +216,25 @@ public class ProfileController : Controller
     }
 
     [HttpPost]
-	public async Task<IActionResult> CreateInfoDelivery(InforDeliveryModel inforDeliveryModel, string city, string district, string ward)
+	public async Task<IActionResult> CreateInfoDelivery(InforDeliveryModel inforDeliveryModel, string city, string district, string commune)
 	{
-		if (!ModelState.IsValid) return NotFound();
-		var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-		inforDeliveryModel.Commune = ward;
+		
+		if (!ModelState.IsValid)
+		{
+			var list = await _adminService.GetAddresses();
+			ViewData["Addresses"] = JsonConvert.SerializeObject(list, Formatting.Indented);
+			inforDeliveryModel.Address = "";
+			return Json(new
+			{
+				isValid = false,
+				html = Helper.RenderRazorViewToString(this, "CreateInfoDelivery", inforDeliveryModel),
+
+			});
+
+		}
+		
+        var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+		inforDeliveryModel.Commune = commune;
 		inforDeliveryModel.District = district;
 		inforDeliveryModel.City = city;
 
@@ -230,8 +245,13 @@ public class ProfileController : Controller
 
 		user.InforDelivery.Add(inforDeliveryModel);
 		await _customerfService.EditInfoAsync(user);
+        return Json(new
+        {
+            isValid = true,
+            html = Helper.RenderRazorViewToString(this, "ManageAddress", user.InforDelivery),
 
-		return PartialView("ManageAddress", user.InforDelivery);
+        });
+        //return PartialView("ManageAddress", user.InforDelivery);
 	}
 
     [HttpPost]
