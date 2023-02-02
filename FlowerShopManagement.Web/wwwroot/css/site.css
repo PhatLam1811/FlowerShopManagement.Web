@@ -33,13 +33,6 @@
     border: none;
 }
 
-/*CARD*/
-.card-img-top {
-    width: 100%;
-    height: auto;
-    background-color: #dfdfdf
-}
-
 /*DROPDOWN*/
 .btn-for-dropdown {
     color: var(--button-color);
@@ -315,6 +308,11 @@
 .card-img-left {
     border-top-left-radius: calc(0.25rem - 1px);
     border-bottom-left-radius: calc(0.25rem - 1px);
+}
+
+.card-img-top {
+    height: 328px;
+    object-fit: cover;
 }
 
 /* SHADOW */

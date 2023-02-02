@@ -12,6 +12,7 @@
     var wards = ViewData["Districts"] as List<string> ?? addresses.Where(i => i._city == "Thành phố Hà Nội" && i._district == "Huyện Đông Anh").GroupBy(i => i._commune).Select(i => i.Key).ToList();
 }
 <form asp-action="UpdateInfoDelivery" asp-controller="Profile" method="post" onsubmit="return addAddress(this);">
+    <p class="h2 mb-3">Edit Delivery Information</p>
     <div class="">
         <div class="flex-grow-1">
             @if (Model.IsDefault)
@@ -38,7 +39,6 @@
                             <option value="@Model.City" selected> @Model.City</option>
                         </select>
                     </div>
-
                     <div class="col form-group ">
                         <label class="form-label">District</label>
                         <select class="form-select form-select-lg h5 py-3" id="district" name="district" style="font-family:'Open Sans'"
@@ -48,7 +48,8 @@
 
                         </select>
                     </div>
-                    <div class="col form-group ">
+                </div>
+                <div class="col form-group ">
                         <label class="form-label">Ward</label>
                         <select class="form-select form-select-lg h5 py-3" id="ward" name="ward" style="font-family:'Open Sans'"
                                 asp-items="@(new SelectList(wards))"
@@ -68,7 +69,6 @@
                         </div>
 
                     </div>
-                </div>
             </div>
         </div>
 
