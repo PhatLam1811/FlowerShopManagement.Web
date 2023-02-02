@@ -25,7 +25,7 @@ public class ProductModel
     [RegularExpression(@"^[0-9]*$", ErrorMessage = "Invalid Amount!")]
     public int Amount { get; set; } = 0;
 
-    public Color Color { get; set; } = Color.Sample;
+    public string Color { get; set; } = "";
 
     [Required]
     [DataType(DataType.Currency)]
@@ -119,8 +119,9 @@ public class ProductDetailModel
     public string Maintainment { get; set; } = string.Empty;
 
     public string Category { get; set; } = "Unknown";
+	[Required]
 
-    public List<IFormFile> FormPicture { get; set; } = new List<IFormFile>();
+	public List<IFormFile> FormPicture { get; set; } = new List<IFormFile>();
 
     public bool IsLike { get; set; } = false;
 
