@@ -284,10 +284,9 @@
     object-fit: cover;
 }
 
-.avatar-nav:hover {
-    width: 35px;
-    height: 35px;
-}
+    .avatar-nav:hover {
+        scale: 1.1;
+    }
 
 .avatar {
     width: 100px;
