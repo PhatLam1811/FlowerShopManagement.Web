@@ -547,12 +547,18 @@ function addAddress(form) {
         contentType: false,
         processData: false,
         success: function (res) {
+            if (res.isValid) {
+                $("#form-modal .modal-body").html('');
+                $("#form-modal .modal-title").html('');
+                $("#form-modal").modal('hide');
 
-            $("#form-modal .modal-body").html('');
-            $("#form-modal .modal-title").html('');
-            $("#form-modal").modal('hide');
-
-            $("#pw").html(res);
+                $("#pw").html(res.html);
+            }
+            else {
+                $("#form-modal .modal-body").html(res.html);
+                $("#pw").html(res.html);
+            }
+           
 
             console.log(res);
         },
