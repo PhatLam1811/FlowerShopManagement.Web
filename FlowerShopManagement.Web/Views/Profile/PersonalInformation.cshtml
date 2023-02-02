@@ -45,13 +45,13 @@
 			@if(Model != null && Model.Avatar != null&& Model.Avatar != "" )
 			{
 				<img src="~/avatar/@Model.Avatar" alt="avatar" class="w-100 h-auto" />
-				<input asp-for="Avatar" />
+				<input asp-for="Avatar" hidden/>
 
 			}
 			else
 			{
-				<img src="~/avatar/user.png" alt="avatar" class="w-100 h-auto" />
-				<input asp-for="Avatar" value="user.png"/>
+				<img src="~/image/avt2.png" alt="avatar" class="w-100 h-auto" />
+				<input asp-for="Avatar" value="avt2.png" hidden />
 
 			}
 			<div class="form-group mt-3">
@@ -63,5 +63,5 @@
 	</div>
 	
 
-	<button class="btn btn-primary w-100 mt-5" >Submit 1</button>
+	<button class="btn btn-primary w-100 mt-5" >Apply changes</button>
 </form>

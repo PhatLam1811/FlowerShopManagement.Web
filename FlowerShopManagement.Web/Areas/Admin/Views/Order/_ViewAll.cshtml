@@ -15,7 +15,12 @@
                 </th>
                 <th>
                     <div class="d-none d-lg-block">
-                        Date Create
+                        Updated time
+                    </div>
+                </th>
+                <th>
+                    <div class="d-none d-lg-block">
+                        Updated date
                     </div>
                 </th>
                 <th>State</th>
@@ -48,7 +53,23 @@
                             @if (@Model[i - 1].Date != null)
                             {
                             <div class="d-none d-lg-block">
-                                    @Model[i-1].Date.Value.ToString("dd MMM y HH:mm")
+                                    @Model[i-1].Date.Value.ToString("HH:mm")
+                            </div>
+
+                            }
+                            else
+                            {
+                            <div class="d-none d-lg-block">
+                                ERROR
+                            </div>
+
+                            }
+                    </td>
+                    <td>
+                            @if (@Model[i - 1].Date != null)
+                            {
+                            <div class="d-none d-lg-block">
+                                    @Model[i-1].Date.Value.ToString("dd MMM y")
                             </div>
 
                             }
