@@ -217,7 +217,6 @@ public class ProfileController : Controller
     [HttpPost]
 	public async Task<IActionResult> CreateInfoDelivery(InforDeliveryModel inforDeliveryModel, string city, string district, string ward)
 	{
-		
 		if (!ModelState.IsValid) return NotFound();
 		var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 		inforDeliveryModel.Commune = ward;

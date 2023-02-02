@@ -6,16 +6,25 @@ namespace FlowerShopManagement.Application.Models
     public class InforDeliveryModel
     {
         [Required]
-        [RegularExpression(@"([a-zA-Z])")]
-        public string? FullName { get; set; } = string.Empty;
+        [RegularExpression(@"^[a-zA-Z_/s]*$", ErrorMessage = "Invalid name!")]
+        public string FullName { get; set; } = "";
 
         [Required]
         [RegularExpression(@"^([\+]?84[-]?|[0])?[1-9][0-9]{8}$")]
         public string? PhoneNumber { get; set; } = string.Empty;
+
+        [Required]
         public string? City { get; set; } = string.Empty;
+
+        [Required]
         public string? District { get; set; } = string.Empty;
+
+        [Required]
         public string? Commune { get; set; } = string.Empty;
+
+        [Required]
         public string? Address { get; set; } = string.Empty;
+
         public bool IsDefault { get; set; } = false;
 
         public InforDeliveryModel() { }

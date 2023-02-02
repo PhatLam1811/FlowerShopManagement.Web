@@ -23,10 +23,12 @@
 					<div class="col-7 form-group">
 						<label class="form-label">Name:</label>
 						<input type="text" asp-for="FullName" class="form-control form-control-lg h5 py-3" placeholder="ex: Nguyen Van A">
+						<span asp-validation-for="FullName"></span>
 					</div>
 					<div class="col-5 form-group">
 						<label class="form-label">Phone:</label>
 						<input type="text" asp-for="PhoneNumber" class="form-control form-control-lg h5 py-3" placeholder="">
+						<span asp-validation-for="PhoneNumber"></span>
 					</div>
 				</div>
 				@*changes*@
