@@ -2,6 +2,7 @@
 using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Http;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Web.Helpers;
 
 namespace FlowerShopManagement.Application.Models;
@@ -107,7 +108,7 @@ public class ProductDetailModel
     [DataType(DataType.Currency)]
     public float WholesaleDiscount { get; set; } = 0;
 
-    public Color Color { get; set; } = Color.Sample;
+    public string Color { get; set; } = "";
 
     public string Description { get; set; } = string.Empty;
 

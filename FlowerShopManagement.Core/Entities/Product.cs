@@ -18,7 +18,7 @@ public class Product
     public List<Review> _reviews { get; private set; } = new List<Review>();
 
     // adding attributes
-    public Color _color { get; set; }
+    public string _color { get; set; }
     public string _description { get; set; }
     //public Material _material { get; set; }
     public string _material { get; set; }
@@ -31,7 +31,7 @@ public class Product
         string name = "", List<string>? picture = null, 
         string category = "Unknown", int amount = 0,
         int uniPrice = 0, float wholesaleDiscount = 0.0f, string description = "", 
-        string maintainment  = "", string size = "0cm x 0cm x 0cm", string material = "Unknown", Color color = Color.Sample, bool isLike = false)
+        string maintainment  = "", string size = "0cm x 0cm x 0cm", string material = "Unknown", string color = "", bool isLike = false)
     {
         if (id != null)
             _id = id;

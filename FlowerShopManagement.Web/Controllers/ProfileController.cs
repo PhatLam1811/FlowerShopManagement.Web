@@ -180,7 +180,7 @@ public class ProfileController : Controller
 	}
 
 	[HttpGet]
-	public async Task<IActionResult> CreateInfoDelivery(InforDeliveryModel? obj)
+	public async Task<IActionResult> CreateInfoDelivery()
 	{
         var list = await _adminService.GetAddresses();
         ViewData["Addresses"] = JsonConvert.SerializeObject(list, Formatting.Indented);

@@ -145,6 +145,7 @@ public class ProductController : Controller
     [HttpPost]
     public async Task<IActionResult> Create(ProductDetailModel productModel)
     {
+        if(!ModelState.IsValid) { return Create(); }
         var maintainment = listDetailMaterial.FirstOrDefault(i => i._name == productModel.Material);
         if (maintainment == null)
             productModel.Maintainment = "blank";
