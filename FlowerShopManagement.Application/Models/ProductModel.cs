@@ -25,7 +25,7 @@ public class ProductModel
     [RegularExpression(@"^[0-9]*$", ErrorMessage = "Invalid Amount!")]
     public int Amount { get; set; } = 0;
 
-    public Color Color { get; set; } = Color.Sample;
+    public string Color { get; set; } = "";
 
     [Required]
     [DataType(DataType.Currency)]
