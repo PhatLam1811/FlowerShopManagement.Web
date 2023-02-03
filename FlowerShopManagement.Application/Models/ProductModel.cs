@@ -92,6 +92,7 @@ public class ProductDetailModel
 
     [Required]
     [RegularExpression(@"^[a-zA-Z0-9_/s]*$", ErrorMessage = "Invalid name!")]
+
     public string Name { get; set; } = string.Empty;
 
     public List<string> Pictures { get; set; } = new List<string>();
@@ -119,7 +120,6 @@ public class ProductDetailModel
     public string Maintainment { get; set; } = string.Empty;
 
     public string Category { get; set; } = "Unknown";
-	[Required]
 
 	public List<IFormFile> FormPicture { get; set; } = new List<IFormFile>();
 

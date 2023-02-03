@@ -149,13 +149,13 @@ public class HomeController : Controller
             }
             switch (currentPrice)
             {
-                case "0 - 10":
+                case "0$ -> 10$":
                     productMs = productMs.Where(s => s.UniPrice > 0 && s.UniPrice <= 10).ToList();
                     break;
-                case "11 - 50":
+                case "11$ -> 50$":
                     productMs = productMs.Where(s => s.UniPrice > 10 && s.UniPrice <= 50).ToList();
                     break;
-                case ">50":
+                case "> 50$":
                     productMs = productMs.Where(s => s.UniPrice > 50).ToList();
                     break;
                 default:
