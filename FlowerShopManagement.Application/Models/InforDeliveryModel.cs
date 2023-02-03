@@ -6,7 +6,6 @@ namespace FlowerShopManagement.Application.Models
     public class InforDeliveryModel
     {
         [Required]
-        [RegularExpression(@"^[a-zA-Z0-9\s]*$", ErrorMessage = "Invalid name!")]
         public string FullName { get; set; } = "";
 
         [Required]
