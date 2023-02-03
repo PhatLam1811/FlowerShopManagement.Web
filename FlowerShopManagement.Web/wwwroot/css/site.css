@@ -279,13 +279,13 @@
 .avatar-nav {
     width: 30px;
     height: 30px;
-    border: 2px solid black;
     border-radius: 50%;
     object-fit: cover;
 }
 
     .avatar-nav:hover {
-        scale: 1.1;
+        transform: scale(1.1);
+        transition: transform 0.1s linear 0.1s; 
     }
 
 .avatar {
