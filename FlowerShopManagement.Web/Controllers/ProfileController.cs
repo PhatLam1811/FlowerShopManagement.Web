@@ -272,12 +272,13 @@ public class ProfileController : Controller
         var list = await _adminService.GetAddresses();
         ViewData["Addresses"] = JsonConvert.SerializeObject(list, Formatting.Indented);
         TempData["EditAddress"] = JsonConvert.SerializeObject(info, Formatting.Indented);
+
         return PartialView(info);
     }
 	[HttpPost]
     [Route("UpdateInfoDelivery")]
 
-    public async Task<IActionResult> UpdateInfoDelivery(InforDeliveryModel inforDeliveryModel, string city, string district, string ward)
+    public async Task<IActionResult> UpdateInfoDelivery(InforDeliveryModel inforDeliveryModel, string city, string district, string Commune)
     {
 
         if (!ModelState.IsValid) return NotFound();
@@ -297,14 +298,18 @@ public class ProfileController : Controller
 			.FirstOrDefault(x => x.PhoneNumber == info.PhoneNumber && x.Address == info.Address && x.FullName == info.FullName && x.Commune == info.Commune);
         if (editInfo is null) return NotFound();
 
-        editInfo.Commune = ward;
+        editInfo.Commune = Commune;
         editInfo.District = district;
         editInfo.City = city;
         editInfo.Address = inforDeliveryModel.Address;
         
         await _customerfService.EditInfoAsync(user);
+        return Json(new
+        {
+            isValid = true,
+            html = Helper.RenderRazorViewToString(this, "ManageAddress", user.InforDelivery),
 
-        return PartialView("ManageAddress", user.InforDelivery);
+        });
     }
 
     [HttpPost]
