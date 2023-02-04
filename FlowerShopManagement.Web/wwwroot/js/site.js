@@ -522,7 +522,7 @@ function addToCart(url, id, amount) {
         url: url,
         data: { id: id, amount: amount },
         success: function () {
-            $.notify("Added to your cart", "success", { position: "right" });
+            $.notify("Added to your cart", "success", { position: "right middle" });
 
         }
     })

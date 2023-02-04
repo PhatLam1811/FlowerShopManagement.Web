@@ -27,7 +27,7 @@ else
 {
 	@*Da dang nhap*@
 	<li class="nav-item bg-hover dropdown-item">
-		<a id="manage" class="nav-link text-dark bg-hover" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @ViewData["Username"]</a>
+		<a id="manage" class="nav-link text-dark bg-hover" asp-controller="Profile" asp-action="Index" title="Manage">Hello @ViewData["Username"]</a>
 	</li>
 	<li class="nav-item bg-hover dropdown-item">
 		<form id="logoutForm" class="form-inline" asp-action="SignOutAsync" asp-controller="Authentication">
