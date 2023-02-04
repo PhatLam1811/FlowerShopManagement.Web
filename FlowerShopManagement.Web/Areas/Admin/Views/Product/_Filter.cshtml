@@ -1,7 +1,7 @@
 ﻿@{
     List<string>? categories = ViewData["Categories"] as List<string> ?? null;
     List<string>? materials = ViewData["Materials"] as List<string> ?? null;
-    List<string> prices = new List<string> { "All", "0 - 10", "11 - 50", ">50" };
+    List<string> prices = new List<string> { "All", "0$ -> 10$", "11$ -> 50$", "> 50$" };
     string? currentCategory = ViewData["CurrentCategory"] as string ?? "All";
     string? currentMaterial = ViewData["CurrentMaterial"] as string ?? "All";
     string currentPrice = ViewData["CurrentPrice"] as string ?? "All";

@@ -74,92 +74,6 @@ public class ProductController : Controller
 
     }
 
-    //Open edit dialog / modal
-    [Route("Edit")]
-    [HttpGet]
-    public async Task<IActionResult> Edit(string id)
-    {
-        //Should get a new one because an admin updates data realtime
-
-        ProductDetailModel editProduct = await _stockServices.GetADetailProduct(id);
-        if (editProduct != null)
-        {
-
-            ViewData["Categories"] = listCategories.Where(i => i != editProduct.Category && i != "All" && i != "Unknown").ToList();
-            ViewData["Materials"] = listMaterials.Where(i => i != editProduct.Category && i != "All" && i != "Unknown").ToList();
-
-            return View(editProduct);
-        }
-        return NotFound();
-    }
-
-    [Route("Update")]
-    [HttpPost]
-    public async Task<IActionResult> Update(ProductDetailModel productModel)
-    {
-
-
-        //If product get null or Id null ( somehow ) => notfound
-        if (productModel == null || productModel.Id == null) return NotFound();
-
-
-
-
-        if (await _stockServices.UpdateProduct(productModel) == true)
-            return RedirectToAction("Index");
-        return NotFound();
-    }
-
-    [Route("Detele")]
-    [HttpPost]
-    public async Task<IActionResult> Delete(string id)
-    {
-        //If order get null or Id null ( somehow ) => notfound
-        if (id == null) return NotFound();
-
-        //Check productModel for sure if losing some data
-        var result = await _productRepository.RemoveById(id);
-        if (result == false)
-            return NotFound();
-        else
-        {
-            // Update the new way to reload the products in future
-            return RedirectToAction("Index"/*Coult be a ViewModel in here*/); // A updated _ViewAll
-        }
-
-    }
-
-    //Open an Create Dialog
-    [Route("Create")]
-    [HttpGet]
-    public IActionResult Create()
-    {
-        ViewData["Categories"] = listCategories.Where(i => i != "Unknown" && i != "All").ToList();
-        ViewData["Materials"] = listMaterials.Where(i => i != "Unknown" && i != "All").ToList();
-
-        return View(new ProductDetailModel());
-    }
-
-    // Confirm and create an Order
-    [Route("Create")]
-    [HttpPost]
-    public async Task<IActionResult> Create(ProductDetailModel productModel)
-    {
-        if(!ModelState.IsValid) { return Create(); }
-        var maintainment = listDetailMaterial.FirstOrDefault(i => i._name == productModel.Material);
-        if (maintainment == null)
-            productModel.Maintainment = "blank";
-        else
-            productModel.Maintainment = maintainment._maintainment;
-
-        var result = await _stockServices.CreateProduct(productModel);
-        if (result == true)
-        {
-            return RedirectToAction("Index"/*Coult be a ViewModel in here*/); // A updated _ViewAll
-        }
-        return NotFound(); // Can be changed to Redirect
-    }
-
     [Route("Sort")]
     [HttpPost]
     public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString,
@@ -210,13 +124,13 @@ public class ProductController : Controller
             }
             switch (currentPrice)
             {
-                case "0 - 10":
+                case "0$ -> 10$":
                     productMs = productMs.Where(s => s.UniPrice > 0 && s.UniPrice <= 10).ToList();
                     break;
-                case "11 - 50":
+                case "11$ -> 50$":
                     productMs = productMs.Where(s => s.UniPrice > 10 && s.UniPrice <= 50).ToList();
                     break;
-                case ">50":
+                case "> 50$":
                     productMs = productMs.Where(s => s.UniPrice > 50).ToList();
                     break;
                 default:
@@ -233,7 +147,7 @@ public class ProductController : Controller
                 productMs = productMs.Where(s => s.Category.Equals(currentCategory)).ToList();
             }
             PaginatedList<ProductModel> objs = PaginatedList<ProductModel>
-                .CreateAsync(productMs, pageNumber ?? 1, pageSize);
+                .CreateAsync(productMs.OrderBy(i => i.Name).ToList(), pageNumber ?? 1, pageSize);
             return Json(new
             {
                 isValid = true,
@@ -245,6 +159,100 @@ public class ProductController : Controller
         return NotFound();
 
     }
+
+    //Open edit dialog / modal
+    [Route("Edit")]
+    [HttpGet]
+    public async Task<IActionResult> Edit(string id)
+    {
+        //Should get a new one because an admin updates data realtime
+
+        ProductDetailModel editProduct = await _stockServices.GetADetailProduct(id);
+        if (editProduct != null)
+        {
+
+            ViewData["Categories"] = listCategories.Where(i => i != editProduct.Category && i != "All" && i != "Unknown").ToList();
+            ViewData["Materials"] = listMaterials.Where(i => i != editProduct.Category && i != "All" && i != "Unknown").ToList();
+
+            return View(editProduct);
+        }
+        return NotFound();
+    }
+
+    [Route("Update")]
+    [HttpPost]
+    public async Task<IActionResult> Update(ProductDetailModel productModel)
+    {
+
+        if (!ModelState.IsValid)
+        {
+            ViewData["Categories"] = listCategories.Where(i => i != productModel.Category && i != "All" && i != "Unknown").ToList();
+            ViewData["Materials"] = listMaterials.Where(i => i != productModel.Category && i != "All" && i != "Unknown").ToList();
+            return View("Edit", productModel);
+        }
+
+        //If product get null or Id null ( somehow ) => notfound
+        if (productModel == null || productModel.Id == null) return NotFound();
+
+
+
+
+        if (await _stockServices.UpdateProduct(productModel) == true)
+            return RedirectToAction("Index");
+        return NotFound();
+    }
+
+    [Route("Detele")]
+    [HttpPost]
+    public async Task<IActionResult> Delete(string id)
+    {
+        //If order get null or Id null ( somehow ) => notfound
+        if (id == null) return NotFound();
+
+        //Check productModel for sure if losing some data
+        var result = await _productRepository.RemoveById(id);
+        if (result == false)
+            return NotFound();
+        else
+        {
+            // Update the new way to reload the products in future
+            return RedirectToAction("Index"/*Coult be a ViewModel in here*/); // A updated _ViewAll
+        }
+
+    }
+
+    //Open an Create Dialog
+    [Route("Create")]
+    [HttpGet]
+    public IActionResult Create()
+    {
+        ViewData["Categories"] = listCategories.Where(i => i != "Unknown" && i != "All").ToList();
+        ViewData["Materials"] = listMaterials.Where(i => i != "Unknown" && i != "All").ToList();
+
+        return View(new ProductDetailModel());
+    }
+
+    // Confirm and create an Order
+    [Route("Create")]
+    [HttpPost]
+    public async Task<IActionResult> Create(ProductDetailModel productModel)
+    {
+        if (!ModelState.IsValid) { return Create(); }
+        var maintainment = listDetailMaterial.FirstOrDefault(i => i._name == productModel.Material);
+        if (maintainment == null)
+            productModel.Maintainment = "blank";
+        else
+            productModel.Maintainment = maintainment._maintainment;
+
+        var result = await _stockServices.CreateProduct(productModel);
+        if (result == true)
+        {
+            return RedirectToAction("Index"/*Coult be a ViewModel in here*/); // A updated _ViewAll
+        }
+        return NotFound(); // Can be changed to Redirect
+    }
+
+    
 
 
     [Route("Category")]
@@ -262,7 +270,7 @@ public class ProductController : Controller
     public async Task<IActionResult> AddCategory(/*[Required][MinLength(3, ErrorMessage = "Password must be greater than 6 characters")]*/string name)
     {
         var list = listCategories.Where(i => i != "Unknown" && i != "All").ToList();
-        if(!ModelState.IsValid ) { return Category(); }
+        if (!ModelState.IsValid) { return Category(); }
         if (list.Any(i => i == name) == true) return BadRequest();
         var result = _stockServices.CreateCategory(name);
         listCategories = await _stockServices.GetCategories();

@@ -155,7 +155,7 @@ public class OrderController : Controller
 						var info = user.InforDelivery.Where(o => o.IsDefault = true).First();
 						orderM.FullName = info.FullName;
 						orderM.PhoneNumber = info.PhoneNumber;
-						orderM.Address = info.Address;
+						orderM.Address = info.Address + ", " + info.Commune + ", " + info.District+ ", " + info.City;
 					}
 					else
 					{
