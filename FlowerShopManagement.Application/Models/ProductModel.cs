@@ -120,6 +120,7 @@ public class ProductDetailModel
 
     public string Category { get; set; } = "Unknown";
 
+    [AllowNull]
 	public List<IFormFile> FormPicture { get; set; } = new List<IFormFile>();
 
     public bool IsLike { get; set; } = false;
@@ -149,7 +150,7 @@ public class ProductDetailModel
     public ProductDetailModel()
     {
         Id = new Guid().ToString();
-        Pictures = new List<string>();
+        Pictures = new List<string>() { "flower1.png" };
         Name = "";
     }
 
