@@ -61,7 +61,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
         public IActionResult Sort(string sortOrder, DateTime beginDate, DateTime endDate)
         {
             ViewBag.Report = true;
-
+            
             // Analize data
             var dataSet1 = _reportService.GetTotalOrders(beginDate, endDate);
             var dataSet2 = _reportService.GetTotalRevenue(beginDate, endDate);
