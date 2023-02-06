@@ -9,7 +9,7 @@ namespace FlowerShopManagement.Web.ViewModels
         public UserModel? CurrentCustomer = null;
         public List<ProductModel>? CurrentProductModels = new List<ProductModel>();
         public List<ProductModel>? AllProductModels = new List<ProductModel>();
-        public List<UserModel>? customerMs = new List<UserModel>();
+        public List<UserModel1>? customerMs = new List<UserModel1>();
 
         public bool isOkay = false;
 
