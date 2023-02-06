@@ -15,14 +15,28 @@ public class UserModel1
 	public string Email { get; set; } = string.Empty;
 	public string PhoneNumber { get; set; } = string.Empty;
 
-	public UserModel1(User entity)
+	public UserModel1()
+    {
+
+    }
+	public UserModel1(UserModel1 entity)
 	{
 		_id = entity._id;
-		Email = entity.email;
-		PhoneNumber = entity.phoneNumber;
-		Name = entity.name;
-		
+		Email = entity.Email;
+		PhoneNumber = entity.PhoneNumber;
+		Name = entity.Name;
+
 	}
+	public static UserModel1 ToModel(User entity)
+	{
+        UserModel1 a = new UserModel1();
+		a._id = entity._id;
+		a.Email = entity.email;
+		a.PhoneNumber = entity.phoneNumber;
+		a.Name = entity.name;
+        return a;
+	}
+    
 }
 
 public class UserModel

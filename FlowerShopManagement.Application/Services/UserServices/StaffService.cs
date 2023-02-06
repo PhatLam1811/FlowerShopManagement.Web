@@ -66,7 +66,7 @@ public class StaffService : UserService, IStaffService
 			foreach (var user in result)
 			{
 				if (user.role != Core.Enums.Role.Customer) continue;
-				var model = new UserModel1(user);
+				var model = UserModel1.ToModel(user);
 				users.Add(model);
 			}
 
