@@ -179,6 +179,8 @@ public class ImportService : IImportService
             }
         }
 
+        builder.Replace("Supplier_Name", form.Supplier.name);
+
         form.HtmlPart = builder.ToString();
 
         return form;
