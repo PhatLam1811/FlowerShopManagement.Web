@@ -1,7 +1,7 @@
 ﻿@model List<VoucherDetailModel>
 
 @{
-    ViewData["Title"] = "Voucher";
+	ViewData["Title"] = "Voucher";
 }
 
 <div class="row-cols-2 mt-3">
@@ -9,7 +9,9 @@
 	{
 		foreach (var item in Model)
 		{
-			<component type="typeof(VoucherCard)" param-voucher=@item render-mode="ServerPrerendered" />
+			<div class="mb-3">
+				<component type="typeof(VoucherCard)" param-voucher=@item render-mode="ServerPrerendered" />
+			</div>
 		}
 	}
 </div>

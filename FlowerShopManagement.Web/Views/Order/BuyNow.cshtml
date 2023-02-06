@@ -59,14 +59,12 @@
                     <label class="form-label h6 mb-2" for="selectCategory">Delivery Method</label>
                     <input class="form-control form-control-lg h5 py-2" asp-for="DeliveryMethod" />
                 </div>
-                @*<p class="col caption text-dark">Expected Delivery Date: <strong class="text-secondary">20/02/2023</strong></p>*@
             </div>
             <div class="row mt-3">
 
                 <div class="form-group col-3">
                     <label class="form-label h6 mb-2" for="selectCategory">Payment Method</label>
-                    <select class="form-select form-select-lg h5 py-2" asp-items="@(new SelectList(paymentMethods))" id="selectCategory" aria-label="Floating label select example">
-                    </select>
+                    <input class="form-control form-control-lg h5 py-2" value="Cash" />
                 </div>
                 <div class="form-group col-6">
                     <label class="form-label h6 mb-2" for="exampleFormControlInput1">Voucher</label>

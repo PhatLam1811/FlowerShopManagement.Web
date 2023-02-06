@@ -35,7 +35,7 @@
                     <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
 
                         <th scope="row">@i</th>
-                        <td>
+                        <td class="col-5">
                             <div class="d-flex align-items-center gap-2">
                                 @if (item.Pictures.Count <= 0 || String.IsNullOrEmpty(item.Pictures[0]))
                                 {
@@ -53,7 +53,7 @@
                              asp-append-version="true" />
                                 }
 
-                                <span class="limit-line">@item.Name</span>
+                                <span class="limit-one-line">@item.Name</span>
                             </div>
                         </td>
                         <td>$@item.UniPrice</td>
@@ -64,7 +64,11 @@
                             </div>
 
                         </td>
-                        <td>@item.Amount</td>
+                        <td>
+                            <div class="text-center">
+                                @item.Amount
+                            </div>
+                        </td>
                         <td>
                             <a href="@Url.Action("Edit","Product",new {id = @item.Id})" id="@item.Id" class="border-1 table-icon">
                                 <i class="fas fa-edit"></i>

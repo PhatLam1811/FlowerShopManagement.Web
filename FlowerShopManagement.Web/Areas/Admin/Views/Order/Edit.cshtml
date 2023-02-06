@@ -3,7 +3,7 @@
 <form method="post" asp-action="Update" asp-controller="Order" asp-area="Admin" class="modal-content border-0" enctype="multipart/form-data">
 	<div class="row mt-4">
 		<div class="col">
-            <input asp-for="Id" value="@Model.Id"  hidden/>
+			<input asp-for="Id" value="@Model.Id" hidden />
 			@*user info*@
 			<div class="h3 fw-bold text-info">@Model.Status</div>
 			<div class="row mt-3">
@@ -19,6 +19,11 @@
 						<input class="form-control form-control-lg h5 py-3" readonly asp-for="PhoneNumber" id="floatingTextarea"></input>
 						<span asp-validation-for="PhoneNumber" class="text-danger"></span>
 					</div>
+					<div class="form-group">
+						<label for="floatingInput">Voucher</label>
+						<input type="text" asp-for="Voucher" readonly class="form-control form-control-lg h5 py-3" id="floatingInput">
+						<span asp-validation-for="Voucher" class="text-danger"></span>
+					</div>
 				</div>
 				@*charge info*@
 				<div class="col d-grid gap-2">
@@ -32,11 +37,16 @@
 						<input type="number" asp-for="DeliveryCharge" readonly class="form-control form-control-lg h5 py-3" id="floatingInput" placeholder="1">
 						<span asp-validation-for="DeliveryCharge" class="text-danger"></span>
 					</div>
+					<div class="form-group">
+						<label for="floatingInput">Total Price</label>
+						<input type="number" asp-for="Total" readonly class="form-control form-control-lg h5 py-3" id="floatingInput" placeholder="1">
+						<span asp-validation-for="Total" class="text-danger"></span>
+					</div>
 				</div>
 			</div>
-			<div class="form-group">
+			<div class="form-group mt-3">
 				<label for="floatingInput">Note</label>
-				<input type="text" asp-for="Notes" class="form-control form-control-lg h5 py-3" id="floatingInput" placeholder="Leave comments here">
+				<input type="text" asp-for="Notes" class="form-control form-control-lg h5 py-3" id="floatingInput" placeholder="">
 				<span asp-validation-for="Notes" class="text-danger"></span>
 			</div>
 		</div>
@@ -48,8 +58,8 @@
 							<th>#</th>
 							<th class="button">Name</th>
 							<th class="button">Price</th>
-							<th class="button">Color</th>
 							<th class="button">Amount</th>
+							<th class="button">Total</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -59,11 +69,16 @@
 							<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed">
 
 								<th scope="row">@i</th>
-								<td>@Model.Products[i-1].Name</td>
-								<td>@Model.Products[i-1].UniPrice</td>
-								<td>@Model.Products[i-1].Color</td>
-								<td>@Model.Products[i-1].Amount</td>
-
+								<td>
+									<span class="limit-one-line">@Model.Products[i-1].Name</span>
+								</td>
+								<td class="col-1">@Model.Products[i-1].UniPrice</td>
+								<td class="col-1">
+									<div class="text-center">
+										@Model.Products[i-1].Amount
+									</div>
+								</td>
+								<td>@(Model.Products[i - 1].Amount * Model.Products[i - 1].UniPrice)</td>
 							</tr>
 						}
 					</tbody>
@@ -71,7 +86,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="fixed-bottom bottom-50 start-50">
+	<div class="d-flex gap-2 mt-5">
 		<div class="d-flex gap-2">
 			@if (Model.Status == FlowerShopManagement.Core.Enums.Status.Paying || Model.Status == FlowerShopManagement.Core.Enums.Status.Delivering)
 			{

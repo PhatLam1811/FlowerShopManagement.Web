@@ -88,8 +88,8 @@
 		</div>
 	</div>
 
-	<div>
-		<a class="btn btn-no-p btn-primary" onclick="callGetWithId('@Url.Action("HandleStatus","Order",null,Context.Request.Scheme)', '@Model.Id')">
+	<div class="w-100 d-flex justify-content-center">
+		<a class="btn btn-primary" onclick="callGetWithId('@Url.Action("HandleStatus","Order",null,Context.Request.Scheme)', '@Model.Id')">
 			@if (Model.Status == Status.Waiting || Model.Status == Status.Purchased)
 			{
 				<span>Cancel</span>
@@ -97,10 +97,6 @@
 			else if (Model.Status == Status.Delivering)
 			{
 				<span>Received</span>
-			}
-			else if (Model.Status == Status.Canceled)
-			{
-				<span>Buy Again</span>
 			}
 		</a>
 	</div>

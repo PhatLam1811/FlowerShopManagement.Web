@@ -12,7 +12,7 @@
 			<div class="">
 				<div class="d-flex justify-content-between">
 					<span class="h4">@cartItem.items.Name</span>
-					<span class="h6 icon-arrow"></span>
+					<span class="h6 icon-arrow cursor hover-icon" @onclick="NavigateToDetail"></span>
 				</div>
 				<div class="mt-1 d-flex justify-content-between align-items-end">
 					<span class="h6">$@cartItem.items.UniPrice</span>
@@ -91,5 +91,10 @@
 		StateHasChanged();
 
 		await js.InvokeVoidAsync("updateSelection", new object[] { url2, url3, cartItem._productId, isSelected });
+	}
+
+	private void NavigateToDetail()
+	{
+		UriHelper.NavigateTo("ProductDetail/ProductDetail/" + cartItem._productId, true);
 	}
 }

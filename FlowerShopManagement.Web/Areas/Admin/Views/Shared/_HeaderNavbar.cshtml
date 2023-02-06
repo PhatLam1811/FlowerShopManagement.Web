@@ -5,7 +5,7 @@
 		</li>
 		<li class="nav-item px-3 dropdown">
 			<div class="" id="drop" data-bs-toggle="dropdown" aria-expanded="false">
-				<a class="nav-link @(ViewBag.Product==true?"active":"")">Stock<i class="fa-solid fa-caret-down ms-2"></i></a>
+				<a class="nav-link @((ViewBag.Product==true||ViewBag.Voucher==true)?"active":"")">Stock<i class="fa-solid fa-caret-down ms-2"></i></a>
 			</div>
 			<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="drop">
 				<li class="nav-item px-3">
@@ -22,28 +22,28 @@
 		</li>
 		<li class="nav-item px-3 dropdown">
 			<div class="" id="drop" data-bs-toggle="dropdown" aria-expanded="false">
-				<a class="nav-link @(ViewBag.Order==true?"active":"")">User<i class="fa-solid fa-caret-down ms-2"></i></a>
+				<a class="nav-link @((ViewBag.Order==true||ViewBag.User==true)?"active":"")">User<i class="fa-solid fa-caret-down ms-2"></i></a>
 			</div>
 			<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="drop">
 				<li class="nav-item px-3">
-					<a class="nav-link @(ViewBag.Order==true?"active":"")" id="order-nav" asp-area="Admin" asp-controller="Order" asp-action="Index">Order</a>
+					<a class="nav-link" id="order-nav" asp-area="Admin" asp-controller="Order" asp-action="Index">Order</a>
 				</li>
 				
 				<li class="nav-item px-3">
-					<a class="nav-link @(ViewBag.User==true?"active":"")" id="user-nav" asp-area="Admin" asp-controller="User" asp-action="Index">User</a>
+					<a class="nav-link" id="user-nav" asp-area="Admin" asp-controller="User" asp-action="Index">User</a>
 				</li>
 			</ul>
 		</li>
 		<li class="nav-item px-3 dropdown">
 			<div class="" id="drop" data-bs-toggle="dropdown" aria-expanded="false">
-				<a class="nav-link @(ViewBag.Import==true?"active":"")">Import<i class="fa-solid fa-caret-down ms-2"></i></a>
+				<a class="nav-link @((ViewBag.Supplier==true||ViewBag.Report==true)?"active":"")">Import<i class="fa-solid fa-caret-down ms-2"></i></a>
 			</div>
 			<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="drop">
 				<li class="nav-item px-3">
-					<a class="nav-link @(ViewBag.Supplier==true?"active":"")" id="supplier-nav" asp-area="Admin" asp-controller="Supplier" asp-action="Index">Supplier</a>
+					<a class="nav-link" id="supplier-nav" asp-area="Admin" asp-controller="Supplier" asp-action="Index">Supplier</a>
 				</li>
 				<li class="nav-item px-3">
-					<a class="nav-link @(ViewBag.Report==true?"active":"")" id="import-nav" asp-area="Admin" asp-controller="Import" asp-action="Index">Import</a>
+					<a class="nav-link" id="import-nav" asp-area="Admin" asp-controller="Import" asp-action="Index">Import</a>
 				</li>
 			</ul>
 		</li>
