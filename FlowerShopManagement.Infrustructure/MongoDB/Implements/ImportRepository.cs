@@ -23,7 +23,7 @@ public class ImportRepository : BaseRepository<Import>, IImportRepository
                 new BsonDocument("$sort",
                 new BsonDocument
                 {
-                    { "status", -1 },
+                    { "status", 1 },
                     { "createdDate", -1 }
                 })
             };

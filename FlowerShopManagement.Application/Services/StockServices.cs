@@ -126,10 +126,9 @@ public class StockServices : IStockService
 	{
 		// This is only a temporary value of the minimum amount
 		// needed for supply request
-		int minimumAmount = 20;
 		List<ProductModel> lowOnStockProducts = new List<ProductModel>();
 
-		var result = _productRepository.GetAllLowOnStock(minimumAmount);
+		var result = _productRepository.GetAllLowOnStock(-1);
 
 		if (result == null) return lowOnStockProducts;
 

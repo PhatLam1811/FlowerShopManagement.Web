@@ -8,7 +8,7 @@ public interface IImportService
 
     public Task<ImportModel?> GetRequest(string id);
 
-    public Task<string?> Verify(string id, List<int> deliveredQties, List<string> notes);
+    public Task<string?> Verify(string id, List<int> deliveredQties, List<string> notes, string userId, string username);
 
     public Task UpdateStock(string importId);
 

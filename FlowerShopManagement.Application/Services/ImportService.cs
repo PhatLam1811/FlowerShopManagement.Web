@@ -57,7 +57,7 @@ public class ImportService : IImportService
         }
     }
 
-    public async Task<string?> Verify(string id, List<int> deliveredQties, List<string> notes)
+    public async Task<string?> Verify(string id, List<int> deliveredQties, List<string> notes, string userId, string username)
     {
         try
         {
@@ -74,6 +74,9 @@ public class ImportService : IImportService
                 importDetail.details[i].deliveredQty = deliveredQties[i];
                 importDetail.details[i].note = notes[i];
             }
+
+            importDetail.checkedBy._id = userId;
+            importDetail.checkedBy.name = username;
 
             if (isCompleted) importDetail.status = Core.Enums.ImportStatus.Completed;
 

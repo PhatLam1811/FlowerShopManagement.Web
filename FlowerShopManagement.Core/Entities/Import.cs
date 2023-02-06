@@ -35,7 +35,7 @@ public class Import
         note = string.Empty;
 
         this.createdBy = createdBy;
-        checkedBy = null;
+        checkedBy = new UserBasic();
 
         createdDate = DateTime.Now;
     }

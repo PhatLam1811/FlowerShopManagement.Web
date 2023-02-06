@@ -123,6 +123,36 @@ function OpenPostDialog(url, title) {
 
 }
 
+function ImportAlert(form) {
+    var obj = new FormData(form);
+    console.log(obj);
+
+    try {
+        $.ajax({
+            type: 'POST',
+            url: form.action,
+            data: obj,
+            contentType: false,
+            processData: false,
+            success: function (res) {
+                alert("Successfully sent the request!");
+            },
+            error: function (err) {
+                alert("Insufficient supply info! ");
+
+                console.log(err)
+            }
+        })
+        //to prevent default form submit event
+        return false;
+
+    } catch (ex) {
+
+        alert(ex);
+        return false;
+    }
+}
+
 function OpenFormDialog(form) {
     var obj = new FormData(form);
     console.log(obj);

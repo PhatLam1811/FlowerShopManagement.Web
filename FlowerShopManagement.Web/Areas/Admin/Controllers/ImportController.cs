@@ -55,7 +55,7 @@ public class ImportController : Controller
         var suppliers = await _supplierService.GetAllAsync();
 
         // Configure viewmodel
-        var viewmodel = new ImportViewModel(PaginatedList<ProductModel>.CreateAsync(lowOnStockProducts, 1, 10), suppliers);
+        var viewmodel = new ImportViewModel(PaginatedList<ProductModel>.CreateAsync(lowOnStockProducts, 1, 100), suppliers);
 
         return View(viewmodel);
     }
@@ -64,13 +64,18 @@ public class ImportController : Controller
     [ActionName("CreateRequestForm")]
     public async Task CreateRequestForm(List<string> productIds, List<int> requestQty, string supplierIds)
     {
+        var reqQty = new List<int>();
+
         var products = new List<ProductDetailModel>();
-        foreach (var id in productIds)
+        for (int i = 0; i < productIds.Count; i++)
         {
-            var result = await _stockService.GetADetailProduct(id);
+            if (requestQty[i] <= 0) continue;
+
+            var result = await _stockService.GetADetailProduct(productIds[i]);
             
             if (result == null) return;
 
+            reqQty.Add(requestQty[i]);
             products.Add(result);
         }
         var supplier = await _supplierService.GetOneAsync(supplierIds);
@@ -81,7 +86,7 @@ public class ImportController : Controller
 
         if (userId is null || userName is null) return;
 
-        if (products.Count <= 0 || requestQty.Count <= 0 || supplier == null)
+        if (products.Count <= 0 || reqQty.Count <= 0 || supplier == null)
         {
             throw new Exception("Insufficient Values!");
         }
@@ -89,7 +94,7 @@ public class ImportController : Controller
         var reqForm = _importService.CreateRequestForm(
             products,
             supplier,
-            requestQty,
+            reqQty,
             userId, userName, htmlPath);
 
         try
@@ -125,7 +130,10 @@ public class ImportController : Controller
     {
         try
         {
-            var result = await _importService.Verify(importId, deliveredQties, notes);
+            var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var userName = HttpContext.User.FindFirst("Username")?.Value;
+
+            var result = await _importService.Verify(importId, deliveredQties, notes, userId, userName);
 
             if (result != null) return RedirectToAction("Detail", new { id = importId, alert = result });
 
