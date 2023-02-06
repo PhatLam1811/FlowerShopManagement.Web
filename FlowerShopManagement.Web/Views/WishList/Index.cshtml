@@ -2,34 +2,8 @@
 
 @{
 	ViewData["Title"] = "Home Page";
-	List<string> categories = new List<string> { "All", "Fa ke flower", "cay canh" };
-	List<string> prices = new List<string> { "All", "0$ -> 10$", "11$ -> 50$", "> 50$" };
 }
 
-<div class="d-flex align-items-end justify-content-between mt-3 mb-4">
-	<div class="d-flex gap-3">
-		<div class="form-group">
-			<label class="form-label h6" for="selectCategory">Category</label>
-			<select class="form-select" asp-items="@(new SelectList(categories))" id="selectCategory" aria-label="Floating label select example">
-			</select>
-		</div>
-		<div class="form-group">
-			<label class="form-label h6" for="selectCategory">Price</label>
-			<select class="form-select" asp-items="@(new SelectList(prices))" id="selectCategory" aria-label="Floating label select example">
-			</select>
-		</div>
-	</div>
-	<div class="">
-		<label class="form-label h6" for="selectCategory">Search</label>
-		<div class="d-flex align-items-stretch">
-			<div class="h-fit form-group flex-grow-1">
-				<input type="text" class="h-fit form-control position-relative" style="z-index:99" id="floatingInput" placeholder="Abc">
-			</div>
-			<button class="btn btn-no-p border border-primary position-relative" style="z-index:999">
-				<i class="fa-solid fa-magnifying-glass"></i>
-			</button>
-		</div>
-	</div>
+<div class="mt-4">
+	<partial name="_ViewAll" model="@Model" />
 </div>
-
-<partial name="_ViewAll" model="@Model" />

@@ -43,6 +43,7 @@ public class UserController : Controller
     [Route("")]
     public async Task<IActionResult> Index()
     {
+        ViewBag.User = true;
         try
         {
             ViewData["Role"] = Enum.GetNames(typeof(Role)).Where(s => s != "Admin" && s != "Passenger").ToList();

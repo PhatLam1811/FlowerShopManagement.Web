@@ -68,7 +68,33 @@ function showPartialView1(form) {
     })
     return false;
 }
+function OpenGetDialog(url, title) {
+    try {
+        $.ajax({
+            type: "Get",
+            url: url,
+            success: function (res) {
+                console.log(res);
 
+                $("#form-modal .modal-body").html(res);
+                $("#form-modal .modal-title").html(title);
+                $("#form-modal").modal('show');
+                //$.notify("I'm over here !");
+                //$.notify("Access granted", "success", { position: "right" });
+            },
+            error: function (err) {
+                console.log(err);
+                alert(err);
+            }
+        })
+    }
+
+    catch (e) {
+        console.log(e);
+        alert(e);
+    }
+
+}
 function OpenPostDialog(url, title) {
     try {
         $.ajax({
@@ -537,6 +563,7 @@ function removeAddress(url, name, phone, address) {
 }
 
 function addToCart(url, id, amount) {
+    debugger;
     $.ajax({
         type: "POST",
         url: url,
@@ -748,10 +775,9 @@ function createProduct(form) {
         processData: false,
         success: function () {
 
-            alert("going to product page")
-            debugger;
-
-            $(location).prop('/Admin/Product/Index')
+            
+            window.location.replace("/Admin/Product/Index");
+           
 
         },
         error: function (err) {

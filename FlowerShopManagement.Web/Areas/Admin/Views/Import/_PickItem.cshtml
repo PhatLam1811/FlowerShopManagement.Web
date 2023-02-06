@@ -13,15 +13,15 @@
 					</div>
 
 					<div class="row mt-3">
-						<div class="col-md-12">
-							<div class="table-wrap">
+						<div class="">
+							<div class="table-wrap h-70">
 								<table class="table myaccordion table-hover" id="accordion">
-									<thead>
+									<thead class="position-sticky top-0 bg-light">
 										<tr>
 											<th>#</th>
 											<th class="button">Name</th>
 											<th class="button">Price</th>
-											<th class="button">Color</th>
+											@*<th class="button">Color</th>*@
 											<th>State</th>
 											<th class="button">Amount</th>
 											<th class="button">Quantity</th>
@@ -37,14 +37,11 @@
 
 												<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed w-100">
 													<td>
-												
-													</td>
-													<td>
 														@id
 													</td>
-													<td>@i.Name</td>
+													<td class="col-5">@i.Name</td>
 													<td>$@i.UniPrice</td>
-													<td>@i.Color</td>
+													@*<td>@i.Color</td>*@
 													@if (i.Amount == 0)
 													{
 														<td class="text-danger fst-italic">Out of stock</td>
@@ -57,11 +54,11 @@
 													{
 														<td class="text-success fst-italic">Normal</td>
 													}
-													<td>@i.Amount</td>
+													<td class="col-1">@i.Amount</td>
 													<td>
 														<div class="">
 															<label class="form-check-label ml-5 d-flex align-items-center">
-																<input type="number" name="requestQty" value="0" placeholder="0" id="@i.Id" class="form-control ms-2" style="width:100px;" />
+																<input type="number" name="requestQty" value="0" placeholder="0" id="@i.Id" class="form-control ms-2" style="width:80px;" />
 																<input class="form-control" name="productIds" value="@i.Id" hidden />
 															</label>
 														</div>

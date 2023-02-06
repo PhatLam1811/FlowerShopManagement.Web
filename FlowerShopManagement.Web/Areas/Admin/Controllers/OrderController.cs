@@ -198,13 +198,14 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             ViewData["Categories"] = _stockServices.GetCategories();
 
             List<ProductModel> productMs = await _stockServices.GetUpdatedProducts();
-            List<UserModel>? customerMs = await _staffService.GetUsersAsync();
-            if (productMs == null || customerMs == null) return NotFound();
+           // List<UserModel1>? customerMs = await _staffService.GetUsersAsync1();
+            if (productMs == null ) return NotFound();
 
             OrderVM orderVM = new OrderVM();
 
             orderVM.AllProductModels = productMs; // List of products
-            orderVM.customerMs = customerMs;// List of customers
+            //orderVM.customerMs = customerMs;// List of customers
+            //orderVM.customerMs = new List<UserModel>();// List of customers
             if (SetOrderModel(orderVM))
                 return View(orderVM); // This will be an view for dialog / modal
             else
@@ -303,7 +304,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             OrderVM? orderVM = GetOrderModel();
 
-            List<UserModel>? userMS = await _staffService.GetUsersAsync();
+            List<UserModel1>? userMS = await _staffService.GetUsersAsync1();
             if (orderVM == null || userMS == null) return NotFound();
 
             orderVM.customerMs = userMS;

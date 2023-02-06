@@ -10,6 +10,7 @@ using ValueType = FlowerShopManagement.Core.Enums.ValueType;
 using FlowerShopManagement.Core.Entities;
 using System.Web.WebPages;
 using Microsoft.AspNetCore.Authorization;
+using FlowerShopManagement.Application.Services;
 
 namespace FlowerShopManagement.Web.Controllers;
 
@@ -20,6 +21,7 @@ public class OrderController : Controller
 {
 	//Services
 	ISaleService _saleServices;
+	IReportService _reportServices;
 	//Repositories
 	IOrderRepository _orderRepository;
 	IStockService _stockService;
@@ -30,7 +32,7 @@ public class OrderController : Controller
 
 
 	public OrderController(ISaleService saleServices, IOrderRepository orderRepository, IProductRepository productRepository,
-		IUserRepository userRepository, ICustomerfService customerfService, IAuthService authService, IStockService stockService)
+		IUserRepository userRepository, ICustomerfService customerfService, IAuthService authService, IStockService stockService, IReportService reportServices)
 	{
 		_orderRepository = orderRepository;
 		_saleServices = saleServices;
@@ -39,6 +41,7 @@ public class OrderController : Controller
 		_customerService = customerfService;
 		_authService = authService;
 		_stockService = stockService;
+		_reportServices = reportServices;
 	}
 
 	[HttpGet]
@@ -67,7 +70,34 @@ public class OrderController : Controller
 						.AsParallel().OrderByDescending(i => i.Date)
 						.ThenByDescending(i => i.Status == Status.Delivering)
 						.ThenByDescending(i => i.Status == Status.Waiting).ToList();
-				}
+
+					// Report for customer
+					var totalAmount = 0;
+					var success = 0;
+					var waiting = 0;
+					double totalPrice = 0;
+
+					foreach(var i in orderMs)
+					{
+						totalAmount++;
+						totalPrice += i.Total;
+
+						if (i.Status == Status.Delivered)
+						{
+							success++;
+						}
+
+						if (i.Status == Status.Waiting)
+						{
+							waiting++;
+						}
+					}
+
+					ViewData["TotalAmount"] = totalAmount;
+					ViewData["TotalPrice"] = totalPrice;
+					ViewData["Waiting"] = waiting;
+					ViewData["Success"] = success;
+                }
 			}
 		}
 

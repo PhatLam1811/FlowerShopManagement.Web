@@ -79,6 +79,11 @@ public class SaleService : ISaleService
 			newOrder._date = DateTime.Now;
 			// Successful case happens
 			newOrder._status = Status.Paying;//On charging
+			if(newOrder._total > 100) { 
+
+				newOrder._discount = 0.5;
+				newOrder._total *= 0.95 ;
+			}
 			var result = await orderRepository.Add(newOrder);
 			if (result) return new OrderModel(newOrder);
 
