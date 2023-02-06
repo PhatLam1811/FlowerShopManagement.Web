@@ -3,7 +3,8 @@
 	ViewBag.IsAuthenticated = false;
 	ViewBag.IsAdmin = false;
 
-	if (Context.User.Identity is not null) {
+	if (Context.User.Identity is not null)
+	{
 		ViewBag.IsAuthenticated = Context.User.Identity.IsAuthenticated;
 		ViewBag.IsAdmin = Context.User.IsInRole("Admin");
 	}
@@ -39,7 +40,7 @@
 	ViewBag.IsAuthenticated = Context.User.Identity.IsAuthenticated;
 }
 
-<body>
+<body class="position-absolute w-100 h-100 d-flex flex-column">
 	<header class="mx-5">
 		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
 			<div class="container-fluid col">
@@ -81,7 +82,7 @@
 			</div>
 		</nav>
 	</header>
-	<div class="container">
+	<div class="container mb-5">
 		<main role="main" class="pb-3">
 			@RenderBody()
 			<base href="~/" />
