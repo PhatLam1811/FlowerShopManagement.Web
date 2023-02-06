@@ -6,15 +6,9 @@
 		<div class="col d-flex flex-column gap-2">
 			<div class="d-flex flex-row">
 				<div class="container">
-					<!--Search-->
-					<div class="d-flex justify-content-end">
-						<input id="searchFilter" type="text" name="filter" class="form-control form-control-lg" />
-						<button onclick="return showContentItem('@Url.Action("PickItemDialog","Import",null,Context.Request.Scheme)','Choose product');" class="btn btn-secondary btn-no-min icon-search"></button>
-					</div>
-
 					<div class="row mt-3">
 						<div class="">
-							<div class="table-wrap h-fit">
+							<div class="table-wrap" style="height: 530px">
 								<table class="table myaccordion table-hover" id="accordion">
 									<thead>
 										<tr>

@@ -1,25 +1,30 @@
 ﻿@model ImportModel
 
 <form method="post" asp-action="Verify" asp-controller="Import" asp-area="Admin" onshow="window.alert(sadasdas)">
-	<input name="importId" type="text" value=@Model._Id hidden />
-	<div class="text-end">
-		<div class="d-flex gap-3 align-items-end">
-			<p>Import No:</p>
-			<p>@Model._Id</p>
-		</div>
-		<div class="d-flex gap-3 align-items-end">
-			<p>PO No:</p>
-			<p>@Model._Id</p>
-		</div>
+	<div style=" margin: 1rem 0rem 2rem ">
+		<h1>Import Detail</h1>
 	</div>
-	<div>
-		<div class="d-flex gap-3 align-items-end">
-			<p>Supplier Name:</p>
-			<p>@Model.Supplier.name</p>
+	<input name="importId" type="text" value=@Model._Id hidden />
+	<div class="d-flex justify-content-md-between">
+		<div>
+			<div class="d-flex gap-3 align-items-end" style=" margin: 1rem 0rem ">
+				<p>Supplier Name:</p>
+				<p>@Model.Supplier.name</p>
+			</div>
+			<div class="d-flex gap-3 align-items-end" style=" margin: 1rem 0rem ">
+				<p>Create Date:</p>
+				<p>@Model.CreatedDate</p>
+			</div>
 		</div>
-		<div class="d-flex gap-3 align-items-end">
-			<p>Create Date:</p>
-			<p>@Model.CreatedDate</p>
+		<div class="text-end">
+			<div class="d-flex gap-3 align-items-end" style=" margin: 1rem 0rem ">
+				<p>Import No:</p>
+				<p>@Model._Id</p>
+			</div>
+			<div class="d-flex gap-3 align-items-end" style=" margin: 1rem 0rem ">
+				<p>PO No:</p>
+				<p>@Model._Id</p>
+			</div>
 		</div>
 	</div>
 
@@ -68,14 +73,20 @@
 		</table>
 	</div>
 
-	<div class="d-flex justify-content-between">
-		<div class="">
-			<p>Received By:</p>
-			<p>@Model?.CheckedBy?.name</p>
+	<div class="d-flex justify-content-md-between">
+		<div>
+			<div style=" margin: 1rem 0rem ">
+				<p>Received By:</p>
+				<p>@Model?.CheckedBy?.name</p>
+			</div>
+			<div style=" margin: 1rem 0rem 3rem ">
+				<p>Checked By:</p>
+				<p>@Model?.CheckedBy?.name</p>
+			</div>
 		</div>
-		<div class="">
-			<p>Checked By:</p>
-			<p>@Model?.CheckedBy?.name</p>
+		<div class="d-flex" style=" margin: 1rem 0rem 3rem ">
+			<h3><b>TOTAL: </b></h3>
+			<h3 style="text-indent: 0.5rem"><b>$@Model?.Total</b></h3>
 		</div>
 	</div>
 
