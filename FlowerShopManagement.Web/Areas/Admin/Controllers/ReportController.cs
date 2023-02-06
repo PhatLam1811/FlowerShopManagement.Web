@@ -14,28 +14,57 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
     public class ReportController : Controller
     {
         private readonly IReportService _reportService;
+        private readonly Dictionary<int, string> strMonths = new Dictionary<int, string>
+        {
+            { 1, "Jan" },
+            { 2, "Feb" },
+            { 3, "March" },
+            { 4, "April" },
+            { 5, "May" },
+            { 6, "June" },
+            { 7, "July" },
+            { 8, "Aug" },
+            { 9, "Sep" },
+            { 10, "Oct" },
+            { 11, "Nov" },
+            { 12, "Dec" }
+        };
+
+        private DateTime beginDate; 
+        private DateTime endDate;
 
         public ReportController(IReportService reportService)
         {
             _reportService = reportService;
+
+            var today = DateTime.Today;
+            beginDate = new DateTime(today.Year, today.Month, 01);
+            endDate = beginDate.AddMonths(1);
         }
 
         public IActionResult Index(DateTime? date = null, int? month = null, int? year = null)
         {
             ViewBag.Report = true;
 
-            ViewData["Date"] = date is null ? "MM/dd/yyyy" : date.Value.ToString("MM/dd/yyyy");
-            ViewData["Year"] = year is null ? DateTime.Today.Year : year;
-            ViewData["Month"] = month is null ? DateTime.Today.Month : month;
+            
 
-            var today = DateTime.Today;
-            DateTime beginDate = new DateTime(today.Year, today.Month, 01);
-            DateTime endDate = beginDate.AddMonths(1);
+            if (date is null && year is null && month is null)
+            {
+                ViewData["Date"] = "MM/dd/yyyy";
+                ViewData["Year"] = DateTime.Today.Year;
+                ViewData["Month"] = DateTime.Today.Month;
+            }
+            else
+            {
+                ViewData["Date"] = date is null ? "MM/dd/yyyy" : date.Value.ToString("MM/dd/yyyy");
+                ViewData["Year"] = year;
+                ViewData["Month"] = month;
+            }
 
             if (month != null)
             {
                 if (year == null)
-                    beginDate = new DateTime(today.Year, (int)month, 01);
+                    beginDate = new DateTime(DateTime.Today.Year, (int)month, 01);
                 else
                     beginDate = new DateTime((int)year, (int)month, 01);
 
@@ -44,7 +73,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             else
             if (year != null)
             {
-                beginDate = new DateTime(today.Year, 01, 01);
+                beginDate = new DateTime((int)year, 01, 01);
                 endDate = beginDate.AddYears(1);
             }
 
@@ -83,52 +112,12 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             return View();
         }
 
-        //[Route("Sort")]
-        //[HttpGet]
-        //public IActionResult Sort(DateTime date, string month, int year)
-        //{
-        //    ViewBag.Report = true;
-
-        //    var beginDate = new DateTime(2023, 02, 06);
-        //    var endDate = date.AddDays(1);
-            
-        //    // Analize data
-        //    var dataSet1 = _reportService.GetTotalOrders(beginDate, endDate);
-        //    var dataSet2 = _reportService.GetTotalRevenue(beginDate, endDate);
-        //    var dataSet3 = _reportService.GetCategoryStatistic();
-
-        //    Chart lineChart = GenerateLineChart(dataSet1, dataSet2);
-        //    Chart donutChart = GenerateDonutChart(dataSet3);
-
-        //    // Charts
-        //    ViewData["LineChart"] = lineChart;
-        //    ViewData["DonutChart"] = donutChart;
-
-        //    // Orders Statistics
-        //    ViewData["WaitingOrders"] = _reportService.GetOrdersCount(beginDate, endDate, Core.Enums.Status.Paying);
-        //    ViewData["CanceledOrders"] = _reportService.GetOrdersCount(beginDate, endDate, Core.Enums.Status.Canceled);
-        //    ViewData["CompletedOrders"] = _reportService.GetOrdersCount(beginDate, endDate);
-
-        //    // Products Statistics
-        //    ViewData["OutOfStocks"] = _reportService.GetProductsCount(0);
-        //    ViewData["LowOnStocks"] = _reportService.GetProductsCount(20);
-        //    ViewData["ProductsCount"] = _reportService.GetProductsCount(-1);
-
-        //    // Sum-up
-        //    ViewData["TopCustomers"] = _reportService.GetValuableCustomers(beginDate, endDate);
-        //    ViewData["ProfitableProducts"] = _reportService.GetProfitableProducts(beginDate, endDate);
-
-        //    return View("Index");
-        //}
         private Chart GenerateLineChart(List<double?> dataSet1, List<double?> dataSet2)
         {
             Chart chart = new Chart();
             chart.Type = Enums.ChartType.Line;
 
             ChartJSCore.Models.Data data = new ChartJSCore.Models.Data();
-
-            int currentMonth = DateTime.Now.Month;
-            int currentYear = DateTime.Now.Year;
 
             data.Labels = new List<string>();
 
@@ -140,7 +129,22 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             for (int i = 1; i <= dataSet1.Count; i++)
             {
-                data.Labels.Add("Day" + i.ToString());
+                if (dataSet1.Count == 24)
+                {
+                    data.Labels.Add((i-1).ToString() + ((i - 1) > 11 ? "PM" : "AM"));
+                }
+                else if (dataSet1.Count >= 28 && dataSet1.Count <= 31)
+                {
+                    var thisMonth = beginDate.Month;
+                    var thisYear = beginDate.Year;
+                    data.Labels.Add(i.ToString() + "-" + strMonths[thisMonth] + "-" + thisYear.ToString());
+                }
+                else
+                {
+                    data.Labels.Add(strMonths[i]);
+                }
+
+                 
                 dataValues.Add(0);
                 colors.Add(ChartColor.FromRgba(102, 152, 250, 1));
                 borderColors.Add(ChartColor.FromRgb(102, 152, 250));

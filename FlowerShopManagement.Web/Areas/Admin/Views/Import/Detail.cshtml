@@ -71,11 +71,11 @@
 	<div class="d-flex justify-content-between">
 		<div class="">
 			<p>Received By:</p>
-			<p>@Model.CreatedBy</p>
+			<p>@Model?.CreatedBy.name</p>
 		</div>
 		<div class="">
 			<p>Checked By:</p>
-			<p>@Model.CheckedBy</p>
+			<p>@Model?.CheckedBy?.name</p>
 		</div>
 	</div>
 

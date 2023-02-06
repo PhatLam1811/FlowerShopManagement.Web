@@ -83,7 +83,7 @@ public class ImportController : Controller
 
         if (products.Count <= 0 || requestQty.Count <= 0 || supplier == null)
         {
-            throw new NullReferenceException("Insufficient Values!");
+            throw new Exception("Insufficient Values!");
         }
 
         var reqForm = _importService.CreateRequestForm(
