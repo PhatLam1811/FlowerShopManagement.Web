@@ -56,6 +56,40 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             return View();
         }
 
+        [Route("Sort")]
+        [HttpPost]
+        public IActionResult Sort(string sortOrder, DateTime beginDate, DateTime endDate)
+        {
+            ViewBag.Report = true;
+
+            // Analize data
+            var dataSet1 = _reportService.GetTotalOrders(beginDate, endDate);
+            var dataSet2 = _reportService.GetTotalRevenue(beginDate, endDate);
+            var dataSet3 = _reportService.GetCategoryStatistic();
+
+            Chart lineChart = GenerateLineChart(dataSet1, dataSet2);
+            Chart donutChart = GenerateDonutChart(dataSet3);
+
+            // Charts
+            ViewData["LineChart"] = lineChart;
+            ViewData["DonutChart"] = donutChart;
+
+            // Orders Statistics
+            ViewData["WaitingOrders"] = _reportService.GetOrdersCount(beginDate, endDate, Core.Enums.Status.Paying);
+            ViewData["CanceledOrders"] = _reportService.GetOrdersCount(beginDate, endDate, Core.Enums.Status.Canceled);
+            ViewData["CompletedOrders"] = _reportService.GetOrdersCount(beginDate, endDate);
+
+            // Products Statistics
+            ViewData["OutOfStocks"] = _reportService.GetProductsCount(0);
+            ViewData["LowOnStocks"] = _reportService.GetProductsCount(20);
+            ViewData["ProductsCount"] = _reportService.GetProductsCount(-1);
+
+            // Sum-up
+            ViewData["TopCustomers"] = _reportService.GetValuableCustomers(beginDate, endDate);
+            ViewData["ProfitableProducts"] = _reportService.GetProfitableProducts(beginDate, endDate);
+
+            return PartialView("_IndexPartial");
+        }
         private Chart GenerateLineChart(List<double?> dataSet1, List<double?> dataSet2)
         {
             Chart chart = new Chart();

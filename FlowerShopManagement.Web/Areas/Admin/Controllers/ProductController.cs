@@ -1,13 +1,10 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
 using FlowerShopManagement.Application.Models;
 using FlowerShopManagement.Application.MongoDB.Interfaces;
-using FlowerShopManagement.Application.MyRegex;
 using FlowerShopManagement.Core.Entities;
-using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Web.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
 
 namespace FlowerShopManagement.Web.Areas.Admin.Controllers;
 
@@ -252,8 +249,56 @@ public class ProductController : Controller
         return NotFound(); // Can be changed to Redirect
     }
 
-    
+    [HttpPost("ChoosePictures")]
+    public IActionResult ChoosePictures()
+    {
+        return PartialView("_ChoosePictures", new List<string>());
+    }
+    [HttpPost]
+    [Route("ReChosePictures")]
 
+    public IActionResult ReChosePictures(List<string> Pictures, string eliminate)
+    {
+        Pictures.Remove(eliminate); 
+        return PartialView("_ChoosePictures", Pictures);
+    }
+
+    [HttpPost]
+    [Route("ChosePictures")]
+    public async Task<IActionResult> ChosePictures(List<IFormFile> formfiles, List<string>? pictures)
+    {
+        var strings = new List<string>();
+        if (formfiles != null && formfiles.Count > 0)
+        {
+            foreach (var picture in formfiles)
+            {
+                if (picture != null && picture.Length > 0)
+                {
+                    string fileName = picture.FileName;
+                    string path = Path.Combine(_webHostEnvironment.WebRootPath + "/Image/", fileName);
+                    using (var fileStream = new FileStream(path, FileMode.Create))
+                    {
+                        await picture.CopyToAsync(fileStream);
+                        
+                    }
+                    strings.Add(fileName);
+                }
+
+            }
+
+        }
+        if(pictures == null) return PartialView("_ChoosePictures", strings);
+        foreach (string i in strings)
+        {
+            if (!pictures.Contains(i))
+            {
+                pictures.Add(i);
+            }
+        }
+        //Set up default values for ProductPage
+        return PartialView("_ChoosePictures", pictures);
+
+    }
 
     [Route("Category")]
     [HttpGet]

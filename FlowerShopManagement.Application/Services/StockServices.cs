@@ -12,215 +12,224 @@ namespace FlowerShopManagement.Application.Services;
 
 public class StockServices : IStockService
 {
-    // APPLICATION SERVICES (USE CASES)
-    ICategoryRepository _categoryRepository;
-    IMaterialRepository _materialRepository;
-    IProductRepository _productRepository;
-    IWebHostEnvironment _webHostEnvironment; IVoucherRepository _voucherRepository;
+	// APPLICATION SERVICES (USE CASES)
+	ICategoryRepository _categoryRepository;
+	IMaterialRepository _materialRepository;
+	IProductRepository _productRepository;
+	IWebHostEnvironment _webHostEnvironment; IVoucherRepository _voucherRepository;
 
 
-    public StockServices(ICategoryRepository categoryRepository, IMaterialRepository materialRepository,
-        IProductRepository productRepository, IWebHostEnvironment webHostEnvironment, IVoucherRepository voucherRepository)
-    {
-        _categoryRepository = categoryRepository;
-        _materialRepository = materialRepository;
-        _productRepository = productRepository;
-        _webHostEnvironment = webHostEnvironment;
-        _voucherRepository = voucherRepository;
-    }
+	public StockServices(ICategoryRepository categoryRepository, IMaterialRepository materialRepository,
+		IProductRepository productRepository, IWebHostEnvironment webHostEnvironment, IVoucherRepository voucherRepository)
+	{
+		_categoryRepository = categoryRepository;
+		_materialRepository = materialRepository;
+		_productRepository = productRepository;
+		_webHostEnvironment = webHostEnvironment;
+		_voucherRepository = voucherRepository;
+	}
 
-    public async Task<bool> CreateCategory(string name)
-    {
-        if (name == null || name == "") return false;
+	public async Task<bool> CreateCategory(string name)
+	{
+		if (name == null || name == "") return false;
 
-        Category category = new Category() { _id = Guid.NewGuid().ToString(), _name = name };
-        var result = await _categoryRepository.Add(category);
-        return result;
-    }
+		Category category = new Category() { _id = Guid.NewGuid().ToString(), _name = name };
+		var result = await _categoryRepository.Add(category);
+		return result;
+	}
 
-    public async Task<bool> CreateMaterial(string name, string description)
-    {
-        if (name == null || name == "" || description == null || description == "") return false;
+	public async Task<bool> CreateMaterial(string name, string description)
+	{
+		if (name == null || name == "" || description == null || description == "") return false;
 
-        Material meterial = new Material() { _id = Guid.NewGuid().ToString(), _name = name, _maintainment = description };
-        var result = await _materialRepository.Add(meterial);
-        return result;
-    }
+		Material meterial = new Material() { _id = Guid.NewGuid().ToString(), _name = name, _maintainment = description };
+		var result = await _materialRepository.Add(meterial);
+		return result;
+	}
 
-    public async Task<bool> CreateProduct(ProductDetailModel productModel)
-    {
+	public async Task<bool> CreateProduct(ProductDetailModel productModel)
+	{
 
-        if (productModel != null)
-        {
-            if (productModel.FormPicture == null) return false;
-            var obj = await productModel.ToEntityContainingImages(
-                wwwRootPath: _webHostEnvironment.WebRootPath
-                );
-            return await _productRepository.Add(obj);
-        }
-        return false;
-    }
+		if (productModel != null)
+		{
+			if (productModel.FormPicture == null)
+			{
+				productModel.Pictures.Add("flower1.png");
 
-    public async Task<bool> CreateVoucher(VoucherDetailModel VoucherDetailModel, IVoucherRepository voucherRepository)
-    {
-        if (VoucherDetailModel != null && voucherRepository != null)
-        {
-            var obj = VoucherDetailModel.ToEntity();
-            if (obj != null)
-                return await voucherRepository.Add(obj);
-        }
-        return false;
-    }
 
-    public async Task<ProductDetailModel> GetADetailProduct(string id)
-    {
-        Product? product = await _productRepository.GetById(id);
-        if (product == null) return new ProductDetailModel();
-        return new ProductDetailModel(product);
-    }
+			}
 
-    public async Task<List<ProductModel>> GetByIdsAsync(List<string> ids)
-    {
-        var products = new List<ProductModel>();
+			var obj = await productModel.ToEntityContainingImages(
+						   wwwRootPath: _webHostEnvironment.WebRootPath
+						   );
+			return await _productRepository.Add(obj);
 
-        try
-        {
-            var result = await _productRepository.GetByIds(ids);
 
-            foreach (var supplier in result)
-            {
-                var model = new ProductModel(supplier);
-                products.Add(model);
-            }
 
-            return products;
-        }
-        catch (Exception e)
-        {
-            throw new Exception(e.Message);
-        }
-    }
+		}
+		return false;
+	}
 
-    public async Task<List<string>> GetCategories()
-    {
-        var list = await _categoryRepository.GetAll();
-        if (list == null) return new List<string>() { "All" };
-        return list.Select(x => x._name).ToList();
-    }
-    public async Task<List<Material>> GetDetailMaterials()
-    {
-        var list = await _materialRepository.GetAll();
-        if (list == null) return new List<Material>();
-        return list;
-    }
-    public List<ProductModel> GetLowOnStockProducts()
-    {
-        // This is only a temporary value of the minimum amount
-        // needed for supply request
-        int minimumAmount = 20;
-        List<ProductModel> lowOnStockProducts = new List<ProductModel>();
+	public async Task<bool> CreateVoucher(VoucherDetailModel VoucherDetailModel, IVoucherRepository voucherRepository)
+	{
+		if (VoucherDetailModel != null && voucherRepository != null)
+		{
+			var obj = VoucherDetailModel.ToEntity();
+			if (obj != null)
+				return await voucherRepository.Add(obj);
+		}
+		return false;
+	}
 
-        var result = _productRepository.GetAllLowOnStock(minimumAmount);
+	public async Task<ProductDetailModel> GetADetailProduct(string id)
+	{
+		Product? product = await _productRepository.GetById(id);
+		if (product == null) return new ProductDetailModel();
+		return new ProductDetailModel(product);
+	}
 
-        if (result == null) return lowOnStockProducts;
+	public async Task<List<ProductModel>> GetByIdsAsync(List<string> ids)
+	{
+		var products = new List<ProductModel>();
 
-        // Convert Product to ProductModel
-        foreach (var item in result)
-        {
-            var model = new ProductModel(item);
-            lowOnStockProducts.Add(model);
-        }
+		try
+		{
+			var result = await _productRepository.GetByIds(ids);
 
-        return lowOnStockProducts;
-    }
+			foreach (var supplier in result)
+			{
+				var model = new ProductModel(supplier);
+				products.Add(model);
+			}
 
-    public async Task<List<string>> GetMaterials()
-    {
-        var list = await _materialRepository.GetAll();
-        if (list == null) return new List<string>() { "All" };
-        return list.Select(x => x._name).ToList();
-    }
+			return products;
+		}
+		catch (Exception e)
+		{
+			throw new Exception(e.Message);
+		}
+	}
 
-    public async Task<List<ProductModel>> GetUpdatedProducts()
-    {
-        List<Product>? products = await _productRepository.GetAll();
-        List<ProductModel> productMs = new List<ProductModel>();
+	public async Task<List<string>> GetCategories()
+	{
+		var list = await _categoryRepository.GetAll();
+		if (list == null) return new List<string>() { "All" };
+		return list.Select(x => x._name).ToList();
+	}
+	public async Task<List<Material>> GetDetailMaterials()
+	{
+		var list = await _materialRepository.GetAll();
+		if (list == null) return new List<Material>();
+		return list;
+	}
+	public List<ProductModel> GetLowOnStockProducts()
+	{
+		// This is only a temporary value of the minimum amount
+		// needed for supply request
+		int minimumAmount = 20;
+		List<ProductModel> lowOnStockProducts = new List<ProductModel>();
 
-        if (products == null) return productMs;
+		var result = _productRepository.GetAllLowOnStock(minimumAmount);
 
-        foreach (var o in products)
-        {
-            productMs.Add(new ProductModel(o));
-        }
-        return productMs;
-    }
+		if (result == null) return lowOnStockProducts;
 
-    public async Task<List<ProductDetailModel>> GetUpdatedDetailProducts()
-    {
-        List<Product>? products = await _productRepository.GetAll();
-        List<ProductDetailModel> productMs = new List<ProductDetailModel>();
+		// Convert Product to ProductModel
+		foreach (var item in result)
+		{
+			var model = new ProductModel(item);
+			lowOnStockProducts.Add(model);
+		}
 
-        if (products == null) return productMs;
+		return lowOnStockProducts;
+	}
 
-        foreach (var o in products)
-        {
-            productMs.Add(new ProductDetailModel(o));
-        }
-        return productMs;
-    }
-    public async Task<List<VoucherDetailModel>> GetUpdatedVouchers()
-    {
-        List<Voucher>? vouchers = await _voucherRepository.GetAll();
-        List<VoucherDetailModel> voucherMs = new List<VoucherDetailModel>();
+	public async Task<List<string>> GetMaterials()
+	{
+		var list = await _materialRepository.GetAll();
+		if (list == null) return new List<string>() { "All" };
+		return list.Select(x => x._name).ToList();
+	}
 
-        if (vouchers == null) return voucherMs;
+	public async Task<List<ProductModel>> GetUpdatedProducts()
+	{
+		List<Product>? products = await _productRepository.GetAll();
+		List<ProductModel> productMs = new List<ProductModel>();
 
-        foreach (var o in vouchers)
-        {
-            voucherMs.Add(new VoucherDetailModel(o));
-        }
-        return voucherMs;
-    }
+		if (products == null) return productMs;
 
-    public async Task<bool> UpdateProduct(ProductDetailModel productModel)
-    {
-        if (productModel == null || productModel.Id == null) return false;
+		foreach (var o in products)
+		{
+			productMs.Add(new ProductModel(o));
+		}
+		return productMs;
+	}
 
-        var oldObj = await _productRepository.GetById(productModel.Id);
-        var obj = await productModel.ToEntityContainingImages(wwwRootPath: _webHostEnvironment.WebRootPath);
-        if (obj == null || obj._id == null || oldObj == null) return false;
-        if (oldObj._material != obj._material)
-        {
-            var list = await _materialRepository.GetAll();
-            var material = list.FirstOrDefault(i => i._name == obj._material);
-            if (material == null) { return false; }
-            obj._maintainment = material._maintainment;
-        }
+	public async Task<List<ProductDetailModel>> GetUpdatedDetailProducts()
+	{
+		List<Product>? products = await _productRepository.GetAll();
+		List<ProductDetailModel> productMs = new List<ProductDetailModel>();
 
-        return await _productRepository.UpdateById(obj._id, obj);
-    }
+		if (products == null) return productMs;
 
-    public async Task<VoucherDetailModel> GetADetailVoucher(string id)
-    {
+		foreach (var o in products)
+		{
+			productMs.Add(new ProductDetailModel(o));
+		}
+		return productMs;
+	}
+	public async Task<List<VoucherDetailModel>> GetUpdatedVouchers()
+	{
+		List<Voucher>? vouchers = await _voucherRepository.GetAll();
+		List<VoucherDetailModel> voucherMs = new List<VoucherDetailModel>();
 
-        Voucher? voucher = await _voucherRepository.GetById(id);
-        if (voucher == null) return new VoucherDetailModel();
-        return new VoucherDetailModel(voucher);
-    }
+		if (vouchers == null) return voucherMs;
 
-    public Task<bool> DeleteVoucher(string id)
-    {
-        throw new NotImplementedException();
-    }
+		foreach (var o in vouchers)
+		{
+			voucherMs.Add(new VoucherDetailModel(o));
+		}
+		return voucherMs;
+	}
 
-    public async Task<bool> ActivateVoucher(string id)
-    {
-        Voucher? voucher = await _voucherRepository.GetById(id);
+	public async Task<bool> UpdateProduct(ProductDetailModel productModel)
+	{
+		if (productModel == null || productModel.Id == null) return false;
 
-        if (voucher == null) return false;
+		var oldObj = await _productRepository.GetById(productModel.Id);
+		var obj = await productModel.ToEntityContainingImages(wwwRootPath: _webHostEnvironment.WebRootPath);
+		if (obj == null || obj._id == null || oldObj == null) return false;
+		if (oldObj._material != obj._material)
+		{
+			var list = await _materialRepository.GetAll();
+			var material = list.FirstOrDefault(i => i._name == obj._material);
+			if (material == null) { return false; }
+			obj._maintainment = material._maintainment;
+		}
 
-        voucher._state = Core.Enums.VoucherStatus.Using;
+		return await _productRepository.UpdateById(obj._id, obj);
+	}
 
-        return await _voucherRepository.UpdateById(voucher._id, voucher);
-    }
+	public async Task<VoucherDetailModel> GetADetailVoucher(string id)
+	{
+
+		Voucher? voucher = await _voucherRepository.GetById(id);
+		if (voucher == null) return new VoucherDetailModel();
+		return new VoucherDetailModel(voucher);
+	}
+
+	public Task<bool> DeleteVoucher(string id)
+	{
+		throw new NotImplementedException();
+	}
+
+	public async Task<bool> ActivateVoucher(string id)
+	{
+		Voucher? voucher = await _voucherRepository.GetById(id);
+
+		if (voucher == null) return false;
+
+		voucher._state = Core.Enums.VoucherStatus.Using;
+
+		return await _voucherRepository.UpdateById(voucher._id, voucher);
+	}
 }

@@ -90,9 +90,8 @@
         {
             @foreach (var i in @Model.Pictures)
             {
-                <img src="~/image/@i" style="width:300; height:300px"
-             asp-append-version="true" />
-                <input value="@i" asp-for="Pictures" hidden />
+                <img src="~/image/@i" style="width:300; height:300px"asp-append-version="true" />
+             <input value="@i" asp-for="Pictures" hidden />
 
             }
 

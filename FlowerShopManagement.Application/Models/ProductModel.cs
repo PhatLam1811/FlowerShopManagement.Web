@@ -150,7 +150,7 @@ public class ProductDetailModel
     public ProductDetailModel()
     {
         Id = new Guid().ToString();
-        Pictures = new List<string>() { "flower1.png" };
+        Pictures = new List<string>();
         Name = "";
     }
 
