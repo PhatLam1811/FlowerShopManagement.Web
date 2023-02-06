@@ -47,10 +47,10 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             ViewData["WaitingOrder"] = _reportService.GetOrdersCount(beginDate, endDate, Core.Enums.Status.Waiting);
             ViewData["ValuableCustomers"] = _reportService.GetValuableCustomers(beginDate, endDate);
             ViewData["ProfitableProducts"] = _reportService.GetProfitableProducts(beginDate, endDate);
-            ViewData["LowOnStocksCount"] = _reportService.GetProductsCount(20);
             ViewData["OutOfStocksCount"] = _reportService.GetProductsCount(0);
+            ViewData["LowOnStocksCount"] = _reportService.GetProductsCount(20) - (int)ViewData["OutOfStocksCount"];
 
-			return View();
+            return View();
 		}
 
 		private Chart GenerateVerticalBarChart(List<double?> dataSet)

@@ -102,7 +102,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
 
             // Products Statistics
             ViewData["OutOfStocks"] = _reportService.GetProductsCount(0);
-            ViewData["LowOnStocks"] = _reportService.GetProductsCount(20);
+            ViewData["LowOnStocks"] = _reportService.GetProductsCount(20) - (int)ViewData["OutOfStocks"];
             ViewData["ProductsCount"] = _reportService.GetProductsCount(-1);
 
             // Sum-up
