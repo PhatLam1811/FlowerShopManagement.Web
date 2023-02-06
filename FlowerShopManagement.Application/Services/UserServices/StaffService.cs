@@ -53,8 +53,33 @@ public class StaffService : UserService, IStaffService
             return null;
         }
     }
+	public async Task<List<UserModel1>?> GetUsersAsync1()
+	{
+		var users = new List<UserModel1>();
 
-    public async Task<bool> AddCustomerAsync(UserModel newCustomerModel)
+		try
+		{
+			// Get all users from database
+			var result = await _userRepository.GetAll();
+
+			// Entities to Models
+			foreach (var user in result)
+			{
+				if (user.role != Core.Enums.Role.Customer) continue;
+				var model = new UserModel1(user);
+				users.Add(model);
+			}
+
+			// Successfully got staffs list
+			return users;
+		}
+		catch
+		{
+			// Failed to get staffs list
+			return null;
+		}
+	}
+	public async Task<bool> AddCustomerAsync(UserModel newCustomerModel)
     {
         try
         {

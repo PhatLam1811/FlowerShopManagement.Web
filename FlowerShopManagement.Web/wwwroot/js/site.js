@@ -29,6 +29,7 @@ function showContent2(url, title) {
     })
 }
 
+//profile partialView
 function showPartialView(url) {
     $.ajax({
         type: "GET",
@@ -44,7 +45,7 @@ function showPartialView(url) {
     })
 }
 
-//change pw when editing profile
+//change partialView pw when editing profile
 function showPartialView1(form) {
     var obj = new FormData(form);
     $.ajax({
@@ -67,13 +68,41 @@ function showPartialView1(form) {
     })
     return false;
 }
+function OpenGetDialog(url, title) {
+    try {
+        $.ajax({
+            type: "Get",
+            url: url,
+            success: function (res) {
+                console.log(res);
 
+                $("#form-modal .modal-body").html(res);
+                $("#form-modal .modal-title").html(title);
+                $("#form-modal").modal('show');
+                //$.notify("I'm over here !");
+                //$.notify("Access granted", "success", { position: "right" });
+            },
+            error: function (err) {
+                console.log(err);
+                alert(err);
+            }
+        })
+    }
+
+    catch (e) {
+        console.log(e);
+        alert(e);
+    }
+
+}
 function OpenPostDialog(url, title) {
     try {
         $.ajax({
             type: "POST",
             url: url,
             success: function (res) {
+                console.log(res);
+
                 $("#form-modal .modal-body").html(res);
                 $("#form-modal .modal-title").html(title);
                 $("#form-modal").modal('show');
@@ -432,10 +461,27 @@ function callGetWithId(url, id) {
 }
 
 function callPost(url) {
+
     $.ajax({
         type: "POST",
         url: url,
         success: function (res) {
+            $('#hix').html(res);
+        }
+    })
+}
+function callPostReport(url,form) {
+    var obj = new FormData(form);
+
+
+    $.ajax({
+        type: "POST",
+        url: url,
+        data: obj,
+        contentType: false,
+        processData: false,
+        success: function (res) {
+            alert(res)
             $('#hix').html(res);
         }
     })
@@ -517,12 +563,13 @@ function removeAddress(url, name, phone, address) {
 }
 
 function addToCart(url, id, amount) {
+    debugger;
     $.ajax({
         type: "POST",
         url: url,
         data: { id: id, amount: amount },
         success: function () {
-            $.notify("Added to your cart", "success", { position: "right" });
+            $.notify("Added to your cart", "success", { position: "right middle" });
 
         }
     })
@@ -645,4 +692,121 @@ function checkVoucher(url) {
             }
         })
     }
+}
+
+//function chosePictures(url,input) {
+//    console.log(input);
+//    var arr =[];
+
+//    $.each(input.files, function (index, key) {
+//        arr.push(key.name);
+//    });
+//    debugger;
+//    $.ajax({
+//        type: 'POST',
+//        url: url,
+//        data: { pictures: input },
+//        success: function (res) {
+//            $("#form-modal .modal-body").html(res);
+
+//        },
+//        error: function (err) {
+//            alert('sai');
+//            alert(err);
+//            console.log(err)
+//        }
+//    })
+
+//}
+function chosePictures(form) {
+    var obj1 = new FormData($('#picturesForm')[0]);
+    var obj = new FormData(form);
+    for (var pair of obj1.entries()) {
+        console.log(pair[0] + "," + pair[1]);
+
+    }
+    debugger;
+    for (var pair of obj.entries()) {
+
+        obj1.append(pair[0], pair[1]);
+
+    }
+
+    for (var pair of obj1.entries()) {
+        console.log(pair[0] + "," + pair[1]);
+       
+    } debugger;
+
+
+    $.ajax({
+        type: 'POST',
+        url: form.action,
+        data:  obj1 ,
+        contentType: false,
+        processData: false,
+        success: function (res) {
+            $("#picture").html(res);
+
+        },
+        error: function (err) {
+            alert('sai');
+            alert(err);
+            console.log(err)
+        }
+    })
+    return false;
+}
+
+function createProduct(form) {
+    var obj = new FormData(form);
+    var obj1 = new FormData($('#picturesForm')[0]);
+
+    for (var pair of obj1.entries()) {
+        
+        obj.append(pair[0], pair[1]);
+    }
+    
+    debugger;
+    $.ajax({
+        type: 'POST',
+        url: form.action,
+        data:  obj ,
+        contentType: false,
+        processData: false,
+        success: function () {
+
+            
+            window.location.replace("/Admin/Product/Index");
+           
+
+        },
+        error: function (err) {
+            alert('sai');
+            alert(err);
+            console.log(err)
+        }
+    })
+    return false;
+}
+
+function rechosePictures(url, id) {
+
+    var obj1 = new FormData($('#picturesForm')[0]);
+
+
+    obj1.append("eliminate", id);
+    
+   
+    debugger;
+    $.ajax({
+        type: "Post",
+        url: url,
+        data:  obj1 ,
+        contentType: false,
+        processData: false,
+        success: function (res) {
+            $("#picture").html(res);
+
+        }
+    })
 }

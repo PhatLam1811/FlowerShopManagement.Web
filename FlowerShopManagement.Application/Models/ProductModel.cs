@@ -120,6 +120,7 @@ public class ProductDetailModel
 
     public string Category { get; set; } = "Unknown";
 
+    [AllowNull]
 	public List<IFormFile> FormPicture { get; set; } = new List<IFormFile>();
 
     public bool IsLike { get; set; } = false;

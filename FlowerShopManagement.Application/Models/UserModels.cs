@@ -8,6 +8,23 @@ using static System.Net.Mime.MediaTypeNames;
 
 namespace FlowerShopManagement.Application.Models;
 
+public class UserModel1
+{
+    public string _id { get; set; } = string.Empty;
+	public string Name { get; set; } = string.Empty;
+	public string Email { get; set; } = string.Empty;
+	public string PhoneNumber { get; set; } = string.Empty;
+
+	public UserModel1(User entity)
+	{
+		_id = entity._id;
+		Email = entity.email;
+		PhoneNumber = entity.phoneNumber;
+		Name = entity.name;
+		
+	}
+}
+
 public class UserModel
 {
     public string _id { get; set; }
