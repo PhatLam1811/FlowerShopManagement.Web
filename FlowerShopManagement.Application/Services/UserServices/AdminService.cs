@@ -5,6 +5,9 @@ using FlowerShopManagement.Core.Entities;
 using FlowerShopManagement.Core.Enums;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
+using System.Web.Helpers;
+using System.Xml.Linq;
 
 namespace FlowerShopManagement.Application.Services.UserServices;
 
@@ -87,7 +90,25 @@ public class AdminService : StaffService, IAdminService
         try
         {
             // Model to entity
-            var user = userModel.ToEntity();
+            var user = await _userRepository.GetById(userModel._id);
+
+            user.email = userModel.Email;
+            user.phoneNumber = userModel.PhoneNumber;
+            user.role = userModel.Role;
+
+            user.name = userModel.Name;
+            user.gender = userModel.Gender;
+            user.birthYear = userModel.BirthYear;
+
+            var temp = new List<InforDelivery>();
+            foreach (var i in userModel.InforDelivery)
+            {
+                temp.Add(i.ToEntity());
+            }
+
+            user.inforDelivery = temp;
+            user.favProductIds = userModel.FavProductIds;
+
             // Set modified date
             user.lastModified = DateTime.Now;
             var wwwRootPath = _webHostEnvironment.WebRootPath;
