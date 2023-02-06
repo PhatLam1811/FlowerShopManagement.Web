@@ -449,7 +449,7 @@ function callPostReport(url,form) {
 
 
     $.ajax({
-        type: "POST",
+        type: "GET",
         url: url,
         data: obj,
         contentType: false,

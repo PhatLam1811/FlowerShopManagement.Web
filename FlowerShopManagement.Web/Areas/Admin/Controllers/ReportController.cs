@@ -20,12 +20,39 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             _reportService = reportService;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(DateTime? date = null, int? month = null, int? year = null)
         {
             ViewBag.Report = true;
 
-            var beginDate = new DateTime(2023, 01, 01);
-            var endDate = beginDate.AddMonths(1);
+            ViewData["Date"] = date is null ? "MM/dd/yyyy" : date.Value.ToString("MM/dd/yyyy");
+            ViewData["Year"] = year is null ? DateTime.Today.Year : year;
+            ViewData["Month"] = month is null ? DateTime.Today.Month : month;
+
+            var today = DateTime.Today;
+            DateTime beginDate = new DateTime(today.Year, today.Month, 01);
+            DateTime endDate = beginDate.AddMonths(1);
+
+            if (month != null)
+            {
+                if (year == null)
+                    beginDate = new DateTime(today.Year, (int)month, 01);
+                else
+                    beginDate = new DateTime((int)year, (int)month, 01);
+
+                endDate = beginDate.AddMonths(1);
+            }
+            else
+            if (year != null)
+            {
+                beginDate = new DateTime(today.Year, 01, 01);
+                endDate = beginDate.AddYears(1);
+            }
+
+            if (date != null)
+            {
+                beginDate = (DateTime)date;
+                endDate = beginDate.AddDays(1);
+            }
 
             // Analize data
             var dataSet1 = _reportService.GetTotalOrders(beginDate, endDate);
@@ -56,40 +83,43 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             return View();
         }
 
-        [Route("Sort")]
-        [HttpPost]
-        public IActionResult Sort(string sortOrder, DateTime beginDate, DateTime endDate)
-        {
-            ViewBag.Report = true;
+        //[Route("Sort")]
+        //[HttpGet]
+        //public IActionResult Sort(DateTime date, string month, int year)
+        //{
+        //    ViewBag.Report = true;
+
+        //    var beginDate = new DateTime(2023, 02, 06);
+        //    var endDate = date.AddDays(1);
             
-            // Analize data
-            var dataSet1 = _reportService.GetTotalOrders(beginDate, endDate);
-            var dataSet2 = _reportService.GetTotalRevenue(beginDate, endDate);
-            var dataSet3 = _reportService.GetCategoryStatistic();
+        //    // Analize data
+        //    var dataSet1 = _reportService.GetTotalOrders(beginDate, endDate);
+        //    var dataSet2 = _reportService.GetTotalRevenue(beginDate, endDate);
+        //    var dataSet3 = _reportService.GetCategoryStatistic();
 
-            Chart lineChart = GenerateLineChart(dataSet1, dataSet2);
-            Chart donutChart = GenerateDonutChart(dataSet3);
+        //    Chart lineChart = GenerateLineChart(dataSet1, dataSet2);
+        //    Chart donutChart = GenerateDonutChart(dataSet3);
 
-            // Charts
-            ViewData["LineChart"] = lineChart;
-            ViewData["DonutChart"] = donutChart;
+        //    // Charts
+        //    ViewData["LineChart"] = lineChart;
+        //    ViewData["DonutChart"] = donutChart;
 
-            // Orders Statistics
-            ViewData["WaitingOrders"] = _reportService.GetOrdersCount(beginDate, endDate, Core.Enums.Status.Paying);
-            ViewData["CanceledOrders"] = _reportService.GetOrdersCount(beginDate, endDate, Core.Enums.Status.Canceled);
-            ViewData["CompletedOrders"] = _reportService.GetOrdersCount(beginDate, endDate);
+        //    // Orders Statistics
+        //    ViewData["WaitingOrders"] = _reportService.GetOrdersCount(beginDate, endDate, Core.Enums.Status.Paying);
+        //    ViewData["CanceledOrders"] = _reportService.GetOrdersCount(beginDate, endDate, Core.Enums.Status.Canceled);
+        //    ViewData["CompletedOrders"] = _reportService.GetOrdersCount(beginDate, endDate);
 
-            // Products Statistics
-            ViewData["OutOfStocks"] = _reportService.GetProductsCount(0);
-            ViewData["LowOnStocks"] = _reportService.GetProductsCount(20);
-            ViewData["ProductsCount"] = _reportService.GetProductsCount(-1);
+        //    // Products Statistics
+        //    ViewData["OutOfStocks"] = _reportService.GetProductsCount(0);
+        //    ViewData["LowOnStocks"] = _reportService.GetProductsCount(20);
+        //    ViewData["ProductsCount"] = _reportService.GetProductsCount(-1);
 
-            // Sum-up
-            ViewData["TopCustomers"] = _reportService.GetValuableCustomers(beginDate, endDate);
-            ViewData["ProfitableProducts"] = _reportService.GetProfitableProducts(beginDate, endDate);
+        //    // Sum-up
+        //    ViewData["TopCustomers"] = _reportService.GetValuableCustomers(beginDate, endDate);
+        //    ViewData["ProfitableProducts"] = _reportService.GetProfitableProducts(beginDate, endDate);
 
-            return PartialView("_IndexPartial");
-        }
+        //    return View("Index");
+        //}
         private Chart GenerateLineChart(List<double?> dataSet1, List<double?> dataSet2)
         {
             Chart chart = new Chart();

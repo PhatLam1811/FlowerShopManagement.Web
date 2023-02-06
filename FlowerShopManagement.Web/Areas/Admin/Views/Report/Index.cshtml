@@ -1,28 +1,49 @@
 ﻿@{
-    var times = new List<string>() { "week", "month", "year","custom" };
-    //var times = new List<string>() { "day, month, year" };
+    var months = new List<int?>() { null, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };
+    var years = new List<int?>() { null, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030 };
 }
+
+<style>
+    .analyze-btn {
+        width: fit-content;
+        height: 40px;
+        text-align: center;
+        margin-top: 1.4rem;
+        padding: 0rem;
+    }
+</style>
+
+<script>
+    function selectElement(id, valueToSelect) {
+        let element = document.getElementById(id);
+        element.value = valueToSelect;
+    }
+</script>
 
 <div class="row mt-3">
     @*fiter*@
-    <form onsubmit="callPostReport('@Url.Action("Sort","Report")',this); return false;">
+    <form asp-action="Index" asp-area="Admin" asp-controller="Report" method="get">
         <div class="d-flex align-items-end justify-content-between mt-3 mb-4">
             <div class="d-flex gap-3">
                 <div class="form-group">
-                    <label class="form-label h6" for="selectCategory">By</label>
-                    <select class="form-select" asp-items="@(new SelectList(times))"
-                            id="selectCategory" aria-label="Floating label select example"
-                            onchange="sortReport();">
+                    <label class="form-label h6" for="selectDate">Date</label>
+                    <input id="selectDate" type="datetime" class="form-control" name="date" value="@ViewData["Date"]">
+                </div>
+                <div class="form-group">
+                    <label class="form-label h6" for="selectMonth">Month</label>
+                    <select class="form-select" asp-items="@(new SelectList(months))"
+                            id="selectMonth" aria-label="Floating label select example" name="month">
                     </select>
+                    <script>selectElement('selectMonth', @ViewData["Month"]);</script>
                 </div>
                 <div class="form-group">
-                    <label class="form-label h6" for="selectCategory">From</label>
-                    <input type="datetime" name="beginDate" value="@DateTime.Today.ToString("MM/dd/yyyy")" onchange="this.form.onsubmit()" class="form-control">
+                    <label class="form-label h6" for="selectYear">Year</label>
+                    <select class="form-select" asp-items="@(new SelectList(years))"
+                            id="selectYear" aria-label="Floating label select example" name="year">
+                    </select>
+                    <script>selectElement('selectYear', @ViewData["Year"]);</script>
                 </div>
-                <div class="form-group">
-                    <label class="form-label h6" for="selectCategory">To</label>
-                    <input type="datetime" class="form-control" name="endDate" value="@DateTime.Today.ToString("MM/dd/yyyy")" onchange="this.form.onsubmit()" >
-                </div>
+                <button type="submit" class="btn btn-primary analyze-btn">Analyze</button>
             </div>
             <button type="button" class="btn btn-primary" onclick="window.print()">Preview and Print Report</button>
         </div>
@@ -121,11 +142,11 @@
                         {
                             for (int i = 0; i < topCustomers.Count; i++)
                             {
-                                <tr class="align-middle">
-                                    <td>@(i + 1)</td>
-                                    <td>@topCustomers[i]._id</td>
-                                    <td class="">@topCustomers[i].numberOfOrders</td>
-                                </tr>
+                                            <tr class="align-middle">
+                                                <td>@(i + 1)</td>
+                                                <td>@topCustomers[i]._id</td>
+                                                <td class="">@topCustomers[i].numberOfOrders</td>
+                                            </tr>
                             }
                         }
                     }
@@ -151,11 +172,11 @@
                         {
                             for (int i = 0; i < profitableProducts.Count; i++)
                             {
-                                <tr class="align-middle">
-                                    <td>@(i + 1)</td>
-                                    <td>@profitableProducts[i]._id</td>
-                                    <td class="">@profitableProducts[i].soldNumber</td>
-                                </tr>
+                                            <tr class="align-middle">
+                                                <td>@(i + 1)</td>
+                                                <td>@profitableProducts[i]._id</td>
+                                                <td class="">@profitableProducts[i].soldNumber</td>
+                                            </tr>
                             }
                         }
                     }

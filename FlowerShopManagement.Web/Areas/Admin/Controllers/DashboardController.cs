@@ -44,7 +44,7 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             ViewData["VerticalBarChart"] = verticalBarChart;
 
             // Current month's statistic
-            ViewData["WaitingOrder"] = _reportService.GetOrdersCount(beginDate, endDate, Core.Enums.Status.Paying);
+            ViewData["WaitingOrder"] = _reportService.GetOrdersCount(beginDate, endDate, Core.Enums.Status.Waiting);
             ViewData["ValuableCustomers"] = _reportService.GetValuableCustomers(beginDate, endDate);
             ViewData["ProfitableProducts"] = _reportService.GetProfitableProducts(beginDate, endDate);
             ViewData["LowOnStocksCount"] = _reportService.GetProductsCount(20);
