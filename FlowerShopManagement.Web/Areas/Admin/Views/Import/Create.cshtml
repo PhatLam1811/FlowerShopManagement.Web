@@ -3,11 +3,11 @@
 
 <form method="post" asp-action="CreateRequestForm" asp-controller="Import" asp-area="Admin" onsubmit="return OpenFormDialog(this);">
 	<div class="row">
-		<div class="col-7" id="pick_item">
+		<div class="col-12 col-lg-7" id="pick_item">
 			<partial name="_PickItem" model=@Model._lowOnStockProducts />
 		</div>
 
-		<div class="col-5" id="pick_supplier">
+		<div class="col-12 col-lg-5" id="pick_supplier">
 			<partial name="_PickSupplier" model=@Model._suppliers />
 		</div>
 	</div>

@@ -54,8 +54,8 @@
             </div>
         </div>
         <div class="mt-5 d-flex gap-3">
-            <a class="btn btn-secondary">Back to List</a>
             <button type="submit" class="btn btn-primary">Submit</button>
+            <a class="btn btn-secondary" asp-action="Index" asp-area="Admin" asp-controller="Voucher">Back to List</a>
         </div>
 
     </div>
@@ -73,8 +73,8 @@
 </form>
 
 }
-<form method="post" asp-action="Delete" asp-area="Admin" asp-controller="Voucher" class="row mt-3">
-    <input asp-for="@Model.Code" hidden />
-    <button class="btn btn-remove mt-3">Remove</button>
 
+<form method="post" asp-action="Delete" asp-area="Admin" asp-controller="Voucher" class="col mt-3">
+    <input asp-for="@Model.Code" hidden />
+    <button class="btn btn-remove">Remove</button>
 </form>

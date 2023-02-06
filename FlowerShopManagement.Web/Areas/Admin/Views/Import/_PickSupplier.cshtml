@@ -1,58 +1,57 @@
 ﻿@model List<SupplierModel>?
 
 
-	<div class="row">
-		<div class="col p-0 mt-2">
-			<div class="col d-flex flex-column gap-2">
-				<div class="d-flex flex-row">
-					<div class="container">
-						<!--Search-->
-						<div class="d-flex justify-content-end">
-							<input id="searchFilter" type="text" name="filter" class="form-control form-control-lg" />
-							<button onclick="return showContentItem('@Url.Action("PickItemDialog","Import",null,Context.Request.Scheme)','Choose product');" class="btn btn-secondary btn-no-min icon-search"></button>
-						</div>
+<div class="row">
+	<div class="col p-0 mt-2">
+		<div class="col d-flex flex-column gap-2">
+			<div class="d-flex flex-row">
+				<div class="container">
+					<!--Search-->
+					<div class="d-flex justify-content-end">
+						<input id="searchFilter" type="text" name="filter" class="form-control form-control-lg" />
+						<button onclick="return showContentItem('@Url.Action("PickItemDialog","Import",null,Context.Request.Scheme)','Choose product');" class="btn btn-secondary btn-no-min icon-search"></button>
+					</div>
 
-						<div class="row mt-3">
-							<div class="col-md-12">
-								<div class="table-wrap">
-									<table class="table myaccordion table-hover" id="accordion">
-										<thead>
-											<tr>
-												<th>#</th>
-												<th class="button">Name</th>
-												<th class="button">Phone</th>
-												<th class="button">Email</th>
-											</tr>
-										</thead>
-										<tbody>
-											@if (Model != null)
+					<div class="row mt-3">
+						<div class="">
+							<div class="table-wrap h-fit">
+								<table class="table myaccordion table-hover" id="accordion">
+									<thead>
+										<tr>
+											<th>#</th>
+											<th class="button">Name</th>
+											<th class="button">Phone</th>
+											<th class="button">Email</th>
+										</tr>
+									</thead>
+									<tbody>
+										@if (Model != null)
+										{
+											int id = 0;
+
+											@foreach (var i in Model)
 											{
-												int id = 0;
+												id++;
 
-												@foreach (var i in Model)
-												{
-													id++;
+												@*													<input name="supplierIds" value="@i._id" hidden />*@
+												<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed w-100">
 
-@*													<input name="supplierIds" value="@i._id" hidden />*@
-													<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed w-100">
-
-														<td>
-															@id
-														</td>
-														<td>@i.Name</td>
-														<td>@i.PhoneNumber</td>
-														<td>@i.Email</td>
-														<td>
-															<div class="form-floating">
-															<input type="radio" @*class="form-check-input fs-4"*@ value="@i._id" name="supplierIds" />
-															</div>
-														</td>
-													</tr>
-												}
+													<td>
+														@id
+													</td>
+													<td>@i.Name</td>
+													<td>@i.PhoneNumber</td>
+													<td>@i.Email</td>
+													<td>
+														<div class="form-floating">
+															<input type="radio" class="form-check-input fs-5" value="@i._id" name="supplierIds" />
+														</div>
+													</td>
+												</tr>
 											}
-										</tbody>
-									</table>
-								</div>
+										}
+									</tbody>
+								</table>
 							</div>
 						</div>
 					</div>
@@ -60,4 +59,5 @@
 			</div>
 		</div>
 	</div>
+</div>
 
