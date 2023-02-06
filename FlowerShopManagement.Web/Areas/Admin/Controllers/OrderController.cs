@@ -204,7 +204,8 @@ namespace FlowerShopManagement.Web.Areas.Admin.Controllers
             OrderVM orderVM = new OrderVM();
 
             orderVM.AllProductModels = productMs; // List of products
-            orderVM.customerMs = customerMs;// List of customers
+            //orderVM.customerMs = customerMs;// List of customers
+            orderVM.customerMs = new List<UserModel>();// List of customers
             if (SetOrderModel(orderVM))
                 return View(orderVM); // This will be an view for dialog / modal
             else

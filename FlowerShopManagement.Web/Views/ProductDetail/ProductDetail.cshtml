@@ -7,7 +7,7 @@
 <div class="mt-5 row">
 
 	<div class="col-4">
-		<img src="~/image/flower2.png" class="w-100 h-auto" />
+		<img src="~/image/@Model.Pictures[0]" class="w-100 h-auto" />
 	</div>
 
 	<div class="col-5 d-flex flex-column justify-content-between">
@@ -25,20 +25,17 @@
 			<p class="mt-2 limit-line-8">
 				@Model.Description
 			</p>
-			<a class="text-decoration-underline caption-lg text-color-secondary cursor float-end">See more</a>
+			<a class="text-decoration-underline caption-lg text-color-secondary cursor float-end"
+			   onclick="OpenGetDialog('@Url.Action("SeeMore","ProductDetail",null,Context.Request.Scheme)','@Model.Name')">See more</a>
 		</div>
-		@*<div class="row gx-2 gy-3">
-			<component type="typeof(ProductInformationPanel)" render-mode="Static" />
-			<component type="typeof(ProductInformationPanel)" render-mode="Static" />
-			<component type="typeof(ProductInformationPanel)" render-mode="Static" />
-			<component type="typeof(ProductInformationPanel)" render-mode="Static" />
-		</div>*@
+		
 		<div class="">
 			<label class="h6">Maintainment</label>
 			<p class="mt-2 limit-line-8">
 				@Model.Maintainment
 			</p>
-			<a class="text-decoration-underline caption-lg text-color-secondary cursor float-end">See more</a>
+			
+			
 		</div>
 	</div>
 </div>

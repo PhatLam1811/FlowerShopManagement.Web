@@ -17,7 +17,6 @@
 				<th class="button">Name</th>
 				<th class="button">Email</th>
 				<th class="button">Phone</th>
-				<th class="button">Start Date</th>
 				<th class="button"></th>
 			</tr>
 		</thead>
@@ -40,7 +39,6 @@
 					</td>
 					<td> @Model[i-1].Email </td>
 					<td> @Model[i-1].PhoneNumber </td>
-					<td> @Model[i-1].BirthYear </td>
 					<td>
 						<button type="button" class="btn btn-secondary" onclick="jQueryAjaxPickCustomer('@Url.Action("PickedCustomers","Order")','@Model[i-1].PhoneNumber')"> Pick</button>
 					</td>
