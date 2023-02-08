@@ -58,7 +58,7 @@ public class UserModel
 
     // Profile
     [Required]
-    [RegularExpression(@"^([A-Z][a-zA-Z_\s]*$)", ErrorMessage = "Invalid name!")]
+    [RegularExpression(@"^([A-Z][a-zA-Z_\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*$)", ErrorMessage = "Invalid name!")]
     public string Name { get; set; }
 
     public string Avatar { get; set; } = "avt3.png";
@@ -235,13 +235,16 @@ public class UserBasicInfoModel
     public string Email { get; set; } = string.Empty;
 
     [Required]
+
     [RegularExpression(@"^([\\+]?84[-]?|[0])?[1-9][0-9]{8}$", ErrorMessage = "Invalid phone number!")]
     public string PhoneNumber { get; set; } = string.Empty;
 
 
     // Profile
     [Required]
-    [RegularExpression(@"^([A-Z][a-zA-Z_\s]*$)")]
+	[RegularExpression(@"^([A-Z][a-zA-Z_\sÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂưăạảấầẩẫậắằẳẵặẹẻẽềềểỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễếệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ]*$)", ErrorMessage = "Invalid name!")]
+
+	//[RegularExpression(@"^([A-Z][a-zA-Z_\s]*$)")]
     public string Name { get; set; } = string.Empty;
 	public string Avatar { get; set; } = "user.png";
 
