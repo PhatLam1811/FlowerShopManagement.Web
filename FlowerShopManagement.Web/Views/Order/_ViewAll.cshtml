@@ -1,0 +1,12 @@
+﻿@model List<OrderDetailModel>
+
+@if (Model.Count > 0)
+{
+	@foreach (var item in Model)
+	{
+		<component type="typeof(OrderCard)"
+		   render-mode="ServerPrerendered"
+		   param-order=item 
+		   param-orderId=item.Id />
+	}
+}

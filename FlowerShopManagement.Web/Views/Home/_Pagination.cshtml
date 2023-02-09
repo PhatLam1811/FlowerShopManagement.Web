@@ -1,0 +1,65 @@
+﻿@using FlowerShopManagement.Web
+@using FlowerShopManagement.Application.Models
+@model PaginatedList<ProductDetailModel>
+
+@{
+	var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+	var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+}
+
+<div class="d-flex w-100 justify-content-center gap-3 mt-3">
+    @*last page*@
+    @if ((Model.PageIndex - 1) > 1)
+    {
+        <button onclick="jQueryAjaxReloadViewAll('@(Url.Action("Sort", "User",new {sortOrder = ViewData["CurrentSort"],pageNumber=(1),
+                   currentCategory = ViewData["CurrentCategory"]}))')" class="btn btn-no-min ">
+            &lt;&lt;
+        </button>
+    }
+
+    <button onclick="jQueryAjaxReloadViewAll('@(Url.Action("Sort", "User",new {sortOrder = ViewData["CurrentSort"],pageNumber=(Model.PageIndex - 1),
+                   currentCategory = ViewData["CurrentCategory"]  }))')"
+            class="btn btn-no-min @prevDisabled">
+        Previous
+    </button>
+    @if ((Model.PageIndex - 1) > 0)
+    {
+        <button onclick="jQueryAjaxReloadViewAll('@(Url.Action("Sort", "User",new {sortOrder = ViewData["CurrentSort"],pageNumber=(Model.PageIndex-1),
+                   currentCategory = ViewData["CurrentCategory"]}))')"
+            class="btn btn-no-min ">
+            @(Model.PageIndex - 1)
+        </button>
+    }
+
+    <button onclick="jQueryAjaxReloadViewAll('@(Url.Action("Sort", "User",new {sortOrder = ViewData["CurrentSort"],pageNumber=(Model.PageIndex),
+                  currentCategory = ViewData["CurrentCategory"]}))')"
+            class="btn btn-no-min focus">
+        @Model.PageIndex
+    </button>
+
+    @*next page*@
+    @if ((Model.PageIndex + 1) <= Model.TotalPages)
+    {
+        <button onclick="jQueryAjaxReloadViewAll('@(Url.Action("Sort", "User",new {sortOrder = ViewData["CurrentSort"],pageNumber=(Model.PageIndex + 1),
+                   currentCategory = ViewData["CurrentCategory"]}))')"
+            class="btn btn-no-min ">
+            @(Model.PageIndex + 1)
+        </button>
+    }
+
+
+    <button onclick="jQueryAjaxReloadViewAll('@(Url.Action("Sort", "User",new {sortOrder = ViewData["CurrentSort"],pageNumber=(Model.PageIndex + 1),
+                   currentCategory = ViewData["CurrentCategory"]}))')"
+            class="btn btn-no-min @nextDisabled">
+        Next
+    </button>
+    @*last page*@
+    @if (Model.TotalPages - (Model.PageIndex + 1) >= 1)
+    {
+        <button onclick="jQueryAjaxReloadViewAll('@(Url.Action("Sort", "User",new {sortOrder = ViewData["CurrentSort"],pageNumber=(Model.TotalPages),
+                   currentCategory = ViewData["CurrentCategory"]}))')"
+            class="btn btn-no-min ">
+            &gt;&gt;
+        </button>
+    }
+</div>

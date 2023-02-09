@@ -11,11 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlowerShopManagement.Applic
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "source", "source", "{9F3841BE-9874-482E-9915-F3C24F475510}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{2A9F22C9-037A-423E-A51E-8D647BBBF9D1}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlowerShopManagement.Web", "FlowerShopManagement.Web\FlowerShopManagement.Web.csproj", "{5A8805F4-82BA-49B4-850A-D9ABB0054CF6}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FlowerShopManagement.WebAPI", "FlowerShopManagement.WebAPI\FlowerShopManagement.WebAPI.csproj", "{29D6EC36-7D19-4275-8D28-B40E3EC8FA37}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,10 +35,6 @@ Global
 		{5A8805F4-82BA-49B4-850A-D9ABB0054CF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5A8805F4-82BA-49B4-850A-D9ABB0054CF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5A8805F4-82BA-49B4-850A-D9ABB0054CF6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{29D6EC36-7D19-4275-8D28-B40E3EC8FA37}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{29D6EC36-7D19-4275-8D28-B40E3EC8FA37}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{29D6EC36-7D19-4275-8D28-B40E3EC8FA37}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{29D6EC36-7D19-4275-8D28-B40E3EC8FA37}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,7 +44,6 @@ Global
 		{923DA1EB-5978-431E-86DB-BC94F23AE8F5} = {9F3841BE-9874-482E-9915-F3C24F475510}
 		{0272275F-4991-4899-A7AE-C6F218803A7C} = {9F3841BE-9874-482E-9915-F3C24F475510}
 		{5A8805F4-82BA-49B4-850A-D9ABB0054CF6} = {9F3841BE-9874-482E-9915-F3C24F475510}
-		{B0C98AB5-2BE9-4295-BAEF-C0C33AA15638} = {2A9F22C9-037A-423E-A51E-8D647BBBF9D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3C61DE40-AF02-4D96-82EA-9C4A07C61CB4}

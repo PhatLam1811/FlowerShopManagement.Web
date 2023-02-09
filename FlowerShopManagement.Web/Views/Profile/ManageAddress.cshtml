@@ -1,0 +1,67 @@
+﻿@using System.Net.Http
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+@model List<InforDeliveryModel>
+
+@{
+    ViewData["Title"] = "Manage Address";
+}
+
+<div class="w-75">
+    @if (Model != null && Model.Count > 0)
+    {
+        foreach (var item in Model)
+        {
+            <div class="border border-2 border-app radius-2 px-4 py-3 d-flex mt-4">
+                <div class="flex-grow-1">
+                    @if (item.IsDefault)
+                    {
+                        <p class="h4 text-secondary mb-3">Default</p>
+                    }
+                    <div class="d-flex flex-column gap-3">
+                        <div class="d-flex align-items-end gap-3">
+                            <p class="h6">Name:</p>
+                            <p class="h5 text-primary">@item.FullName</p>
+                        </div>
+                        <div class="d-flex align-items-end gap-3">
+                            <p class="h6">Phone:</p>
+                            <p class="h5 text-primary">@item.PhoneNumber</p>
+                        </div>
+                        <div class="d-flex align-items-end gap-3">
+                            <p class="h6">Address:</p>
+                            <p class="h5  text-primary" style="font-weight:400; font-family:'Open Sans'">
+                                @item.Address,@item.Commune, @item.District, @item.City
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex flex-column gap-2">
+                    <form asp-action="EditInfoDelivery" asp-controller="Profile"  method="post" onsubmit="return OpenFormDialog(this);">
+                        <input name="phone" value="@item.PhoneNumber" hidden/>
+                        <input name="address" value="@item.Address" hidden />
+                        <input name="name" value="@item.FullName" hidden />
+                        <button type="submit" class="btn-no-min btn-secondary w-100">Edit</button>
+                    </form>
+                    <button class="btn-no-min btn-secondary w-100"
+                    type="button"
+                    onclick="removeAddress('@Url.Action("RemoveInfoDelivery", "Profile")','@item.FullName','@item.PhoneNumber', '@item.Address')">
+                        Remove
+                    </button>
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        <h3>You currently dont have personal address, please enter your dilivery information => </h3>
+    }
+</div>
+
+<button class="btn btn-primary position-fixed end-0 top-10"
+        onclick="showContent2('@Url.Action("CreateInfoDelivery", "Profile")', 'Create new Info Delivery')">
+    Add new +
+</button>

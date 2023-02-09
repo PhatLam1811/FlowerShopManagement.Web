@@ -1,28 +1,58 @@
 ﻿<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 	<ul class="navbar-nav flex-grow-1 justify-content-center align-items-center">
 		<li class="nav-item px-3">
-			<a class="nav-link text-secondary @(ViewBag.Dashboard==true?"active":"")" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
+			<a class="nav-link @(ViewBag.Dashboard==true?"active":"")" asp-area="Admin" asp-controller="Dashboard" asp-action="Index">Dashboard</a>
 		</li>
-		<li class="nav-item px-3">
-			<a class="nav-link text-secondary @(ViewBag.Product==true?"active":"")" asp-area="Admin" asp-controller="Product" asp-action="Index">Product</a>
+		<li class="nav-item px-3 dropdown">
+			<div class="" id="drop" data-bs-toggle="dropdown" aria-expanded="false">
+				<a class="nav-link @((ViewBag.Product==true||ViewBag.Voucher==true)?"active":"")">Stock<i class="fa-solid fa-caret-down ms-2"></i></a>
+			</div>
+			<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="drop">
+				<li class="nav-item px-3">
+					<a class="nav-link @(ViewBag.Product==true?"active":"")" asp-area="Admin" asp-controller="Product" asp-action="Index">Product</a>
+				</li>
+				<li class="nav-item px-3">
+					<a class="nav-link @(ViewBag.Voucher==true?"active":"")" asp-area="Admin" asp-controller="Voucher" asp-action="Index">Voucher</a>
+				</li>
+				<li class="nav-item px-3">
+					<a class="nav-link" asp-area="Admin" asp-controller="Product" asp-action="Category">Category</a>
+				</li>
+
+			</ul>
 		</li>
-		<li class="nav-item px-3">
-			<a class="nav-link text-secondary @(ViewBag.Order==true?"active":"")" asp-area="Admin" asp-controller="Order" asp-action="Index">Order</a>
+		<li class="nav-item px-3 dropdown">
+			<div class="" id="drop" data-bs-toggle="dropdown" aria-expanded="false">
+				<a class="nav-link @((ViewBag.Order==true||ViewBag.User==true)?"active":"")">User<i class="fa-solid fa-caret-down ms-2"></i></a>
+			</div>
+			<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="drop">
+				<li class="nav-item px-3">
+					<a class="nav-link" id="order-nav" asp-area="Admin" asp-controller="Order" asp-action="Index">Order</a>
+				</li>
+				
+				<li class="nav-item px-3">
+					<a class="nav-link" id="user-nav" asp-area="Admin" asp-controller="User" asp-action="Index">User</a>
+				</li>
+			</ul>
 		</li>
-		<li class="nav-item px-3">
-			<a class="nav-link text-secondary @(ViewBag.Voucher==true?"active":"")" asp-area="Admin" asp-controller="Voucher" asp-action="Index">Voucher</a>
+		<li class="nav-item px-3 dropdown">
+			<div class="" id="drop" data-bs-toggle="dropdown" aria-expanded="false">
+				<a class="nav-link @((ViewBag.Supplier==true||ViewBag.Report==true)?"active":"")">Import<i class="fa-solid fa-caret-down ms-2"></i></a>
+			</div>
+			<ul class="dropdown-menu dropdown-menu-end" aria-labelledby="drop">
+				<li class="nav-item px-3">
+					<a class="nav-link" id="supplier-nav" asp-area="Admin" asp-controller="Supplier" asp-action="Index">Supplier</a>
+				</li>
+				<li class="nav-item px-3">
+					<a class="nav-link" id="import-nav" asp-area="Admin" asp-controller="Import" asp-action="Index">Import</a>
+				</li>
+			</ul>
 		</li>
+		
 		<li class="nav-item px-3">
-			<a class="nav-link text-secondary @(ViewBag.User==true?"active":"")" asp-area="Admin" asp-controller="User" asp-action="Index">User</a>
-		</li>
-		<li class="nav-item px-3">
-			<a class="nav-link text-secondary @(ViewBag.Supplier==true?"active":"")" asp-area="Admin" asp-controller="Supplier" asp-action="Index">Supplier</a>
-		</li>
-		<li class="nav-item px-3">
-			<a class="nav-link text-secondary @(ViewBag.Report==true?"active":"")" asp-area="Admin" asp-controller="Report" asp-action="Index">Report</a>
+			<a class="nav-link @(ViewBag.Report==true?"active":"")" id="report-nav" asp-area="Admin" asp-controller="Report" asp-action="Index">Report</a>
 		</li>
 		@*<li class="nav-item px-3">
-			<a class="nav-link text-secondary @(ViewBag.WishList==true?"active":"")" asp-area="Admin" asp-controller="Home" asp-action="Wishes">Account</a>
+		<a class="nav-link   @(ViewBag.WishList==true?"active":"")" asp-area="Admin" asp-controller="Home" asp-action="Wishes">Account</a>
 		</li>*@
 	</ul>
 </div>

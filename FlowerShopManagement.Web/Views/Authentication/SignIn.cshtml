@@ -1,0 +1,26 @@
+﻿@model SignInModel;
+
+<div class="container">
+	<p class="h1 mt-5 text-center">Login</p>
+
+	<div class="d-flex justify-content-center mt-5">
+		<form class="h-auto" method="post" asp-action="SignInAsync" asp-controller="Authentication" style="width: 300px">
+			<div class="form-group">
+				<label class="form-label" for="exampleFormControlInput1">Email/Phone Number</label>
+				<input type="text" asp-for="EmailorPhone" id="ip-account" class="form-control form-control-lg h5 py-3" placeholder="">
+				<span asp-validation-for="EmailorPhone"></span>
+			</div>
+			<div class="form-group mt-3">
+				<label class="form-label" for="exampleFormControlInput1">Password</label>
+				<input type="password" asp-for="Password" id="ip-password" name="Password" class="form-control form-control-lg h5 py-3" placeholder="">
+				<span asp-validation-for="Password"></span>
+			</div>
+
+			<button class="btn btn-primary mt-5 w-100" type="submit" id="btn-gotoapp">Go to App</button>
+		</form>
+	</div>
+	<div class="mt-5 text-center d-flex flex-column align-items-center justify-content-center">
+		<p class="h5 text-primary">If you do not have an account? Let's register below</p>
+		<a class="btn btn-secondary mt-3" style="width:fit-content" id="btn-register" asp-action="Register" asp-controller="Authentication">Create a new account</a>
+	</div>
+</div>

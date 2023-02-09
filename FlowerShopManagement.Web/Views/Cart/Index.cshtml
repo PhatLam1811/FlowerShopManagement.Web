@@ -1,28 +1,45 @@
-﻿@using FlowerShopManagement.Web.Views.Shared.Components;
+﻿@model CartModel
 
 @{
 	ViewData["Title"] = "Cart Page";
+
+	ViewBag.IsAuthenticated = false;
 }
 
-<div class="mt-5 row">
-	<div class="col-7">
-		<component type="typeof(CartCardItem)" render-mode="Static" />
-		<component type="typeof(CartCardItem)" render-mode="Static" />
+@if (Context.User.Identity is not null)
+{
+	ViewBag.IsAuthenticated = Context.User.Identity.IsAuthenticated;
+}
+
+@if (!ViewBag.IsAuthenticated)
+{
+	<div class="d-flex flex-column gap-5 align-items-center mt-5">
+		<div class="d-flex flex-column gap-4 align-items-center">
+			<p class="h1">Let's Login to View Cart</p>
+			<button class="btn btn-primary w-100" onclick="location.href = '@(Url.Action("SignIn", "Authentication"))'">Login</button>
+		</div>
+		<div class="d-flex flex-column gap-3 align-items-center">
+			<p class="">If you have no account, register below here~</p>
+			<button class="btn btn-secondary" onclick="location.href = '@(Url.Action("Register", "Authentication"))'">Register new account</button>
+		</div>
 	</div>
-	<div class="col-2"></div>
-	<div class="col-3">
-		<div class="d-flex justify-content-between">
-			<p class="h3 text-primary">Total</p>
-			<p class="h3 text-primary">$20</p>
+}
+else
+{
+	<div class="mt-4 row">
+		<div class="col-6">
+			<component type="typeof(CartList)"
+				   render-mode="ServerPrerendered"
+				   param-Model="@Model.Items"
+				   param-url=@Url.Action("RemoveOutOfCart","Cart",null,Context.Request.Scheme)
+				   param-url1=@Url.Action("UpdateAmount","Cart",null,Context.Request.Scheme)
+				   param-url2=@Url.Action("UpdateSelection","Cart",null,Context.Request.Scheme)
+				   param-url3=@Url.Action("LoadViewTotal","Cart",null,Context.Request.Scheme) />
 		</div>
-		<div class="mt-2 d-flex justify-content-between">
-			<p class="caption">Discount</p>
-			<p class="caption">20.000</p>
+		<div class="col-3"></div>
+		<div class="col-3" id="hix">
+			<partial name="_ViewTotal.cshtml" model="@Model" />
 		</div>
-		<div class="mt-4 d-flex justify-content-between">
-			<p class="h2">Balance</p>
-			<p class="h2">$40</p>
-		</div>
-		<button class="btn btn-primary w-100 mt-3" onclick="">Buy Now</button>
 	</div>
-</div>
+
+}

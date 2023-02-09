@@ -1,5 +1,114 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@using ChartJSCore.Models
+<style>
+	.bot-50 {
+		bottom: 30px;
+	}
+</style>
+
+
+<div class="row mt-3">
+	<div class="col-3">
+		<p class="h3 text-color-secondary">Today is @String.Format("{0:dd-MM-yyyy}", ViewData["Today"])</p>
+		<p class="h2 mt-2">Hi, Have a good day!!</p>
+	</div>
+	<div class="col-9 row d-flex">
+		<div class="col position-relative">
+			<div class="d-flex flex-column gap-2 align-items-center border border-2 border-app radius-2 p-3 my-shadow-2">
+				<p class="h2 text-secondary">@ViewData["OutOfStocksCount"]</p>
+				<p class="h5">Out-Of-Stocks</p>
+			</div>
+			<div class="position-absolute bot-50 end-10">
+				<i class="fa-solid fa-arrow-down-wide-short fs-4 text-danger"></i>
+			</div>
+		</div>
+		<div class="col position-relative">
+			<div class="d-flex flex-column gap-2 align-items-center border border-2 border-app radius-2 p-3 my-shadow-2">
+				<p class="h2 text-secondary">@ViewData["LowOnStocksCount"]</p>
+				<p class="h5">Low-On-Stocks</p>
+			</div>
+			<div class="position-absolute bot-50 end-10">
+				<i class="fa-solid fa-arrow-down-wide-short fs-4 text-danger"></i>
+			</div>
+		</div>
+		<div class="col position-relative">
+			<div class="d-flex flex-column gap-2 align-items-center border border-2 border-app radius-2 p-3 my-shadow-2">
+				<p class="h2 text-secondary">@ViewData["WaitingOrder"]</p>
+				<p class="h5">Waiting Orders</p>
+			</div>
+			<div class="position-absolute bot-50 end-10">
+				<i class="fa-solid fa-arrow-up-short-wide fs-4 text-info"></i>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="row mt-5">
+	<div class="col-lg-3 radius-2">
+		<div class="my-shadow d-flex flex-column align-items-center text-center px-4 py-5 gap-3 radius-2">
+			<div>
+				<img src="~/avatar/@ViewData["Avatar"]" class="avatar" />
+			</div>
+			<div class="d-flex flex-column gap-2">
+				<div class="">
+					<p class="caption-lg">Name:</p>
+					<p class="h4 text-secondary">@ViewData["Username"]</p>
+				</div>
+				<div class="">
+					<p class="caption-lg">Email:</p>
+					<p class="h4">@ViewData["Email"]</p>
+				</div>
+			</div>
+			@*<button class="btn btn-no-min btn-secondary mt-3">View Detail</button>*@
+		</div>
+	</div>
+	<div class="col-lg-6 col-12">
+		<p class="h6 text-color-secondary">Today Revenue</p>
+		<div>
+			<canvas id="barChart" class="h-auto"></canvas>
+		</div>
+
+	</div>
+	<div class="col-lg-3">
+		<p class="h6 text-color-secondary">Top customers this month</p>
+		<table class="table myaccordion table-hover">
+			<thead>
+				<tr class="">
+					<th>#</th>
+					<th>Name</th>
+					<th>Orders</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				@{
+					var valuableCustomers = ViewData["ValuableCustomers"] as List<ValuableCustomerModel>;
+					int i = 1;
+
+					if (valuableCustomers != null)
+						foreach (var record in valuableCustomers)
+						{
+								<tr class="align-middle">
+									<td>@i</td>
+									<td>@record._id</td>
+									<td class="text-center">@record.numberOfOrders</td>
+								</tr>
+							i++;
+						}
+				}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.bundle.min.js"></script>
+
 @{
+	var chart = (Chart?)ViewData["VerticalBarChart"];
 }
+
+<script src="~/lib/Chart.js/dist/Chart.js"></script>
+
+<script>
+	@Html.Raw(chart?.CreateChartCode("barChart"));
+</script>

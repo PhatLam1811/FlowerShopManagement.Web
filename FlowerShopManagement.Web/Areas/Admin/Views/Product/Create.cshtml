@@ -1,0 +1,95 @@
+﻿@model ProductDetailModel
+@{
+    List<string>? categories = ViewData["Categories"] as List<string> ?? null;
+    List<string>? materials = ViewData["Materials"] as List<string> ?? null;
+}
+<p class="mt-4"></p>
+<span class="h1">Create new Product</span>
+
+<form method="post" asp-action="Create" asp-area="Admin"
+      asp-controller="Product" class="row mt-3" enctype="multipart/form-data"
+      onsubmit="return createProduct(this);">
+    <div class="col-6">
+        <div class="row">
+            <div class="col-8 form-group">
+                <label class="form-label">Name</label>
+                <input type="text" asp-for="Name" class="form-control form-control-lg h5 py-3" id="ip-productname" placeholder="">
+                <span asp-validation-for="Name"></span>
+            </div>
+            <div class="col-4 form-group">
+                <label class="form-label">Color</label>
+                <input type="text" asp-for="Color" class="form-control form-control-lg h5 py-3" id="ip-color" placeholder="">
+                <span asp-validation-for="Color"></span>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4 form-group">
+                <label class="form-label">Size</label>
+                <input type="text" asp-for="Size" class="form-control form-control-lg h5 py-3" id="ip-size" placeholder="">
+                <span asp-validation-for="Size"></span>
+
+            </div>
+            <div class="col form-group">
+                <label class="form-label" for="selectCategory">Materials</label>
+                <select class="form-select form-select-lg h5 py-3" asp-for="Material" asp-items="@(new SelectList(materials))" id="selectCategory" aria-label="Floating label select example">
+                </select>
+                <span asp-validation-for="Material"></span>
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col form-group">
+                <label class="form-label">Price</label>
+                <input type="number" asp-for="UniPrice" class="form-control form-control-lg h5 py-3" id="ip-price" value="" placeholder="0">
+                <span asp-validation-for="UniPrice"></span>
+
+            </div>
+
+            <div class="col form-group">
+                <label class="form-label">Amount</label>
+                <input type="number" asp-for="Amount" class="form-control form-control-lg h5 py-3" id="ip-amount" value="" placeholder="0">
+                <span asp-validation-for="Amount"></span>
+
+            </div>
+            <div class="col form-group">
+                <label class="form-label" for="selectCategory">Category</label>
+                <select class="form-select form-select-lg h5 py-3" asp-for="Category" asp-items="@(new SelectList(categories))" id="selectCategory" aria-label="Floating label select example">
+                </select>
+            </div>
+        </div>
+        @*<div class="form-group">
+        <label class="form-label" >Maintainment</label>
+        <textarea type="text" asp-for="Maintainment" class="form-control form-control-lg h5 py-3" id="ip-maintainment" placeholder=""></textarea>
+        </div>*@
+        <div class="form-group">
+            <label class="form-label">Description</label>
+            <textarea type="text" asp-for="Description" class="form-control form-control-lg h5 py-3" id="ip-description" placeholder=""></textarea>
+
+        </div>
+
+        <div class="mt-5 d-flex gap-3">
+            <button type="submit" class="btn btn-primary" id="btn-submit">Submit</button>
+            <a class="btn btn-secondary" asp-action="Index" asp-area="Admin" asp-controller="Product">Back to List</a>
+        </div>
+    </div>
+
+
+</form>
+<div class="col-4" id="picture">
+    @*add image*@
+    <partial name="_ChoosePictures" for="Pictures" />
+
+</div>
+@*<img src="~/image/flower1.png"
+	 class="w-100 h-auto"
+	 asp-append-version="true" />
+<div class="form-floating">
+	<input asp-for="FormPicture" style="border-width:0px" accept="image/*" class="form-control" multiple />
+	<span asp-validation-for="FormPicture"></span>
+
+	<label for="FormPicture">Image</label>
+</div>
+<button type="button" class="btn btn-primary"
+onclick="OpenPostDialog('@Url.Action("ChoosePictures","Product",null,Context.Request.Scheme)','Add products images')">
+</button>*@

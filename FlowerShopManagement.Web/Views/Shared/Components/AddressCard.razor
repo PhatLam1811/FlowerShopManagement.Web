@@ -1,0 +1,34 @@
+﻿
+<div class="border border-2 border-app radius-2 px-4 py-3 d-flex mt-4">
+	<div class="flex-grow-1">
+		@if (inforDelivery.IsDefault)
+		{
+			<p class="h4 text-secondary mb-3">Default</p>
+		}
+		<div class="d-flex flex-column gap-3">
+			<div class="d-flex align-items-end gap-3">
+				<p class="h6">Name:</p>
+				<p class="h5 text-primary">@inforDelivery.FullName</p>
+			</div>
+			<div class="d-flex align-items-end gap-3">
+				<p class="h6">Phone:</p>
+				<p class="h5 text-primary">@inforDelivery.PhoneNumber</p>
+			</div>
+			<div class="d-flex align-items-end gap-3">
+				<p class="h6">Address:</p>
+				<p class="h5 text-primary" style="font-family:'Open Sans'">@inforDelivery.Address</p>
+			</div>
+		</div>
+	</div>
+	<div class="d-flex flex-column gap-2">
+		<button class="btn-no-min btn-secondary">Edit</button>
+		@*<button class="btn-no-min btn-secondary" onclick="removeAddress(@Url.Action("RemoveInfoDelivery", "Profile"),@inforDelivery.Name,@inforDelivery.Phone, @inforDelivery.Address)">Remove</button>*@
+	</div>
+</div>
+
+@code {
+	[Parameter]
+	public InforDeliveryModel inforDelivery { get; set; } = null!;
+
+	
+}

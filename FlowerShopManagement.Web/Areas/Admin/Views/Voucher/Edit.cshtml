@@ -1,0 +1,80 @@
+﻿@using FlowerShopManagement.Core.Enums;
+
+@model VoucherDetailModel
+
+@{
+    var valueTypes = Enum.GetValues(typeof(FlowerShopManagement.Core.Enums.ValueType)).Cast<FlowerShopManagement.Core.Enums.ValueType>().ToList();
+}
+
+<p class="mt-4"></p>
+<span class="h1">Edit voucher + @Model.Code</span>
+
+<form asp-action="Update" asp-area="Admin" asp-controller="Voucher" class="row mt-3">
+    <input asp-for="@Model.Code" hidden />
+
+    <div class="col-6">
+        <div class="row mt-3">
+            <div class="col-6 form-group">
+                <label class="form-label" for="exampleFormControlInput1">Condition - Min Value</label>
+                <input type="text" asp-for="ConditionValue" class="form-control form-control-lg h5 py-3" readonly placeholder="">
+            </div>
+            <div class="col-6 form-group">
+                <label class="form-label" for="exampleFormControlInput1">Amount</label>
+                <input type="number" asp-for="Amount" class="form-control form-control-lg h5 py-3" placeholder="">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col form-group">
+                <label class="form-label" for="floatingSelect">Value Type</label>
+                <input type="text" asp-for="ValueType" class="form-control form-control-lg h5 py-3" readonly placeholder="">
+
+            </div>
+            <div class="col form-group">
+                <label class="form-label" for="exampleFormControlInput1">Start Date</label>
+                <input type="date" asp-for="CreatedDate" class="form-control form-control-lg h5 py-3" readonly placeholder="">
+            </div>
+        </div>
+        <div class="row">
+            <div class="col form-group">
+                <label class="form-label" for="exampleFormControlInput1">Value</label>
+                <input type="number" asp-for="Discount" class="form-control form-control-lg h5 py-3" readonly placeholder="">
+            </div>
+            <div class="col form-group">
+                <label class="form-label" for="exampleFormControlInput1">Expired Date</label>
+                <input type="date" asp-for="ExpiredDate" class="form-control form-control-lg h5 py-3" readonly placeholder="">
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="form-label" for="exampleFormControlInput1">Code</label>
+                <div class="d-flex">
+                    <input type="text" asp-for="Code" class="form-control form-control-lg h5 py-3 m-0" readonly placeholder="">
+                    <button type="button" class="btn btn-secondary" readonly>Auto generate	</button>
+                </div>
+            </div>
+        </div>
+        <div class="mt-5 d-flex gap-3">
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a class="btn btn-secondary" asp-action="Index" asp-area="Admin" asp-controller="Voucher">Back to List</a>
+        </div>
+
+    </div>
+
+    <div class="col-6">
+        @*img*@
+    </div>
+</form>
+@if (Model.State == VoucherStatus.ComingSoon)
+{
+    <form method="post" asp-action="Activate" asp-area="Admin" asp-controller="Voucher" class="row mt-3">
+    <input asp-for="@Model.Code" hidden />
+    <button class="btn btn-remove mt-3">Activate</button>
+
+</form>
+
+}
+
+<form method="post" asp-action="Delete" asp-area="Admin" asp-controller="Voucher" class="col mt-3">
+    <input asp-for="@Model.Code" hidden />
+    <button class="btn btn-remove">Remove</button>
+</form>

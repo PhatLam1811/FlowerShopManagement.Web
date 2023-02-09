@@ -1,0 +1,126 @@
+﻿@using FlowerShopManagement.Core.Enums;
+@using Newtonsoft.Json;
+
+@model UserCreateVM
+
+@{
+    var roles = ViewData["Roles"] as List<Role> ?? new List<Role>();
+    var genders = ViewData["Genders"] as List<Gender> ?? new List<Gender>();
+    string s = ViewData["Addresses"] as string ?? "";
+    var addresses = JsonConvert.DeserializeObject<List<AddressModel>>(s);
+    var cities = addresses.GroupBy(i => i._city).Select(i => i.Key).ToList();
+    var districts = ViewData["Districts"] as List<string> ?? addresses.Where(i => i._city == "Thành phố Hà Nội").GroupBy(i => i._district).Select(i => i.Key).ToList();
+    var wards = ViewData["Districts"] as List<string> ?? addresses.Where(i => i._city == "Thành phố Hà Nội" && i._district == "Huyện Đông Anh").GroupBy(i => i._commune).Select(i => i.Key).ToList();
+   // var wards = ViewData["Wards"] as List<string> ?? new List<string>();
+    if (Model != null && Model.userModel != null)
+    {
+        Model.userModel.BirthYear = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
+    }
+}
+
+<p class="mt-4"></p>
+<span class="h1">Create new User</span>
+
+<form asp-action="Create" method="post" asp-area="Admin" asp-controller="User" class="row mt-3" enctype="multipart/form-data">
+    <div class="col-6">
+        <div class="row mt-3">
+            <div class="col-7 form-group">
+                <label class="form-label" for="exampleFormControlInput1">Name</label>
+                <input type="text" asp-for="userModel.Name" class="form-control form-control-lg h5 py-3" id="ip-name" placeholder="">
+            </div>
+            <div class="col form-group">
+                <label class="form-label" for="floatingSelect">Role</label>
+                <select class="form-select form-select-lg h5 py-3"
+                        asp-for="userModel.Role" asp-items="@(new SelectList(roles))" id="floatingSelect"
+                        aria-label="Floating label select example" required>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-6 form-group">
+                <label class="form-label" for="exampleFormControlInput1">Email</label>
+                <input type="email" asp-for="userModel.Email" class="form-control form-control-lg h5 py-3" id="ip-email" placeholder="">
+            </div>
+            <div class="col-6 form-group">
+                <label class="form-label" for="exampleFormControlInput1">Phone</label>
+                <input type="tel" asp-for="userModel.PhoneNumber" class="form-control form-control-lg h5 py-3" id="ip-phone" placeholder="">
+            </div>
+
+            <input type="date" hidden asp-for="userModel.CreatedDate" class="form-control form-control-lg h5 py-3" placeholder="">
+
+        </div>
+        <div class="row">
+            <div class="col form-group">
+                <label class="form-label" for="exampleFormControlInput1">Birthday</label>
+                <input type="date" asp-for="userModel.BirthYear" class="form-control form-control-lg h5 py-3" placeholder="">
+            </div>
+            <div class="col form-group">
+                <label class="form-label" for="floatingSelect">Gender</label>
+                <select class="form-select form-select-lg h5 py-3" asp-for="userModel.Gender" asp-items="@(new SelectList(genders))" id="floatingSelect" aria-label="Floating label select example" required>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col form-group">
+                <label class="form-label" for="floatingSelect">City</label>
+                <select asp-items="@(new SelectList(cities))" id="city" name="city"
+                        class="form-select form-select-lg h5 py-3" style="font-family:Open Sans"
+                        id="floatingSelect" aria-label="Floating label select example" 
+                        required onchange="debugger; if (this.selectedIndex != -1) FindDistricts(this,'@Url.Action("FindDistricts","User",null,Context.Request.Scheme)');">
+                </select>
+            </div>
+
+            <div class="col form-group ">
+                <label class="form-label" >District</label>
+                <select class="form-select form-select-lg h5 py-3" id="district" name="district" style="font-family:'Open Sans'"
+                        asp-items="@(new SelectList(districts))" aria-label="Floating label select example" 
+                        required onchange="if (this.selectedIndex != -1) FindWards(this,'@Url.Action("FindWards","User",null,Context.Request.Scheme)');">
+                </select>
+            </div>
+            <div class="col form-group ">
+                <label class="form-label" >Ward</label>
+                <select class="form-select form-select-lg h5 py-3" id="ward" name="ward" style="font-family:'Open Sans'"
+                        asp-items="@(new SelectList(wards))" 
+                        aria-label="Floating label select example" 
+                        required >
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label" for="exampleFormControlInput1">Address</label> 
+                @if (Model != null && Model.userModel != null && Model.userModel.InforDelivery != null && Model.userModel.InforDelivery.Count > 0)
+                {
+                    <div class="d-flex">
+                        <input type="text" name="detailAddress" style="font-family:'Open Sans'"
+                           class="form-control form-control-lg h5 py-3"
+                           id="ip-address" placeholder="eg: 69 Le Loi street">
+                    </div>
+                }
+                else
+                {
+                    <div class="d-flex">
+                        <input type="text" name="detailAddress" style="font-family:'Open Sans'"
+                           class="form-control form-control-lg h5 py-3"
+                           id="ip-address" placeholder="eg: 69 Le Loi street">
+                        </div>
+                }
+            </div>
+        </div>
+        <div class="mt-5 d-flex gap-3">
+            <a class="btn btn-secondary">Back to List</a>
+            <button type="submit" class="btn btn-primary" id="btn-submit">Submit</button>
+        </div>
+    </div>
+
+    <div class="col-6">
+        @*add image*@
+        <img src="~/avatar/user.png"
+             class="w-100 h-auto"
+             asp-append-version="true" />
+        <div class="form-floating">
+            <input asp-for="userModel.FormFile" style="border-width:0px" accept="image/*" class="form-control" />
+            @*<label for="FormPicture">Image</label>*@
+        </div>
+    </div>
+</form>
+
+

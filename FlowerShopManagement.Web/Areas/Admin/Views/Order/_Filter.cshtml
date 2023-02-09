@@ -1,0 +1,69 @@
+﻿@using FlowerShopManagement.Web
+@using FlowerShopManagement.Application.Models
+
+@{
+    List<string>? status = ViewData["Status"] as List<string> ?? null;
+    string? currentCategory = ViewData["CurrentCategory"] as string ?? "All";
+    string? currentDateOrdering = ViewData["CurrentDateOrdering"] as string ?? "none";
+
+}
+<form method="post" action="@(Url.Action("Sort", "Order"))" onsubmit="return jQueryAjaxSearch(this);">
+    <input type="text" name="pageNumber" value="1"
+           class="form-control form-control-lg h5 h-100 position-relative" style="z-index:99"
+           id="floatingInput" placeholder="Abc" hidden>
+    <div class="">
+        <span class="h4">Filter</span>
+        <div class="check-list mt-2">
+            <span class="">Categories</span>
+            @if (currentCategory != null)
+            {
+                @if (status != null)
+                {
+                    @foreach (var i in status)
+                    {
+                        @if (i.ToString() != currentCategory.ToString())
+                        {
+                            <label class="check-list-item">
+                                <input type="radio" class="form-check-input" value="@i" id="@i" name="currentCategory" onclick="this.form.onsubmit()" />
+                                @i
+                            </label>
+                        }
+                        else
+                        {
+                            <label class="check-list-item">
+                                <input type="radio" class="form-check-input disabled" value="@i" name="currentCategory" checked onclick="this.form.onsubmit()" />
+                                @i
+                            </label>
+
+                        }
+                    }
+
+                }
+            }
+
+        </div>
+        <div class="check-list mt-2">
+            <span class="">Order by</span>
+            <label class="check-list-item">
+                <input type="radio" class="form-check-input" value="none" name="currentDateOrdering" onclick="this.form.onsubmit()" checked />
+                None
+            </label>
+            <label class="check-list-item">
+                <input type="radio" class="form-check-input" value="descending" name="currentDateOrdering" onclick="this.form.onsubmit()" />
+                Older -> Newer
+            </label>
+
+            <label class="check-list-item">
+                <input type="radio" class="form-check-input disabled" value="ascending" name="currentDateOrdering" onclick="this.form.onsubmit()" />
+                Newer -> Older
+            </label>
+
+
+
+
+
+
+
+        </div>
+    </div>
+</form>

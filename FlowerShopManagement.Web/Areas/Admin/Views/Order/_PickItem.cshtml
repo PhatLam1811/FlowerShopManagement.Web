@@ -1,0 +1,85 @@
+﻿@model List<ProductModel>?
+
+<form method="post" action="@(Url.Action("PickedItems", "Order"))" style="width:800px" onsubmit="return jQueryAjaxReloadPickingTable(this);">
+    
+    <div class="row">
+        <div class="col p-0 mt-2">
+            <div class="col d-flex flex-column gap-2">
+                <div class="d-flex flex-row">
+                    <div class="container">
+                        <!--Search-->
+                        <div class="d-flex justify-content-end">
+                            <input id="searchFilter" type="text" name="filter" class="form-control" />
+                            <button onclick="OpenPostDialog('@Url.Action("PickItemDialog","Order")','Current Products');" class="icon-search border-primary">Search</button>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-wrap">
+                                    <table class="table myaccordion table-hover" id="accordion666">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th class="button">Name</th>
+                                                <th class="button">Price</th>
+                                                <th class="button">Color</th>
+                                                <th class="button">Amount</th>
+                                                <th class="button">Quantity</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model != null)
+                                                @foreach (var i in Model)
+                                                {
+                                                    <input name="ids" value="@i.Id" hidden />
+                                                    <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed w-100">
+
+                                                        <th>
+                                                            @*Picture place*@
+                                                            @*<div class="d-flex flex-column">
+                                                    @i.Id.Substring(i.Id.Length-6,5)
+                                                    @if (String.IsNullOrEmpty(i.Picture))
+                                                    {
+                                                    i.Picture = "product-empty.png";
+                                                    }
+                                                    <img src="~/image/@i.Picture"
+                                                    height="80" width="80"
+                                                    asp-append-version="true" />
+
+                                                    </div>*@
+
+                                                        </th>
+                                                        <td>@i.Name</td>
+                                                        <td>$@i.UniPrice</td>
+                                                        <td>@i.Color</td>
+                                                        <td>@i.Amount</td>
+
+                                                        <td>
+                                                            <div class="">
+                                                                <label class="form-check-label ml-5 d-flex align-items-center">
+                                                                    <input type="number" name="amounts" value="0" placeholder="0" id="@i.Id" class="form-control ms-2" style="width:100px;" />
+                                                                </label>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="">
+        <button type="submit" id="btn-submit"
+                class="btn btn-primary position-fixed icon-plus"
+                style="bottom:50px; right:50px; height:50px; width:200px">
+            Add
+        </button>
+
+    </div>
+</form>

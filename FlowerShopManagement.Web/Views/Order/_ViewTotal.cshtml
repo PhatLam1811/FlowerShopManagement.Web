@@ -1,0 +1,20 @@
+﻿@model OrderDetailModel
+
+<div class="d-flex justify-content-between">
+	<p class="h3 text-primary">Total</p>
+	<p class="h3 text-primary">$@Model.Total</p>
+	<input value="@(Model.Total)" id="total-input" hidden />
+</div>
+<div class="mt-2 d-flex justify-content-between">
+	<p class="caption">Delivery Fee</p>
+	<p class="caption">$@Model.DeliveryCharge</p>
+</div>
+<div class="mt-2 d-flex justify-content-between">
+	<p class="caption">Discount</p>
+	<p class="caption" id="discount">$0</p>
+	<input class="caption" value="0" id="discount-input" name="discounte" hidden />
+</div>
+<div class="mt-4 d-flex justify-content-between">
+	<p class="h2">Balance</p>
+	<p class="h2" id="balance-input">$@Model.Total</p>
+</div>

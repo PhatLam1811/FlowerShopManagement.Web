@@ -1,0 +1,42 @@
+﻿@model RegisterModel;
+
+<div class="container">
+	<p class="h1 mt-5 text-center">Register</p>
+
+	<div class="d-flex justify-content-center mt-5">
+		<form class="h-auto" method="post" asp-action="RegisterAsync" asp-controller="Authentication" style="width: 600px">
+			<div class="row">
+				<div class="col-8 form-group">
+					<label class="form-label" for="exampleFormControlInput1">Email</label>
+					<input type="email" id="ip-email" asp-for="Email" class="form-control form-control-lg h5 py-3" placeholder="">
+					<span asp-validation-for="Email"></span>
+				</div>
+				<div class="col-4 form-group">
+					<label class="form-label" for="exampleFormControlInput1">Phone Number</label>
+					<input type="tel" id="ip-phone" asp-for="PhoneNumber" class="form-control form-control-lg h5 py-3" placeholder="">
+					<span asp-validation-for="PhoneNumber"></span>
+				</div>
+			</div>
+			<div class="row mt-3">
+				<div class="col form-group">
+					<label class="form-label" for="exampleFormControlInput1">Password</label>
+					<input type="password" id="ip-password" asp-for="Password" class="form-control form-control-lg h5 py-3" placeholder="">
+					<span asp-validation-for="Password"></span>
+				</div>
+				<div class="col form-group">
+					<label class="form-label" for="exampleFormControlInput1">Confirm Password</label>
+					<input type="password" id="ip-confirmpassword" asp-for="ConfirmPassword" class="form-control form-control-lg h5 py-3" placeholder="">
+					<span asp-validation-for="ConfirmPassword"></span>
+				</div>
+			</div>
+
+			<div class="mt-5">
+				<button class="btn btn-primary w-100" id="btn-submit">Create New Account</button>
+				<div class="mt-5 text-center d-flex flex-column align-items-center justify-content-center">
+					<p class="h5 text-primary">If you have an account? Let's Login here</p>
+					<a class="btn btn-secondary mt-3" style="width:fit-content" id="btn-register" asp-action="Login" asp-controller="Authentication">Login with an account</a>
+				</div>
+			</div>
+		</form>
+	</div>
+</div>

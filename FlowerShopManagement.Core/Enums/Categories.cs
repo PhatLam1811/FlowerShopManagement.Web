@@ -2,8 +2,11 @@
 
 public enum Categories
 {
-    artfFlower = 0,
-    furniture = 1,
-    entertainmentEquipment = 2
+    All = 0,
+    Unknown = 1,
+    ArtificialFlowers = 2,
+    Furnitures = 3,
+    Accessories = 4,
+    PlantingTools = 5,
 }
 

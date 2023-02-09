@@ -1,0 +1,39 @@
+﻿@model List<string>;
+
+<div class="row mt-5">
+	<div class="col-1"></div>
+	<div class="col-4">
+		<p class="h2 mb-2">Edit old</p>
+		<div class="gap-3 mt-3">
+			@foreach (var i in Model)
+			{
+				<div class="d-flex mb-3">
+					<div class="form-group ps-2 pe-2">
+						<input class="form-control form-control-lg h5 py-3" id="input-@i" value="@i" placeholder="-" />
+					</div>
+					<a class="btn btn-no-p btn-secondary h-auto border-app border table-icon ps-3 pe-3 d-flex align-items-center" onclick="EditCategory('@(Url.Action("EditCategory", "Product"))','@i','@i')">
+						<i class="fa-solid fa-check link-info"></i>
+					</a>
+				</div>
+			}
+		</div>
+
+	</div>
+
+	<form asp-action="AddCategory" method="post" asp-controller="Product" asp-area="Admin" class="col">
+		<div class="">
+			<p class="h1 mb-2 text-color-secondary">Add new</p>
+			<input type="text" placeholder=""
+				   name="name" id="input-addCategories" class="form-control form-control-lg h5 py-3" />
+		</div>
+		  
+		<button type="submit" class="btn btn-primary mt-3">
+			Submit
+			<i class="fa-solid fa-check ms-2 fs-5"></i>
+		</button>
+	</form>
+
+	<div class="col-1"></div>
+</div>
+
+

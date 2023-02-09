@@ -1,0 +1,90 @@
+﻿@{
+    List<string>? categories = ViewData["Categories"] as List<string> ?? null;
+    List<string>? materials = ViewData["Materials"] as List<string> ?? null;
+    List<string> prices = new List<string> { "All", "0$ -> 10$", "11$ -> 50$", "> 50$" };
+    string? currentCategory = ViewData["CurrentCategory"] as string ?? "All";
+    string? currentMaterial = ViewData["CurrentMaterial"] as string ?? "All";
+    string currentPrice = ViewData["CurrentPrice"] as string ?? "All";
+
+}
+<form method="post" action="@(Url.Action("Sort", "Product"))" onsubmit="return jQueryAjaxSearch(this);">
+    <input type="text" name="pageNumber" value="1"
+           class="form-control form-control-lg h5 h-100 position-relative" style="z-index:99"
+           id="floatingInput" placeholder="Abc" hidden>
+    <div class="">
+        <span class="h4">Filter</span>
+        <div class="check-list mt-4">
+            <span class="">Categories</span>
+
+            @if (categories != null)
+            {
+                @foreach (var i in categories)
+                {
+                    @if (i.ToString() != currentCategory.ToString())
+                    {
+                        <label class="check-list-item">
+                            <input type="radio" class="form-check-input" value="@i" id="@i" name="currentCategory" onclick="this.form.onsubmit()" />
+                            @i
+                        </label>
+                    }
+                    else
+                    {
+                        <label class="check-list-item">
+                            <input type="radio" class="form-check-input disabled" value="@i" name="currentCategory" checked onclick="this.form.onsubmit()" />
+                            @i
+                        </label>
+                    }
+                }
+            }
+        </div>
+
+        <div class="check-list mt-4">
+
+            <span class="">Material</span>
+            @if (materials != null)
+            {
+                @foreach (var i in materials)
+                {
+                    @if (i.ToString() != currentMaterial.ToString())
+                    {
+                        <label class="check-list-item">
+                            <input type="radio" class="form-check-input" value="@i" id="@i" name="currentMaterial" onclick="this.form.onsubmit()" />
+                            @i
+                        </label>
+                    }
+                    else
+                    {
+                        <label class="check-list-item">
+                            <input type="radio" class="form-check-input disabled" value="@i" name="currentMaterial" checked onclick="this.form.onsubmit()" />
+                            @i
+                        </label>
+
+                    }
+                }
+            }
+        </div>
+        <div class="check-list mt-3">
+            <span class="">Prices</span>
+            @if (currentPrice != null)
+            {
+                @foreach (var i in prices)
+                {
+                    if (i == currentPrice)
+                    {
+                        <label class="check-list-item">
+                            <input type="radio" class="form-check-input disabled" value="@i" name="currentPrice" checked onclick="this.form.onsubmit()" />
+                            @i
+                        </label>
+                    }
+                    else
+                    {
+                        <label class="check-list-item">
+                            <input type="radio" class="form-check-input" value="@i" name="currentPrice" onclick="this.form.onsubmit()" />
+                            @i
+                        </label>
+                    }
+                }
+            }
+        </div>
+    </div>
+</form>

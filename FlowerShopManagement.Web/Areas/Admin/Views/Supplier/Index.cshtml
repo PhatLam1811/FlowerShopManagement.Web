@@ -1,5 +1,40 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@using FlowerShopManagement.Core.Enums;
+
+@model List<SupplierModel>?
+
+<div class="row">
+	<div class="col-12 mt-3 mt-lg-0" id="hihi">
+		<div class="d-flex justify-content-end d-lg-none">
+			<button class="filter-icon border-0 fs-3" data-bs-toggle="collapse" data-bs-target=".um" aria-controls="navbarSupportedContent"
+					aria-expanded="false" aria-label="Toggle navigation">
+				<span class="h5">Filter</span>
+			</button>
+		</div>
+
+		<form method="post" action="@(Url.Action("Sort", "Product"))" onsubmit="return jQueryAjaxSearch(this)">
+			<div class="d-flex w-100">
+				<input type="text" name="pageNumber" value="1"
+					   class="form-control form-control-lg h5 h-100 position-relative" style="z-index:99"
+					   placeholder="Abc" hidden>
+
+				<input type="text" name="searchString" id="ip-search" value="@ViewData["CurrentFilter"]"
+					   class="form-control form-control-lg h5 h-auto position-relative m-0" style="z-index:99"
+					   placeholder="Name">
+
+				<button class="btn btn-icon border border-primary position-relative d-flex gap-2 align-items-center" id="btn-search" style="z-index:999"
+						type="submit">
+					Search
+					<i class="fa-solid fa-magnifying-glass"></i>
+				</button>
+			</div>
+
+		</form>
+		<partial name="_ViewAll" model=@Model />
+
+	</div>
+
+</div>
+
+<button class="btn btn-primary icon-plus rounded position-fixed" style="right:0; bottom:60px;" onclick="location.href = '@(Url.Action("Create", "Supplier"))'">Add</button>
+
+<div c></div>

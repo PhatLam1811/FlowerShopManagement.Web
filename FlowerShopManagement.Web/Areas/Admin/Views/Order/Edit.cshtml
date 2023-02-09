@@ -1,0 +1,111 @@
+﻿@model OrderModel;
+
+<form method="post" asp-action="Update" asp-controller="Order" asp-area="Admin" class="modal-content border-0" enctype="multipart/form-data">
+	<div class="row mt-4">
+		<div class="col">
+			<input asp-for="Id" value="@Model.Id" hidden />
+			@*user info*@
+			<div class="h3 fw-bold text-info">@Model.Status</div>
+			<div class="row mt-3">
+				<div class="col d-grid gap-2">
+					<div class="form-group">
+						<label for="floatingInput">User Name</label>
+						<input type="text" asp-for="FullName" readonly class="form-control form-control-lg h5 py-3" id="floatingInput">
+						<span asp-validation-for="FullName" class="text-danger"></span>
+					</div>
+
+					<div class="form-group flex-grow-1">
+						<label for="floatingTextarea">Phone number</label>
+						<input class="form-control form-control-lg h5 py-3" readonly asp-for="PhoneNumber" id="floatingTextarea"></input>
+						<span asp-validation-for="PhoneNumber" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label for="floatingInput">Voucher</label>
+						<input type="text" asp-for="Voucher" readonly class="form-control form-control-lg h5 py-3" id="floatingInput">
+						<span asp-validation-for="Voucher" class="text-danger"></span>
+					</div>
+				</div>
+				@*charge info*@
+				<div class="col d-grid gap-2">
+					<div class="form-group">
+						<label for="floatingInput">DeliveryMethod</label>
+						<input type="text" asp-for="DeliveryMethod" readonly class="form-control form-control-lg h5 py-3" id="floatingInput" placeholder="$20">
+						<span asp-validation-for="DeliveryMethod" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label for="floatingInput">DeliveryCharge</label>
+						<input type="number" asp-for="DeliveryCharge" readonly class="form-control form-control-lg h5 py-3" id="floatingInput" placeholder="1">
+						<span asp-validation-for="DeliveryCharge" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label for="floatingInput">Total Price</label>
+						<input type="number" asp-for="Total" readonly class="form-control form-control-lg h5 py-3" id="floatingInput" placeholder="1">
+						<span asp-validation-for="Total" class="text-danger"></span>
+					</div>
+				</div>
+			</div>
+			<div class="form-group mt-3">
+				<label for="floatingInput">Note</label>
+				<input type="text" asp-for="Notes" class="form-control form-control-lg h5 py-3" id="floatingInput" placeholder="">
+				<span asp-validation-for="Notes" class="text-danger"></span>
+			</div>
+		</div>
+		<div class="col">
+			<div class="table-wrap">
+				<table class="table myaccordion table-hover" id="accordion">
+					<thead>
+						<tr>
+							<th>#</th>
+							<th class="button">Name</th>
+							<th class="button">Price</th>
+							<th class="button">Amount</th>
+							<th class="button">Total</th>
+						</tr>
+					</thead>
+					<tbody>
+
+						@for (var i = 1; i <= Model.Products.Count; i++)
+						{
+							<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed">
+
+								<th scope="row">@i</th>
+								<td>
+									<span class="limit-one-line">@Model.Products[i-1].Name</span>
+								</td>
+								<td class="col-1">@Model.Products[i-1].UniPrice</td>
+								<td class="col-1">
+									<div class="text-center">
+										@Model.Products[i-1].Amount
+									</div>
+								</td>
+								<td>@(Model.Products[i - 1].Amount * Model.Products[i - 1].UniPrice)</td>
+							</tr>
+						}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<div class="d-flex gap-2 mt-5">
+		<div class="d-flex gap-2">
+			@if (Model.Status == FlowerShopManagement.Core.Enums.Status.Paying || Model.Status == FlowerShopManagement.Core.Enums.Status.Delivering)
+			{
+				@*<a class="btn btn-outline-info" asp-action="CompletedCheck" asp-controller="Order" asp-route-id=@Model.Id>Completed</a>*@
+				<input type="submit" class="btn btn-outline-info" value="Complete" name="type" />
+
+			}
+			else if (Model.Status == FlowerShopManagement.Core.Enums.Status.Waiting)
+			{
+				@*<a class="btn btn-primary" asp-action="ConfirmCheck" asp-area="Admin" asp-controller="Order" asp-route-id=@Model.Id>Confirm</a>*@
+				<input type="submit" class="btn btn-primary" value="Confirm" name="type" />
+
+			}
+		</div>
+		@if (Model.Status != FlowerShopManagement.Core.Enums.Status.Canceled)
+		{
+			<input type="submit" class="btn btn-outline-secondary icon-delete" value="Cancel" name="type" />
+
+		}
+	</div>
+	@Html.AntiForgeryToken()
+</form>

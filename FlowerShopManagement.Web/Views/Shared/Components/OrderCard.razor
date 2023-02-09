@@ -1,0 +1,45 @@
+﻿
+<div class="row mb-5 p-0 gx-0" @onclick="NavigateToDetail">
+	<div class="col-12 col-md-7 p-0">
+		@if (order.Products.Count > 0)
+		{
+			<OrderCardItem orderDetail=order.Products[0] @key="order.Products[0]" />
+		}
+	</div>
+	<div class="col-12 col-md-5 d-flex border border-1 border-app flex-column justify-content-between align-items-end p-3">
+		<div class="caption text-end">
+			<p class="caption fw-bold text-secondary">@order.Status</p>
+			<span>Deliveriy Expected on 20-12-2022</span>
+		</div>
+		<div class="d-flex w-100 justify-content-between align-items-end mt-3 mt-lg-0">
+			<div class="d-flex justify-content-end align-items-end">
+				<p class="caption">Amount</p>
+				<p class="caption fw-bold text-color-secondary ms-2">@order.Amount</p>
+			</div>
+			<div class="d-flex align-items-end">
+				<p class="h4">Total</p>
+				<p class="h3 text-secondary ms-2">$@(order.Total - order.Discount)</p>
+			</div>
+		</div>
+	</div>
+	<div class="d-flex justify-content-end">
+		<a class="btn-no-p btn-secondary text-decoration-none h6 fw-normal p-2" @onclick="NavigateToDetail">View Detail ></a>
+	</div>
+</div>
+
+@code {
+
+	[Parameter]
+	public OrderDetailModel order { get; set; } = null!;
+
+	[Parameter]
+	public string orderId { get; set; } = "";
+
+	[Parameter]
+	public int totalAmount { get; set; } = 0;
+
+	private void NavigateToDetail()
+	{
+		UriHelper.NavigateTo("Order/OrderDetail/" + orderId, true);
+	}
+}

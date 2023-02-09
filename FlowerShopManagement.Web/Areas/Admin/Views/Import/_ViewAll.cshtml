@@ -1,0 +1,55 @@
+﻿@model List<ImportModel>
+
+<div class="table-wrap">
+    <table class="table myaccordion table-hover" id="accordion">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th class="button">Request ID</th>
+                <th class="button">Supplier</th>
+                <th class="button">Create By</th>
+                <th class="button">Date</th>
+                <th class="button">Status</th>
+                <th class="button">
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                var i = 0;
+                foreach (var item in Model)
+                {
+                    i++;
+
+                    <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
+                        <th scope="row">@i</th>
+                        <td>@item._Id</td>
+                        <td>@item.Supplier.name</td>
+                        <td>@item.CreatedBy.name</td>
+                        <td>@item.CreatedDate</td>
+                        @if (item.Status == FlowerShopManagement.Core.Enums.ImportStatus.OnGoing)
+                        {
+                            <td class="text-warning fst-italic">On-going</td>
+                        }
+                        @if (item.Status == FlowerShopManagement.Core.Enums.ImportStatus.Completed)
+                        {
+                            <td class="text-success fst-italic">Completed</td>
+                        }
+                        @if (item.Status == FlowerShopManagement.Core.Enums.ImportStatus.Canceled)
+                        {
+                            <td class="text-danger fst-italic">On-going</td>
+                        }
+                        <td>
+                            <a href="@Url.Action("Detail","Import",new {id = @item._Id})" id="@item._Id" class="border-1 table-icon">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+
+</div>

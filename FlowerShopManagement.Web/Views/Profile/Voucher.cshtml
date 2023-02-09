@@ -1,0 +1,17 @@
+﻿@model List<VoucherDetailModel>
+
+@{
+	ViewData["Title"] = "Voucher";
+}
+
+<div class="row-cols-2 mt-3">
+	@if (Model != null && Model.Count > 0)
+	{
+		foreach (var item in Model)
+		{
+			<div class="mb-3">
+				<component type="typeof(VoucherCard)" param-voucher=@item render-mode="ServerPrerendered" />
+			</div>
+		}
+	}
+</div>

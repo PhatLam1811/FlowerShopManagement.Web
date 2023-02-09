@@ -1,0 +1,47 @@
+﻿@using System.Net.Http
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+@model List<string>
+
+@{
+    ViewData["Title"] = "Manage Address";
+}
+<div class="d-flex ">
+    <div class="d-flex flex-column gap-2">
+        <form id="picturesForm">
+            @if (Model != null && Model.Count > 0)
+            {
+
+                @foreach (var i in @Model)
+                {
+                    <img src="~/image/@i" style="width:300; height:300px" asp-append-version="true" />
+                    <input type="text" value="@i" id="@i" name="Pictures" hidden />
+                    <button class="btn btn-secondary" type="button" onclick="rechosePictures('@Url.Action("ReChosePictures","Product",null,Context.Request.Scheme)','@i');" > eliminate </button>
+
+                }
+
+            }
+        </form>
+    </div>
+    <form asp-action="ChosePictures" asp-controller="Product"
+          method="post" onsubmit="return chosePictures(this);"
+          enctype="multipart/form-data" class="mb-2">
+
+        <div class="form-floating">
+            <input type="file" style="border-width:0px"
+                   accept="image/*" name="formfiles"
+                   class="form-control" multiple
+                   onchange="this.form.onsubmit();" />
+            <label for="pictures">Image</label>
+
+            @*onchange="chosePictures('@Url.Action("ChosePictures","Product",null,Context.Request.Scheme)',this);" />*@
+
+        </div>
+        
+    </form>
+
+</div>

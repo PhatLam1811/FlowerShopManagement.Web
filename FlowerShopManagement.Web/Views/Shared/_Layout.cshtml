@@ -1,23 +1,50 @@
 ﻿<!DOCTYPE html>
+@{
+	ViewBag.IsAuthenticated = false;
+	ViewBag.IsAdmin = false;
+
+	if (Context.User.Identity is not null)
+	{
+		ViewBag.IsAuthenticated = Context.User.Identity.IsAuthenticated;
+		ViewBag.IsAdmin = Context.User.IsInRole("Admin");
+	}
+
+	if (ViewBag.IsAuthenticated)
+	{
+		ViewData["Username"] = Context.User.FindFirst("Username")?.Value;
+		ViewData["Avatar"] = Context.User.FindFirst("Avatar")?.Value;
+	}
+}
+
 <html lang="en">
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<title>@ViewData["Title"] - FlowerShopManagement.Web</title>
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
-	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/css/color.css" asp-append-version="true" />
-	<link rel="stylesheet" href="~/css/base.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/css/icons.css" asp-append-version="true" />
 	<link rel="stylesheet" href="~/css/font.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/base.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins">
 	<link rel="stylesheet" href="~/FlowerShopManagement.Web.styles.css" asp-append-version="true" />
 </head>
-<body>
+
+@{
+	ViewBag.IsAuthenticated = false;
+}
+
+@if (Context.User.Identity is not null)
+{
+	ViewBag.IsAuthenticated = Context.User.Identity.IsAuthenticated;
+}
+
+<body class="position-absolute w-100 h-100 d-flex flex-column">
 	<header class="mx-5">
-		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
 			<div class="container-fluid col">
-				<a class="navbar-brand h2 fw-bold" asp-area="" asp-controller="Home" asp-action="Index">Logo</a>
+				<a class="navbar-brand h2 fw-bold" asp-area="" asp-controller="Home" asp-action="Index">Dallas</a>
 				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
 						aria-expanded="false" aria-label="Toggle navigation">
 					<span class="navbar-toggler-icon"></span>
@@ -26,34 +53,105 @@
 					<partial name="_HeaderNavbar" />
 				</div>
 				<div class="d-flex gap-3 align-items-center">
-					<a class="nav-icon-link" asp-controller="Notification" asp-action="Index">
-						<i class="fa-solid fa-magnifying-glass nav-icon"></i>
-					</a>
-					<a class="nav-icon-link" asp-controller="Notification" asp-action="Index">
-						<i class="fa-regular fa-bell nav-icon"></i>
-					</a>
+					@*<a class="nav-icon-link" asp-controller="Home" asp-action="Index">
+					<i class="fa-solid fa-magnifying-glass nav-icon"></i>
+					</a>*@
+					@*<a class="nav-icon-link" asp-controller="Notification" asp-action="Index">
+					<i class="fa-regular fa-bell nav-icon"></i>
+					</a>*@
 					<a class="nav-icon-link" asp-controller="Cart" asp-action="Index">
 						<i class="fa-solid fa-cart-shopping nav-icon"></i>
 					</a>
+					<div class="dropdown">
+						@if (!ViewBag.IsAuthenticated)
+						{
+							<button class="nav-icon-link fa-regular fa-circle-user nav-icon border-0 p-0 m-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+							</button>
+						}
+						else
+						{
+							<button class="fa-regular border-0 p-0 m-0" type="button" data-bs-toggle="dropdown" aria-expanded="false" id="avt">
+								<img src="~/avatar/@ViewData["Avatar"]" class="avatar-nav" />
+							</button>
+						}
+						<div class="dropdown-menu dropdown-menu-end" aria-labelledby="drop">
+							<partial name="_LoginPartial" />
+						</div>
+					</div>
 				</div>
 			</div>
 		</nav>
 	</header>
-	<div class="container">
+	<div class="container mb-5">
 		<main role="main" class="pb-3">
 			@RenderBody()
+			<base href="~/" />
+			<script src="_framework/blazor.server.js"></script>
+
+			<!-- Messenger Plugin chat Code -->
+			<div id="fb-root"></div>
+
+			<!-- Your Plugin chat code -->
+			<div id="fb-customer-chat" class="fb-customerchat">
+			</div>
+
+			<script>
+				var chatbox = document.getElementById('fb-customer-chat');
+				chatbox.setAttribute("page_id", "105773592427393");
+				chatbox.setAttribute("attribution", "biz_inbox");
+			</script>
+
+			<!-- Your SDK code -->
+			<script>
+				window.fbAsyncInit = function () {
+					FB.init({
+						xfbml: true,
+						version: 'v15.0'
+					});
+				};
+
+				(function (d, s, id) {
+					var js, fjs = d.getElementsByTagName(s)[0];
+					if (d.getElementById(id)) return;
+					js = d.createElement(s); js.id = id;
+					js.src = 'https://connect.facebook.net/en_US/sdk/xfbml.customerchat.js';
+					fjs.parentNode.insertBefore(js, fjs);
+				}(document, 'script', 'facebook-jssdk'));
+			</script>
+
 		</main>
 	</div>
-
-	@*    <footer class="border-top footer text-muted">
-	<div class="container">
-	&copy; 2022 - FlowerShopManagement.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+	@if (ViewBag.IsAuthenticated && Context.User.IsInRole("Admin") == true)
+	{
+	}
+	else
+	{
+		<partial name="_FooterPartial" />
+	}
+	<div class="modal fade" tabindex="-1" role="dialog" id="form-modal">
+		<div class="modal-dialog modal-dialog-centered justify-content-center" role="document">
+			<div class="modal-content border-0 px-3 py-3" style="width:fit-content">
+				<div class="modal-header pt-4 pb-2">
+					<h5 class="modal-title"></h5>
+				</div>
+				<div class="modal-body">
+				</div>
+			</div>
+		</div>
 	</div>
-	</footer>*@
+	<div class="d-flex justify-content-center" style="position: absolute;vertical-align: middle; top: 50%; left: 50%;">
+		<div class="spinner-border" role="status" id="loaderbody">
+			<span class="visually-hidden">Loading...</span>
+		</div>
+	</div>
+
 	<script src="~/lib/jquery/dist/jquery.min.js"></script>
 	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
 	<script src="https://kit.fontawesome.com/be837eac8e.js" crossorigin="anonymous"></script>
 	<script src="~/js/site.js" asp-append-version="true"></script>
+	<script src="~/js/notify.min.js" asp-append-version="true"></script>
+
 	@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

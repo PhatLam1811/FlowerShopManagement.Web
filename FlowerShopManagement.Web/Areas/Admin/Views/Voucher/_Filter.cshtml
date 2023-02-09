@@ -1,0 +1,70 @@
+﻿@{
+	List<string>? categories = ViewData["VoucherCategories"] as List<string> ?? null;
+	List<string>? valueTypes = ViewData["ValueType"] as List<string> ?? null;
+	List<string> status = new List<string> { "All", "Using", "Coming Soon", "Expired" };
+	string currentCategory = ViewData["CurrentCategory"] as string ?? "All";
+	string currentStatus = ViewData["CurrentStatus"] as string ?? "All";
+	string currentValueType = ViewData["CurrentValueType"] as string ?? "All";
+
+
+}
+<form method="post" action="@(Url.Action("Sort", "Voucher"))" onsubmit="return jQueryAjaxSearch(this);">
+	<input type="text" name="pageNumber" value="1"
+		   class="form-control form-control-lg h5 h-100 position-relative" style="z-index:99"
+		   id="floatingInput" placeholder="Abc" hidden>
+	<div class="">
+		<span class="h4">Filter</span>
+
+		<div class="">
+			<div class="check-list mt-4">
+				<span class="">Value Type</span>
+				@if (valueTypes != null)
+				{
+					@foreach (var i in valueTypes)
+					{
+						@if (i != currentCategory)
+						{
+							<label class="check-list-item">
+								<input type="radio" class="form-check-input" value="@i" id="@i" name="currentValueType" onclick="this.form.onsubmit()" />
+								@i
+							</label>
+						}
+						else
+						{
+							<label class="check-list-item">
+								<input type="radio" class="form-check-input disabled" value="@i" name="currentValueType" checked onclick="this.form.onsubmit()" />
+								@i
+							</label>
+						}
+					}
+				}
+			</div>
+		</div>
+		<div class="">
+			<div class="check-list mt-4">
+				<span class="">Status</span>
+				@if (categories != null)
+				{
+					@foreach (var i in status)
+					{
+						@if (i != currentStatus.ToString())
+						{
+							<label class="check-list-item">
+								<input type="radio" class="form-check-input" value="@i" id="@i" name="currentStatus" onclick="this.form.onsubmit()" />
+								@i
+							</label>
+						}
+						else
+						{
+							<label class="check-list-item">
+								<input type="radio" class="form-check-input disabled" value="@i" name="currentStatus" checked onclick="this.form.onsubmit()" />
+								@i
+							</label>
+						}
+					}
+				}
+			</div>
+		</div>
+	</div>
+
+</form>

@@ -1,0 +1,55 @@
+﻿@using System.Net.Http
+@using Microsoft.AspNetCore.Authorization
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+@model List<InforDeliveryModel>
+
+@{
+    ViewData["Title"] = "Manage Address";
+}
+<div class="">
+    @if (Model != null && Model.Count > 0)
+    {
+        foreach (var item in Model)
+        {
+            <form asp-action="ChooseAddress" asp-controller="Order" method="post" onsubmit="return chooseAddress(this);" class="mb-2">
+                <input name="FullName" value="@item.FullName" hidden/>
+                <input name="PhoneNumber" value="@item.PhoneNumber" hidden />
+                <input name="Address" value="@item.Address" hidden />
+                <input name="City" value="@item.City" hidden />
+                <input name="District" value="@item.District" hidden />
+                <input name="Commune" value="@item.Commune" hidden />
+                <div class="border border-2 border-app radius-2 px-4 py-3 d-flex gap-5">
+                    <div class="flex-grow-1">
+                        @if (item.IsDefault)
+                        {
+                            <p class="h4 text-secondary mb-3">Default</p>
+                        }
+                        <div class="d-flex flex-column gap-3">
+                            <div class="d-flex align-items-end gap-3">
+                                <p class="h6">Name:</p>
+                                <p name="FullName" class="h5 text-primary">@item.FullName</p>
+                            </div>
+                            <div class="d-flex align-items-end gap-3">
+                                <p class="h6">Phone:</p>
+                                <p name="PhoneNumber" class="h5 text-primary">@item.PhoneNumber</p>
+                            </div>
+                            <div class="d-flex align-items-end gap-3">
+                                <p class="h6" >Address:</p>
+                                <p name="Address" style="font-family:'Open Sans'" class="h5 text-primary">@item.Address, @item.Commune, @item.District, @item.City</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex flex-column gap-2">
+                        <button class="btn-no-min btn-secondary" type="submit">
+                            Pick
+                        </button>
+                    </div>
+                </div>
+            </form>
+        }
+    }
+</div>

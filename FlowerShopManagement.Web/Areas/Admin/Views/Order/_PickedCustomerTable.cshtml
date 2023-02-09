@@ -1,0 +1,52 @@
+﻿@model UserModel?
+
+@if (Model == null)
+{
+    <span class="h3 text-color-secondary">Customer</span>
+    <div class="row mt-3">
+        <div class="col-7 form-group">
+            <label class="form-label" for="exampleFormControlInput1">Name</label>
+            <input type="text" name="Name" class="form-control form-control-lg h5 py-3" id="ip-cusname" placeholder="">
+        </div>
+        <div class="col-5 form-group">
+            <label class="form-label" for="exampleFormControlInput1">Phone</label>
+            <input type="tel" name="PhoneNumber" class="form-control form-control-lg h5 py-3" id="ip-cusphone" placeholder=""> @*Change to select form*@
+        </div>
+    </div>
+    <div class="row">
+        <div class="col form-group">
+            <label class="form-label" for="exampleFormControlInput1">Email</label>
+            <input type="email" name="Email" class="form-control form-control-lg h5 py-3" id="ip-cusemail" placeholder="">
+        </div>
+    </div>
+   
+}
+else
+{
+    <span class="h3 text-color-secondary">Customer</span>
+    <div class="row mt-3">
+        <div class="col-7 form-group">
+            <label class="form-label" for="exampleFormControlInput1">Name</label>
+            <input type="text" name="Name" class="form-control form-control-lg h5 py-3" value="@Model.Name" placeholder="">
+        </div>
+        <div class="col-5 form-group">
+            <label class="form-label" for="exampleFormControlInput1">Phone number</label>
+            <input type="tel" name="PhoneNumber" class="form-control form-control-lg h5 py-3" value="@Model.PhoneNumber" placeholder=""> @*Change to select form*@
+        </div>
+    </div>
+    <div class="row">
+        <div class="col form-group">
+            <label class="form-label" for="exampleFormControlInput1">Email</label>
+            <input type="email" name="Email" class="form-control form-control-lg h5 py-3" value="@Model.Email" placeholder="">
+        </div>
+    </div>
+   @* @if (Model.ShippingAddresses != null && Model.ShippingAddresses.Count() > 0)
+    {
+        <div class="form-group">
+            <label class="form-label" for="exampleFormControlInput1">Addresses</label>
+            <input type="text" class="form-control form-control-lg h5 py-3" value="@Model.ShippingAddresses.FirstOrDefault()" placeholder="">
+        </div>
+    }*@
+    
+
+}

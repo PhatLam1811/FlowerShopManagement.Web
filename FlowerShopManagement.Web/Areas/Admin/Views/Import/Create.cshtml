@@ -1,0 +1,19 @@
+﻿@using FlowerShopManagement.Web.Areas.Admin.Controllers
+@model ImportViewModel
+
+<form method="post" asp-action="CreateRequestForm" asp-controller="Import" asp-area="Admin" onsubmit="return ImportAlert(this);">
+	<h2 style="margin: 1rem 0rem 3rem">Apply Supply Request</h2>
+	<div class="row" style="height: fit-content">
+		<div class="col-12 col-lg-7 h-50" id="pick_item">
+			<h5 style="margin-bottom: -1rem">Products</h5>
+			<partial name="_PickItem" model=@Model._lowOnStockProducts />
+		</div>
+
+		<div class="col-12 col-lg-5" id="pick_supplier">
+			<h5 style="margin-bottom: -1rem">Suppliers</h5>
+			<partial name="_PickSupplier" model=@Model._suppliers />
+		</div>
+	</div>
+
+	<button type="submit" class="btn btn-primary" style="margin-top: 2rem">Request</button>
+</form>

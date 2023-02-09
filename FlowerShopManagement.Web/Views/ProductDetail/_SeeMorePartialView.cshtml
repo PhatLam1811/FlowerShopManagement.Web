@@ -1,0 +1,29 @@
+﻿@using FlowerShopManagement.Web.Views.Shared.Components;
+@model ProductDetailModel
+
+@{
+	ViewData["Title"] = "Detail Page";
+}
+<div class="mt-3 row" style="width: 800px">
+
+	<div class="col-6">
+		@if (@Model.Pictures == null || @Model.Pictures.Count <= 0)
+		{
+			<img src="~/image/flower2.png" class="w-100" style="height: 450px; object-fit: cover;" />
+		}
+		else
+		{
+			@foreach (var i in @Model.Pictures)
+			{
+				<div class="mb-2">
+					<img src="~/image/@i" class="w-100" style="height: 350px; object-fit: cover;" />
+				</div>
+			}
+		}
+	</div>
+
+	<div class="col-6 d-flex flex-column gap-3">
+		<p>@Model.Description</p>
+	</div>
+</div>
+

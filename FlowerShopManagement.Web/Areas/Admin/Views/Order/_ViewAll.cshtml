@@ -1,0 +1,118 @@
+﻿@model PaginatedList<OrderModel>
+
+<div class="table-wrap">
+    <table class="table myaccordion table-hover" id="accordion">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Code</th>
+                <th>Customer</th>
+                <th>Price</th>
+                <th>
+                    <div class="d-none d-lg-block">
+                        Amount
+                    </div>
+                </th>
+                <th>
+                    <div class="d-none d-lg-block">
+                        Updated time
+                    </div>
+                </th>
+                <th>
+                    <div class="d-none d-lg-block">
+                        Updated date
+                    </div>
+                </th>
+                <th>State</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed">
+                @for (var i = 1; i <= Model.Count; i++)
+                {
+                <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
+
+                    <th scope="row">@i</th>
+                        @if (@Model[i - 1].Id != "")
+                        {
+                        <td>@Model[i-1].Id.Substring(0,5)</td>
+                        }
+                        else
+                        {
+                        <td>Unknown</td>
+                        }
+                    <td>@Model[i-1].FullName</td>
+                    <td>$@Model[i-1].Total</td>
+                    <td>
+                        <div class="d-none d-lg-block">
+                                @Model[i-1].Amount
+                        </div>
+                    </td>
+                    <td>
+                            @if (@Model[i - 1].Date != null)
+                            {
+                            <div class="d-none d-lg-block">
+                                    @Model[i-1].Date.Value.ToString("HH:mm")
+                            </div>
+
+                            }
+                            else
+                            {
+                            <div class="d-none d-lg-block">
+                                ERROR
+                            </div>
+
+                            }
+                    </td>
+                    <td>
+                            @if (@Model[i - 1].Date != null)
+                            {
+                            <div class="d-none d-lg-block">
+                                    @Model[i-1].Date.Value.ToString("dd MMM y")
+                            </div>
+
+                            }
+                            else
+                            {
+                            <div class="d-none d-lg-block">
+                                ERROR
+                            </div>
+
+                            }
+                    </td>
+                        @if (@Model[i - 1].Status.ToString() == "Waiting")
+                        {
+                        <td class="fw-bold text-primary">@Model[i-1].Status.ToString()</td>
+
+                        }
+                        else if (@Model[i - 1].Status.ToString() == "Canceled")
+                        {
+                        <td class="text-danger fst-italic">@Model[i-1].Status.ToString()</td>
+                        }
+                        else if (@Model[i - 1].Status.ToString() == "Delivering")
+                        {
+                        <td class="text-info">@Model[i-1].Status.ToString()</td>
+                        }
+                        else if (@Model[i - 1].Status.ToString() == "Purchased")
+                        {
+                        <td class="text-warning">@Model[i-1].Status.ToString()</td>
+                        }
+                        else
+                        {
+                        <td class="text-success fst-italic">@Model[i-1].Status.ToString()</td>
+
+                        }
+
+                    <td>
+                        <a href="@Url.Action("Edit","Order",new {id = Model[i-1].Id} )" id="@Model[i-1].Id" class="border-1 link-info table-icon">
+                            <i class="fas fa-edit"></i>
+                        </a>
+                    </td>
+
+                </tr>
+                }
+        </tbody>
+    </table>
+
+</div>

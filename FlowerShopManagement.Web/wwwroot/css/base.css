@@ -2,6 +2,10 @@
     width: 30% !important;
 }
 
+.w-35 {
+    width: 35% !important;
+}
+
 .w-60 {
     width: 60% !important;
 }
@@ -22,8 +26,40 @@
     height: 90% !important;
 }
 
-p, span, h1, h2, h3, h4, h5, h6 {
+.h-fit {
+    height: fit-content !important;
+}
+
+p, span, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     margin: 0;
+}
+
+.top-10 {
+    top: 10%;
+}
+
+.top-20 {
+    top: 20%;
+}
+
+.bottom-30 {
+    bottom: 30%;
+}
+
+.bottom-20 {
+    bottom: 20%;
+}
+
+.end-5 {
+    right: 5%;
+}
+
+.end-10 {
+    right: 10%;
+}
+
+.vh-90 {
+    height: 90vh;
 }
 
 /*IMG*/
@@ -34,54 +70,107 @@ p, span, h1, h2, h3, h4, h5, h6 {
 
 /*BUTTON*/
 .btn {
-    padding: 12px 10px;
-    border-radius: 2px;
+    padding: 14px;
+    border-radius: 4px;
     min-width: 150px;
+    cursor: pointer;
 }
 
-.btn-priamry {
-
+.btn-no-min {
+    padding: 10px 20px;
+    border-radius: 4px;
+    min-width: auto !important;
+    cursor: pointer;
 }
+
+    .btn-no-min.focus {
+        background-color: rgba(173, 161, 230, 0.3) !important;
+    }
+
+.btn-no-p {
+    padding: 0 10px;
+    border-radius: 4px;
+    min-width: auto !important;
+    cursor: pointer;
+}
+
+.btn-primary {
+}
+
+    .btn-primary:hover {
+        background: var(--bs-dark);
+    }
+
+    .btn-primary:active, .btn-primary:focus {
+        background: var(--bs-dark);
+        border: none;
+        text-decoration: none;
+    }
 
 .btn-secondary {
     border: solid;
-    border-width: 1px;
-    border-color: rgb(20, 33, 61);
+    border-width: 2px;
+    border-color: var(--bs-primary);
     background-color: transparent;
     color: rgb(20, 33, 61);
-    font-weight: 700;
+    font-weight: 500;
+    border: rgb(96,83,153) 2px solid outset;
 }
 
     .btn-secondary:hover {
-        background-color: rgba(20, 33, 61, 0.2);
+        background-color: #fff;
         color: rgba(20, 33, 61, 0.8);
+        font-weight: inherit;
         transition-delay: 100ms;
         transition-duration: 100ms;
+        border-color: #bfb9ec;
     }
 
     .btn-secondary:active {
         background-color: inherit;
         color: inherit;
-        font-weight: inherit;
+        font-weight: 700;
+        box-shadow: 0 0 0 0.25rem rgb(49 132 253 / 50%);
+        border: none;
     }
 
     .btn-secondary:focus {
         background-color: inherit;
         color: inherit;
-        font-weight: inherit;
+        font-weight: 700;
+        box-shadow: 0 0 0 0.25rem rgb(49 132 253 / 50%);
+        border: none;
     }
 
-.btn:active {
-    background-color: #E59512;
-    border: none;
-    text-decoration: none;
+    .btn-secondary:disabled {
+        background-color: inherit;
+        color: inherit;
+        font-weight: 700;
+        border-color: var(--bs-primary);
+        opacity: 0.3;
+    }
+
+.btn-remove {
+    border-color: var(--bs-secondary);
+    background-color: transparent;
+    color: var(--bs-secondary);
 }
+
+.btn-remove:hover {
+    color: inherit;
+    opacity: 0.7;
+}
+
+    .btn-remove:focus, .btn-remove:active {
+        box-shadow: 0 0 0 0.25rem #ebc1ee;
+        border: none;
+    }
 
 .btn-icon {
     width: fit-content;
     height: auto;
     min-width: auto !important;
-    padding: 2px 12px;
+    padding: 0 14px;
 }
 
 .btn-icon-primary {
@@ -96,24 +185,33 @@ p, span, h1, h2, h3, h4, h5, h6 {
 }
 
 /*LABEL*/
-label {
-    font-size: 12px;
+.label {
+    font-size: 10px;
 }
 
 .form-check-label {
     font-size: 16px
 }
 
-
-/*DROPDOWN*/
-/*.dropdown-menu {
-    min-width: auto;
+/*CHECKBOX && RADIO */
+.check-list label {
+    display: block;
+    padding: 12px;
 }
 
-.row {
-    margin-right: 0;
+.check-list .check-list-item {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 15px;
 }
 
-.padding-cart {
-    padding: 0px 80px 0px 80px;
-}*/
+    .check-list .check-list-item input {
+        font-size: 20px;
+        margin: 0;
+    }
+
+/* CURSOR */
+.cursor {
+    cursor: pointer;
+}

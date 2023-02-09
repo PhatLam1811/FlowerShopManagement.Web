@@ -1,33 +1,58 @@
-﻿@using FlowerShopManagement.Web.Views.Shared.Components;
+﻿@model List<ProductDetailModel>
 
 @{
-	ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home Page";
+    List<string>? categories = ViewData["Categories"] as List<string> ?? null;
+    List<string>? materials = ViewData["Materials"] as List<string> ?? null;
+    List<string> prices = new List<string> { "All", "0$ -> 10$", "11$ -> 50$", "> 50$" };
 }
 
-<div>
-	<div class="h3 mb-3">Categories</div>
-	<div class="row gx-3">
-		<component type="typeof(CategoryCard)" render-mode="Static" />
-		<component type="typeof(CategoryCard)" render-mode="Static" />
-		<component type="typeof(CategoryCard)" render-mode="Static" />
+
+<form method="post" action="@(Url.Action("Sort", "Home"))" onsubmit="return jQueryAjaxSearch(this)">
+	<div class="d-flex align-items-end justify-content-between mt-3 mb-4">
+		<div class="d-flex gap-3">
+			<div class="form-group">
+				<label class="form-label h6" for="selectCategory">Category</label>
+				<select class="form-select" asp-items="@(new SelectList(categories))" name="currentCategory" onchange="this.form.onsubmit()" aria-label="Floating label select example">
+				</select>
+			</div>
+			<div class="form-group">
+				<label class="form-label h6" for="selectCategory">Material</label>
+				<select class="form-select" asp-items="@(new SelectList(materials))" name="currentMaterial" onchange="this.form.onsubmit()" aria-label="Floating label select example">
+				</select>
+			</div>
+			<div class="form-group">
+				<label class="form-label h6" for="selectCategory">Price</label>
+				<select class="form-select" asp-items="@(new SelectList(prices))" name="currentPrice" onchange="this.form.onsubmit()" aria-label="Floating label select example">
+				</select>
+			</div>
+		</div>
+		<div class="">
+			<label class="form-label h6" for="selectCategory">Search</label>
+			<div class="d-flex align-items-stretch">
+				<div class="h-fit form-group flex-grow-1">
+					<input type="text" class="h-fit form-control position-relative" name="searchString" id="ip-search" style="z-index:99" value="@ViewData["CurrentFilter"]" placeholder="Name of product">
+				</div>
+				<button class="btn btn-no-p border border-primary position-relative" style="z-index:999">
+					<i class="fa-solid fa-magnifying-glass"></i>
+				</button>
+			</div>
+		</div>
 	</div>
+</form>
+
+<div class="" id="hihi">
+	<partial name="_ViewAll" model="@Model" />
 </div>
 
-<div class="mt-5">
-	<div class="h3 mb-3">Products</div>
-	<form asp-action="SignIn" method="SignIn()">
-		<button class="btn btn-default">Button</button>
-	</form>
-	<div class="row gx-3 gy-5">
-		<component type="typeof(ProductCard)" render-mode="Static" />
-		<component type="typeof(ProductCard)" render-mode="Static" />
-		<component type="typeof(ProductCard)" render-mode="Static" />
-		<component type="typeof(ProductCard)" render-mode="Static" />
-		<component type="typeof(ProductCard)" render-mode="Static" />
-		<component type="typeof(ProductCard)" render-mode="Static" />
-		<component type="typeof(ProductCard)" render-mode="Static" />
-	</div>
+<div class="d-flex w-100 justify-content-center gap-3 mt-3">
+	<button class="btn btn-no-min disabled">
+		Previous
+	</button>
+	<button class="btn btn-no-min focus">
+		1
+	</button>
+	<button class="btn btn-no-min disabled">
+		Next
+	</button>
 </div>
-
-
-<div>Pagination</div>

@@ -1,6 +1,9 @@
 ﻿using FlowerShopManagement.Application.MongoDB.Interfaces;
 using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Core.Enums;
 using FlowerShopManagement.Infrustructure.MongoDB.Interfaces;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
 namespace FlowerShopManagement.Infrustructure.MongoDB.Implements;
@@ -18,8 +21,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
 
     // Filters Configuration
     private static FilterDefinition<TEntity> idFilter(string id) => Builders<TEntity>.Filter.Eq("_id", id);
-    private static FilterDefinition<TEntity> customFilter(string fieldName, IComparable value)
-        => Builders<TEntity>.Filter.Eq(fieldName, value);
+    private static FilterDefinition<TEntity> customFilter(string fieldName, IComparable value) => Builders<TEntity>.Filter.Eq(fieldName, value);
 
     // Indexes Configuration
     protected string CreateUniqueIndex(FieldDefinition<TEntity, string> field)
@@ -28,6 +30,29 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         var indexOption = new CreateIndexOptions<TEntity>() { Unique = true };
         var indexModel = new CreateIndexModel<TEntity>(indexDefine, indexOption);
         return _mongoDbCollection.Indexes.CreateOne(indexModel);
+    }
+
+    // Aggregations
+    protected virtual List<TAggregate> Aggregate<TAggregate>(PipelineDefinition<TEntity, BsonDocument> pipeline)
+    {
+        try
+        {
+            var bsonList = _mongoDbCollection.Aggregate(pipeline).ToList();
+
+            var result = new List<TAggregate>();
+
+            foreach (var bsonDoc in bsonList)
+            {
+                var model = BsonSerializer.Deserialize<TAggregate>(bsonDoc);
+                result.Add(model);
+            }
+
+            return result;
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
     }
 
     // CRUD operations
@@ -44,11 +69,11 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
     }
 
-    public virtual async Task<IEnumerable<TEntity>> GetAll()
+    public virtual async Task<List<TEntity>> GetAll(int skip = 0, int? limit = null)
     {
         try
         {
-            return await _mongoDbCollection.Find(Builders<TEntity>.Filter.Empty).ToListAsync();
+            return await _mongoDbCollection.Find(Builders<TEntity>.Filter.Empty).Skip(skip).Limit(limit).ToListAsync();
         }
         catch (Exception e)
         {
@@ -56,7 +81,7 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
     }
 
-    public virtual async Task<TEntity> GetByField(string fieldName, IComparable value)
+    public virtual async Task<TEntity?> GetByField(string fieldName, IComparable value)
     {
         try
         {
@@ -68,11 +93,24 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
     }
 
-    public virtual async Task<TEntity> GetById(string id)
+    public virtual async Task<TEntity?> GetById(string id)
     {
         try
         {
             return await _mongoDbCollection.Find(idFilter(id)).SingleOrDefaultAsync();
+        }
+        catch (Exception e)
+        {
+            throw new Exception(e.Message);
+        }
+    }
+
+    public virtual async Task<List<TEntity>> GetByIds(List<string> ids)
+    {
+        try
+        {
+            var filter = Builders<TEntity>.Filter.In("_id", ids.ToArray());
+            return await _mongoDbCollection.Find(filter).ToListAsync();
         }
         catch (Exception e)
         {
@@ -132,38 +170,79 @@ public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : 
         }
     }
 
+    //public async Task<bool> UpdateField(string id, string fieldName, string value)
+    //{
+    //    var filter = idFilter(id);
+    //    var update = Builders<TEntity>.Update.Set(fieldName, value);
+
+    //    try
+    //    {
+    //        var result = await _mongoDbCollection.UpdateOneAsync(filter, update);
+    //        return result.IsAcknowledged;
+    //    } 
+    //    catch (Exception e)
+    //    {
+    //        throw new Exception(e.Message);
+    //    }
+    //}
 
     // Override disposable function
+
     public void Dispose() => GC.SuppressFinalize(this);
 }
 
 // Specific repositories
 public class UserRepository : BaseRepository<User>, IUserRepository
 {
-    public UserRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) 
+    public UserRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
     {
         CreateUniqueIndex("email");
         CreateUniqueIndex("phoneNumber");
     }
 
-    public async Task<User> GetByEmailOrPhoneNb(string emailOrPhoneNb)
+    public async Task<User?> GetByEmailOrPhoneNb(string emailOrPhoneNb)
     {
         var filter = Builders<User>.Filter.Eq("email", emailOrPhoneNb);
         filter |= Builders<User>.Filter.Eq("phoneNumber", emailOrPhoneNb);
         var result = await _mongoDbCollection.FindAsync(filter);
         return result.FirstOrDefault();
     }
+
+    public async Task<List<User>?> GetByRole(Role role)
+    {
+        var filter = Builders<User>.Filter.Eq("role", role);
+        var result = await _mongoDbCollection.FindAsync(filter);
+        return result.ToList();
+    }
 }
 
 public class CartRepository : BaseRepository<Cart>, ICartRepository
 {
-    public CartRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) 
+    public CartRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext)
     {
         CreateUniqueIndex("customerId");
     }
 }
-
-public class OrderRepository : BaseRepository<Order>, IOrderRepository
+public class CategoryRepository : BaseRepository<Category>, ICategoryRepository
 {
-    public OrderRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+    public CategoryRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+}
+
+public class MaterialRepository : BaseRepository<Material>, IMaterialRepository
+{
+    public MaterialRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+}
+
+public class SupplierRepository : BaseRepository<Supplier>, ISupplierRepository
+{
+    public SupplierRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+}
+
+public class VoucherRepository : BaseRepository<Voucher>, IVoucherRepository
+{
+    public VoucherRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
+}
+public class AddressRepository : BaseRepository<Address>, IAddressRepository
+{
+    public AddressRepository(IMongoDBContext mongoDbContext) : base(mongoDbContext) { }
 }

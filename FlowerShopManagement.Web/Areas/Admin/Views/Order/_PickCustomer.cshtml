@@ -1,0 +1,52 @@
+﻿@model List<UserModel1>
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+}
+
+
+
+<p class="h3" id="ModalLabel">CHOOSE USER</p>
+
+<div class="modal-body p-0 mt-2">
+	<table class="table myaccordion table-hover" id="accordion">
+		<thead>
+			<tr>
+				<th>#</th>
+				<th class="button">Name</th>
+				<th class="button">Email</th>
+				<th class="button">Phone</th>
+				<th class="button"></th>
+			</tr>
+		</thead>
+		<tbody>
+			@for (var i = 1; i <= @Model.Count; i++)
+			{
+				<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
+
+
+					<th scope="row"> @i </th>
+					<td>
+						@*@if (Model[i - 1].Avatar != null)
+						{
+							<img src="~/image/@Model[i-1].Avatar"
+						 class="rounded-circle"
+						 height="40" width="40"
+						 asp-append-version="true" />
+						}*@
+						@Model[i-1].Name
+					</td>
+					<td> @Model[i-1].Email </td>
+					<td> @Model[i-1].PhoneNumber </td>
+					<td>
+						<button type="button" class="btn btn-secondary" onclick="jQueryAjaxPickCustomer('@Url.Action("PickedCustomers","Order")','@Model[i-1].PhoneNumber')"> Pick</button>
+					</td>
+
+				</tr>
+			}
+
+
+		</tbody>
+	</table>
+</div>

@@ -1,0 +1,24 @@
+﻿@model List<ProductDetailModel>
+
+@{
+	var isAuthenticated = false;
+}
+
+@if (Context.User.Identity is not null)
+{
+	isAuthenticated = Context.User.Identity.IsAuthenticated;
+}
+
+<div class="row mt-3">
+	@foreach (var i in Model)
+	{
+		<div class="col-3">
+			<component type="typeof(ProductCard)"
+				   render-mode="ServerPrerendered"
+				   param-product=@i
+				   param-isAuthenticated=@isAuthenticated
+				   param-url1=@Url.Action("AddToWishList","Home",null,Context.Request.Scheme)
+				   param-url2=@Url.Action("RemoveOutOfWishList","Home",null,Context.Request.Scheme) />
+		</div>
+	}
+</div>

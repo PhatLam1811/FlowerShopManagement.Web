@@ -1,0 +1,116 @@
+﻿@model ImportModel
+
+<style>
+    .container1 {
+        margin: 20px 240px;
+        padding: 20px 24px 40px 24px;
+        border-radius: 12px;
+        background-color: var(--surface-color);
+        box-shadow: 20px 20px var(--primary-fade-color);
+        --primary-color: #605399;
+        --primary-fade-color: #60539973;
+        --surface-color: #e4def9;
+        --pink-color: #d562be;
+        --dark-color: #4e4e4e;
+        --blue-color: #1561f8;
+    }
+
+    .container1-title {
+        color: var(--pink-color);
+    }
+
+    .text-center1 {
+        text-align: center;
+    }
+
+    .product-list1 {
+        width: 100%;
+        margin-top: 20px;
+    }
+
+    .please1 {
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .myinfo1 {
+        margin: 30px 0 0 0;
+    }
+
+    .myinfo-item1 {
+        margin-top: 16px;
+        font-size: 16px;
+    }
+
+    .myinfo-item1-value {
+        color: var(--blue-color);
+    }
+
+    .product-index1 {
+        text-align: center;
+    }
+
+    table,
+    th,
+    td {
+        border: 1px solid black;
+    }
+
+    th1 {
+        font-size: 20px;
+        padding: 6px;
+    }
+
+    td1 {
+        font-size: 18px;
+        padding: 6px;
+    }
+
+    b1 {
+        color: var(--pink-color);
+    }
+</style>
+<div class="container1">
+    <h1 class="text-center1 container1-title">
+        The Request Form For December 2022
+    </h1>
+    <h2>From: Dallas</h2>
+    <h3>To: ...?</h3>
+    <table class="product-list1">
+        <tr>
+            <th class="th1">#</th>
+            <th class ="th1">Product Name</th>
+            <th class ="th1">Amount</th>
+        </tr>
+        <tr class="tr1">
+            <td class="product-index1">1</td>
+            <td class="td1">P Flower</td>
+            <td class="td1">200</td>
+        </tr>
+        <tr class="tr1">
+            <td class="td1">2</td>
+            <td class="td1">Q Flower</td>
+            <td class="td1">300</td>
+        </tr>
+    </table>
+    <div class="myinfo1">
+        <span class="please1">
+            &#8810; Please send me a <b class="b1">QUOTE</b> by reply this email if you are
+            available &#8811; or contact me via info below
+        </span>
+        <div class="myinfo-item1">
+            <span>Phone:</span>
+            <span class="">3946239486</span>
+        </div>
+        <div class="myinfo-item1">
+            <span>Email:</span>
+            <span class="myinfo-item1-value">abc@gm.uit.edu.vn</span>
+        </div>
+    </div>
+</div>
+
+@*@section Scripts{
+    <script type="text/javascript">
+        $("#dialog").modal('show');
+    </script>
+}*@

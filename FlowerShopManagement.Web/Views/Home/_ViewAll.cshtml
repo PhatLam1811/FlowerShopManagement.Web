@@ -1,0 +1,83 @@
+﻿@model List<ProductDetailModel>
+
+@{
+    var isAuthenticated = false;
+}
+
+@if (Context.User.Identity is not null)
+{
+    isAuthenticated = Context.User.Identity.IsAuthenticated;
+}
+
+<div class="row mt-3">
+    @foreach (var i in Model)
+    {
+        @if (i != null)
+        {
+            <div class="col-3">
+
+                <div class="card border-0 mb-5">
+                    <div class="">
+                        @if (@i.Pictures == null || i.Pictures.Count <= 0)
+                        {
+                            <img src="image/flower1.png" class="card-img-top" />
+
+                        }
+                        else
+                        {
+                            <img src="image/@i.Pictures.FirstOrDefault()" class="card-img-top" />
+
+                        }
+                    </div>
+
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                @*<p class="h4" onclick="NavigateToDetail">@i.Name</p>*@
+                                <a class="h4 text-decoration-none text-black limit-one-line" asp-action="ProductDetail" asp-controller="ProductDetail" asp-route-id="@i.Id">@i.Name</a>
+                                <p class="h3 text-secondary mt-3">$@i.UniPrice</p>
+                            </div>
+                            @if (isAuthenticated == true)
+                            {
+                                @if (i.IsLike == false)
+                                {
+                                    <a class="fa-solid fa-heart icon-normal text-color-fade hover-icon text-decoration-none h-fit"
+                                    id="@i.Id" onclick="callWithId('@Url.Action("AddToWishList","Home",null,Context.Request.Scheme)','@i.Id')">
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a class="fa-solid fa-heart icon-normal text-secondary hover-dark-icon text-decoration-none h-fit" 
+                                    id="@i.Id" onclick="callWithId('@Url.Action("RemoveOutOfWishList","Home",null,Context.Request.Scheme)','@i.Id')"></a>
+                                }
+                            }
+                            else
+                            {
+                                <a class="fa-solid fa-heart icon-normal text-color-fade hover-icon text-decoration-none h-fit" asp-action="SignIn" asp-controller="Authentication"></a>
+                            }
+
+
+                        </div>
+                    </div>
+                    @if (isAuthenticated == true)
+                    {
+
+                        @if (i.Amount > 0)
+                        {
+                            <button class="btn btn-primary mt-2 w-100" onclick="addToCart('@Url.Action("AddtoCart","Cart",null,Context.Request.Scheme)','@i.Id','1')" ;>@(false ? "Added" : "Add to Cart")</button>
+                        }
+                        else
+                        {
+                            <a class="btn btn-secondary mt-2 w-100" disabled>Sold out</a>
+                        }
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary mt-2 w-100" asp-action="SignIn" asp-controller="Authentication">Add to Cart</a>
+                    }
+                </div>
+            </div>
+        }
+    }
+
+</div>

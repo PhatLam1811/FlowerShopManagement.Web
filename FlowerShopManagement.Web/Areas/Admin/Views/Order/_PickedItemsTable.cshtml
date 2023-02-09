@@ -1,0 +1,38 @@
+﻿@model List<ProductModel>
+
+<div class="table-wrap">
+
+        <table class="table myaccordion table-hover" id="accordion">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Product Name</th>
+                    <th>Color</th>
+                    <th>Price</th>
+                    <th>Amount</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    @for (var i = 1; i <= Model.Count; i++)
+                    {
+                        <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
+                            <th scope="row">@i</th>
+                            <td name="Name">@Model[i-1].Name</td>
+                            <td name="Color">@Model[i-1].Color</td>
+                            <td name="UniPrice">$@Model[i-1].UniPrice</td>
+                            <td name="Amount">@Model[i-1].Amount</td>
+                            <td>
+                                <button type="button" class="border-1 table-icon text-secondary btn-icon btn" onclick="jQueryAjaxReloadPickingTableWithId('@(Url.Action("DeleteItem", "Order"))','@Model[i-1].Id')">
+                                    <i class="fa-solid fa-trash-can"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+        </table>
+</div>

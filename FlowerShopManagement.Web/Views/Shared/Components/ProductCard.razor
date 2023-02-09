@@ -1,24 +1,116 @@
-﻿<div class="col-3">
-	<div class="card">
+﻿@if (product != null)
+{
+	<div class="card border-0 mb-5">
 		<div class="">
-			<img src="image/flower1.png" class="card-img-top" />
+			<img src="image/@product.Pictures[0]" class="card-img-top" />
 		</div>
 
 		<div class="card-body">
 			<div class="d-flex justify-content-between">
 				<div>
-					<p class="h4">Flower</p>
-					<span class="h3">$20</span>
+					<p class="h4 limit-one-line" @onclick="NavigateToDetail">@product.Name</p>
+					<p class="h3 text-secondary mt-3">$@product.UniPrice</p>
 				</div>
-				<p class="fa-regular fa-heart icon-normal"></p>
+				@if (product.IsLike == false)
+				{
+					<a class="fa-solid fa-heart icon-normal text-color-fade hover-icon text-decoration-none h-fit" @onclick="AddToWishList"></a>
+				}
+				else
+				{
+					<a class="fa-solid fa-heart icon-normal text-secondary hover-dark-icon text-decoration-none h-fit" @onclick="RemoveOutOfWishList"></a>
+				}
 			</div>
-			<button class="btn btn-primary mt-4 float-end w-100 button" asp-action="SignIn">Add to Cart</button>
 		</div>
+
+		@if (product.Amount > 0) {
+			<button class="btn btn-primary mt-2 w-100" @onclick="AddToCart">@(isAddedToCart ? "Added" : "Add to Cart")</button>
+		}
+		else {
+			<button class="btn btn-secondary mt-2 w-100" @onclick="AddToCart" disabled>Sold out</button>
+		}
+		
 	</div>
-</div>
+}
 
 @code {
-	//public async Task SignIn() 
+
+	[Parameter]
+	public ProductDetailModel product { get; set; }
+
+	[Parameter]
+	public string url { get; set; } = "";
+
+	[Parameter]
+	public string url1 { get; set; } = "";
+
+	[Parameter]
+	public string url2 { get; set; } = "";
+
+	[Parameter]
+	public bool isAuthenticated { get; set; }
+
+	[Parameter]
+	public bool isAddedToCart { get; set; } = false;
+
+	private async void AddToCart()
+	{
+		if (isAuthenticated)
+		{
+			if (product.Id != null)
+			{
+				await js.InvokeVoidAsync("addToCart", new object[] { url, product.Id, 1 });
+				isAddedToCart = true;
+
+				StateHasChanged();
+			}
+		}
+		else
+		{
+			UriHelper.NavigateTo("Authentication/SignIn", true);
+		}
+	}
+
+	private async void AddToWishList()
+	{
+		if (isAuthenticated)
+		{
+			if (product.Id != null)
+			{
+				await js.InvokeVoidAsync("callWithId", new object[] { url1, product.Id });
+				product.IsLike = true;
+
+				StateHasChanged();
+			}
+		}
+		else
+		{
+			UriHelper.NavigateTo("Authentication/SignIn", true);
+		}
+	}	
+
+	private async void RemoveOutOfWishList()
+	{
+		if (isAuthenticated)
+		{
+			if (product.Id != null)
+			{
+				await js.InvokeVoidAsync("callWithId", new object[] { url2, product.Id });
+				product.IsLike = false;
+
+				StateHasChanged();
+			}
+		}
+		else
+		{
+			UriHelper.NavigateTo("Authentication/SignIn", true);
+		}
+	}
+
+	private void NavigateToDetail() {
+		UriHelper.NavigateTo("ProductDetail/ProductDetail/" + product.Id, true);
+	}
+
+	//public async Task SignIn()
 	//{
 	//	await SignIn();
 	//}

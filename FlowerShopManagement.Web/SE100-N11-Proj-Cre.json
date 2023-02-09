@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "flower-shop-management-se100",
+  "private_key_id": "e9205166c36e5ff3954a779a0fc1fb7fbc0f7ec2",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCTXxM+xVQDioDm\nP+9saoyrZCW93TrKQKaslbNJ1N8YRBb+AIY2aMR5YzP0tFXMnfg4koMqHWaSiNrh\nWAMTHGmXgLnuUVIc+gRRJoT3wtsItTcUcPNUd4tSyWJbITUVHiD0Mmevy327vmEb\n05r1fk4NwaGIAmSLqdBsm5GOmGdZrgR4ZNb3j4W5xqWiDbRsfjnF3y8lqNg6vY0G\neBOpm4JRjpWKL0ioRL2sE2m6odxaHKXWSkPFDIXyR1qFOqLjAn0iWOMIiA0zMMdi\ntC8TXHqxawPsRsh+jTql/PItFDIUPlY+SFbQuflQIq4HO6ce9m0hF1TS2IGdnbhP\ns6SiNgurAgMBAAECggEAFw+wM8juSjWQ0TcdENKlm6Zqz4jAi+jNDEHK0hlpJeN1\n056iYf5IDJTNCxRzPrdTogqvUtZR+ElJMy0yIfn2vhoLPnNkTZuENGy6LwlDfFvb\nOCwqr8ObPkO8S/Vo2Jqj3oLKvfQyg0AZ8yBMZfEzZqyvydhSApb6whwgDXfk6F/5\nkdCUIlDmX0kGOkdi6L8fRsUJLFmau6pcs5PDXmfxGfdn4omJgNjyedGY+b8xlWpB\nMMmEOC/og9LkB/mYK7twOcOMKsG4er3bAoGJST1rO1VtFegy6fiMeK5dF6KSu8/W\nPC8OKdB92DRYNdyFwllLTkZiIrIl5oreBtJxw3GRjQKBgQDCY6msT1/4X22UywFA\nZY57qtn4nf7Kp5bZVSrBzv8DBPC5/z5CVEEbzY8JdtbhEUrp7Oh2Bmf/qogK9k9a\nUwpcjGuq4/0EMkGBFGtrN9NEdLCzS3tTr0nGb5iVXEevpnkBFUJ2SNc61+bOS3NK\nKosdSVE2VTe+cQjTjDtbhNvrRwKBgQDCFHpQ6gkErh+qM0f7wX2m9+DU/jC/P8Zm\nqSPopX8Xcj86wzVSAQdOYF5jgFWjcJArCtnowt7eYOyO9ANOUgw5EYuRn+vx8IN+\ndjXMiZrZLytbvY59lGDpKs0cE35n7yxWi43WbKK2Q8IyoL4milQUp93fdYut7TIk\nMBTIuWuGfQKBgAtOiLwBEe/8fP8+n6ADSDphQbR4XC2ledzCW25Sf/rI+seW1SQ+\nilr3pe5C/1SwEM9yfEMBNGNmo+sfUJZMZjnj4Q9bm4f29GBxs53U7XD56J1FMrM3\nau8j5pgpefH5mOg7OFZw/jPqAv7U3KvftZ/Kd/LVGhz1rjG/4mP8Yl5ZAoGANYbm\nUUiq4hKQAyYPlVzBJfq5lKTiluyk8I13rONwEOxeiftqykokVLZ5ceHkPKZ/7I8a\nmHqecyCyPZ8JBmHUoyy2nJxJu7mE2q0Jm3bcMUg0IiI+mV4B+GzokvTBaTLqvJfS\nr6/YlIJNnh79Mq32EJhXthi6RGbl7FsicFXLVRUCgYAraj3ifuKioJwSF9rShm4/\nseWlFJ+zznVArgzVIyy7vnD/chZR4On5LtIMApB3ooETGvRgKDu09PgAuNa8zMhy\n3ng0HOlA67qR0olX3xH6d1tOiCJNSOCE5u2snIxBjEQsha52IecCVIf2ZHyog9wU\nobhOW92ZKl/YR1GjKt8eAw==\n-----END PRIVATE KEY-----\n",
+  "client_email": "se100-n11-proj@flower-shop-management-se100.iam.gserviceaccount.com",
+  "client_id": "112979449187947853666",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/se100-n11-proj%40flower-shop-management-se100.iam.gserviceaccount.com"
+}

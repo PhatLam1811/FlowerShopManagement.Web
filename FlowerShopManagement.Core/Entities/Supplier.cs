@@ -1,13 +1,36 @@
-﻿namespace FlowerShopManagement.Core.Entities
+﻿namespace FlowerShopManagement.Core.Entities;
+
+public class Supplier
 {
-    public class Supplier
+    public string _id;
+
+    public string name;
+    public string address;
+    public string email;
+    public string phoneNumber;
+    public string description;
+
+    public DateTime createdDate;
+    public DateTime lastModified;
+
+    public Supplier()
     {
-        public string? _id { get; private set; }
-        public string _name { get; set; } = string.Empty;
-        public string _address { get; set; } = string.Empty;
-        public string _products { get; set; } = string.Empty; // Type could change depends on how UI displays the suppliers
-        public string _phoneNumber { get; set; } = string.Empty;
-        public string _email { get; set; } = string.Empty;
-        public string _note { get; set; } = string.Empty;
+        _id = Guid.NewGuid().ToString();
+
+        name = string.Empty;
+        address = string.Empty;
+        email = string.Empty;
+        phoneNumber = string.Empty;
+        description = string.Empty;
+
+        createdDate = DateTime.Now;
+        lastModified = DateTime.Now;
     }
+}
+
+public class SupplierBasic
+{
+    public string _id = string.Empty;
+    public string name = string.Empty;
+    public string email = string.Empty;
 }

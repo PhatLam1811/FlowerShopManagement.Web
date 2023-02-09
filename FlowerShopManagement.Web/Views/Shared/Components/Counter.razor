@@ -1,9 +1,38 @@
 ﻿<div class="d-flex">
-	<button class="btn btn-icon btn-icon-primary icon-plus"></button>
-	<input class="form-control form-control-lg w-25" readonly/>
-	<button class="btn btn-icon btn-icon-primary icon-plus"></button>
+	<button class="btn btn-icon bg-color-fade fs-4" style="z-index:2" @onclick="Decreament">-</button>
+	<p class="border-0 form-control text-center h6" style="width:70px" id="selectedcount">@count</p>
+	<button class="btn btn-icon bg-color-fade fs-4" style="z-index:2" @onclick="Increament">+</button>
 </div>
 
 @code {
+	[Parameter]
+	public int min { get; set; } = 1;
+	[Parameter]
+	public int max { get; set; } = 1;
+	[Parameter]
+	public int count { get; set; } = 1;
+	[Parameter]
+	public EventCallback<int> OnGetAmount { get; set; }
 
+	protected async Task Increament()
+	{
+		if (count < max)
+		{
+			count++;
+		}
+		else await js.InvokeVoidAsync("showAlert", new object[] { "Exceed to amount of product in stock!!" });
+
+		await OnGetAmount.InvokeAsync(count);
+	}
+
+	protected async void Decreament()
+	{
+		if (count > 1)
+		{
+			count--;
+		}
+		else await js.InvokeVoidAsync("showAlert", new object[] { "Amount of product in stock must be greater than 0!!" });
+
+		await OnGetAmount.InvokeAsync(count);
+	}
 }

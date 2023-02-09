@@ -1,0 +1,85 @@
+﻿@using FlowerShopManagement.Web
+@using FlowerShopManagement.Application.Models
+@model PaginatedList<ProductModel>
+
+@{
+
+}
+
+<div class="table-wrap">
+    <table class="table myaccordion table-hover" id="accordion">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th class="button">Name</th>
+                <th class="button">Price</th>
+                <th class="button">
+                    <div class="d-none d-lg-block">
+                        Category
+                    </div>
+                </th>
+                <th class="button">Amount</th>
+                <th class="button">
+                    Edit
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null)
+            {
+                var i = 0;
+                foreach (var item in Model)
+                {
+                    i++;
+
+                    <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed align-middle">
+
+                        <th scope="row">@i</th>
+                        <td class="col-5">
+                            <div class="d-flex align-items-center gap-2">
+                                @if (item.Pictures.Count <= 0 || String.IsNullOrEmpty(item.Pictures[0]))
+                                {
+
+                                    <img src="~/image/flower1.png"
+                             class="rounded-circle"
+                             height="40" width="40"
+                             asp-append-version="true" />
+                                }
+                                else
+                                {
+                                    <img src="~/image/@item.Pictures[0]"
+                             class="rounded-circle"
+                             height="40" width="40"
+                             asp-append-version="true" />
+                                }
+
+                                <span class="limit-one-line">@item.Name</span>
+                            </div>
+                        </td>
+                        <td>$@item.UniPrice</td>
+                        <td>
+                            <div class="d-none d-lg-block">
+
+                                @item.Category
+                            </div>
+
+                        </td>
+                        <td>
+                            <div class="text-center">
+                                @item.Amount
+                            </div>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Edit","Product",new {id = @item.Id})" id="@item.Id" class="border-1 table-icon">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </td>
+
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+
+
+</div>

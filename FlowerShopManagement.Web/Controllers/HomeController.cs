@@ -1,62 +1,235 @@
 ﻿using FlowerShopManagement.Application.Interfaces;
-using FlowerShopManagement.Web.Models;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication;
+using FlowerShopManagement.Application.Interfaces.UserSerivices;
+using FlowerShopManagement.Application.Models;
+using FlowerShopManagement.Application.MongoDB.Interfaces;
+using FlowerShopManagement.Core.Entities;
+using FlowerShopManagement.Web.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
-using FlowerShopManagement.Infrustructure.Google.Interfaces;
+using System.Security.Claims;
 
 namespace FlowerShopManagement.Web.Controllers;
 
+[AllowAnonymous]
 public class HomeController : Controller
 {
+    //Services
     private readonly ILogger<HomeController> _logger;
-    private readonly IAuthenticationServices _authServices;
-    private readonly IGmailServices _gmailServices;
+    private readonly IAuthService _authServices;
+    private readonly ICustomerfService _customerService;
+    private readonly IPersonalService _personalService;
+    private readonly IStockService _stockServices;
+    private readonly IEmailService _mailServices;
+    private readonly IProductRepository _productRepository;
 
-    public HomeController(ILogger<HomeController> logger, IAuthenticationServices authServices, IGmailServices gmailServices)
+    static List<string> listCategories = new List<string>();
+    static List<Material> listDetailCategories = new List<Material>();
+    static List<string> listMaterials = new List<string>();
+
+    public HomeController(ILogger<HomeController> logger, IAuthService authServices, IEmailService mailServices,
+        IProductRepository productRepository, IStockService stockServices, ICustomerfService customerfService, IPersonalService personalService)
     {
         _logger = logger;
         _authServices = authServices;
-        _gmailServices = gmailServices;
+        _mailServices = mailServices;
+        _productRepository = productRepository;
+        _stockServices = stockServices;
+        _customerService = customerfService;
+        _personalService = personalService;
+
+        //set up for the static list
+        if (listMaterials.Count <= 0 && listDetailCategories.Count <= 0 && listCategories.Count <= 0)
+        {
+            var task = Task.Run(async () =>
+            {
+                listCategories = await _stockServices.GetCategories();
+                listDetailCategories = await _stockServices.GetDetailMaterials();
+                listMaterials = await _stockServices.GetMaterials();
+
+            });
+            task.Wait();
+            listCategories.Insert(0, "All");
+            listMaterials.Insert(0, "All");
+        }
     }
 
-    // =======================================================================================================
-    // THESE FUNCTIONS BELOW IN THE SAMPLE REGION ARE ONLY USED FOR TESTING & UNDERSTANDING CLEAN ARCHITECTURE
-    // - Change the function names in index.cshtml file for testing multiple functions (button onlick event)
-    // - Can code some new functions to test (please keep it down to only 1 or 2 more...)
-    // =======================================================================================================
-    #region Sample function
-    public IActionResult AddItemtoCart()
+    [HttpGet]
+    public async Task<IActionResult> Index()
     {
-        return View();
-    }
+        if (HttpContext.User.FindFirst(ClaimTypes.Role)?.Value == "Staff") 
+            return RedirectToAction("index","dashboard", new { area = "admin" });
 
-    public Task<bool> AddNewCustomer()
-    {
-        // Hardcode a Customer object for simpleness
-        //CustomerModel customer = new Customer();
-        //customer.password = "1"; // this should be encrypted later
-        //customer.profile.fullName = "Lam Tan Phat";
+        // Get current user Id
+        var currentUserId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-        //return _customerServices.AddNewCustomer(customer);
-        throw new NotImplementedException();
-    }
-
-    public bool RemoveCustomerById()
-    {
-        // Hardcode for simpleness
-        //string removedId = "1e69fd8b-ec24-4754-bee5-1151e8c78876";
-        //return _customerServices.RemoveCustomerById(removedId);
-        throw new NotImplementedException();
-    }
-    
-   
-    #endregion
-
-    public IActionResult Index()
-    {
         ViewBag.Home = true;
+        ViewData["Categories"] = listCategories.Where(i => i != "Unknown").ToList();
+        ViewData["Materials"] = listMaterials.Where(i => i != "Unknown").ToList();
+
+        List<ProductDetailModel> productMs = await _stockServices.GetUpdatedDetailProducts();
+
+        // get user's id
+        var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        // Unauthenticated user
+        if (userId != null)
+        {
+
+            productMs = new List<ProductDetailModel>();
+
+            var temp = await _stockServices.GetUpdatedDetailProducts();
+
+            UserModel? user = await _authServices.GetAuthenticatedUserAsync(userId);
+
+            for (int i = 0; i < temp.Count; i++)
+            {
+                if (user != null && user.FavProductIds != null&& user.FavProductIds.Where(o => o == temp[i].Id).Count() > 0)
+                {
+                    temp[i].IsLike = true;
+                }
+            }
+
+            productMs = productMs.OrderBy(i => i.Name).ToList();
+
+            return View(temp);
+        }
+
+        productMs = productMs.OrderBy(i => i.Name).ToList();
+        return View(productMs);
+    }
+
+    [Route("Sort")]
+    [HttpPost]
+    public async Task<IActionResult> Sort(string sortOrder, string currentFilter, string searchString,
+       int? pageNumber, string? currentPrice, string currentMaterial, string? currentCategory)
+    {
+        int pageSize = 8;
+
+        ViewData["CurrentSort"] = sortOrder;
+        ViewData["CurrentPrice"] = currentPrice;
+        ViewData["CurrentCategory"] = currentCategory;
+        ViewData["CurrentMaterial"] = currentMaterial;
+        ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+        ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+
+        if (searchString != null)
+        {
+            pageNumber = 1;
+        }
+        else
+        {
+            searchString = currentFilter;
+        }
+
+        ViewData["CurrentFilter"] = searchString;
+        List<ProductDetailModel> productMs = await _stockServices.GetUpdatedDetailProducts();
+        if (productMs != null)
+        {
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                productMs = productMs.Where(s => s.Name.Contains(searchString)).ToList();
+            }
+            // sort order - feature incoming
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    productMs = productMs.OrderByDescending(s => s.Name).ToList();
+                    break;
+                //case "Date":
+                //    productMs = (List<ProductModel>)productMs.OrderBy(s => s.);
+                //      break;
+                case "name_asc":
+                    productMs = productMs.OrderBy(s => s.Name).ToList();
+                    break;
+                default:
+                    //case filter
+
+                    break;
+            }
+            switch (currentPrice)
+            {
+                case "0$ -> 10$":
+                    productMs = productMs.Where(s => s.UniPrice > 0 && s.UniPrice <= 10).ToList();
+                    break;
+                case "11$ -> 50$":
+                    productMs = productMs.Where(s => s.UniPrice > 10 && s.UniPrice <= 50).ToList();
+                    break;
+                case "> 50$":
+                    productMs = productMs.Where(s => s.UniPrice > 50).ToList();
+                    break;
+                default:
+
+                    break;
+            }
+
+            if (currentMaterial != null && currentMaterial != "All")
+            {
+                productMs = productMs.Where(s => s.Material.Equals(currentMaterial)).ToList();
+            }
+            if (currentCategory != null && currentCategory != "All")
+            {
+                productMs = productMs.Where(s => s.Category.Equals(currentCategory)).ToList();
+            }
+            PaginatedList<ProductDetailModel> objs = PaginatedList<ProductDetailModel>
+                .CreateAsync(productMs, pageNumber ?? 1, pageSize);
+            return Json(new
+            {
+                isValid = true,
+                htmlViewAll = Helper.RenderRazorViewToString(this, "_ViewAll", objs),
+                htmlPagination = Helper.RenderRazorViewToString(this, "_Pagination", objs)
+
+            });
+        }
+        return NotFound();
+
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> AddToWishList(string id)
+    {
+        // get user's id
+        var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        // Unauthenticated user
+        if (userId is null) return NotFound();
+
+        // add a product item to wishlist of that user
+        var isOk = await _customerService.AddFavProduct(userId, id, _authServices, _personalService);
+
+        if (isOk)
+        {
+            //return RedirectToAction("Index", "Home");
+            return Json( new {isTrue = true});
+        }
+
+        return NotFound();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> RemoveOutOfWishList(string id)
+    {
+        // get user's id
+        var userId = HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        // Unauthenticated user
+        if (userId is null) return NotFound();
+
+        // remove a product item out of wishlist of that user
+        var isOk = await _customerService.RemoveFavProduct(userId, id, _authServices, _personalService);
+
+        if (isOk)
+        {
+			//return RedirectToAction("Index", "Home");
+			return Json(new { isTrue = false });
+
+		}
+
+		return NotFound();
+    }
+
+    public IActionResult Privacy()
+    {
         return View();
     }
 
@@ -72,28 +245,8 @@ public class HomeController : Controller
         return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 
-    public Task<bool> SignIn()
+    public IActionResult Welcome()
     {
-        _gmailServices.Send();
-        return Task.FromResult(true);
-        //// Authenticate input email or phone Nb & password
-        //var result = await _authServices.AuthenticateAsync("phatlam1811@gmail.com", "123123");
-
-        //// Invalid account
-        //if (_authServices.GetUser() == null) return View("Error");
-
-        //// Get user's id and role
-        //string userId = _authServices.GetUser()._id;
-        //string userRole = _authServices.GetUser().role.Value;
-
-        //// Cookies authenticating section
-        //var principal = _authServices.CreateUserClaims(userId, userRole);
-
-        //await HttpContext.SignInAsync(
-        //    CookieAuthenticationDefaults.AuthenticationScheme,
-        //    principal,
-        //    new AuthenticationProperties { IsPersistent = true });
-
-        //return RedirectToAction("Index", "Profile");
+        return View();
     }
 }

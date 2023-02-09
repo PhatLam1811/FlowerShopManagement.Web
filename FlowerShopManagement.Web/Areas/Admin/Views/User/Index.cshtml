@@ -1,58 +1,45 @@
-﻿@using FlowerShopManagement.Web.Views.Shared.Components;
-@*CUSTOMER*@
-<div class="row borderCustom">
-    <div class="col-2 borderCustom1">
-        <div class="row">
-            <ii class="row-1 h6 mb-2 mt-4">Category</ii>
+﻿@using FlowerShopManagement.Core.Enums;
 
-            <div class="tabCustom row-cols-6">
-                <button class="tabCustom" onclick="openCity(event, 'London')">All</button>
-                <button class="tabCustom" onclick="openCity(event, 'London')">Customer</button>
-                <button class="tabCustom" onclick="openCity(event, 'London')">Staff</button>
-                <button class="tabCustom" onclick="openCity(event, 'London')">Admin</button>
+@model PaginatedList<UserModel>
 
-            </div>
-        </div>
-    </div> @*used to col-3 vs col-10*@
+@{
+}
 
-    <div class="container col-10">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="table-wrap">
-                    <table class="table myaccordion table-hover" id="accordion">
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>Name</th>
-                                <th>Email</th>
-                                <th>Orders</th>
-                                <th>Start Date</th>
-                                <th>Roll</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed">
-                                <th scope="row">1</th>
-                                <td>Hoang Le</td>
-                                <td>Hoang L@email.com</td>
-                                <td>12</td>
-                                <td>Today</td>
-                                <td>waiter</td>
-                                <td>
-                                    <p class="icon-plus m-0"></p>
-                                </td>
-                            </tr>
-                            @*<tr>
-                            <td colspan="6" id="collapseOne" class="acc collapse" data-parent="#accordion" style="">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro iste, facere sunt sequi nostrum ipsa, amet doloremque magnam reiciendis tempore sapiente. Necessitatibus recusandae harum nam sit perferendis quia inventore natus.</p>
-                            </td>
-                            </tr>*@
+<div class="row">
+	<div class="col-lg-2 d-lg-block collapse borderCustom1 um mt-3">
+		<partial name="_Filter" model=@Model />
+	</div>
 
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="col-lg-10 col-12 mt-3 mt-lg-0">
+		<form method="post" action="@(Url.Action("Sort", "User"))" onsubmit="return jQueryAjaxSearch(this)">
+			<div class="d-flex w-100">
+				<input type="text" name="pageNumber" value="1"
+					   class="form-control form-control-lg h5 h-100 position-relative" style="z-index:99"
+					   placeholder="Abc" hidden>
+
+				<input type="text" name="searchString" id="ip-search" value="@ViewData["CurrentFilter"]"
+					   class="form-control form-control-lg h5 h-auto position-relative m-0" style="z-index:99"
+					   placeholder="Search user">
+
+				<button class="btn btn-icon border border-primary position-relative d-flex gap-2 align-items-center" id="btn-search" style="z-index:999"
+						type="submit">
+					Search
+					<i class="fa-solid fa-magnifying-glass"></i>
+				</button>
+			</div>
+
+		</form>
+		<div class="row mt-3">
+			<div class="" id="hihi">
+				<partial name="_ViewAll" model=@Model view-data="ViewData" />
+			</div>
+		</div>
+		<nav class="container" id="pagination">
+			<partial name="_Pagination" model=@Model view-data="ViewData" />
+		</nav>
+
+	</div>
+
 </div>
+
+<button class="btn btn-primary icon-plus rounded position-fixed" id="btn-create" style="right:0; bottom:60px;" onclick="location.href = '@(Url.Action("Create", "User"))'">Create new User</button>

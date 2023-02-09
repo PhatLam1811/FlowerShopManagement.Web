@@ -1,0 +1,73 @@
+﻿@model PaginatedList<ProductModel>?
+
+
+<div class="row">
+	<div class="col p-0 mt-2">
+		<div class="col d-flex flex-column gap-2">
+			<div class="d-flex flex-row">
+				<div class="container">
+					<div class="row mt-3">
+						<div class="">
+							<div class="table-wrap" style="height: 530px">
+								<table class="table myaccordion table-hover" id="accordion">
+									<thead class="position-sticky top-0 bg-light">
+										<tr>
+											<th>#</th>
+											<th class="button">Name</th>
+											<th class="button">Price</th>
+											@*<th class="button">Color</th>*@
+											<th>State</th>
+											<th class="button">Amount</th>
+											<th class="button">Quantity</th>
+										</tr>
+									</thead>
+									<tbody>
+										@if (Model != null)
+										{
+											int id = 0;
+											@foreach (var i in Model)
+											{
+												id++;
+
+												<tr data-toggle="collapse" data-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne" class="collapsed w-100">
+													<td>
+														@id
+													</td>
+													<td class="col-5">@i.Name</td>
+													<td>$@i.UniPrice</td>
+													@*<td>@i.Color</td>*@
+													@if (i.Amount == 0)
+													{
+														<td class="text-danger fst-italic">Out of stock</td>
+													}
+													@if (i.Amount > 0 && i.Amount < 21)
+													{
+														<td class="text-warning fst-italic">Low on stock</td>
+													}
+													@if (i.Amount > 20)
+													{
+														<td class="text-success fst-italic">Normal</td>
+													}
+													<td class="col-1">@i.Amount</td>
+													<td>
+														<div class="">
+															<label class="form-check-label ml-5 d-flex align-items-center">
+																<input type="number" name="requestQty" value="0" placeholder="0" id="@i.Id" class="form-control ms-2" style="width:80px;" />
+																<input class="form-control" name="productIds" value="@i.Id" hidden />
+															</label>
+														</div>
+													</td>
+												</tr>
+											}
+										}
+									</tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+

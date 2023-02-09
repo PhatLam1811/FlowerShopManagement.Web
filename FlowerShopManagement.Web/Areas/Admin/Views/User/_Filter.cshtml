@@ -1,0 +1,54 @@
+﻿@using FlowerShopManagement.Web
+@using FlowerShopManagement.Application.Models
+
+@{
+    List<string>? status = ViewData["Role"] as List<string> ?? null;
+    string? currentCategory = ViewData["CurrentCategory"] as string ?? "All";
+
+}
+<form method="post" action="@(Url.Action("Sort", "User"))" onsubmit="return jQueryAjaxSearch(this);">
+    <input type="text" name="pageNumber" value="1"
+           class="form-control form-control-lg h5 h-100 position-relative" style="z-index:99"
+           id="floatingInput" placeholder="Abc" hidden>
+    <div class="">
+        <span class="h4">Filter</span>
+        <div class="check-list mt-2">
+            <span class="">Categories</span>
+            @if (currentCategory != null)
+            {
+
+                @if (status != null)
+                {
+                    @foreach (var i in status)
+                    {
+                        @if (i.ToString() == "Staff")
+                        {
+                            <label class="check-list-item">
+                                <input type="radio" class="form-check-input" disabled value="@i" id="@i" name="currentCategory" onclick="this.form.onsubmit()" />
+                                @i (disable)
+                            </label>
+                        }
+                        else if (i.ToString() != currentCategory.ToString())
+                        {
+                            <label class="check-list-item">
+                                <input type="radio" class="form-check-input" value="@i" id="@i" name="currentCategory" onclick="this.form.onsubmit()" />
+                                @i
+                            </label>
+                        }
+                        else
+                        {
+                            <label class="check-list-item">
+                                <input type="radio" class="form-check-input disabled" value="@i" name="currentCategory" checked onclick="this.form.onsubmit()" />
+                                @i
+                            </label>
+
+                        }
+                    }
+
+                }
+            }
+
+        </div>
+
+    </div>
+</form>
